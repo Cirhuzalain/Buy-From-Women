@@ -34,6 +34,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="profiles">Farmers</string>
     <string name="sales">Sales</string>
+    <string name="loan">Loan</string>
+    <string name="user_profile">User profile</string>
+    <string name="user_profile_simple">Profile</string>
     <string name="purchase">Purchases</string>
     <string name="stats">Summary</string>
     <string name="settings">Settings</string>
@@ -53,6 +56,7 @@
     <string name="create_farmer">Create Farmer</string>
     <string name="name">Name</string>
     <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="gender">Gender</string>
@@ -83,6 +87,7 @@
     <string name="cell_carrier">Cell Carrier</string>
     <string name="membership_id">Membership ID</string>
     <string name="number_of_household_members">Number of Household Members</string>
+    <string name="household_members"># Household Members</string>
     <string name="total_production_in_kg">Total production in KG</string>
     <string name="tot_lost">Total Lost in KG</string>
     <string name="total_sold_in_kg">Total Sold in KG</string>
@@ -101,9 +106,11 @@
     <string name="aggregation">Aggregation</string>
     <string name="other">Other</string>
     <string name="mm_acct">Mobile Money Account</string>
+    <string name="harvsetSeason">Harvset Season</string>
     <string name="available_resources">Available Resources</string>
     <string name="agri_extension">Agricultural extension services</string>
     <string name="climate_related_information_e_g_weather_forecasts">Climate related information (e.g. weather forecasts)</string>
+    <string name="climate_related_info_e_g_weather_forecasts">Climate related information</string>
     <string name="seed">Seeds</string>
     <string name="organic_fertilizers">Organic Fertilizers</string>
     <string name="inor_fert">Inorganic Fertilizers</string>
@@ -130,6 +137,8 @@
     <string name="is_a_vendor">Is a Vendor</string>
     <string name="internal_note">Internal Note</string>
     <string name="land_size_in_ha">Land Size in ha</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
     <string name="add">Add</string>
     <string name="account_number">Account Number</string>
     <string name="account_holder">Account Holder</string>
@@ -147,6 +156,13 @@
         <item>cooperative</item>
         <item>sacco</item>
         <item>other</item>
+    </string-array>
+
+    <string-array name="harverstSeason">
+        <item>2017A</item>
+        <item>2017B</item>
+        <item>2018A</item>
+        <item>2018B</item>
     </string-array>
 
     <string-array name="payment_detail">
@@ -241,6 +257,7 @@
     <string name="base_line">BaseLine For Previous Season</string>
     <string name="finance">Finance</string>
     <string name="access_service">Access to other services, inputs and equipment</string>
+    <string name="access_to_info">Access to Information</string>
     <string name="system">System</string>
     <string name="farmer_land">Farmer Land Information</string>
     <string name="bank_info">Bank Information</string>
@@ -278,5 +295,12 @@
     <string name="view_purchase">Purchase</string>
     <string name="title_activity_coop_profile">Cooperative</string>
     <string name="profile">Detail</string>
+
+    <string name="infogen">Detail</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="my_cart">My Cart</string>
+    <string name="delete">DELETE</string>
+
 
 </resources>

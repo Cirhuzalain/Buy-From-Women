@@ -15,25 +15,29 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/name_farmer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="guy"
+            app:titleEnabled="true"
             app:toolbarId="@+id/toolbar">
 
             <ImageView
                 android:id="@+id/coop_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+                app:layout_collapseParallaxMultiplier="1.0"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 
@@ -42,7 +46,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_coop_profile" />
+    <include layout="@layout/show_details" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_coop"

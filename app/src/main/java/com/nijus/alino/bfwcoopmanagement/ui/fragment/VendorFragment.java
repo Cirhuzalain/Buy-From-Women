@@ -16,10 +16,10 @@ import com.nijus.alino.bfwcoopmanagement.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BuyerFragment extends Fragment {
+public class VendorFragment extends Fragment {
 
 
-    public BuyerFragment() {
+    public VendorFragment() {
         // Required empty public constructor
     }
 
@@ -34,7 +34,7 @@ public class BuyerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_buyer, container, false);
+        return inflater.inflate(R.layout.fragment_vendor, container, false);
     }
 
     @Override

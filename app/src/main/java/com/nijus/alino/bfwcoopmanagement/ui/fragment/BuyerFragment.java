@@ -1,4 +1,4 @@
-package droidmentor.tabwithviewpager.Fragment;
+package com.nijus.alino.bfwcoopmanagement.ui.fragment;
 
 
 import android.os.Bundle;
@@ -10,16 +10,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import droidmentor.tabwithviewpager.R;
+import com.nijus.alino.bfwcoopmanagement.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CallsFragment extends Fragment {
+public class BuyerFragment extends Fragment {
 
 
-    public CallsFragment() {
+    public BuyerFragment() {
         // Required empty public constructor
     }
 
@@ -34,13 +34,13 @@ public class CallsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calls, container, false);
+        return inflater.inflate(R.layout.fragment_buyer, container, false);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_calls_fragment, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+        /*inflater.inflate(R.menu.menu_buyer_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);*/
     }
 
 }

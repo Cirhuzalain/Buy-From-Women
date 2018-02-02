@@ -26,4 +26,4 @@
     android:layout_height="match_parent"
     android:textSize="@dimen/cafebar_content_text"
     android:textStyle="bold"
-    android:theme="@style/CafeBarRippleStyle"/>
+    android:theme="@style/Animation.AppCompat.Dialog"/>
