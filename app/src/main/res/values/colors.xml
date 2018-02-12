@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#482366</color>
+    <color name="colorPrimaryDark">#1d003b</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="primaryLightColor">#764d94</color>
+    <color name="colorAccent">#ff4081</color>
+    <!-- the activated state color -->
+    <color name="activated">#c1bfbf</color>
+    <color name="secondary_text">#727272</color>
+    <color name="primary_text">#212121</color>
+    <!-- the color used for the low temperature in forecastVendorcast list -->
+    <color name="forecast_low_text">#607D8B</color>
+    <color name="default_color">#FBFFFFFF</color>
+
+    <color name="step_pager_previous_tab_color">#4433b5e5</color>
+    <color name="step_pager_selected_tab_color">#ff0099cc</color>
+    <color name="step_pager_selected_last_tab_color">#ff669900</color>
+    <color name="step_pager_next_tab_color">#10000000</color>
+    <color name="row_activated">#e0e0e0</color>
+
+
+    <color name="review_green">#ff669900</color>
+
+    <color name="text_light">#66000000</color>
+
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextDisable">#66FFFFFF</color>
+    <color name="bg_circle_default">#666666</color>
+
+    <color name="bg_row_background">#fa315b</color>
+    <color name="item_name">#535353</color>
+    <color name="description">#a9a9a9</color>
+    <color name="bg_detail">#0bff4079</color>
+    <color name="bg_action_mode">#757575</color>
+</resources>

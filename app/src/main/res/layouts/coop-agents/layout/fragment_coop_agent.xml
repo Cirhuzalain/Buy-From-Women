@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/lib/com.nijus.alino.bfwcoopmanagement"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".coopAgent.ui.activities.CoopAgentActivity">
+
+    <TextView
+        android:id="@+id/recyclerview_empty_coop_Agent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:text="@string/there_s_no_cooperative_agent"
+        android:textSize="18sp"
+        app:layout_anchor="@id/coopsagent_list"
+        app:layout_anchorGravity="fill" />
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_data_done"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:elevation="6dp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/coopsagent_list"
+            android:name="com.example.alino.bfwcoopmanagement.ui.fragment.NavigationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".coopAgent.ui.fragment.CoopAgentFragment"
+            tools:listitem="@layout/coopagent_item" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:stateListAnimator="@animator/fab_raise"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

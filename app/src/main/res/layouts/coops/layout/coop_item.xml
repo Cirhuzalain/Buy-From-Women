@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Make the background of our selector a non-transparent color -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:paddingLeft="@dimen/list_item_extra_padding"
+    android:paddingRight="@dimen/list_item_extra_padding"
+    >
+
+    <LinearLayout
+        android:id="@+id/view_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+        android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
+
+        <RelativeLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/icon_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillAfter="false"
+                android:fillEnabled="false">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:alpha="0.8"
+                    android:src="@drawable/bg_circle" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_done_white_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/icon_front"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillAfter="false"
+                android:fillEnabled="false">
+
+                <ImageView
+                    android:id="@+id/u_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+        <!--<ImageView
+            android:id="@+id/u_icon"
+            android:layout_width="@dimen/list_icon"
+            android:layout_height="@dimen/list_icon"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/abc_list_item_padding_horizontal_material"
+            android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material" />-->
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/u_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COOOOOP"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Kigali city"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="120"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/pic_irr_w_p_details2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical|center_horizontal|center"
+                    android:src="@drawable/profile" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="8"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/pic_irr_w_p_details21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical|center_horizontal|center"
+                    android:src="@drawable/profile" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

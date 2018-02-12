@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/val_sales_settings"
+        android:orderInCategory="120"
+        android:title="@string/val_so_settings"
+        app:showAsAction="never" />
+</menu>

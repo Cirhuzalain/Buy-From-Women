@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bfw App</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="message1">Achat De Femmes du Rwanda</string>
+    <string name="message2">Enregistrement des terrains</string>
+    <string name="message3">Gestion des récoltes</string>
+    <string name="comments1">
+        Inscription des agriculteurs
+    </string>
+    <string name="comments2">
+        Ajouter l\'information foncière
+    </string>
+    <string name="comments3">
+        Afficher les commandes d\'achat et de vente
+    </string>
+    <string name="login">Connexion</string>
+    <string name="title_activity_login">Connexion</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Courriel</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="error_invalid_email">Cette adresse e-mail est invalide</string>
+    <string name="error_invalid_password">Ce mot de passe est trop court (>= 3 caractères)</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_field_required">Ce champ est obligatoire</string>
+    <string name="permission_rationale">Les permissions de contacts sont nécessaires pour fournir des courriels finitions.
+    </string>
+    <string name="title_activity_navigation">Bfw App</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="profiles">Farmers</string>
+    <string name="sales">Sales</string>
+    <string name="purchase">Purchases</string>
+    <string name="stats">Summary</string>
+    <string name="settings">Settings</string>
+    <string name="user_profile_image">User Profile Image</string>
+    <string name="about">About</string>
+    <string name="farmer_list">Farmers List</string>
+    <string name="uname">john@gmail.com</string>
+    <string name="title_activity_farmer_detail">Farmer Detail</string>
+
+    <string name="generalVendor">General</string>
+    <string name="production">Harvest</string>
+    <string name="land">Land</string>
+    <string name="sell">Sell</string>
+    <string name="create_general">General</string>
+    <string name="create_land">Land</string>
+
+    <string name="create_farmer">Create Farmer</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="gender">Gender</string>
+    <string name="coop">Coop</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="image_profile">Image Profile</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="househol_head">Househol Head</string>
+    <string name="family_in_house_hold">Family # in House Hold</string>
+    <string name="spouse_name">Spouse Name</string>
+    <string name="mobile_money_account">Mobile Money Account</string>
+    <string name="notes">Notes</string>
+    <string name="rainfall_notification">Rainfall Notification</string>
+    <string name="plot_status">Plot Status</string>
+    <string name="land_location">Land Location</string>
+    <string name="email">Email</string>
+    <string name="number_of_arable_land_plots">Number of arable land plots</string>
+    <string name="total_farmer_land_size">Total farmer land size</string>
+    <string name="expected_total_production_in_kg">Expected Total Production in KG</string>
+    <string name="expected_sales_outside_the_ppp">Expected sales outside the PPP</string>
+    <string name="expected_post_harvest_loss_in_kg">Expected Post Harvest loss in KG</string>
+    <string name="total_coop_land_size_in_ha">Total Coop Land Size (in HA)</string>
+    <string name="percent_coop_land_size">Farmer % of total coop land size</string>
+    <string name="spouse_f_name">Spouse First Name</string>
+    <string name="spouse_last_name">Spouse Last Name</string>
+    <string name="cell_phone_alt">Cell phone (Alt)</string>
+    <string name="cell_carrier">Cell Carrier</string>
+    <string name="membership_id">Membership ID</string>
+    <string name="number_of_household_members">Number of Household Members</string>
+    <string name="total_production_in_kg">Total production in KG</string>
+    <string name="tot_lost">Total Lost in KG</string>
+    <string name="total_sold_in_kg">Total Sold in KG</string>
+    <string name="tot_vol_sold_coop">Total volume sold to your coop in KG</string>
+    <string name="price_sold_to_the_coop_per_kg">Price sold to the coop per KG</string>
+    <string name="tot_vol_side_sold">Total volume that was side-sold in KG</string>
+    <string name="price_sold_kg">Price side-sold in KG</string>
+    <string name="total_loan_amount_in_rwf">Total loan amount (in RWF)</string>
+    <string name="tot_outstanding">Total outstanding (in RWF)</string>
+    <string name="interest_rate">Interest Rate (% in months)</string>
+    <string name="duration_month">Duration (in months)</string>
+    <string name="loan_provider">Loan Provider</string>
+    <string name="outstanding_loan">Outstanding Loan</string>
+    <string name="loan_purpose">Loan Purpose</string>
+    <string name="input">Input</string>
+    <string name="aggregation">Aggregation</string>
+    <string name="other">Other</string>
+    <string name="mm_acct">Mobile Money Account</string>
+    <string name="available_resources">Available Resources</string>
+    <string name="agri_extension">Agricultural extension services</string>
+    <string name="climate_related_information_e_g_weather_forecasts">Climate related information (e.g. weather forecasts)</string>
+    <string name="seed">Seeds</string>
+    <string name="organic_fertilizers">Organic Fertilizers</string>
+    <string name="inor_fert">Inorganic Fertilizers</string>
+    <string name="labour">Labour</string>
+    <string name="irrigation_water_pumps">Irrigation/Water pumps</string>
+    <string name="tractors">Tractors</string>
+    <string name="harv">Harvester</string>
+    <string name="spreaders_or_sprayers">Spreaders or Sprayers</string>
+    <string name="dryer">Dryer</string>
+    <string name="thresher">Thresher</string>
+    <string name="safe_storage">Safe storage</string>
+    <string name="other_res_av">Other</string>
+    <string name="main_water_source">Main water source</string>
+    <string name="dam">Dam</string>
+    <string name="well">Well</string>
+    <string name="borehole">Borehole</string>
+    <string name="river_stream">River/Stream</string>
+    <string name="pipe_borne">Pipe-Borne</string>
+    <string name="irrigation">Irrigation</string>
+    <string name="none">None</string>
+    <string name="s_other">Other</string>
+    <string name="internal_reference">Internal Reference</string>
+    <string name="is_a_customer">Is a Customer</string>
+    <string name="is_a_vendor">Is a Vendor</string>
+    <string name="internal_note">Internal Note</string>
+    <string name="land_size_in_ha">Land Size in ha</string>
+    <string name="add">Add</string>
+    <string name="account_number">Account Number</string>
+    <string name="account_holder">Account Holder</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="add_b">Add</string>
+    <string name="p_o_name">Name</string>
+    <string name="p_n">Partner Name</string>
+    <string name="active">Active</string>
+    <string name="acq_account">Acquirer Account</string>
+    <string name="acq_ref">Acquirer Ref.</string>
+    <string name="partner_phone_number">Partner Phone Number</string>
+
+    <string-array name="loan_provider">
+        <item>bank</item>
+        <item>cooperative</item>
+        <item>sacco</item>
+        <item>other</item>
+    </string-array>
+
+    <string-array name="payment_detail">
+        <item>15 Days</item>
+        <item>30 Net Days</item>
+        <item>90 Day Loan Term</item>
+        <item>Immediate Payment</item>
+        <item>On Delivery</item>
+    </string-array>
+
+    <string-array name="product_info">
+        <item>Maize grade I</item>
+        <item>Maize grade II</item>
+        <item>Maize grade III</item>
+    </string-array>
+
+    <string-array name="vendor_info">
+        <item>Vendor I</item>
+        <item>Vendor II</item>
+        <item>Vendor III</item>
+    </string-array>
+
+    <string name="ms_prev">PREV</string>
+    <string name="ms_next">NEXT</string>
+    <string name="ms_end">COMPLETE</string>
+    <string name="ms_continue">CONTINUE</string>
+    <string name="ms_optional">Optional</string>
+    <string name="ms_text_step">Step $current of $total</string>
+    <string name="customer">Customer</string>
+    <string name="harvest_season">Harvest Season</string>
+    <string name="order_lines">Order Lines</string>
+    <string name="product">Product</string>
+    <string name="quantity">Quantity (Kg)</string>
+    <string name="add_so_contract">Add New Product</string>
+    <string name="payment_term">Payment Term</string>
+    <string name="start_date">Creation Date</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="price_rwf">Unit Price (RWF)</string>
+    <string name="title_activity_sale_order_contact">Sale Order Contract</string>
+    <string name="title_activity_sale_order_info">Sale Order</string>
+    <string name="view_contract_details">Contract Details</string>
+    <string name="update_contract">Update Contract</string>
+    <string name="validate_sale_order">Validate Sale Order</string>
+    <string name="payment_date">Payment Date</string>
+    <string name="payment_amount_rwf">Payment Amount (Rwf)</string>
+    <string name="memo">Memo</string>
+    <string name="validate">Validate</string>
+    <string name="val_so_settings">Settings</string>
+    <string name="vendor">Vendor</string>
+    <string name="date">Date</string>
+    <string name="deliveries_and_invoices">Deliveries and Invoices</string>
+    <string name="title_activity_purchase_order">Purchase Order</string>
+    <string name="purchase_order_detail">Purchase Order Detail</string>
+    <string name="maize_iii">Maize III</string>
+    <string name="about_label">About</string>
+    <string name="version_1_0">Version 1.0</string>
+    <string name="about_text">An app to empower Coop Agent to register farmers and perform various actions including but not limited to farmer registration and harvest management</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="logout_user">Logout</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="s_stepper">Save</string>
+    <string name="u_stepper">Update</string>
+
+    <string name="prev">Previous</string>
+    <string name="finish">Submit</string>
+
+    <string name="submit_confirm_message">Save Farmer Coming soon !!!</string>
+    <string name="submit_confirm_button">Save Farmer</string>
+    <string name="next_s">Next</string>
+    <string name="voice_button">Voice search Button</string>
+
+    <string name="land_info">Select Land Location</string>
+    <string name="current_location">Current</string>
+    <string name="pick_location">Pick</string>
+    <string name="cancel_loc">Cancel</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="lang_key">language_key</string>
+
+    <string name="kin_value">Kinyarwanda</string>
+    <string name="fr_value">French</string>
+    <string name="en_value">English</string>
+
+    <string name="kin_key">kin</string>
+    <string name="fr_key">fr</string>
+    <string name="eng_key">en</string>
+
+   <!-- <PageVendorPage Title &ndash;&gt;-->
+    <string name="gen_title">General Information</string>
+    <string name="forecastVendor">Forecast</string>
+    <string name="demographicVendor">Demographics</string>
+    <string name="base_line">BaseLine For Previous Season</string>
+    <string name="financeVendor">Finance</string>
+    <string name="access_service">Access to other services, inputs and equipment</string>
+    <string name="system">System</string>
+    <string name="farmer_land">Farmer Land Information</string>
+    <string name="bank_info">Bank Information</string>
+    <string name="payment_detail">Payment Detail</string>
+    <string name="left_icon">Next Step Left Icon</string>
+    <string name="next_step_icon">Next Step Right Icon</string>
+    <string name="action_search">Search</string>
+    <string name="name_search">Farmer name</string>
+
+    <!-- Preference for app token -->
+    <string name="user_name">uname</string>
+    <string name="user_server_id">userServerId</string>
+
+    <string name="connectivity_error">Sorry you\'re not connected, please check your internet connection</string>
+    <string name="json_error">An error occur while logging you in, please try again later </string>
+    <string name="data_error">An error occur while logging you out, please try again later </string>
+    <string name="data_valid_error">Farmer Name and Phone Number are required</string>
+    <string name="unknown_msg">Unknown User Id</string>
+    <string name="msg_ok">Ok</string>
+    <string name="msg_cancel">Cancel</string>
+    <string name="there_s_no_farmer">There\'s no farmer</string>
+    <string name="syncing_error">An error occur while syncing farmer data</string>
+    <string name="update_farmer">Update Farmer</string>
+    <string name="update_msg">Information update successfully</string>
+    <string name="coops">Coops</string>
+
+    <string name="there_s_no_cooperative">There\'s no cooperative</string>
+    <string name="cooperativ">Coops</string>
+    <string name="add_farmer_msg">Farmer added successfully</string>
+    <string name="view_sale">Sale</string>
+    <string name="view_purchase">Purchase</string>
+    <string name="title_activity_coop_profile">Cooperative</string>
+    <string name="profile">Detail</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Make the background of our selector a non-transparent color -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:paddingLeft="@dimen/list_item_extra_padding"
+    android:paddingRight="@dimen/list_item_extra_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+        android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
+
+        <ImageView
+            android:id="@+id/prod_icon"
+            android:layout_width="@dimen/list_icon"
+            android:layout_height="@dimen/list_icon"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/abc_list_item_padding_horizontal_material"
+            android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/prod_harv_s"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2017A"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            <TextView
+                android:id="@+id/prod_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RGCC"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/prod_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/forecast_temperature_space"
+            android:layout_marginRight="@dimen/forecast_temperature_space"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:gravity="right"
+            android:text="15000Kg"
+            android:textColor="@color/primary_text"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+</FrameLayout>

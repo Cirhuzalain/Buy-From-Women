@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/features"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/user_profile"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/user_profile" />
+        <item
+            android:id="@+id/profile_farmer"
+            android:icon="@drawable/ic_farmer"
+            android:title="@string/liste_farmer" />
+        <item
+            android:id="@+id/profile_coop"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/user_profile_coop_agent" />
+        <item
+            android:id="@+id/profile_buyer"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/user_profile_buyer" />
+        <item
+            android:id="@+id/profile_vendor"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/user_profile_vendor" />
+        <item
+            android:id="@+id/sales"
+            android:icon="@drawable/ic_local_grocery_store_black_24dp"
+            android:title="@string/sales" />
+        <item
+            android:id="@+id/purchases"
+            android:icon="@drawable/ic_add_shopping_cart_black_24dp"
+            android:title="@string/purchase" />
+        <item
+            android:id="@+id/loan"
+            android:icon="@drawable/ic_add_shopping_cart_black_24dp"
+            android:title="@string/loan" />
+        <item
+            android:id="@+id/product"
+            android:icon="@drawable/ic_add_shopping_cart_black_24dp"
+            android:title="@string/product" />
+    </group>
+
+    <group
+        android:id="@+id/settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_applications_black_24dp"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_abouts"
+            android:title="@string/about" />
+        <item
+            android:id="@+id/logout_user"
+            android:icon="@drawable/ic_input_black_24dp"
+            android:title="@string/logout_user" />
+    </group>
+</menu>

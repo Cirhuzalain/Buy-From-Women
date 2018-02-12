@@ -1,0 +1,57 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin_20">20dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="list_item_extra_padding">0dp</dimen>
+
+    <dimen name="toolbar_size_lan">48dp</dimen>
+
+    <dimen name="list_icon">40dp</dimen>
+    <dimen name="forecast_text_width">75dp</dimen>
+    <dimen name="forecast_temperature_space">8dp</dimen>
+    <dimen name="forecast_text_size">32dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+
+    <dimen name="step_pager_tab_width">28dp</dimen>
+    <dimen name="step_pager_tab_height">3dp</dimen>
+    <dimen name="step_pager_tab_spacing">4dp</dimen>
+
+    <dimen name="cafebar_icon_size">24dp</dimen>
+
+    <dimen name="cafebar_content_padding_side">24dp</dimen>
+    <dimen name="cafebar_content_padding_top">14dp</dimen>
+
+    <dimen name="cafebar_button_margin_start">24dp</dimen>
+    <dimen name="cafebar_button_padding">10dp</dimen>
+    <dimen name="cafebar_button_margin">8dp</dimen>
+
+    <dimen name="cafebar_shadow_top">4dp</dimen>
+    <dimen name="cafebar_shadow_around">2dp</dimen>
+    <dimen name="cafebar_content_text">14sp</dimen>
+
+    <dimen name="cafebar_corner_radius">0dp</dimen>
+
+    <!-- Floating Size -->
+    <dimen name="cafebar_floating_min_width">108dp</dimen>
+    <dimen name="cafebar_floating_max_width">368dp</dimen>
+    <dimen name="cafebar_floating_padding">16dp</dimen>
+
+    <!--swip recycleview-->
+    <dimen name="activity_padding_horizontal">16dp</dimen>
+    <dimen name="padd_10">10dp</dimen>
+    <dimen name="ic_delete">30dp</dimen>
+    <dimen name="thumbnail">90dp</dimen>
+
+    <!--respnsive-->
+    <dimen name="landscape_forecast_view_width">360dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
+
+</resources>

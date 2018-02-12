@@ -1,0 +1,8 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:fragment="com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity$LanguageFragment"
+        android:icon="@drawable/ic_language_black_24dp"
+        android:title="Language" />
+
+</preference-headers>

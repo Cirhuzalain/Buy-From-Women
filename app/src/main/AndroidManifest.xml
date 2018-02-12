@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nijus.alino.bfwcoopmanagement">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".ui.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.UserProfileActivityAdmin"
+            android:label="@string/user_profile"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".farmers.ui.activities.NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".farmers.ui.activities.CreateFarmerActivity"
+            android:label="@string/create_farmer"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".farmers.ui.activities.UpdateFarmer"
+            android:label="@string/update_farmer"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".coops.ui.activities.UpdateCoop"
+            android:label="@string/update_coop"
+            android:parentActivityName=".coops.ui.activities.CoopActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".coops.ui.activities.CoopActivity" />
+        </activity>
+        <activity
+            android:name=".vendors.ui.activities.VendorActivity"
+            android:label="@string/vendor"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
+        <activity
+            android:name=".coopAgent.ui.activities.CoopAgentActivity"
+            android:label="@string/coop_agent"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
+        <!--   android:parentActivityName=".farmers.ui.activities.NavigationActivity"-->
+        <activity
+            android:name=".vendors.ui.activities.UpdateVendor"
+            android:label="@string/update_vendor"
+            android:parentActivityName=".coops.ui.activities.CoopActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".vendors.ui.activities.VendorActivity" />
+        </activity>
+        <activity
+            android:name=".farmers.ui.activities.DetailFarmerActivity"
+            android:label="@string/user_profile"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
+        <activity
+            android:name=".coopAgent.ui.activities.DetailCoopAgentActivity"
+            android:label="@string/user_profile"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".coopAgent.ui.activities.CoopAgentActivity" />
+        </activity>
+        <activity
+            android:name=".coops.ui.activities.CreateCoopActivity"
+            android:label="@string/create_coop"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".vendors.ui.activities.CreateVendorActivity"
+            android:label="@string/create_vend"
+            android:parentActivityName=".vendors.ui.activities.VendorActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".vendors.ui.activities.VendorActivity" />
+        </activity>
+        <activity
+            android:name=".coops.ui.activities.DetailCoopActivity"
+            android:label="@string/user_profile"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
+        <activity
+            android:name=".vendors.ui.activities.DetailVendorActivity"
+            android:label="@string/user_profile"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
+        <activity
+            android:name=".sales.ui.activities.SaleOrderInfoActivity"
+            android:label="@string/title_activity_sale_order_info"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".products.ui.activities.ProductActivity"
+            android:label="@string/title_activity_product"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".sales.ui.activities.SaleOrderDetailActivity"
+            android:label="Sale Order Detail"
+            android:parentActivityName=".sales.ui.activities.SaleOrderInfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".sales.ui.activities.SaleOrderInfoActivity" />
+        </activity>
+        <activity
+            android:name=".products.ui.activities.ProductDetailActivity"
+            android:label="Product details"
+            android:parentActivityName=".products.ui.activities.ProductActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".products.ui.activities.ProductActivity" />
+        </activity>
+        <activity
+            android:name=".coops.ui.activities.CoopActivity"
+            android:label="@string/cooperativ"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".purchases.ui.activities.PurchaseOrderActivity"
+            android:label="@string/title_activity_purchase_order"
+            android:launchMode="singleTop"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".purchases.ui.activities.PurchaseOrderDetailActivity"
+            android:label="@string/purchase_order_detail"
+            android:parentActivityName=".purchases.ui.activities.PurchaseOrderActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".purchases.ui.activities.PurchaseOrderActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.AboutActivity"
+            android:label="@string/about_label"
+            android:launchMode="singleTop"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+
+        <service android:name=".farmers.sync.DeleteTokenService" />
+        <service android:name=".farmers.sync.AddFarmer" />
+        <service android:name=".farmers.sync.SyncBackground" />
+        <service android:name=".farmers.sync.RefreshData" />
+        <service android:name=".farmers.sync.UpdateFarmerService" />
+        <service android:name=".farmers.sync.UpdateSyncFarmer" />
+        <service android:name=".coops.sync.UpdateCoopService" />
+        <service
+            android:name=".farmers.sync.UpdateSyncFarmerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".farmers.sync.SyncFarmer"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name=".data.BfwProvider"
+            android:authorities="com.nijus.alino.bfwcoopmanagement"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".coops.ui.activities.CoopProfileActivity"
+            android:label="@string/title_activity_coop_profile"
+            android:parentActivityName=".farmers.ui.activities.NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".farmers.ui.activities.NavigationActivity" />
+        </activity>
+        <activity
+            android:name=".coopAgent.ui.activities.CreateCoopAgentActivity"
+            android:label="@string/title_activity_create_coop_agent"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".loans.ui.activities.LoanActivity"
+            android:label="@string/title_activity_loan"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".coopAgent.ui.activities.UpdateCoopAgent"
+            android:label="@string/title_activity_update_coop_agent"
+            android:parentActivityName=".coopAgent.ui.activities.DetailCoopAgentActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".coopAgent.ui.activities.DetailCoopAgentActivity" />
+        </activity>
+        <activity
+            android:name=".buyers.ui.activities.BuyerActivity"
+            android:label="@string/title_activity_buyer"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ui.activities.UserProfileActivityAdmin" />
+    </activity>
+        <activity
+            android:name=".buyers.ui.activities.CreateBuyerActivity"
+            android:label="@string/title_activity_create_buyer"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".buyers.ui.activities.UpdateBuyerActivity"
+            android:label="@string/title_activity_update_buyer"
+            android:parentActivityName=".buyers.ui.activities.DetailBuyerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".buyers.ui.activities.DetailBuyerActivity"
+            android:label="@string/title_activity_detail_buyer"
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".loans.ui.activities.CreateLoanActivity"
+            android:label="@string/title_activity_create_loan"
+            android:parentActivityName=".loans.ui.activities.LoanActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".loans.ui.activities.DetailLoanActivity"
+            android:label="@string/title_activity_detail_buyer"
+            android:parentActivityName=".loans.ui.activities.LoanActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+
+</manifest>
