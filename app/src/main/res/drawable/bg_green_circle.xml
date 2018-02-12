@@ -4,7 +4,7 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/colorAccent"/>
+        android:color="@color/step_pager_selected_last_tab_color"/>
 
     <size
         android:width="120dp"
