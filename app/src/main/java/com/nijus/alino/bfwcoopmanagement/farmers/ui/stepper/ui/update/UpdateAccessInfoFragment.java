@@ -105,72 +105,9 @@ public class UpdateAccessInfoFragment extends Fragment implements AdapterView.On
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int aggriExt = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_AGRI_EXTENSION_SERV));
-            int cInfo = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_CLIMATE_RELATED_INFO));
-            int seedInf = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SEEDS));
-            int organicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_ORGANIC_FERTILIZER));
-            int inorganicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_INORGANIC_FERTILIZER));
-            int isLabour = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LABOUR));
-            int isWp = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_PUMPS));
-
-            int cSprayer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SPRAYERS));
 
 
-            if (aggriExt == 1) {
-                agriculturalExtension.setChecked(true);
-                accessToInformation.setAgricultureExtension(true);
-            } else {
-                accessToInformation.setAgricultureExtension(false);
-            }
 
-            if (cInfo == 1) {
-                climateInfo.setChecked(true);
-                accessToInformation.setClimateRelatedInformation(true);
-            } else {
-                accessToInformation.setClimateRelatedInformation(false);
-            }
-
-            if (seedInf == 1) {
-                seeds.setChecked(true);
-                accessToInformation.setSeed(true);
-            } else {
-                accessToInformation.setSeed(false);
-            }
-
-            if (organicFert == 1) {
-                organicFertilizers.setChecked(true);
-                accessToInformation.setOrganicFertilizers(true);
-            } else {
-                accessToInformation.setInorganicFertilizers(false);
-            }
-
-            if (inorganicFert == 1) {
-                inorganicFertilizers.setChecked(true);
-                accessToInformation.setInorganicFertilizers(true);
-            } else {
-                accessToInformation.setInorganicFertilizers(false);
-            }
-
-            if (isLabour == 1) {
-                labour.setChecked(true);
-                accessToInformation.setLabour(true);
-            } else {
-                accessToInformation.setLabour(false);
-            }
-
-            if (isWp == 1) {
-                irrigation.setChecked(true);
-                accessToInformation.setWaterPumps(true);
-            } else {
-                accessToInformation.setWaterPumps(false);
-            }
-
-            if (cSprayer == 1) {
-                spreaders.setChecked(true);
-                accessToInformation.setSpreaderOrSprayer(true);
-            } else {
-                accessToInformation.setSpreaderOrSprayer(false);
-            }
 
 
             mPage.getData().putParcelable("accessToInformation", accessToInformation);

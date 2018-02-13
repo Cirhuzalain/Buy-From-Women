@@ -189,8 +189,6 @@ public class UpdateVendorService extends IntentService {
             contentValues.put(BfwContract.Farmer.COLUMN_GENDER, gender ? "male" : "female");
             contentValues.put(BfwContract.Farmer.COLUMN_PHONE, phoneNumber);
 
-            contentValues.put(BfwContract.Farmer.COLUMN_ARABLE_LAND_PLOT, arableLandPlot);
-
             contentValues.put(BfwContract.Farmer.COLUMN_HOUSEHOLD_HEAD, isHouseHoldHead ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_HOUSE_MEMBER, houseHoldMember);
             contentValues.put(BfwContract.Farmer.COLUMN_FIRST_NAME, fName);
@@ -198,43 +196,14 @@ public class UpdateVendorService extends IntentService {
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_PHONE, cellPhoneAlt);
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_CARRIER, cellCarrier);
             contentValues.put(BfwContract.Farmer.COLUMN_MEMBER_SHIP, memeberShipId);
-
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_PROD_B_KG, totProductionKg);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_LOST_KG, totLostKg);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_SOLD_KG, totSolddKg);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_COOP, totSoldVolCoop);
-            contentValues.put(BfwContract.Farmer.COLUMN_PRICE_SOLD_COOP_PER_KG, totPriceSoldCoopPerKG);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_IN_KG, totVolSideSold);
-            contentValues.put(BfwContract.Farmer.COLUMN_PRICE_SOLD_KG, priceSoldKg);
-
-            contentValues.put(BfwContract.Farmer.COLUMN_OUTSANDING_LOAN, outstandingLoan ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_LOAN_AMOUNT, totLoanAmount);
-            contentValues.put(BfwContract.Farmer.COLUMN_MOBILE_MONEY_ACCOUNT, isMobileMoneyAccount ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_TOT_OUTSTANDING, totOutstanding);
-            contentValues.put(BfwContract.Farmer.COLUMN_INTEREST_RATE, interestRate);
-            contentValues.put(BfwContract.Farmer.COLUMN_DURATION, duration);
-            contentValues.put(BfwContract.Farmer.COLUMN_LOAN_PROVIDER, loanProvider);
-            contentValues.put(BfwContract.Farmer.COLUMN_LP_AGGREG, isAggregation ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_LP_INPUT, isInput ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_LP_OTHER, isOther ? 1 : 0);
-
-            contentValues.put(BfwContract.Farmer.COLUMN_AGRI_EXTENSION_SERV, isAgriculture ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_CLIMATE_RELATED_INFO, isClimateInfo ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_SEEDS, isSeeds ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_ORGANIC_FERTILIZER, organicFertilizers ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_INORGANIC_FERTILIZER, inorganicFertilizers ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_LABOUR, labour ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_WATER_PUMPS, waterPumps ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_TRACTORS, isTractors ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_HARVESTER, isHarvester ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_SPRAYERS, isSpreader ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_DRYER, isDryer ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_TRESHER, isTresher ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_SAFE_STORAGE, isSafeStorage ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO, isOtherInfo ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_DAM, isDam ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_WELL, isWell ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_BORHOLE, isBoreHole ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_PIPE_BORNE, isPipeBorne ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_RIVER_STREAM, isRiverStream ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_IRRIGATION, isIrrigation ? 1 : 0);

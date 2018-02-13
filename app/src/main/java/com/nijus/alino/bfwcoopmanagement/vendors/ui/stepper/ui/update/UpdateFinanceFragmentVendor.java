@@ -107,63 +107,8 @@ public class UpdateFinanceFragmentVendor extends Fragment implements AdapterView
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int lOutstandingLoan = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OUTSANDING_LOAN));
-            int lTotLoanAmount = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOAN_AMOUNT));
-            int lTotOutstanding = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_OUTSTANDING));
-            double lInterestRate = data.getDouble(data.getColumnIndex(BfwContract.Farmer.COLUMN_INTEREST_RATE));
-            int lDuration = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DURATION));
-            String lProvider = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_LOAN_PROVIDER));
-            int isMMAccount = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_MOBILE_MONEY_ACCOUNT));
-            int lInput = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_INPUT));
-            int lAggregation = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_AGGREG));
-            int lOther = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_OTHER));
 
-            if (lOutstandingLoan == 1) {
-                outstandingLoan.setChecked(true);
-                financeVendor.setOutstandingLoan(true);
-            } else {
-                financeVendor.setOutstandingLoan(false);
-            }
 
-            if (isMMAccount == 1) {
-                mobileMoneyAccount.setChecked(true);
-                financeVendor.setHasMobileMoneyAccount(true);
-            } else {
-                financeVendor.setHasMobileMoneyAccount(false);
-            }
-
-            if (lInput == 1) {
-                inPut.setChecked(true);
-                financeVendor.setInput(true);
-            } else {
-                financeVendor.setInput(false);
-            }
-
-            if (lAggregation == 1) {
-                inPut.setChecked(true);
-                financeVendor.setAggregation(true);
-            } else {
-                financeVendor.setAggregation(false);
-            }
-
-            if (lOther == 1) {
-                other.setChecked(true);
-                financeVendor.setOtherLp(true);
-            } else {
-                financeVendor.setOtherLp(false);
-            }
-
-            totLoanAmount.setText("" + lTotLoanAmount + "");
-            totOutstanding.setText("" + lTotOutstanding + "");
-            interestRate.setText("" + lInterestRate + "");
-            duration.setText("" + lDuration + "");
-            financeVendor.setTotLoanAmount(lTotLoanAmount);
-            financeVendor.setTotOutstanding(lTotOutstanding);
-            financeVendor.setInterestRate(lInterestRate);
-            financeVendor.setDurationInMonth(lDuration);
-
-            setSpinnerItemByName(loanProvider, lProvider);
-            mPageVendor.setData("financeVendor", financeVendor);
         }
     }
 

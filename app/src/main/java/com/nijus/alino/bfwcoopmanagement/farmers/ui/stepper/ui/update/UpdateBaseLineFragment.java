@@ -99,13 +99,13 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int totProd = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_PROD_B_KG));
-            int totLost = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOST_KG));
-            int totSolKg = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_SOLD_KG));
-            int totVSoldCoop = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_COOP));
-            int priceSoldCoop = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_COOP_PER_KG));
-            int totVolSKg = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_IN_KG));
-            int priceSold = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_KG));
+            int totProd = 0;
+            int totLost = 0;
+            int totSolKg = 0;
+            int totVSoldCoop = 0;
+            int priceSoldCoop = 0;
+            int totVolSKg = 0;
+            int priceSold = 0;
 
             totProdKg.setText("" + totProd + "");
             totLostKg.setText("" + totLost + "");

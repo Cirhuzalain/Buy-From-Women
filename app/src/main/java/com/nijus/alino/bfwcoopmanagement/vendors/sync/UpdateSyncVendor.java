@@ -82,8 +82,6 @@ public class UpdateSyncVendor extends IntentService {
                     String phoneNumber = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
                     String gender = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_GENDER));
 
-                    double arableLandPlot = cursor.getDouble(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_ARABLE_LAND_PLOT));
-
                     boolean houseHold = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSEHOLD_HEAD)) == 1;
                     int houseMember = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSE_MEMBER));
                     String sFirstName = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_FIRST_NAME));
@@ -91,43 +89,15 @@ public class UpdateSyncVendor extends IntentService {
                     String cellPhone = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_PHONE));
                     String cellCarrier = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_CARRIER));
                     String membershipId = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_MEMBER_SHIP));
-
-                    int totProdBKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_PROD_B_KG));
-                    int totLostKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOST_KG));
-                    int totSoldKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_SOLD_KG));
-                    int totVolSoldCoop = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_COOP));
-                    int priceSoldPerKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_COOP_PER_KG));
-                    int totVolSoldKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_IN_KG));
-                    int priceSoldKg = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_KG));
-
-                    boolean isOutstanding = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OUTSANDING_LOAN)) == 1;
-                    int totLoanAmount = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOAN_AMOUNT));
-                    int totOutstanding = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_OUTSTANDING));
-                    double interestRate = cursor.getDouble(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_INTEREST_RATE));
-                    int duration = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_DURATION));
-                    String loanProvider = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_LOAN_PROVIDER));
-                    boolean isMobileMoney = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_MOBILE_MONEY_ACCOUNT)) == 1;
-                    boolean isAggregation = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_LP_AGGREG)) == 1;
-                    boolean isInput = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_LP_INPUT)) == 1;
                     boolean isOther = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER)) == 1;
-
-                    boolean isAggriExtension = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_AGRI_EXTENSION_SERV)) == 1;
-                    boolean isClimate = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_CLIMATE_RELATED_INFO)) == 1;
-                    boolean seeds = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_SEEDS)) == 1;
-                    boolean isOrganicFertilizer = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_ORGANIC_FERTILIZER)) == 1;
-                    boolean isInorganicFertilizer = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_INORGANIC_FERTILIZER)) == 1;
-                    boolean labour = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_LABOUR)) == 1;
-                    boolean waterPumps = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_PUMPS)) == 1;
                     boolean tractors = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TRACTORS)) == 1;
                     boolean harvester = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_HARVESTER)) == 1;
-                    boolean sprayers = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_SPRAYERS)) == 1;
                     boolean dryer = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_DRYER)) == 1;
                     boolean tresher = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_TRESHER)) == 1;
                     boolean safeStorage = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_SAFE_STORAGE)) == 1;
                     boolean otherInfo = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO)) == 1;
                     boolean isDam = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_DAM)) == 1;
                     boolean isWell = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_WELL)) == 1;
-                    boolean isBorehole = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_BORHOLE)) == 1;
                     boolean isPipeBorne = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_PIPE_BORNE)) == 1;
                     boolean isRiverStream = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_RIVER_STREAM)) == 1;
                     boolean isIrrigation = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_IRRIGATION)) == 1;
@@ -143,62 +113,7 @@ public class UpdateSyncVendor extends IntentService {
                             .build();
                     String API = BuildConfig.API_URL + "res.partner" + "/" + fServerId;
 
-                    loanProvider = loanProvider == null ? "\"other\"" : "\"" + loanProvider + "\"";
-
-                    String bodyContent = "{" +
-                            "\"ar_safestorage\": " + safeStorage + "," +
-                            "\"num_household_members\": " + houseMember + "," +
-                            "\"cellphone_alt\": \"" + cellPhone + "\"," +
-                            "\"mws_well\": " + isWell + "," +
-                            "\"sex\": \"" + gender + "\"," +
-                            "\"total_outstanding\": " + totOutstanding + "," +
-                            "\"loan_provider\": " + loanProvider + "," +
-                            "\"duration\": " + duration + "," +
-                            "\"ar_dryer\": " + dryer + "," +
-                            bankInfos +
-                            "\"ar_labour\": " + labour + "," +
-                            "\"ar_thresher\": " + tresher + "," +
-                            "\"interest_rate\": " + interestRate + "," +
-                            "\"ar_other\": " + otherInfo + "," +
-                            "\"mobile_money_account\": " + isMobileMoney + "," +
-                            "\"head_of_household\": " + houseHold + "," +
-                            "\"ar_iwp\": " + waterPumps + "," +
-                            "\"seasona_2016_harvest\": " + totProdBKg + "," +
-                            "\"loan_purpose_i\": " + isInput + "," +
-                            "\"cell_carrier\": \"" + cellCarrier + "\"," +
-                            "\"spouse_lastname\": \"" + sLastName + "\"," +
-                            "\"total_loan_amount\": " + totLoanAmount + "," +
-                            "\"mws_other\": " + isOtherSource + "," +
-                            "\"ar_cri\": " + isClimate + "," +
-                            "\"loan_purpose_a\": " + isAggregation + "," +
-                            "\"price_sold_middlemen\": " + priceSoldKg + "," +
-                            "\"total_qty_coops\": " + totVolSoldCoop + "," +
-                            "\"mws_none\": " + isNone + "," +
-                            "\"mws_rs\": " + isRiverStream + "," +
-                            "\"spouse_firstname\": \"" + sFirstName + "\"," +
-                            "\"ar_of\": " + isOrganicFertilizer + "," +
-                            "\"mws_pb\": " + isPipeBorne + "," +
-                            "\"ar_tractors\": " + tractors + "," +
-                            "\"loan_purpose_o\": " + isOther + "," +
-                            "\"user_id\": " + coopUserId + "," +
-                            "\"ar_seeds\": " + seeds + "," +
-                            "\"lost_harvest_total\": " + totLostKg + "," +
-                            "\"outstanding_loan\": " + isOutstanding + "," +
-                            "\"mws_dam\": " + isDam + "," +
-                            "\"cellphone\": \"" + phoneNumber + "\"," +
-                            "\"total_arable_land_plots\": " + arableLandPlot + "," +
-                            "\"ar_if\": " + isInorganicFertilizer + "," +
-                            "\"name\": \"" + name + "\"," +
-                            "\"contact_type\": \"farmer\"," +
-                            "\"price_sold_coops\": " + priceSoldPerKg + "," +
-                            "\"mws_irrigation\": " + isIrrigation + "," +
-                            "\"mws_borehole\": " + isBorehole + "," +
-                            "\"ar_aes\": " + isAggriExtension + "," +
-                            "\"membership_id\": \"" + membershipId + "\"," +
-                            "\"sold_harvest_total\": " + totSoldKg + "," +
-                            "\"ar_ss\": " + sprayers + "," +
-                            "\"ar_harverster\": " + harvester + "," +
-                            "\"total_qty_middlemen\": " + totVolSoldKg + "}";
+                    String bodyContent = "{}";
 
 
                     RequestBody body = RequestBody.create(JSON, bodyContent);

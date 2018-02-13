@@ -99,29 +99,7 @@ public class UpdateBaseLineFragmentVendor extends Fragment implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int totProd = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_PROD_B_KG));
-            int totLost = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOST_KG));
-            int totSolKg = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_SOLD_KG));
-            int totVSoldCoop = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_COOP));
-            int priceSoldCoop = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_COOP_PER_KG));
-            int totVolSKg = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_VOL_SOLD_IN_KG));
-            int priceSold = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PRICE_SOLD_KG));
 
-            totProdKg.setText("" + totProd + "");
-            totLostKg.setText("" + totLost + "");
-            totSoldKg.setText("" + totSolKg + "");
-            totVolSoldCoops.setText("" + totVSoldCoop + "");
-            priceSoldToCoop.setText("" + priceSoldCoop + "");
-            totVolSoldKg.setText("" + totVolSKg + "");
-            priceSoldKg.setText("" + priceSold + "");
-
-            baseLineVendor.setTotProdInKg(totProd);
-            baseLineVendor.setTotLostInKg(totLost);
-            baseLineVendor.setTotSoldInKg(totSolKg);
-            baseLineVendor.setTotVolumeSoldCoopInKg(totVSoldCoop);
-            baseLineVendor.setPriceSoldToCoopPerKg(priceSoldCoop);
-            baseLineVendor.setTotVolSoldInKg(totVolSKg);
-            baseLineVendor.setPriceSoldInKg(priceSold);
             mPageVendor.getData().putParcelable("baseline", baseLineVendor);
         }
     }

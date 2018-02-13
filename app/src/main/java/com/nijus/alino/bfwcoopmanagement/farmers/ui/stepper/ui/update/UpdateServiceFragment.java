@@ -129,7 +129,7 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
             int otherInfo = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO));
             int cDam = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DAM));
             int cwell = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WELL));
-            int cborehole = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_BORHOLE));
+            int cborehole = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_BOREHOLE));
             int cpipeBorne = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PIPE_BORNE));
             int criverStream = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_RIVER_STREAM));
             int cirrig = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_IRRIGATION));

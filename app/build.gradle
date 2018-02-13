@@ -7,7 +7,7 @@ android {
         applicationId "com.nijus.alino.bfwcoopmanagement"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 11
+        versionCode 12
         versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

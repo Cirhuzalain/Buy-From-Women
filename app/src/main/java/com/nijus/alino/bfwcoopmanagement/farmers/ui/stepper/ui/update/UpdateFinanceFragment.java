@@ -107,16 +107,16 @@ public class UpdateFinanceFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int lOutstandingLoan = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OUTSANDING_LOAN));
-            int lTotLoanAmount = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_LOAN_AMOUNT));
-            int lTotOutstanding = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TOT_OUTSTANDING));
-            double lInterestRate = data.getDouble(data.getColumnIndex(BfwContract.Farmer.COLUMN_INTEREST_RATE));
-            int lDuration = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DURATION));
-            String lProvider = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_LOAN_PROVIDER));
-            int isMMAccount = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_MOBILE_MONEY_ACCOUNT));
-            int lInput = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_INPUT));
-            int lAggregation = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_AGGREG));
-            int lOther = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LP_OTHER));
+            int lOutstandingLoan = 0;
+            int lTotLoanAmount = 0;
+            int lTotOutstanding = 0;
+            double lInterestRate = 0;
+            int lDuration = 0;
+            String lProvider = "";
+            int isMMAccount  = 0;
+            int lInput = 0;
+            int lAggregation = 0;
+            int lOther = 0;
 
             if (lOutstandingLoan == 1) {
                 outstandingLoan.setChecked(true);

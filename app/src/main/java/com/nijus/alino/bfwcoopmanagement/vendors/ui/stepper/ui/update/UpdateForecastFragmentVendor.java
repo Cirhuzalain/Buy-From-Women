@@ -94,7 +94,7 @@ public class UpdateForecastFragmentVendor extends Fragment implements LoaderMana
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
 
-            double arableLandPlot = data.getDouble(data.getColumnIndex(BfwContract.Farmer.COLUMN_ARABLE_LAND_PLOT));
+            double arableLandPlot = 2;
             String landValue = "" + arableLandPlot + "";
             numLandPlot.setText(landValue);
             forecastVendor.setArableLandPlot(arableLandPlot);
