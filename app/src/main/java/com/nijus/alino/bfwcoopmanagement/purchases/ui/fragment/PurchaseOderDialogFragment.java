@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class PurchaseOderDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
 
@@ -34,8 +36,6 @@ public class PurchaseOderDialogFragment extends DialogFragment implements Dialog
     //private DatePicker date;
     private EditText ed_date_value;
     private Button date_btn;
-    private  int jr,mois,annee;
-
 
     private Spinner productName;
     private EditText quantity;
@@ -134,19 +134,24 @@ public class PurchaseOderDialogFragment extends DialogFragment implements Dialog
         }
         if(view == date_btn){
 
-            final Calendar c= Calendar.getInstance();
-            jr=c.get(Calendar.DAY_OF_MONTH);
-            mois=c.get(Calendar.MONTH);
-            annee=c.get(Calendar.YEAR);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            final Calendar calendar = Calendar.getInstance();
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    ed_date_value.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+                public void onDateSet(DatePicker arg0, int year, int month, int day_of_month) {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, (month));
+                    calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                    String myFormat = "dd/MM/yyyy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+                    ed_date_value.setText(sdf.format(calendar.getTime()));
                 }
-            }
-                    ,jr,mois,annee);
-            datePickerDialog.show();
+            },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.set(Calendar.YEAR, 2000);
+            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
+            calendar.set(Calendar.YEAR, 2030);
+            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());// TODO: used to hide future date,month and year
+
+            dialog.show();
         }
     }
 

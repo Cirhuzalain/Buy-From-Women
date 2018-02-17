@@ -3,22 +3,28 @@ package com.nijus.alino.bfwcoopmanagement.sales.ui.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SalesBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 
-public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFragment.OnListFragmentInteractionListener, View.OnClickListener {
+public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFragment.OnListFragmentInteractionListener,
+        View.OnClickListener{
+    private SwipeRefreshLayout mRefreshData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +34,18 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sale_order);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
+
+        //mRefreshData = findViewById(R.id.refresh_data_done);
+       // mRefreshData.setOnRefreshListener(this);
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.fab_sale_order) {
-            SaleOrderDialogFragment dialogFragment = new SaleOrderDialogFragment();
-            dialogFragment.show(getSupportFragmentManager(), "saleDialog");
+            BottomSheetDialogFragment bottomSheetDialogFragment = new SalesBottomSheetDialogFragment();
+            bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+            /*SaleOrderDialogFragment dialogFragment = new SaleOrderDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(), "saleDialog");*/
         }
     }
 
@@ -89,4 +100,9 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
 
         return super.onOptionsItemSelected(item);
     }
+
+   /* @Override
+    public void onRefresh() {
+        mRefreshData.setRefreshing(false);
+    }*/
 }

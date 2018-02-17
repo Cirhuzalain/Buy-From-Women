@@ -28,17 +28,17 @@ public class ProductListFragment extends Fragment implements AdapterView.OnItemC
     private String mParam2;
 
     private Product[] productArrayList = {
+            new Product("MAIZEIII", "25000 RWF", "150 KG"),
+            new Product("MAIZEII", "2500 RWF", "15000 KG"),
+            new Product("MAIZEI", "25000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG")
+            new Product("MAIZEIII", "250000 RWF", "10000 KG"),
+            new Product("MAIZEI II", "25000 RWF", "15000 KG"),
+            new Product("MAIZEIII", "250000 RWF", "15000 KG"),
+            new Product("MAIZEII", "25000 RWF", "150000 KG"),
+            new Product("MAIZE", "250000 RWF", "150 KG"),
+            new Product("MAIZEIII", "250000 RWF", "1500 KG"),
+            new Product("MAIZE II", "250000 RWF", "150000 KG")
     };
 
     private OnListFragmentInteractionListener mListener;

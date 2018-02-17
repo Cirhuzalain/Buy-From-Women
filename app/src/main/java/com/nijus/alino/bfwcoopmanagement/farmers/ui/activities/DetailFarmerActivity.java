@@ -66,7 +66,7 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
 
         FloatingActionButton fab = findViewById(R.id.fab_coop);
         ImageView imageView = findViewById(R.id.coop_image);
-        imageView.setImageResource(R.drawable.bg);
+        imageView.setImageResource(R.mipmap.farmer_bg);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -50,20 +50,6 @@ public class UpdateCoopAgent extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-   /* @Override
-    public void onBackPressed() {
-        DrawerLayout drawerLayout = super.getDrawerLayout();
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-    }*/
-
-
 }

@@ -52,11 +52,16 @@ public class ProductAdapter extends BaseAdapter {
         final TextView productName = view.findViewById(R.id.productName);
         final TextView productQty = view.findViewById(R.id.productQty);
         final TextView productPrice = view.findViewById(R.id.productPrice);
-
+/*
         if (mIsProduct) {
             imageView.setImageResource(R.drawable.ic_add_shopping_cart_black_24dp);
         } else {
             imageView.setImageResource(R.drawable.ic_local_grocery_store_black_24dp);
+        }*/
+        if (mIsProduct) {
+            imageView.setImageResource(R.mipmap.farmer_bg);
+        } else {
+            imageView.setImageResource(R.mipmap.farmer_bg);
         }
 
         productName.setText(product.getName());

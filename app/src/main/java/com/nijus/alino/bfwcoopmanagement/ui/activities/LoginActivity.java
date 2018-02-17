@@ -69,9 +69,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static com.nijus.alino.bfwcoopmanagement.R.id.add;
-import static com.nijus.alino.bfwcoopmanagement.R.id.is_vendor;
-import static com.nijus.alino.bfwcoopmanagement.R.id.loan;
 import static com.nijus.alino.bfwcoopmanagement.R.id.login_form;
 
 /**
@@ -3157,7 +3154,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         .content(message)
                         .theme(CafeBarTheme.CLEAR_BLACK)
                         .floating(true)
-                        .gravity(CafeBarGravity.START)
+                        .gravity(CafeBarGravity.CENTER)
                         .duration(CafeBarDuration.LONG.getDuration())
                         .neutralText("Close")
                         .neutralColor(Color.parseColor("#FF4081"))

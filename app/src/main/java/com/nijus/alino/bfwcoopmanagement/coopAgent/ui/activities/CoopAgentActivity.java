@@ -1,5 +1,6 @@
 package com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -25,8 +26,7 @@ import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
-public class CoopAgentActivity extends AppCompatActivity /*implements CoopAgentFragment.OnListFragmentInteractionListener,*/ /*CoopAgentFragment.OnFragmentInteractionListener */{
-    private CollapsingToolbarLayout collapsingToolbarLayout;
+public class CoopAgentActivity extends BaseActivity  {
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,37 +34,17 @@ public class CoopAgentActivity extends AppCompatActivity /*implements CoopAgentF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coop_agent);
 
-
         FloatingActionButton fab = findViewById(R.id.fab_edit_coop_agent);
-        ImageView imageView = findViewById(R.id.c_details);
-        imageView.setImageResource(R.drawable.bg);
+
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"eloko",Toast.LENGTH_LONG).show();
-
                 Intent intent1 = new Intent(getApplicationContext(),UpdateCoop.class);
                 intent1.putExtra("coopId", 1);
                 startActivity(intent1);
             }
         });
-
-        collapsingToolbarLayout = findViewById(R.id.name_coop);
-        toolbar = findViewById(R.id.toolbar_coop);
-        //toolbar.setTitle(mCoopId+"");
-        //Log.d("DetailCoopActivity",mCoopId+"");
-
-
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Affichages des donnees venant dans lka base des donnes
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         TextView name_c_details = findViewById(R.id.name_c_details);
         name_c_details.setText("ici le text");
@@ -380,13 +360,6 @@ public class CoopAgentActivity extends AppCompatActivity /*implements CoopAgentF
             }
         });
 
-
-
-
-
-
-
-
     }
 
     @Override
@@ -394,6 +367,17 @@ public class CoopAgentActivity extends AppCompatActivity /*implements CoopAgentF
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = super.getDrawerLayout();
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            NavUtils.navigateUpFromSameTask(this);
+        }
     }
 
     @Override
@@ -411,16 +395,16 @@ public class CoopAgentActivity extends AppCompatActivity /*implements CoopAgentF
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawerLayout = super.getDrawerLayout();
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            NavUtils.navigateUpFromSameTask(this);
+    @Override
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+    public void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY).trim();
         }
-    }*/
+    }
 
 }

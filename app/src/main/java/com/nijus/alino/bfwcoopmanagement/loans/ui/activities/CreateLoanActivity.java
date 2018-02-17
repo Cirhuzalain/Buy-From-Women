@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CreateLoanActivity extends AppCompatActivity implements View.OnClickListener {
     private Button save_loan;
     private EditText ed_date_value;
     private Button date;
-    private  int jr,mois,annee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +48,25 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
         if(view==save_loan){
         Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show();}
         else if(view == date){
-            final Calendar c= Calendar.getInstance();
-            jr=c.get(Calendar.DAY_OF_MONTH);
-            mois=c.get(Calendar.MONTH);
-            annee=c.get(Calendar.YEAR);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            final Calendar calendar = Calendar.getInstance();
+            DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                 @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    ed_date_value.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
+                public void onDateSet(DatePicker arg0, int year, int month, int day_of_month) {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, (month));
+                    calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                    String myFormat = "dd/MM/yyyy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+                    ed_date_value.setText(sdf.format(calendar.getTime()));
                 }
-            }
-                    ,jr,mois,annee);
-            datePickerDialog.show();
+            },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.set(Calendar.YEAR, 2000);
+            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
+            calendar.set(Calendar.YEAR, 2030);
+            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());// TODO: used to hide future date,month and year
+
+            dialog.show();
         }
     }
 }

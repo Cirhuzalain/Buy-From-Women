@@ -73,6 +73,8 @@
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/cardview_light_background"
+                    android:background="@drawable/gradient_button"
                     android:text="@string/title_activity_create_buyer" />
 
 

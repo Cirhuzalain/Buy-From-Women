@@ -23,6 +23,7 @@ import com.nijus.alino.bfwcoopmanagement.R;
 //import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.CreateBuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.adapter.LoanAdapter;
+import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.CreateLoanActivity;
 
 
 public class LoanFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -137,9 +138,9 @@ public class LoanFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onClick(View view) {
 
         if (view.getId() == R.id.fab) {
-            Toast.makeText(getContext(), "breee clic fab voir enregistrer", Toast.LENGTH_LONG).show();
-            //Intent intent  = new Intent(getActivity(), CreateCoopActivity.class);
-            //startActivity(new Intent(getActivity(), CreateBuyerActivity.class));
+            Toast.makeText(getContext(), "Comming soon", Toast.LENGTH_LONG).show();
+           //Intent intent  = new Intent(getActivity(), CreateLoanActivity.class);
+            //startActivity(new Intent(getActivity(), CreateLoanActivity.class));
         }
     }
 

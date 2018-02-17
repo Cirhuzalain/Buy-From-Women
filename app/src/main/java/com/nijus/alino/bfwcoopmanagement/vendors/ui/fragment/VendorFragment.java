@@ -23,6 +23,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -90,6 +91,8 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
         View view = inflater.inflate(R.layout.activity_main2, container, false);
         //View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_farmer);
+        TextView textView = view.findViewById(R.id.recyclerview_empty_farmer);
+        textView.setText(R.string.there_s_no_vendor);
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.farmers_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

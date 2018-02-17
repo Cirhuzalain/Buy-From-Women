@@ -2,6 +2,7 @@ package com.nijus.alino.bfwcoopmanagement.sales.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,8 +80,11 @@ public class SaleOrderFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Product product = productArrayList[i];
-        UpdateSaleOrderDialogFragment dialogFragment = new UpdateSaleOrderDialogFragment();
-        dialogFragment.show(getFragmentManager(), "updateSaleTag");
+        //appel du bootom sheet pur modification
+        BottomSheetDialogFragment bottomSheetDialogFragment = new SalesBottomSheetDialogFragment();
+        bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
+        /*UpdateSaleOrderDialogFragment dialogFragment = new UpdateSaleOrderDialogFragment();
+        dialogFragment.show(getFragmentManager(), "updateSaleTag");*/
     }
 
     @Override

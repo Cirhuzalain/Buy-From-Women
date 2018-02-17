@@ -17,27 +17,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.PaymentBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
 
-
 public class DetailLoanActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener {
-    Long mBuyerId;
+    Long mLoanId;
     private Uri mUri;
     private String name;
     private String mKey;
     public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
+    private ImageView loan_details;
 
     private Button schedule,payment, save;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,30 +46,24 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         //get Coop Id
         Intent intent = this.getIntent();
         if (intent.hasExtra("loanId")) {
-            mBuyerId = intent.getLongExtra("loanId", 0);
-            mUri = BfwContract.Coops.buildCoopUri(mBuyerId);
+            mLoanId = intent.getLongExtra("loanId", 0);
+            mUri = BfwContract.Coops.buildCoopUri(mLoanId);
         }
 
         collapsingToolbarLayout = findViewById(R.id.name_loan);
         toolbar = findViewById(R.id.toolbar_loan);
-        //toolbar.setTitle(mBuyerId+"");
-        //Log.d("DetailCoopActivity",mBuyerId+"");
-
-
         setSupportActionBar(toolbar);
 
-
         FloatingActionButton fab = findViewById(R.id.fab_edit_loan);
-        ImageView imageView = findViewById(R.id.loan_details);
-        //imageView.setImageResource(R.mipmap.coopbg);
+        loan_details = findViewById(R.id.loan_details);
+        loan_details.setImageResource(R.mipmap.loan_bg);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Comming soon",Toast.LENGTH_LONG).show();
-                /*Intent intent1 = new Intent(getApplicationContext(),UpdateBuyerActivity.class);
-                intent1.putExtra("buyerId", mBuyerId);
-                startActivity(intent1);*/
+                Intent intent1 = new Intent(getApplicationContext(),UpdateLoanActivity.class);
+                intent1.putExtra("loanId", mLoanId);
+                startActivity(intent1);
             }
         });
 
@@ -99,7 +90,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
                     mUri,
                     null,
                     coopSelection,
-                    new String[]{Long.toString(mBuyerId)},
+                    new String[]{Long.toString(mLoanId)},
                     null
             );
         }
@@ -114,19 +105,6 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             name = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME));
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
-
-            //Affichages des donnees venant dans lka base des donnes
-
-
-           /* TextView name_ca_details = findViewById(R.id.name_b_details);
-            name_ca_details.setText("Name Lastname Buyer");
-            TextView phone_ca_details = findViewById(R.id.phone_b_details);
-            phone_ca_details.setText("+2501286555");
-            *//*TextView coop_ca_details = findViewById(R.id.coop_ca_details);
-            coop_ca_details.setText("ici le text");*//*
-            TextView mail_ca_details = findViewById(R.id.mail_b_details);
-            mail_ca_details.setText("ici @ text");*/
-
         }
     }
 
@@ -152,18 +130,13 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
                 adb.setView(alertLayout);
-                //adb.setTitle("List");
-                //adb.setMessage(name);
                 adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
-                        //dialogInterface.dismiss();
                     }
                 });
                 adb.show();
-               // BottomSheetDialogFragment bottomSheetDialogFragment = new ScheduleBottomSheetDialogFragment();
-                ///bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                 break;
             }
         }
