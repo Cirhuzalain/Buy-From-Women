@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.view.ActionMode;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -158,9 +159,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements  VendorFra
         tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-
-
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -178,15 +176,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements  VendorFra
 
             }
         });
-        //}
-        //catch (Exception e)
-        //{
-           // Toast.makeText(this, "error "+e.getMessage(), Toast.LENGTH_LONG).show();
-            //e.printStackTrace();
-       // }
-       /* selectedItems = new SparseBooleanArray();
-        animationItemsIndex = new SparseBooleanArray();*/
-        //actionModeCallback = new ActionModeCallback();
 
     }
 
@@ -206,9 +195,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements  VendorFra
         adapter.addFragment(buyerFragment,"Buyer");
         adapter.addFragment(vendorFragment,"Vendor");
 
-       /* selectedItems = new SparseBooleanArray();
-        animationItemsIndex = new SparseBooleanArray();
-*/
         viewPager.setAdapter(adapter);
     }
 

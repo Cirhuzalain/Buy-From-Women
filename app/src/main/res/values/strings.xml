@@ -112,7 +112,7 @@
     <string name="aggregation">Aggregation</string>
     <string name="other">Other</string>
     <string name="mm_acct">Mobile Money Account</string>
-    <string name="harvsetSeason">Harvset Season</string>
+    <string name="harvsetSeason">Harvest Season</string>
     <string name="available_resources">Available Resources</string>
     <string name="agri_extension">Agricultural extension services</string>
     <string name="climate_related_information_e_g_weather_forecasts">Climate related information (e.g. weather forecasts)</string>
@@ -201,6 +201,9 @@
     <string name="harvest_season">Harvest Season</string>
     <string name="order_lines">Order Lines</string>
     <string name="product">Product</string>
+    <string name="product_name">Product name</string>
+    <string name="sale_price">Sale price</string>
+    <string name="cost">Cost</string>
     <string name="quantity">Quantity (Kg)</string>
     <string name="add_so_contract">Add New Product</string>
     <string name="payment_term">Payment Term</string>
@@ -220,6 +223,7 @@
     <string name="val_so_settings">Settings</string>
     <string name="vendor">Vendor</string>
     <string name="coop_agent">Coop Agent</string>
+    <string name="details_coop_">Cooperative\'s details</string>
     <string name="date">Date</string>
     <string name="deliveries_and_invoices">Deliveries and Invoices</string>
     <string name="title_activity_purchase_order">Purchase Order</string>
@@ -272,7 +276,7 @@
     <string name="access_to_info">Access to Information</string>
     <string name="system">System</string>
     <string name="farmer_land">Farmer Land Information</string>
-    <string name="vender_land">Vender Land Information</string>
+    <string name="vender_land">Vendor Land Information</string>
     <string name="bank_info">Bank Information</string>
     <string name="payment_detail">Payment Detail</string>
     <string name="left_icon">Next Step Left Icon</string>
@@ -313,12 +317,13 @@
     <string name="syncing_error">An error occur while syncing farmer data</string>
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
+    <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
     <string name="update_msg">Information update successfully</string>
     <string name="coops">Coops</string>
 
     <string name="there_s_no_cooperative">There\'s no cooperative</string>
-    <string name="there_s_no_cooperative_agent">There\'s no cooperative\' agent</string>
+    <string name="there_s_no_cooperative_agent">There\'s no cooperative\'s agent</string>
     <string name="there_s_no_buyer">There\'s no buyer</string>
     <string name="there_s_no_vendor">There\'s no vendor</string>
     <string name="there_s_no_loan">There\'s no loan</string>

@@ -535,7 +535,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         .content(message)
                         .theme(CafeBarTheme.CLEAR_BLACK)
                         .floating(true)
-                        .gravity(CafeBarGravity.START)
+                        .gravity(CafeBarGravity.CENTER)
                         //.autoDismiss(false)
                         .duration(CafeBarDuration.LONG.getDuration())
                         .neutralText("Close")

@@ -1,12 +1,17 @@
 package com.nijus.alino.bfwcoopmanagement.farmers.ui.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.CreateFarmerFragment;
@@ -20,17 +25,42 @@ public class CreateFarmerActivity extends AppCompatActivity implements CreateFar
         PageFragmentCallbacks {
 
     private FarmerWizardModel farmerWizardModel = new FarmerWizardModel(this);
+    /*private ActionBar actionBar;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar;
+        actionBar = getSupportActionBar();
+        getSupportActionBar().setElevation(0.0f);
+        //AppBarLayout appBarLayout = actionBar.getCustomView();
+        //getSupportActionBar().setElevation(0);
+        //getActionBar().setElevation(0);
+
+
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setElevation(0);
+
         setContentView(R.layout.create_farmer_fragment);
-        ActionBar actionBar = getSupportActionBar();
+
+        //actionBar.setElevation(0);
         if (actionBar != null) {
-            actionBar.setElevation(0);
+            //actionBar.setElevation(0);
         }
 
+        // chek si orientation est paysage pour supprimer l'eleveation du toolbar
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            // Portrait Mode
+            //Toast.makeText(this,"P",Toast.LENGTH_LONG).show();
+            //actionBar.setElevation(0);
+        } else {
+            // Landscape Mode
+            //Toast.makeText(this,"L",Toast.LENGTH_LONG).show();
+            //actionBar.setElevation(0);
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

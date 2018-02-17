@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,8 +61,6 @@ public class NavigationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main2);
 
-        //getLoaderManager().initLoader(0, null, "");
-        //getSupportLoaderManager(0, null, this);
         getSupportLoaderManager().initLoader(0,null,this);
 
 
@@ -71,28 +70,9 @@ public class NavigationActivity extends BaseActivity implements
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
 
-        //recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-      /*  navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(this, emptyView,
-                new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
-            @Override
-            public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-                //((CoopAgentFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
-            }
-
-        }, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
-            @Override
-            public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-
-            }
-            @Override
-            public boolean onLongClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-                //return ((CoopAgentFragment.OnListFragmentInteractionListener) getActivity()).onLong2FragmentInteraction(farmerId, vh);
-                return true;
-            }
-        });*/
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(this, emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
@@ -107,31 +87,6 @@ public class NavigationActivity extends BaseActivity implements
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
 
-   /*     //add on 1 febrary 2018 listener to recycleview when touching it
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT *//*| ItemTouchHelper.RIGHT | ItemTouchHelper.UP*//*) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Row is swiped from recycler view
-                // remove it from adapter
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
-*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);

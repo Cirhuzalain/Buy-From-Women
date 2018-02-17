@@ -38,6 +38,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
     private GeneralInformation general;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
+    private ImageView coop_image_details;
 
 
     @Override
@@ -56,6 +57,9 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
 
         collapsingToolbarLayout = findViewById(R.id.name_coop);
         toolbar = findViewById(R.id.toolbar_coop);
+
+        coop_image_details = findViewById(R.id.coop_image_details);
+        coop_image_details.setImageResource(R.mipmap.coop_bg);
         //toolbar.setTitle(mCoopId+"");
         //Log.d("DetailCoopActivity",mCoopId+"");
 
@@ -65,7 +69,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_coop);
         ImageView imageView = findViewById(R.id.coop_image_details);
-        imageView.setImageResource(R.mipmap.coopbg);
+        imageView.setImageResource(R.mipmap.coop_bg);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

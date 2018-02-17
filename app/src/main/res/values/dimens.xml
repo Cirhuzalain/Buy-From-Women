@@ -54,4 +54,24 @@
     <dimen name="landscape_forecast_view_width">360dp</dimen>
     <dimen name="appbar_elevation">4dp</dimen>
 
+    <dimen name="padding_bottom_sheet">0dp</dimen>
+
+    <dimen name="padding_land">120dp</dimen>
+
+    <dimen name="padding_sw600_land">190dp</dimen>
+    <dimen name="padding_sw600_port">150dp</dimen>
+
+    <dimen name="padding_sw720_land">200dp</dimen>
+    <dimen name="padding_sw720_port">150dp</dimen>
+
+<!--
+    cardview recycle view
+-->
+    <dimen name="md_keylines">8dp</dimen>
+    <dimen name="card_image_height">100dp</dimen>
+    <dimen name="card_title_height">40dp</dimen>
+    <dimen name="article_subheading">16sp</dimen>
+
+
+
 </resources>

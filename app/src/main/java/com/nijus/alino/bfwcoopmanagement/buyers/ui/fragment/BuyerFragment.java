@@ -1,5 +1,4 @@
 package com.nijus.alino.bfwcoopmanagement.buyers.ui.fragment;
-//CoopAgentFragment
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.CreateBuyerActivit
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.CreateCoopAgentActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
-
 public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
@@ -37,12 +35,9 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     private BuyerAdapter buyerRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
 
-    //private CoopAgentFragment.OnFragmentInteractionListener mListener;
-
     public BuyerFragment() {
         // Required empty public constructor
     }
-
 
     public static BuyerFragment newInstance(String param1, String param2) {
         BuyerFragment fragment = new BuyerFragment();
@@ -136,23 +131,6 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
         getLoaderManager().restartLoader(0, null, this);
     }
 
-   /* @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CoopAgentFragment.OnFragmentInteractionListener) {
-            mListener = (CoopAgentFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-*/
-   /* @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
-
     @Override
     public void onClick(View view) {
 
@@ -162,7 +140,6 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
             startActivity(new Intent(getActivity(), CreateBuyerActivity.class));
         }
     }
-
 
     /**
      * This interface must be implemented by activities that contain this

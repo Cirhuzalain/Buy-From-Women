@@ -18,6 +18,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -83,6 +84,10 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_coop_agent, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_coop_Agent);
+
+        TextView textView = view.findViewById(R.id.recyclerview_empty_coop_Agent);
+        textView.setText(R.string.there_s_no_cooperative);
+
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.coopsagent_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

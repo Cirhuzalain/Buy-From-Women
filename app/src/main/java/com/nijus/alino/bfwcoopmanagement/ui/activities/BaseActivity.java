@@ -3,6 +3,8 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -10,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -71,6 +74,20 @@ public class BaseActivity extends AppCompatActivity implements
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(mToolbar);
+/*
+        ActionBar  actionBar = getSupportActionBar();
+
+        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            // Portrait Mode
+            //Toast.makeText(this,"P",Toast.LENGTH_LONG).show();
+            actionBar.setElevation(0);
+        } else {
+            // Landscape Mode
+            //Toast.makeText(this,"L",Toast.LENGTH_LONG).show();
+            actionBar.setElevation(0);
+        }
+*/
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view_base);
 //        Menu menu = mNavigationView.getMenu();
@@ -89,9 +106,6 @@ public class BaseActivity extends AppCompatActivity implements
     public void setUpNavigationView() {
         if (mNavigationView != null) {
             mNavigationView.setNavigationItemSelectedListener(this);
-
-
-
 
             View header = LayoutInflater.from(this).inflate(R.layout.nav_header_navigation, null);
             mNavigationView.addHeaderView(header);

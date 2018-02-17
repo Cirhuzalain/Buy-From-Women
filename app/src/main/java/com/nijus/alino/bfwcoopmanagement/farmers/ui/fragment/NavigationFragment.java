@@ -15,6 +15,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -88,8 +89,6 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.activity_main2, container, false);
         //View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_farmer);

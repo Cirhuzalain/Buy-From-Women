@@ -28,7 +28,7 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
     public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-
+    private ImageView buyer_details,gen_info_pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +46,23 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
 
         collapsingToolbarLayout = findViewById(R.id.name_bayer);
         toolbar = findViewById(R.id.toolbar_buyer);
-        //toolbar.setTitle(mBuyerId+"");
-        //Log.d("DetailCoopActivity",mBuyerId+"");
 
+        buyer_details = findViewById(R.id.buyer_details);
+        buyer_details.setImageResource(R.mipmap.buyer_bg);
+
+        gen_info_pic = findViewById(R.id.gen_info_pic);
+        gen_info_pic.setImageResource(R.mipmap.male);
+
+        //Log.d("DetailCoopActivity",mBuyerId+"");
 
         setSupportActionBar(toolbar);
 
-
         FloatingActionButton fab = findViewById(R.id.fab_edit_buyer);
         ImageView imageView = findViewById(R.id.buyer_details);
-        //imageView.setImageResource(R.mipmap.coopbg);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"eloko",Toast.LENGTH_LONG).show();
                 Intent intent1 = new Intent(getApplicationContext(),UpdateBuyerActivity.class);
                 intent1.putExtra("buyerId", mBuyerId);
                 startActivity(intent1);
@@ -100,13 +102,11 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
 
             //Affichages des donnees venant dans lka base des donnes
 
-
             TextView name_ca_details = findViewById(R.id.name_b_details);
             name_ca_details.setText("Name Lastname Buyer");
             TextView phone_ca_details = findViewById(R.id.phone_b_details);
             phone_ca_details.setText("+2501286555");
-            /*TextView coop_ca_details = findViewById(R.id.coop_ca_details);
-            coop_ca_details.setText("ici le text");*/
+
             TextView mail_ca_details = findViewById(R.id.mail_b_details);
             mail_ca_details.setText("ici @ text");
 
