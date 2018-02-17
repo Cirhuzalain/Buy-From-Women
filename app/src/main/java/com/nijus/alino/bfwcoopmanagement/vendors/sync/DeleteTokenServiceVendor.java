@@ -50,7 +50,7 @@ public class DeleteTokenServiceVendor extends IntentService {
                 .readTimeout(240, TimeUnit.SECONDS)
                 .build();
 
-        String API = BuildConfig.API_URL + "auth/delete_tokens";
+        String API = BuildConfig.DEV_API_URL + "auth/delete_tokens";
         String bodyContent = "{\"refresh_token\": \"" + appRefreshToken + "\"}";
 
         RequestBody body = RequestBody.create(JSON, bodyContent);

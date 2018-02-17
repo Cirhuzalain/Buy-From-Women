@@ -17,7 +17,7 @@
     <string name="title_activity_login">Login</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">Login</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -35,12 +35,12 @@
     <string name="profiles">Farmers</string>
     <string name="sales">Sales</string>
     <string name="loan">Loan</string>
-    <string name="user_profile">User profile</string>
+    <string name="user_profile">Users Profile</string>
     <string name="user_profile_simple">Profile</string>
-    <string name="user_profile_coop_agent">Profile coop</string>
-    <string name="liste_farmer">Farmer\'s list</string>
-    <string name="user_profile_buyer">Profile buyer</string>
-    <string name="user_profile_vendor">Profile vendor</string>
+    <string name="user_profile_coop_agent">Coop Profile</string>
+    <string name="liste_farmer">Farmers</string>
+    <string name="user_profile_buyer">Buyer Profile</string>
+    <string name="user_profile_vendor">Vendor Profile</string>
     <string name="purchase">Purchases</string>
     <string name="stats">Summary</string>
     <string name="settings">Settings</string>
@@ -297,6 +297,10 @@
     <string name="application_key" translatable="false">app</string>
     <string name="app_key" translatable="false">app_key</string>
     <string name="app_refresh_token" translatable="false">app_refresh_token</string>
+    <string name="g_name" translatable="false">g_name</string>
+    <string name="server_id" translatable="false">server_id</string>
+    <string name="vendor_buyer_id" translatable="false">vendor_buyer_id</string>
+    <string name="coop_id" translatable="false">coop_id</string>
     <string name="app_id" translatable="false">appId</string>
     <string name="user_name">uname</string>
     <string name="user_server_id">userServerId</string>
@@ -430,7 +434,5 @@
     <string name="date_select">Select a date</string>
     <string name="princip_amount">Principal amount (RWF)</string>
     <string name="financial_institution">Financial institution</string>
-    <!-- <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>-->
+    <string name="parse_error">An Error occur while parsing Date Information</string>
 </resources>

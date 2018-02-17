@@ -115,7 +115,7 @@ public class SyncBackgroundVendor extends IntentService {
                             .writeTimeout(240, TimeUnit.SECONDS)
                             .readTimeout(240, TimeUnit.SECONDS)
                             .build();
-                    String API = BuildConfig.API_URL + "res.partner";
+                    String API = BuildConfig.DEV_API_URL + "res.partner";
 
                     String bodyContent = "{}";
 
@@ -158,7 +158,7 @@ public class SyncBackgroundVendor extends IntentService {
                                             "\"plot_size\": " + plotSize + "," +
                                             "\"partner_id\": " + farmerServerId + "" +
                                             "}";
-                                    String API_INFO = BuildConfig.API_URL + "res.partner.land.plot";
+                                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.land.plot";
 
                                     RequestBody bodyLand = RequestBody.create(JSON, plotInfo);
 

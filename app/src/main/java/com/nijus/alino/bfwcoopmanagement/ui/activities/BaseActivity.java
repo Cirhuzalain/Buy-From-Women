@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.BuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.CoopAgentActivity;
-import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.CoopAgentFragment;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteTokenEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.DeleteTokenService;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
@@ -69,19 +68,11 @@ public class BaseActivity extends AppCompatActivity implements
 
         super.setContentView(mDrawerLayout);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        mToolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(mToolbar);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view_base);
-//        Menu menu = mNavigationView.getMenu();
+        mNavigationView = findViewById(R.id.nav_view_base);
 
-        //check who is connected
-//        menu.removeItem(R.id.user_profile);
-//        menu.removeItem(R.id.profile_coop);
-//        menu.removeItem(R.id.profile_vendor);
-//        menu.removeItem(R.id.loan);
-//        menu.removeItem(R.id.sales);
-//        menu.removeItem(R.id.purchases);
 
         setUpNavigationView();
     }
@@ -89,8 +80,6 @@ public class BaseActivity extends AppCompatActivity implements
     public void setUpNavigationView() {
         if (mNavigationView != null) {
             mNavigationView.setNavigationItemSelectedListener(this);
-
-
 
 
             View header = LayoutInflater.from(this).inflate(R.layout.nav_header_navigation, null);
@@ -108,6 +97,41 @@ public class BaseActivity extends AppCompatActivity implements
             mImageView = header.findViewById(R.id.imageView);
             mImageView.setImageResource(R.drawable.ic_account_circle_black_24dp);
 
+            prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
+                    Context.MODE_PRIVATE);
+            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+            if (groupName.equals("Admin")) {
+                // remove buyer, vendor, navigation, coop agent activity
+                Menu menu = mNavigationView.getMenu();
+                menu.removeItem(R.id.profile_buyer);
+                menu.removeItem(R.id.profile_vendor);
+                menu.removeItem(R.id.profile_farmer);
+                menu.removeItem(R.id.profile_coop);
+            } else if (groupName.equals("Agent")) {
+                // remove userProfile, vendor, buyer
+                Menu menu = mNavigationView.getMenu();
+                menu.removeItem(R.id.user_profile);
+                menu.removeItem(R.id.profile_vendor);
+                menu.removeItem(R.id.profile_buyer);
+            } else if (groupName.equals("Vendor")) {
+                // remove buyer, navigation, coop agent, user profile activity
+                Menu menu = mNavigationView.getMenu();
+                menu.removeItem(R.id.profile_buyer);
+                menu.removeItem(R.id.user_profile);
+                menu.removeItem(R.id.profile_farmer);
+                menu.removeItem(R.id.profile_coop);
+            } else if (groupName.equals("Buyer")) {
+                // remove user profile,navigation, coop agent, vendor, sale,purchase, loan
+                Menu menu = mNavigationView.getMenu();
+                menu.removeItem(R.id.user_profile);
+                menu.removeItem(R.id.profile_vendor);
+                menu.removeItem(R.id.profile_farmer);
+                menu.removeItem(R.id.profile_coop);
+                menu.removeItem(R.id.sales);
+                menu.removeItem(R.id.purchases);
+                menu.removeItem(R.id.loan);
+            }
+
             toggle.syncState();
         }
     }
@@ -118,33 +142,25 @@ public class BaseActivity extends AppCompatActivity implements
         int id = item.getItemId();
         //item.removeItem(R.id.action_logout);
 
-        if(id == R.id.user_profile){
-            startActivity(new Intent( this, UserProfileActivityAdmin.class));
-            //startActivity(new Intent(this, VendorActivity.class));
-           //Toast.makeText(getApplicationContext(),"user profile",Toast.LENGTH_LONG).show();
-        }
-        else if (id == R.id.profile_buyer) {
+        if (id == R.id.user_profile) {
+            startActivity(new Intent(this, UserProfileActivityAdmin.class));
+        } else if (id == R.id.profile_buyer) {
             startActivity(new Intent(this, BuyerActivity.class));
-        }
-        else if (id == R.id.profile_farmer) {
+        } else if (id == R.id.profile_farmer) {
             startActivity(new Intent(this, NavigationActivity.class));
-        }
-        else if (id == R.id.profile_coop) {
+        } else if (id == R.id.profile_coop) {
             startActivity(new Intent(this, CoopAgentActivity.class));
-        }
-        else if (id == R.id.profile_vendor) {
+        } else if (id == R.id.profile_vendor) {
             startActivity(new Intent(this, VendorActivity.class));
-        }
-        else if (id == R.id.sales) {
+        } else if (id == R.id.sales) {
             startActivity(new Intent(this, SaleOrderInfoActivity.class));
         } else if (id == R.id.purchases) {
             startActivity(new Intent(this, PurchaseOrderActivity.class));
-        }else if (id == R.id.loan) {
+        } else if (id == R.id.loan) {
             startActivity(new Intent(this, LoanActivity.class));
-        }
-        else if (id == R.id.product) {
+        } else if (id == R.id.product) {
             startActivity(new Intent(this, ProductActivity.class));
-        }else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
@@ -194,6 +210,7 @@ public class BaseActivity extends AppCompatActivity implements
         editor.putBoolean(getResources().getString(R.string.app_id), false);
         editor.remove(getResources().getString(R.string.app_key));
         editor.remove(getResources().getString(R.string.app_refresh_token));
+        editor.remove(getResources().getString(R.string.g_name));
         editor.remove(getResources().getString(R.string.user_name));
         editor.remove(getResources().getString(R.string.user_server_id));
         editor.apply();

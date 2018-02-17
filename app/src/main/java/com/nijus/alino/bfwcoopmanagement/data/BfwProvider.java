@@ -103,6 +103,8 @@ public class BfwProvider extends ContentProvider {
     static final int PURCHASE_ORDER_LINE_PRODUCT = 223;
     static final int LOAN_LINE_PAYMENT = 224;
 
+    static final int PAYMENT_TERM = 250;
+
     private static final SQLiteQueryBuilder infoByCoop;
     private static final SQLiteQueryBuilder saleByCoop;
     private static final SQLiteQueryBuilder yieldByCoop;
@@ -437,6 +439,8 @@ public class BfwProvider extends ContentProvider {
 
         matcher.addURI(authority, BfwContract.PATH_PURCHASE_ORDER + "/#/#", PURCHASE_ORDER_LINE_PRODUCT);
 
+        matcher.addURI(authority, BfwContract.PATH_PAYMENT_TERM, PAYMENT_TERM);
+
         return matcher;
     }
 
@@ -571,6 +575,8 @@ public class BfwProvider extends ContentProvider {
                 return BfwContract.PurchaseOrder.CONTENT_TYPE;
             case LOAN_LINE_PAYMENT:
                 return BfwContract.Loan.CONTENT_TYPE;
+            case PAYMENT_TERM:
+                return BfwContract.PaymentTerm.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri " + uri);
         }
@@ -832,6 +838,14 @@ public class BfwProvider extends ContentProvider {
                     throw new UnsupportedOperationException("Uri not supported table loan payment  " + uri);
                 }
                 break;
+            case PAYMENT_TERM:
+                id = db.insert(BfwContract.PaymentTerm.TABLE_NAME, null, contentValues);
+                if (id > 0) {
+                    returnUri = BfwContract.PaymentTerm.buildPaymentTermUri(id);
+                } else {
+                    throw new UnsupportedOperationException("Uri not supported table loan payment  " + uri);
+                }
+                break;
             default:
                 throw new UnsupportedOperationException("Not Implemented yet");
 
@@ -858,6 +872,16 @@ public class BfwProvider extends ContentProvider {
                 break;
             case COOP_AGENT:
                 returnCursor = db.query(BfwContract.CoopAgent.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PAYMENT_TERM:
+                returnCursor = db.query(BfwContract.PaymentTerm.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -1446,6 +1470,10 @@ public class BfwProvider extends ContentProvider {
                 updateRow = db.update(BfwContract.BaselineFarmer.TABLE_NAME, contentValues,
                         selection, selectionArgs);
                 break;
+            case PAYMENT_TERM:
+                updateRow = db.update(BfwContract.PaymentTerm.TABLE_NAME, contentValues,
+                        selection, selectionArgs);
+                break;
             case FARMER_FORECAST:
                 updateRow = db.update(BfwContract.ForecastFarmer.TABLE_NAME, contentValues,
                         selection, selectionArgs);
@@ -1583,6 +1611,10 @@ public class BfwProvider extends ContentProvider {
                 break;
             case FARMER_BASELINE:
                 deleteRow = db.delete(BfwContract.BaselineFarmer.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+            case PAYMENT_TERM:
+                deleteRow = db.delete(BfwContract.PaymentTerm.TABLE_NAME,
                         selection, selectionArgs);
                 break;
             case FARMER_FORECAST:

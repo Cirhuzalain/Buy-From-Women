@@ -28,8 +28,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     final private Context mContext;
     final private View mEmptyView;
     final private FarmerAdapterOnClickHandler mClickHandler;
-    private Uri mUri;
-    //private String id_cursor_to_delete ;
 
 
 

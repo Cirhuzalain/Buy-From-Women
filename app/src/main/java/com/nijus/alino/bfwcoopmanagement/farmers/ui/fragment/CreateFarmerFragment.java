@@ -183,7 +183,8 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
                 //Save Farmer data
-                saveNewFarmer();
+                Toast.makeText(getActivity(), "Coming Soon !!!", Toast.LENGTH_LONG).show();
+                //saveNewFarmer();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -198,7 +199,8 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
             //Save farmer data
-            saveNewFarmer();
+            //saveNewFarmer();
+            Toast.makeText(getActivity(), "Coming Soon !!!", Toast.LENGTH_LONG).show();
         }
 
     }

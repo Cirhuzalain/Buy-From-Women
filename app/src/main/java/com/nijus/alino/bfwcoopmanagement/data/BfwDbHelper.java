@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BfwDbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 1;
     private static final String DB_NAME = "buyfromwomen.db";
 
     public BfwDbHelper(Context context) {
@@ -24,6 +24,8 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.CoopAgent.COLUMN_AGENT_PHONE + " TEXT NOT NULL," +
                 BfwContract.CoopAgent.COLUMN_COOP_ID + " INTEGER NOT NULL," +
                 BfwContract.CoopAgent.COLUMN_USER_ID + " INTEGER," +
+                BfwContract.CoopAgent.COLUMN_IS_SYNC + " INTEGER," +
+                BfwContract.CoopAgent.COLUMN_IS_UPDATE + " INTEGER," +
                 BfwContract.CoopAgent.COLUMN_AGENT_SERVER_ID + " INTEGER" +
                 " ); ";
 
@@ -33,6 +35,8 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.Buyer.COLUMN_BUYER_EMAIL + " TEXT NOT NULL," +
                 BfwContract.Buyer.COLUMN_BUYER_PHONE + " TEXT NOT NULL," +
                 BfwContract.Buyer.COLUMN_USER_ID + " INTEGER," +
+                BfwContract.Buyer.COLUMN_IS_SYNC + " INTEGER," +
+                BfwContract.Buyer.COLUMN_IS_UPDATE + " INTEGER," +
                 BfwContract.Buyer.COLUMN_BUYER_SERVER_ID + " INTEGER" +
                 " );";
 
@@ -76,13 +80,16 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.Farmer.COLUMN_OTHER + " INTEGER, " +
                 BfwContract.Farmer.COLUMN_STORAGE_DETAIL + " TEXT," +
                 BfwContract.Farmer.COLUMN_NEW_SOURCE_DETAIL + " TEXT," +
-                BfwContract.Farmer.COLUMN_TOTAL_PLOT_SIZE + " INTEGER," +
-                BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS + "TEXT," +
+                BfwContract.Farmer.COLUMN_TOTAL_PLOT_SIZE + " REAL," +
+                BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS + " TEXT," +
 
                 BfwContract.Farmer.COLUMN_IS_SYNC + " INTEGER, " +
                 BfwContract.Farmer.COLUMN_IS_UPDATE + " INTEGER, " +
                 BfwContract.Farmer.COLUMN_FARMER_SERVER_ID + " INTEGER, " +
-                BfwContract.Farmer.COLUMN_COOP_USER_ID + " INTEGER " +
+                BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " INTEGER, " +
+                BfwContract.Farmer.COLUMN_COOP_USER_ID + " INTEGER," +
+                "FOREIGN KEY (" + BfwContract.Farmer.COLUMN_COOP_USER_ID + ") REFERENCES " +
+                BfwContract.Coops.TABLE_NAME + " (" + BfwContract.Coops._ID + ")" +
                 " ); ";
 
         final String CREATE_TABLE_LAND_PLOT = "CREATE TABLE " + BfwContract.LandPlot.TABLE_NAME + " ( " +
@@ -169,8 +176,8 @@ public class BfwDbHelper extends SQLiteOpenHelper {
         final String CREATE_TABLE_FINANCEDATA_FARMER = "CREATE TABLE " + BfwContract.FinanceDataFarmer.TABLE_NAME + " ( " +
                 BfwContract.FinanceDataFarmer._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 BfwContract.FinanceDataFarmer.COLUMN_OUTSANDING_LOAN + " INTEGER," +
-                BfwContract.FinanceDataFarmer.COLUMN_TOT_LOAN_AMOUNT + " INTEGER," +
-                BfwContract.FinanceDataFarmer.COLUMN_TOT_OUTSTANDING + " INTEGER," +
+                BfwContract.FinanceDataFarmer.COLUMN_TOT_LOAN_AMOUNT + " REAL," +
+                BfwContract.FinanceDataFarmer.COLUMN_TOT_OUTSTANDING + " REAL," +
                 BfwContract.FinanceDataFarmer.COLUMN_INTEREST_RATE + " REAL," +
                 BfwContract.FinanceDataFarmer.COLUMN_DURATION + " INTEGER," +
                 BfwContract.FinanceDataFarmer.COLUMN_LOAN_PROVIDER + " TEXT," +
@@ -215,15 +222,15 @@ public class BfwDbHelper extends SQLiteOpenHelper {
 
                 BfwContract.Vendor.COLUMN_DAM + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_WELL + " INTEGER, " +
-                BfwContract.Vendor.COLUMN_BORHOLE + " INTEGER, " +
+                BfwContract.Vendor.COLUMN_BOREHOLE + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_PIPE_BORNE + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_RIVER_STREAM + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_IRRIGATION + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_NONE + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_OTHER + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_STORAGE_DETAIL + " TEXT," +
-                BfwContract.Vendor.COLUMN_TOTAL_PLOT_SIZE + " INTEGER," +
-                BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS + "TEXT," +
+                BfwContract.Vendor.COLUMN_TOTAL_PLOT_SIZE + " REAL," +
+                BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS + " TEXT," +
 
                 BfwContract.Vendor.COLUMN_IS_SYNC + " INTEGER, " +
                 BfwContract.Vendor.COLUMN_IS_UPDATE + " INTEGER, " +
@@ -314,8 +321,8 @@ public class BfwDbHelper extends SQLiteOpenHelper {
         final String CREATE_TABLE_FINANCEDATA_VENDOR = "CREATE TABLE " + BfwContract.FinanceDataVendor.TABLE_NAME + " ( " +
                 BfwContract.FinanceDataVendor._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 BfwContract.FinanceDataVendor.COLUMN_OUTSANDING_LOAN + " INTEGER," +
-                BfwContract.FinanceDataVendor.COLUMN_TOT_LOAN_AMOUNT + " INTEGER," +
-                BfwContract.FinanceDataVendor.COLUMN_TOT_OUTSTANDING + " INTEGER," +
+                BfwContract.FinanceDataVendor.COLUMN_TOT_LOAN_AMOUNT + " REAL," +
+                BfwContract.FinanceDataVendor.COLUMN_TOT_OUTSTANDING + " REAL," +
                 BfwContract.FinanceDataVendor.COLUMN_INTEREST_RATE + " REAL," +
                 BfwContract.FinanceDataVendor.COLUMN_DURATION + " INTEGER," +
                 BfwContract.FinanceDataVendor.COLUMN_LOAN_PROVIDER + " TEXT," +
@@ -369,7 +376,9 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.Coops.COLUMN_MEMBER + " INTEGER," +
                 BfwContract.Coops.COLUMN_IS_SYNC + " INTEGER," +
                 BfwContract.Coops.COLUMN_IS_UPDATE + " INTEGER," +
-                BfwContract.Coops.COLUMN_COOP_SERVER_ID + " INTEGER NOT NULL" +
+                BfwContract.Coops.COLUMN_STORAGE_DETAILS + " TEXT," +
+                BfwContract.Coops.COLUMN_OTHER_DETAILS + " TEXT," +
+                BfwContract.Coops.COLUMN_COOP_SERVER_ID + " INTEGER" +
                 " ); ";
 
         final String CREATE_TABLE_COOP_INFO = "CREATE TABLE " + BfwContract.CoopInfo.TABLE_NAME + " ( " +
@@ -466,7 +475,7 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_COOPERATIVE + " INTEGER," +
                 BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_SACCO + " INTEGER," +
                 BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_OTHER + " INTEGER," +
-                BfwContract.FinanceInfoCoop.COLUMN_CYLE_LOAN_AMOUNT + " REAL," +
+                BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN_AMOUNT + " REAL," +
                 BfwContract.FinanceInfoCoop.COLUMN_CYCLE_INTEREST_RATE + " REAL," +
                 BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN_DURATION + " INTEGER," +
                 BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_LABOUR + " INTEGER," +
@@ -576,6 +585,7 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.SaleOrder.COLUMN_VENDOR_ID + " INTEGER," +
                 BfwContract.SaleOrder.COLUMN_COOP_AGENT_ID + " INTEGER," +
                 BfwContract.SaleOrder.COLUMN_COOP_ID + " INTEGER," +
+                BfwContract.SaleOrder.COLUMN_PAYMENT_TERM + " INTEGER," +
                 BfwContract.SaleOrder.COLUMN_SERVER_ID + " INTEGER," +
                 BfwContract.SaleOrder.COLUMN_IS_SYNC + " INTEGER," +
                 BfwContract.SaleOrder.COLUMN_IS_UPDATE + " INTEGER," +
@@ -590,7 +600,9 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + BfwContract.SaleOrder.COLUMN_COOP_AGENT_ID + ") REFERENCES " +
                 BfwContract.CoopAgent.TABLE_NAME + " (" + BfwContract.CoopAgent._ID + ")," +
                 "FOREIGN KEY (" + BfwContract.SaleOrder.COLUMN_COOP_ID + ") REFERENCES " +
-                BfwContract.Coops.TABLE_NAME + " (" + BfwContract.Coops._ID + ")" +
+                BfwContract.Coops.TABLE_NAME + " (" + BfwContract.Coops._ID + ")," +
+                "FOREIGN KEY (" + BfwContract.SaleOrder.COLUMN_PAYMENT_TERM + ") REFERENCES " +
+                BfwContract.PaymentTerm.TABLE_NAME + " (" + BfwContract.PaymentTerm._ID + ")" +
                 ");";
 
         final String CREATE_TABLE_SALE_ORDER_LINE = "CREATE TABLE " + BfwContract.SaleOrderLine.TABLE_NAME + " ( " +
@@ -705,6 +717,16 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.LoanPayment.COLUMN_IS_UPDATE + " INTEGER" +
                 ");";
 
+        final String CREATE_TABLE_PAYMENT_TERM = "CREATE TABLE " + BfwContract.PaymentTerm.TABLE_NAME + " ( " +
+                BfwContract.PaymentTerm._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                BfwContract.PaymentTerm.COLUMN_NAME + " TEXT," +
+                BfwContract.PaymentTerm.COLUMN_NOTE + " TEXT," +
+                BfwContract.PaymentTerm.COLUMN_ACTIVE + " INTEGER," +
+                BfwContract.PaymentTerm.COLUMN_IS_SYNC + " INTEGER," +
+                BfwContract.PaymentTerm.COLUMN_IS_UPDATE + " INTEGER," +
+                BfwContract.PaymentTerm.COLUMN_SERVER_ID + " INTEGER" +
+                ");";
+
         sqLiteDatabase.execSQL(CREATE_TABLE_BUYER);
         sqLiteDatabase.execSQL(CREATE_TABLE_COOP_AGENT);
         sqLiteDatabase.execSQL(CREATE_TABLE_HARVEST_SEASON);
@@ -733,6 +755,7 @@ public class BfwDbHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(CREATE_TABLE_PRODUCT_PRODUCT);
         sqLiteDatabase.execSQL(CREATE_TABLE_PRODUCT_TEMPLATE);
+        sqLiteDatabase.execSQL(CREATE_TABLE_PAYMENT_TERM);
         sqLiteDatabase.execSQL(CREATE_TABLE_SALE_ORDER);
         sqLiteDatabase.execSQL(CREATE_TABLE_SALE_ORDER_LINE);
         sqLiteDatabase.execSQL(CREATE_TABLE_PURCHASE_ORDER);

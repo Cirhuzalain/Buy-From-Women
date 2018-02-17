@@ -7,8 +7,8 @@ android {
         applicationId "com.nijus.alino.bfwcoopmanagement"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.5"
+        versionCode 14
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -18,7 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'API_URL', "\"http://13.90.147.208:8069/api/\""
+            it.buildConfigField 'String', 'PRODUCTION_API_URL', "\"http://13.90.147.208:8069/api/\""
+            it.buildConfigField 'String', 'DEV_API_URL', "\"http://127.0.0.1:8069/api/\""
+            it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://127.0.0.1:1993/\""
+            it.buildConfigField 'String', 'PROD_PROXY_URL', "\"http://13.90.147.208:1993/\""
+            it.buildConfigField 'String', 'DEV_DB_NAME', "\"buyfromwomen\""
+            it.buildConfigField 'String', 'PRODUCTION_DB_NAME', "\"sellharvest\""
         }
     }
     sourceSets {

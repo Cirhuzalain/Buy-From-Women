@@ -1,6 +1,8 @@
 package com.nijus.alino.bfwcoopmanagement.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.BuyerActivity;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager, true);
     }
 
@@ -66,9 +71,28 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (Utils.checkAlreadyLogin(getApplicationContext())) {
-            Intent intent = new Intent(this, UserProfileActivityAdmin.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
+                    Context.MODE_PRIVATE);
+            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+            if (groupName.equals("Admin")) {
+                Intent intent = new Intent(this, UserProfileActivityAdmin.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else if (groupName.equals("Agent")) {
+                Intent intent = new Intent(this, NavigationActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else if (groupName.equals("Buyer")) {
+                Intent intent = new Intent(this, BuyerActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else if (groupName.equals("Vendor")) {
+                Intent intent = new Intent(this, VendorActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
 
             finish();
         }

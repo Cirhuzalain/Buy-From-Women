@@ -87,8 +87,8 @@
         <activity
             android:name=".vendors.ui.activities.VendorActivity"
             android:label="@string/vendor"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.UserProfileActivityAdmin" />
@@ -317,12 +317,12 @@
         <activity
             android:name=".buyers.ui.activities.BuyerActivity"
             android:label="@string/title_activity_buyer"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".ui.activities.UserProfileActivityAdmin" />
-    </activity>
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.UserProfileActivityAdmin" />
+        </activity>
         <activity
             android:name=".buyers.ui.activities.CreateBuyerActivity"
             android:label="@string/title_activity_create_buyer"
@@ -342,7 +342,7 @@
             android:name=".loans.ui.activities.CreateLoanActivity"
             android:label="@string/title_activity_create_loan"
             android:parentActivityName=".loans.ui.activities.LoanActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".loans.ui.activities.DetailLoanActivity"
             android:label="@string/title_activity_detail_buyer"

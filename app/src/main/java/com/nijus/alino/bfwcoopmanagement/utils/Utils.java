@@ -6,7 +6,14 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Utils {
 
@@ -21,6 +28,20 @@ public class Utils {
                 .getSharedPreferences(context.getResources().getString(R.string.application_key), Context.MODE_PRIVATE);
 
         return prefsGoog.getBoolean(context.getResources().getString(R.string.app_id), false);
+    }
+
+    public static Response getServerData(OkHttpClient client, String token, String apiUrl) {
+        try {
+            Request requestUser = new Request.Builder()
+                    .url(apiUrl)
+                    .header("Access-Token", token)
+                    .get()
+                    .build();
+
+            return client.newCall(requestUser).execute();
+        } catch (IOException exp) {
+            return null;
+        }
     }
 
     public static String getLoginUserToken(Activity context) {

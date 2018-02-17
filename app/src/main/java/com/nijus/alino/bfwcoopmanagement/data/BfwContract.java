@@ -49,6 +49,8 @@ public class BfwContract {
     public static final String PATH_LOAN_LINE = "path_loan_line";
     public static final String PATH_LOAN_PAYMENT = "path_loan_payment";
 
+    public static final String PATH_PAYMENT_TERM = "payment_term";
+
 
     public static final class CoopAgent implements BaseColumns {
 
@@ -65,6 +67,8 @@ public class BfwContract {
         public static final String COLUMN_AGENT_EMAIL = "agent_email";
         public static final String COLUMN_USER_ID = "agent_user_id";
         public static final String COLUMN_COOP_ID = "agent_coop_id";
+        public static final String COLUMN_IS_SYNC = "is_sync";
+        public static final String COLUMN_IS_UPDATE = "is_update";
         public static final String COLUMN_AGENT_SERVER_ID = "agent_server_id";
 
         public static Uri buildAgentUri(long id) {
@@ -87,6 +91,8 @@ public class BfwContract {
         public static final String COLUMN_BUYER_PHONE = "buyer_phone";
         public static final String COLUMN_BUYER_EMAIL = "buyer_email";
         public static final String COLUMN_USER_ID = "buyer_user_id";
+        public static final String COLUMN_IS_SYNC = "is_sync";
+        public static final String COLUMN_IS_UPDATE = "is_update";
         public static final String COLUMN_BUYER_SERVER_ID = "buyer_server_id";
 
         public static Uri buildBuyerUri(long id) {
@@ -142,6 +148,7 @@ public class BfwContract {
         public static final String COLUMN_IS_UPDATE = "is_update";
         public static final String COLUMN_FARMER_SERVER_ID = "farmer_server_id";
         public static final String COLUMN_COOP_USER_ID = "coop_user_id";
+        public static final String COLUMN_COOP_SERVER_ID = "coop_server_id";
 
 
         public static Uri buildFarmerUri(long id) {
@@ -309,9 +316,9 @@ public class BfwContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_VENDOR;
 
-        public static final String TABLE_NAME = "vendor_farmers";
+        public static final String TABLE_NAME = "vendor_farmer";
 
-        public static final String COLUMN_NAME = "farmer_name";
+        public static final String COLUMN_NAME = "vendor_name";
         public static final String COLUMN_PHONE = "phone";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_GENDER = "gender";
@@ -336,7 +343,7 @@ public class BfwContract {
 
         public static final String COLUMN_DAM = "dam";
         public static final String COLUMN_WELL = "well";
-        public static final String COLUMN_BORHOLE = "bore_hole";
+        public static final String COLUMN_BOREHOLE = "bore_hole";
         public static final String COLUMN_RIVER_STREAM = "river_stream";
         public static final String COLUMN_PIPE_BORNE = "pipe_borne";
         public static final String COLUMN_IRRIGATION = "irrigation";
@@ -546,6 +553,8 @@ public class BfwContract {
         public static final String COLUMN_DRYER = "dryer";
         public static final String COLUMN_THRESHER = "thresher";
         public static final String COLUMN_SAFE_STORAGE = "safe_storage";
+        public static final String COLUMN_STORAGE_DETAILS = "storage_details";
+        public static final String COLUMN_OTHER_DETAILS = "others_details";
         public static final String COLUMN_OTHER = "other";
 
         public static final String COLUMN_MALE_COOP = "male_coop";
@@ -699,7 +708,7 @@ public class BfwContract {
         public static final String COLUMN_INPUT_LOAN_PROVIDER_COOPERATIVE = "input_loan_provider_coop";
         public static final String COLUMN_INPUT_LOAN_PROVIDER_SACCO = "input_loan_provider_sacco";
         public static final String COLUMN_INPUT_LOAN_PROVIDER_OTHER = "input_loan_provider_other";
-        public static final String COLUMN_CYLE_LOAN_AMOUNT = "cycle_loan_amount";
+        public static final String COLUMN_CYCLE_LOAN_AMOUNT = "cycle_loan_amount";
         public static final String COLUMN_CYCLE_INTEREST_RATE = "cycle_interest_rate";
         public static final String COLUMN_CYCLE_LOAN_DURATION = "cycle_loan_duration";
         public static final String COLUMN_INPUT_LOAN_PURPOSE_LABOUR = "loan_purpose_labour";
@@ -861,6 +870,7 @@ public class BfwContract {
         public static final String COLUMN_ORDERED_QTY = "ordered_qty";
         public static final String COLUMN_DELIVERED_QTY = "delivered_qty";
         public static final String COLUMN_BALANCE_TO_SHIP = "balance_to_ship";
+        public static final String COLUMN_PAYMENT_TERM = "payment_term_id";
         public static final String COLUMN_SERVER_ID = "server_id";
         public static final String COLUMN_IS_SYNC = "is_sync";
         public static final String COLUMN_IS_UPDATE = "is_update";
@@ -1036,6 +1046,29 @@ public class BfwContract {
         public static final String COLUMN_IS_UPDATE = "is_update";
 
         public static Uri buildProductLoanPaymentUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+    }
+
+    public static final class PaymentTerm implements BaseColumns {
+
+        public static final Uri CONTENT_URI = BASE_CONTENT.buildUpon().appendPath(PATH_PAYMENT_TERM).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PAYMENT_TERM;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PAYMENT_TERM;
+
+        public static final String TABLE_NAME = "payment_term";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_NOTE = "note";
+        public static final String COLUMN_ACTIVE = "active";
+        public static final String COLUMN_SERVER_ID = "server_id";
+        public static final String COLUMN_IS_SYNC = "is_sync";
+        public static final String COLUMN_IS_UPDATE = "is_update";
+
+        public static Uri buildPaymentTermUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 

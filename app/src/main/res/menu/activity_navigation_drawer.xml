@@ -11,7 +11,7 @@
             android:title="@string/user_profile" />
         <item
             android:id="@+id/profile_farmer"
-            android:icon="@drawable/ic_farmer"
+            android:icon="@drawable/ic_people_black_24dp"
             android:title="@string/liste_farmer" />
         <item
             android:id="@+id/profile_coop"
@@ -19,11 +19,11 @@
             android:title="@string/user_profile_coop_agent" />
         <item
             android:id="@+id/profile_buyer"
-            android:icon="@drawable/ic_people_black_24dp"
+            android:icon="@drawable/ic_farmer"
             android:title="@string/user_profile_buyer" />
         <item
             android:id="@+id/profile_vendor"
-            android:icon="@drawable/ic_people_black_24dp"
+            android:icon="@drawable/ic_farmer"
             android:title="@string/user_profile_vendor" />
         <item
             android:id="@+id/sales"
