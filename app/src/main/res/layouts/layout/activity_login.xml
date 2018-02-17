@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content1"
@@ -49,8 +50,9 @@
 
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
@@ -63,8 +65,9 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <EditText
                     android:id="@+id/password"
@@ -81,11 +84,13 @@
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                android:layout_width="wrap_content"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:background="@color/colorAccent"
+                android:background="@drawable/gradient_button"
+                android:elevation="4dp"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="@string/action_sign_in"
                 android:textColor="@android:color/white"

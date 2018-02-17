@@ -1,7 +1,5 @@
 package com.nijus.alino.bfwcoopmanagement.cafebar;
 
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;

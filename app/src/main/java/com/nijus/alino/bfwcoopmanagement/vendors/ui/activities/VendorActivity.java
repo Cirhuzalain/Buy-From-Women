@@ -1,9 +1,11 @@
 package com.nijus.alino.bfwcoopmanagement.vendors.ui.activities;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,9 +25,7 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
-public class VendorActivity extends AppCompatActivity implements View.OnClickListener {
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-    private Toolbar toolbar;
+public class VendorActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,23 +34,8 @@ public class VendorActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vendor);
 
-        collapsingToolbarLayout = findViewById(R.id.name_vendor);
-        toolbar = findViewById(R.id.toolbar_vendor);
-
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.ic_add_black_24dp);
-        fab.setOnClickListener(this);
-*/
         FloatingActionButton fab = findViewById(R.id.fab_edit_vendor);
-        ImageView imageView = findViewById(R.id.vendor_details);
-        imageView.setImageResource(R.drawable.bg);
+
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,14 +43,8 @@ public class VendorActivity extends AppCompatActivity implements View.OnClickLis
                 Intent intent1 = new Intent(getApplicationContext(),UpdateVendor.class);
                 intent1.putExtra("farmerId", 1);
                 startActivity(intent1);
-                //Snackbar.make(view, mFarmerId+" Edit Coop Profile coming soon", Snackbar.LENGTH_LONG)
-                //.setAction("Action", null).show();
             }
         });
-
-
-
-
 
 
         ImageView gen_info_pic = findViewById(R.id.gen_info_pic);
@@ -79,8 +58,6 @@ public class VendorActivity extends AppCompatActivity implements View.OnClickLis
 
         TextView sex_f_details = findViewById(R.id.sex_f_details);
         sex_f_details.setText("gender");
-
-        //recup static data
 
         TextView address_f_details = findViewById(R.id.address_f_details);
         address_f_details.setText("NYABUGOGO KIGALI");
@@ -308,11 +285,6 @@ public class VendorActivity extends AppCompatActivity implements View.OnClickLis
         });
 
 
-
-
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
@@ -343,31 +315,26 @@ public class VendorActivity extends AppCompatActivity implements View.OnClickLis
 
         return super.onOptionsItemSelected(item);
     }
-
-   /* @Override
-    public void onListFragmentInteraction(long itemId, VendorRecyclerViewAdapter.ViewHolder vh) {
-        //Toast.makeText(this,"BEYONCE ",Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, UpdateVendor.class);
-        intent.putExtra("farmerId", itemId);
-        startActivity(intent);
-    }
-*/
-    /*@Override
+    @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = super.getDrawerLayout();
 
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            startActivity(intent);
+            NavUtils.navigateUpFromSameTask(this);
         }
-    }*/
+    }
 
-   /* @Override
-    public void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh) {
 
-    }*/
+    @Override
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+    public void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY).trim();
+        }
+    }
 }

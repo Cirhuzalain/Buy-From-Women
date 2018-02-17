@@ -46,7 +46,6 @@ public class NavigationActivity extends BaseActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
         getSupportLoaderManager().initLoader(0, null, this);
 
 
@@ -58,7 +57,6 @@ public class NavigationActivity extends BaseActivity implements
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
 
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(this, emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
@@ -72,6 +70,7 @@ public class NavigationActivity extends BaseActivity implements
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);

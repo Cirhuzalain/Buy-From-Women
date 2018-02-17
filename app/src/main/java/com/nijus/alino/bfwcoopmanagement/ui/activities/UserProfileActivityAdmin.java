@@ -131,8 +131,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements VendorFrag
         //Initializing the tablayout
         tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

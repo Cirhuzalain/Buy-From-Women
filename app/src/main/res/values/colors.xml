@@ -4,8 +4,13 @@
     <color name="colorPrimaryDark">#1d003b</color>
     <color name="textColorPrimary">#000000</color>
     <color name="primaryLightColor">#764d94</color>
+
     <color name="colorAccent">#ff4081</color>
+    <color name="colorAccentDark">#d92b66</color>
+    <color name="colorAccentLight">#fd5890</color>
+
     <!-- the activated state color -->
+    <color name="shadow">#b9c1bfbf</color>
     <color name="activated">#c1bfbf</color>
     <color name="secondary_text">#727272</color>
     <color name="primary_text">#212121</color>

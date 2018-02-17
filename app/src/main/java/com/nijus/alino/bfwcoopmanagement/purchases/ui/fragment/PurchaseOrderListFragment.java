@@ -2,6 +2,7 @@ package com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,8 +91,11 @@ public class PurchaseOrderListFragment extends Fragment implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Product product = productArrayList[i];
-        UpdatePurchaseOrderDialogFragment dialogFragment = new UpdatePurchaseOrderDialogFragment();
-        dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
+        // appel du botomm sheet to modify purchase
+        BottomSheetDialogFragment bottomSheetDialogFragment = new PurchasesBottomSheetDialogFragment();
+        bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
+        /*UpdatePurchaseOrderDialogFragment dialogFragment = new UpdatePurchaseOrderDialogFragment();
+        dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");*/
     }
 
     @Override

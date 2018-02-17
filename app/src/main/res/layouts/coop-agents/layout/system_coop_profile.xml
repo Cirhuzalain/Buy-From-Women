@@ -5,8 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".coops.ui.activities.DetailCoopActivity"
-        tools:showIn="@layout/activity_details_coop">
+        tools:context=".coopAgent.ui.activities.CoopAgentActivity"
+        tools:showIn="@layout/activity_coop_agent">
 
     <LinearLayout
         android:layout_width="match_parent"

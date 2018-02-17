@@ -26,14 +26,6 @@ public class CreateBuyerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
         name = findViewById(R.id.name_b);
         phone = findViewById(R.id.name_phone_b);
         email = findViewById(R.id.address_mail_b);
@@ -42,13 +34,8 @@ public class CreateBuyerActivity extends AppCompatActivity {
         create_buyer_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //intent.putExtra("coop_agent", new CoopAgentParcelable(,phone.getText().toString(),
-                //email.getText().toString(),coop.getSelectedItem().toString()));
-/*
-                Bundle data = getIntent().getExtras();
-                CoopAgentParcelable coopAgentParcelable = (CoopAgentParcelable) data.getParcelable("coop_agent");*/
 
-                Toast.makeText(getApplicationContext()," enregister buyer",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()," Commingg soon",Toast.LENGTH_LONG).show();
             }
         });
 

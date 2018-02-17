@@ -3,6 +3,7 @@ package com.nijus.alino.bfwcoopmanagement.purchases.ui.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchasesBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
-import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchaseOderDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchaseOrderListFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 
@@ -33,8 +34,10 @@ public class PurchaseOrderActivity extends BaseActivity implements
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.fab_purchase_orders) {
-            PurchaseOderDialogFragment dialogFragment = new PurchaseOderDialogFragment();
-            dialogFragment.show(getSupportFragmentManager(), "purchaseDialog");
+            BottomSheetDialogFragment bottomSheetDialogFragment = new PurchasesBottomSheetDialogFragment();
+            bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+           /* PurchaseOderDialogFragment dialogFragment = new PurchaseOderDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(), "purchaseDialog");*/
         }
     }
 

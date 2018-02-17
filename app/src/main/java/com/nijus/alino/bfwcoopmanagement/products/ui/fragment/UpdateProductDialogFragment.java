@@ -13,6 +13,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,17 +31,13 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     private LinearLayout mProductContainer;
     private Button addProductItem;
     private Spinner vendor;
-    private Spinner harvestSeason;
-    private Spinner coops;
-    //private DatePicker date;
-    private EditText ed_date_value;
-    private Button date_btn;
-    private  int jr,mois,annee;
+    private Spinner harvsetSeason;
+    private Spinner grade;
 
-
-    private Spinner productName;
-    private EditText quantity;
-    private EditText unitPrice;
+    AutoCompleteTextView product_name;
+    AutoCompleteTextView quantity;
+    AutoCompleteTextView cost;
+    AutoCompleteTextView sale_price;
 
     @Override
     @NonNull
@@ -53,18 +50,14 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         addProductItem = viewContainer.findViewById(R.id.add_po_proposal);
         addProductItem.setOnClickListener(this);
 
-        vendor = viewContainer.findViewById(R.id.po_vendor_spinner);
-        harvestSeason = viewContainer.findViewById(R.id.po_harv_season);
-        coops = viewContainer.findViewById(R.id.po_coop_info);
-        //date = viewContainer.findViewById(R.id.datePicker);
+        vendor = viewContainer.findViewById(R.id.vendor);
+        harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
+        grade = viewContainer.findViewById(R.id.grade);
 
-        date_btn = viewContainer.findViewById(R.id.date_selected);
-        date_btn.setOnClickListener(this);
-        ed_date_value = viewContainer.findViewById(R.id.ed_date_value);
-
-        productName = viewContainer.findViewById(R.id.product_po_order);
-        quantity = viewContainer.findViewById(R.id.product_quantity_po);
-        unitPrice = viewContainer.findViewById(R.id.product_price);
+        product_name = viewContainer.findViewById(R.id.product_name);
+        quantity = viewContainer.findViewById(R.id.quantity);
+        cost = viewContainer.findViewById(R.id.cost);
+        sale_price = viewContainer.findViewById(R.id.sale_price);
 
         builder.setView(viewContainer)
                 .setPositiveButton(R.string.msg_ok, this)
@@ -101,7 +94,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             // Create the list view and bind the adapter
-            coops.setAdapter(adapter);
+            //coops.setAdapter(adapter);
         }
     }
 
@@ -132,22 +125,6 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
             linearLayout.addView(unitPrice);
 
             mProductContainer.addView(linearLayout, 1);
-        }
-        if(view == date_btn){
-
-            final Calendar c= Calendar.getInstance();
-            jr=c.get(Calendar.DAY_OF_MONTH);
-            mois=c.get(Calendar.MONTH);
-            annee=c.get(Calendar.YEAR);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    ed_date_value.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
-                }
-            }
-                    ,jr,mois,annee);
-            datePickerDialog.show();
         }
     }
 

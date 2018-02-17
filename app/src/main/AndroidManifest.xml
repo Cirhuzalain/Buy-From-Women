@@ -85,6 +85,14 @@
                 android:value=".coops.ui.activities.CoopActivity" />
         </activity>
         <activity
+            android:name=".loans.ui.activities.UpdateLoanActivity"
+            android:label="@string/update_loan"
+            android:parentActivityName=".loans.ui.activities.DetailLoanActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".loans.ui.activities.DetailLoanActivity" />
+        </activity>
+        <activity
             android:name=".vendors.ui.activities.VendorActivity"
             android:label="@string/vendor"
             android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
@@ -95,7 +103,7 @@
         </activity>
         <activity
             android:name=".coopAgent.ui.activities.CoopAgentActivity"
-            android:label="@string/coop_agent"
+            android:label="@string/details_coop_"
             android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

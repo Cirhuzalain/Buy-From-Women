@@ -2,8 +2,6 @@ package com.nijus.alino.bfwcoopmanagement.buyers.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,12 +23,14 @@ public class UpdateBuyerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         update_buyer = findViewById(R.id.update_buyer);
         update_buyer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Update buyer omming soon",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Update buyer comming soon",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -52,9 +52,6 @@ public class UpdateBuyerActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-
 }

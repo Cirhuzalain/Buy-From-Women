@@ -36,6 +36,7 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
     private GeneralVendor generalVendor;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
+    private ImageView coop_image;
 
 
     @Override
@@ -67,7 +68,7 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
 
         FloatingActionButton fab = findViewById(R.id.fab_coop);
         ImageView imageView = findViewById(R.id.coop_image);
-        imageView.setImageResource(R.mipmap.vend);
+        imageView.setImageResource(R.mipmap.vendor);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

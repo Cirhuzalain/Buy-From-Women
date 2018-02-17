@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:elevation="@dimen/appbar_elevation"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -21,10 +22,11 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <FrameLayout
+        <!--<FrameLayout
             android:id="@+id/activity_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
+        <include layout="@layout/activity_content"/>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
