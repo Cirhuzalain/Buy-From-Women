@@ -53,11 +53,9 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
 
         coop_image_details = findViewById(R.id.coop_image_details);
         coop_image_details.setImageResource(R.mipmap.agent_bg);
-        //toolbar.setTitle(mCoopAgentId+"");
-        //Log.d("DetailCoopActivity",mCoopAgentId+"");
 
 
-       // setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_coop);
@@ -74,7 +72,6 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
             }
         });
 
-        //AFFICHAGE DES DETAILS DU COOPERATIVE
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

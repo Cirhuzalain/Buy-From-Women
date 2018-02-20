@@ -17,19 +17,20 @@ public class Finance implements Parcelable {
     private boolean isAggregation;
     private boolean isOtherLp;
 
-    private int totLoanAmount;
-    private int totOutstanding;
+    private double totLoanAmount;
+    private double totOutstanding;
     private double interestRate;
     private int durationInMonth;
     private String loanProvider;
+    private int harvestSeason;
 
     public Finance() {
 
     }
 
     public Finance(boolean isOutstandingLoan, boolean hasMobileMoneyAccount, boolean isInput, boolean isAggregation,
-                   boolean isOtherLp, int totOutstanding, double interestRate, int durationInMonth,
-                   String loanProvider, int totLoanAmount) {
+                   boolean isOtherLp, double totOutstanding, double interestRate, int durationInMonth,
+                   String loanProvider, double totLoanAmount, int harvestSeason) {
         this.totLoanAmount = totLoanAmount;
         this.isOutstandingLoan = isOutstandingLoan;
         this.hasMobileMoneyAccount = hasMobileMoneyAccount;
@@ -40,19 +41,21 @@ public class Finance implements Parcelable {
         this.interestRate = interestRate;
         this.durationInMonth = durationInMonth;
         this.loanProvider = loanProvider;
+        this.harvestSeason = harvestSeason;
     }
 
     public Finance(Parcel data) {
-        this.totLoanAmount = data.readInt();
+        this.totLoanAmount = data.readDouble();
         this.isOutstandingLoan = data.readByte() != 0;
         this.hasMobileMoneyAccount = data.readByte() != 0;
         this.isInput = data.readByte() != 0;
         this.isAggregation = data.readByte() != 0;
         this.isOtherLp = data.readByte() != 0;
-        this.totOutstanding = data.readInt();
+        this.totOutstanding = data.readDouble();
         this.interestRate = data.readDouble();
         this.durationInMonth = data.readInt();
         this.loanProvider = data.readString();
+        this.harvestSeason = data.readInt();
     }
 
     @Override
@@ -62,23 +65,32 @@ public class Finance implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(totLoanAmount);
+        parcel.writeDouble(totLoanAmount);
         parcel.writeByte((byte) (isOutstandingLoan ? 1 : 0));
         parcel.writeByte((byte) (hasMobileMoneyAccount ? 1 : 0));
         parcel.writeByte((byte) (isInput ? 1 : 0));
         parcel.writeByte((byte) (isAggregation ? 1 : 0));
         parcel.writeByte((byte) (isOtherLp ? 1 : 0));
-        parcel.writeInt(totOutstanding);
+        parcel.writeDouble(totOutstanding);
         parcel.writeDouble(interestRate);
         parcel.writeInt(durationInMonth);
         parcel.writeString(loanProvider);
+        parcel.writeInt(harvestSeason);
     }
 
-    public int getTotLoanAmount() {
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
+    }
+
+    public double getTotLoanAmount() {
         return totLoanAmount;
     }
 
-    public void setTotLoanAmount(int totLoanAmount) {
+    public void setTotLoanAmount(double totLoanAmount) {
         this.totLoanAmount = totLoanAmount;
     }
 
@@ -122,11 +134,11 @@ public class Finance implements Parcelable {
         isOtherLp = otherLp;
     }
 
-    public int getTotOutstanding() {
+    public double getTotOutstanding() {
         return totOutstanding;
     }
 
-    public void setTotOutstanding(int totOutstanding) {
+    public void setTotOutstanding(double totOutstanding) {
         this.totOutstanding = totOutstanding;
     }
 

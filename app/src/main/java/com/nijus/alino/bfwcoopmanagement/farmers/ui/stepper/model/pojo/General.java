@@ -11,6 +11,7 @@ public class General implements Parcelable {
 
     private String name;
     private String coopsName;
+    private int coopId;
     private String address;
     private String phoneNumber;
     private boolean gender;
@@ -19,12 +20,13 @@ public class General implements Parcelable {
 
     }
 
-    public General(String name, boolean gender, String coop, String phoneNumber,String address) {
+    public General(String name, boolean gender, String coop, String phoneNumber, String address, int coopId) {
         this.name = name;
         this.gender = gender;
         this.coopsName = coop;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.coopId = coopId;
     }
 
     public General(Parcel data) {
@@ -33,6 +35,7 @@ public class General implements Parcelable {
         this.phoneNumber = data.readString();
         this.address = data.readString();
         this.gender = data.readByte() != 0;
+        this.coopId = data.readInt();
     }
 
     @Override
@@ -47,6 +50,7 @@ public class General implements Parcelable {
         parcel.writeString(phoneNumber);
         parcel.writeString(address);
         parcel.writeByte((byte) (gender ? 1 : 0));
+        parcel.writeInt(coopId);
 
     }
 
@@ -56,6 +60,14 @@ public class General implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCoopId() {
+        return coopId;
+    }
+
+    public void setCoopId(int coopId) {
+        this.coopId = coopId;
     }
 
     public void setGender(boolean gender) {

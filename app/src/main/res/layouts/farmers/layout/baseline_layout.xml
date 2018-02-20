@@ -57,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/total_production_in_kg"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -71,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/tot_lost"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -85,7 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/total_sold_in_kg"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -99,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/tot_vol_sold_coop"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -113,7 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/price_sold_to_the_coop_per_kg"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/tot_vol_side_sold"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -141,7 +141,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/price_sold_kg"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>

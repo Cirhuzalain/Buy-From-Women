@@ -1061,7 +1061,7 @@ public class BfwProvider extends ContentProvider {
                 );
                 break;
             case LOAN_LINE:
-                returnCursor = db.query(BfwContract.SalesCoop.TABLE_NAME,
+                returnCursor = db.query(BfwContract.LoanLine.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,

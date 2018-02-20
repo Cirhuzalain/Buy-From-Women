@@ -26,8 +26,8 @@ import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
-public class CoopAgentActivity extends BaseActivity  {
-    private Toolbar toolbar;
+public class CoopAgentActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.activity_open_translate_from_bottom, R.anim.activity_no_animation);
@@ -40,7 +40,7 @@ public class CoopAgentActivity extends BaseActivity  {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),UpdateCoop.class);
+                Intent intent1 = new Intent(getApplicationContext(), UpdateCoop.class);
                 intent1.putExtra("coopId", 1);
                 startActivity(intent1);
             }
@@ -93,29 +93,29 @@ public class CoopAgentActivity extends BaseActivity  {
             membership_f_details.setText("ici le text");*/
 
         //LES IMAGES ICI
-        ImageView gen_info_pic =findViewById(R.id.gen_info_pic);
+        ImageView gen_info_pic = findViewById(R.id.gen_info_pic);
         gen_info_pic.setImageResource(R.drawable.profile);
-        ImageView internal_pic_c_details =findViewById(R.id.internal_pic_c_details);
+        ImageView internal_pic_c_details = findViewById(R.id.internal_pic_c_details);
         internal_pic_c_details.setImageResource(R.drawable.profile);
-        ImageView pic_office_space_details =findViewById(R.id.pic_office_space_details);
+        ImageView pic_office_space_details = findViewById(R.id.pic_office_space_details);
         pic_office_space_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_moisture_meter_details =findViewById(R.id.pic_moisture_meter_details);
+        ImageView pic_moisture_meter_details = findViewById(R.id.pic_moisture_meter_details);
         pic_moisture_meter_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_weighting_scales_details =findViewById(R.id.pic_weighting_scales_details);
+        ImageView pic_weighting_scales_details = findViewById(R.id.pic_weighting_scales_details);
         pic_weighting_scales_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_qlt_inputs_details =findViewById(R.id.pic_qlt_inputs_details);
+        ImageView pic_qlt_inputs_details = findViewById(R.id.pic_qlt_inputs_details);
         pic_qlt_inputs_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_tractors_details =findViewById(R.id.pic_tractors_details);
+        ImageView pic_tractors_details = findViewById(R.id.pic_tractors_details);
         pic_tractors_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_harvs_details =findViewById(R.id.pic_harvs_details);
+        ImageView pic_harvs_details = findViewById(R.id.pic_harvs_details);
         pic_harvs_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_dryer_details =findViewById(R.id.pic_dryer_details);
+        ImageView pic_dryer_details = findViewById(R.id.pic_dryer_details);
         pic_dryer_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_thresher_details =findViewById(R.id.pic_thresher_details);
+        ImageView pic_thresher_details = findViewById(R.id.pic_thresher_details);
         pic_thresher_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_safe_storage_facilities_details =findViewById(R.id.pic_safe_storage_facilities_details);
+        ImageView pic_safe_storage_facilities_details = findViewById(R.id.pic_safe_storage_facilities_details);
         pic_safe_storage_facilities_details.setImageResource(R.mipmap.icon_sm_error);
-        ImageView pic_other_details =findViewById(R.id.pic_other_details);
+        ImageView pic_other_details = findViewById(R.id.pic_other_details);
         pic_other_details.setImageResource(R.mipmap.icon_sm_error);
 
         //ACCORDION DETAILS FOR COOPS
@@ -189,7 +189,6 @@ public class CoopAgentActivity extends BaseActivity  {
         baseline_s.setHeadingString("BASELINE SALES");
 
 
-
         TextView qty_agregated_from_members = findViewById(R.id.qty_agregated_from_members);
         qty_agregated_from_members.setText("504");
         TextView cycle_h_at_price_per_kg = findViewById(R.id.cycle_h_at_price_per_kg);
@@ -221,7 +220,6 @@ public class CoopAgentActivity extends BaseActivity  {
         //5. BASELINE FINANCE
         final AccordionView baseline_fin = findViewById(R.id.baseline_fin_accordion);
         baseline_fin.setHeadingString("BASELINE FINANCE INFO");
-
 
 
         TextView input_loan_amount = findViewById(R.id.input_loan_amount);
@@ -300,6 +298,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 access_info_accordion.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 access_info_accordion.setHeadingBackGround(R.color.default_color);
@@ -311,6 +310,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 forecast_sales.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 forecast_sales.setHeadingBackGround(R.color.default_color);
@@ -322,6 +322,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 baseline_y.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 baseline_y.setHeadingBackGround(R.color.default_color);
@@ -333,6 +334,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 baseline_s.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 baseline_s.setHeadingBackGround(R.color.default_color);
@@ -343,6 +345,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 baseline_fin.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 baseline_fin.setHeadingBackGround(R.color.default_color);
@@ -354,6 +357,7 @@ public class CoopAgentActivity extends BaseActivity  {
             public void onExpanded(AccordionView view) {
                 expected_yiel.setHeadingBackGround(R.color.bg_detail);
             }
+
             @Override
             public void onCollapsed(AccordionView view) {
                 expected_yiel.setHeadingBackGround(R.color.default_color);
@@ -401,6 +405,7 @@ public class CoopAgentActivity extends BaseActivity  {
         setIntent(intent);
         handleIntent(intent);
     }
+
     public void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY).trim();

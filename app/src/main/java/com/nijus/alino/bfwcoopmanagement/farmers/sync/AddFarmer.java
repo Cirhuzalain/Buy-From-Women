@@ -22,6 +22,7 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Demograph
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Forecast;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.General;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.LandInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.ServiceAccess;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
@@ -45,62 +46,76 @@ public class AddFarmer extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        //long locationId = ContentUris.parseId(insertedUri);
         if (intent != null) {
             Bundle farmerData = intent.getBundleExtra("farmer_data");
 
             General general = farmerData.getParcelable("general");
-            Forecast forecast = farmerData.getParcelable("forecast");
-            Demographic demographic = farmerData.getParcelable("demographic");
-            BaseLine baseLine = farmerData.getParcelable("baseline");
-            Finance finance = farmerData.getParcelable("finance");
             ServiceAccess serviceAccess = farmerData.getParcelable("serviceAccess");
-            AccessToInformation accessToInformation = farmerData.getParcelable("access_information");
-            HashMap map = (HashMap) farmerData.getSerializable("land_info");
+            Demographic demographic = farmerData.getParcelable("demographic");
 
-            //save data
-            int duration = 0, coopServerId = 43, houseHoldMember = 0, totProductionKg = 0, totLostKg = 0, totSolddKg = 0,
-                    totSoldVolCoop = 0, totPriceSoldCoopPerKG = 0, priceSoldKg = 0, totVolSideSold = 0, totLoanAmount = 0, totOutstanding = 0;
-            String name = "", phoneNumber = "", coopName = "", fName = null, lName = null, cellPhoneAlt = null, cellCarrier = null, memeberShipId = null, loanProvider = null;
 
-            boolean gender = false, isHouseHoldHead = false, isMobileMoneyAccount = false, isInput = false, isAggregation = false, isOther = false, outstandingLoan = false,
-                    isAgriculture = false, isClimateInfo = false, isSeeds = false, organicFertilizers = false, inorganicFertilizers = false, labour = false,
-                    waterPumps = false, isTractors = false, isHarvester = false, isSpreader = false, isDryer = false, isTresher = false, isSafeStorage = false, isOtherResourceInfo = false,
-                    isDam = false, isWell = false, isBoreHole = false, isPipeBorne = false, isRiverStream = false, isIrrigation = false, hasNoWaterSource = false, isOtherInfo = false;
+            HashMap<String, Forecast> forecast = (HashMap<String, Forecast>) farmerData.getSerializable("forecast");
+            HashMap<String, BaseLine> baseLine = (HashMap<String, BaseLine>) farmerData.getSerializable("baseline");
+            HashMap<String, Finance> finance = (HashMap<String, Finance>) farmerData.getSerializable("finance");
+            HashMap<String, AccessToInformation> accessToInformation = (HashMap<String, AccessToInformation>) farmerData.getSerializable("access_information");
+            HashMap<String, LandInformation> landInformations = (HashMap<String, LandInformation>) farmerData.getSerializable("land_info");
 
-            double arableLandPlot = 0.0, interestRate = 0.0;
+            Cursor cursor = null;
 
+            //General page field
+            String name = null, phoneNumber = null, address = null;
+            Boolean gender = false;
+            int coopServerId = 1;
+
+            //Access to information page field
+            Boolean isTractors = null, isHarvester = null, isDryer = null, isTresher = null, isSafeStorage = null, isOtherResourceInfo = null,
+                    isDam = null, isWell = null, isBoreHole = null, isPipeBorne = null, isRiverStream = null, isIrrigation = null,
+                    hasNoWaterSource = null, isOtherInfo = null;
+            String storageInfo = null, otherAvailableRes = null, otherWaterSource = null;
+
+            //Demographic data
+            Boolean isHouseHoldHead = false;
+            Integer houseHoldMember = null;
+            String fName = null, lName = null, cellPhoneAlt = null, cellCarrier = null;
+
+            //Forecast data field
+            Double numArableLandPlot;
+            Double farmerexpectedminppp;
+            Double minimumflowprice;
+
+            //Baseline data field
+            Double totProdInKg = null;
+            Double totLostInKg = null;
+            Double totSoldInKg = null;
+            Double totVolumeSoldCoopInKg = null;
+            Double priceSoldToCoopPerKg = null;
+            Double totVolSoldInKg = null;
+            Double priceSoldInKg = null;
+            Double harvestSeason = null;
+
+            //Finance data field;
+            Boolean outstandingLoan = null, isInput = null, isAggregation = null, isOther = null, isMobileMoneyAccount = null;
+            Double interestRate = null, totLoanAmount = null, totOutstanding = null;
+            Integer duration = null;
+            String loanProvider = null;
+
+            //Access to information data field
+            Boolean isAgriculture = null, isClimateInfo = null, isSeeds = null, organicFertilizers = null,
+                    inorganicFertilizers = null, labour = null,
+                    waterPumps = null, isSpreader = null;
+
+
+            //Land information data field
+            Double landSize = null, lat = null, lng = null;
+
+            // farmer table
             if (general != null) {
 
                 name = general.getName();
                 phoneNumber = general.getPhoneNumber();
-                coopName = general.getCoopsName();
                 gender = general.isGender();
-
-                Cursor cursor = null;
-
-                String selection = BfwContract.Coops.TABLE_NAME + "." +
-                        BfwContract.Coops.COLUMN_COOP_NAME + " =  ? ";
-
-                String[] selectionArgs = {coopName};
-
-                try {
-                    cursor = getContentResolver().query(BfwContract.Coops.CONTENT_URI, null, selection, selectionArgs, null);
-
-                    if (cursor != null && cursor.moveToFirst()) {
-                        cursor.moveToFirst();
-                        coopServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));
-
-                    }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
-            }
-
-            if (forecast != null) {
-                arableLandPlot = forecast.getArableLandPlot();
+                address = general.getAddress();
+                coopServerId = general.getCoopId();
             }
 
             if (demographic != null) {
@@ -110,38 +125,9 @@ public class AddFarmer extends IntentService {
                 lName = demographic.getSpouseLastName();
                 cellPhoneAlt = demographic.getCellPhoneAlt();
                 cellCarrier = demographic.getCellCarrier();
-                memeberShipId = demographic.getMemberShipId();
-            }
-
-            if (baseLine != null) {
-
-                totProductionKg = baseLine.getTotProdInKg();
-                totLostKg = baseLine.getTotLostInKg();
-                totSolddKg = baseLine.getTotSoldInKg();
-                totSoldVolCoop = baseLine.getTotVolumeSoldCoopInKg();
-                totPriceSoldCoopPerKG = baseLine.getPriceSoldToCoopPerKg();
-                totVolSideSold = baseLine.getTotVolSoldInKg();
-                priceSoldKg = baseLine.getPriceSoldInKg();
-
-            }
-
-            if (finance != null) {
-
-                outstandingLoan = finance.isOutstandingLoan();
-                isMobileMoneyAccount = finance.isHasMobileMoneyAccount();
-                isInput = finance.isInput();
-                isAggregation = finance.isAggregation();
-                isOther = finance.isOtherLp();
-
-                totLoanAmount = finance.getTotLoanAmount();
-                totOutstanding = finance.getTotOutstanding();
-                interestRate = finance.getInterestRate();
-                duration = finance.getDurationInMonth();
-                loanProvider = finance.getLoanProvider();
             }
 
             if (serviceAccess != null) {
-
 
                 isTractors = serviceAccess.isTractor();
                 isHarvester = serviceAccess.isHarvester();
@@ -149,6 +135,7 @@ public class AddFarmer extends IntentService {
                 isTresher = serviceAccess.isTresher();
                 isSafeStorage = serviceAccess.isSafeStorage();
                 isOtherResourceInfo = serviceAccess.isOtherResourceInfo();
+
 
                 isDam = serviceAccess.isDam();
                 isWell = serviceAccess.isWell();
@@ -158,22 +145,17 @@ public class AddFarmer extends IntentService {
                 isIrrigation = serviceAccess.isIrrigation();
                 hasNoWaterSource = serviceAccess.isHasNoWaterSource();
                 isOtherInfo = serviceAccess.isOtherInfo();
-            }
-            if (accessToInformation != null){
-                isAgriculture = accessToInformation.isAgricultureExtension();
-                isClimateInfo = accessToInformation.isClimateRelatedInformation();
-                isSeeds = accessToInformation.isSeed();
-                organicFertilizers = accessToInformation.isOrganicFertilizers();
-                inorganicFertilizers = accessToInformation.isInorganicFertilizers();
-                labour = accessToInformation.isLabour();
-                waterPumps = accessToInformation.isWaterPumps();
-                isSpreader = accessToInformation.isSpreaderOrSprayer();
+
+                storageInfo = serviceAccess.getStorageDetails();
+                otherAvailableRes = serviceAccess.getNewResourcesDetails();
+                otherWaterSource = serviceAccess.getMainWaterSourceDetails();
             }
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(BfwContract.Farmer.COLUMN_NAME, name);
             contentValues.put(BfwContract.Farmer.COLUMN_GENDER, gender ? "male" : "female");
             contentValues.put(BfwContract.Farmer.COLUMN_PHONE, phoneNumber);
+            contentValues.put(BfwContract.Farmer.COLUMN_ADDRESS, address);
 
             contentValues.put(BfwContract.Farmer.COLUMN_HOUSEHOLD_HEAD, isHouseHoldHead ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_HOUSE_MEMBER, houseHoldMember);
@@ -181,49 +163,184 @@ public class AddFarmer extends IntentService {
             contentValues.put(BfwContract.Farmer.COLUMN_LAST_NAME, lName);
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_PHONE, cellPhoneAlt);
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_CARRIER, cellCarrier);
-            contentValues.put(BfwContract.Farmer.COLUMN_MEMBER_SHIP, memeberShipId);
-            contentValues.put(BfwContract.Farmer.COLUMN_TRACTORS, isTractors ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_HARVESTER, isHarvester ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_DRYER, isDryer ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_TRESHER, isTresher ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_SAFE_STORAGE, isSafeStorage ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO, isOtherInfo ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_DAM, isDam ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_WELL, isWell ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_PIPE_BORNE, isPipeBorne ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_RIVER_STREAM, isRiverStream ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_IRRIGATION, isIrrigation ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_NONE, hasNoWaterSource ? 1 : 0);
-            contentValues.put(BfwContract.Farmer.COLUMN_OTHER, isOtherResourceInfo ? 1 : 0);
+            contentValues.put(BfwContract.Farmer.COLUMN_TRACTORS, isTractors);
+            contentValues.put(BfwContract.Farmer.COLUMN_HARVESTER, isHarvester);
+            contentValues.put(BfwContract.Farmer.COLUMN_DRYER, isDryer);
+            contentValues.put(BfwContract.Farmer.COLUMN_TRESHER, isTresher);
+            contentValues.put(BfwContract.Farmer.COLUMN_SAFE_STORAGE, isSafeStorage);
+            contentValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO, isOtherInfo);
+            contentValues.put(BfwContract.Farmer.COLUMN_DAM, isDam);
+            contentValues.put(BfwContract.Farmer.COLUMN_BOREHOLE, isBoreHole);
+            contentValues.put(BfwContract.Farmer.COLUMN_STORAGE_DETAIL, storageInfo);
+            contentValues.put(BfwContract.Farmer.COLUMN_NEW_SOURCE_DETAIL, otherAvailableRes);
+            contentValues.put(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
+            contentValues.put(BfwContract.Farmer.COLUMN_WELL, isWell);
+            contentValues.put(BfwContract.Farmer.COLUMN_PIPE_BORNE, isPipeBorne);
+            contentValues.put(BfwContract.Farmer.COLUMN_RIVER_STREAM, isRiverStream);
+            contentValues.put(BfwContract.Farmer.COLUMN_IRRIGATION, isIrrigation);
+            contentValues.put(BfwContract.Farmer.COLUMN_NONE, hasNoWaterSource);
+            contentValues.put(BfwContract.Farmer.COLUMN_OTHER, isOtherResourceInfo);
             contentValues.put(BfwContract.Farmer.COLUMN_IS_SYNC, 0);
             contentValues.put(BfwContract.Farmer.COLUMN_IS_UPDATE, 0);
             contentValues.put(BfwContract.Farmer.COLUMN_COOP_USER_ID, coopServerId);
 
             Uri uri = getContentResolver().insert(BfwContract.Farmer.CONTENT_URI, contentValues);
+            long farmerId = ContentUris.parseId(uri);
+            String seasonName = null;
 
-            long id = ContentUris.parseId(uri);
+            try {
+                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, null, null, null);
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
 
-            if (map != null) {
-                //save land information
-                ContentValues landFarmer;
-                double landInfo;
+                        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
 
-                for (Object landSize : map.keySet()) {
-                    landFarmer = new ContentValues();
-                    landInfo = (double) map.get(landSize.toString());
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_PLOT_SIZE, landInfo);
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_FARMER_ID, id);
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_LAND_ID, UUID.randomUUID().toString());
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 0);
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_SERVER_ID, 0);
-                    landFarmer.put(BfwContract.LandPlot.COLUMN_IS_UPDATE, 0);
+                        // check if forecast is available for this season and save it
+                        if (forecast != null && forecast.containsKey(seasonName)) {
 
-                    getContentResolver().insert(BfwContract.LandPlot.CONTENT_URI, landFarmer);
+                            numArableLandPlot = forecast.get(seasonName).getArableLandPlot();
+                            minimumflowprice = forecast.get(seasonName).getMinimumflowprice();
+                            farmerexpectedminppp = forecast.get(seasonName).getFarmerexpectedminppp();
+
+                            ContentValues forecastFarmerValues = new ContentValues();
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_ARABLE_LAND_PLOT, numArableLandPlot);
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_EXPECTED_MIN_PPP, farmerexpectedminppp);
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_FLOW_PRICE, minimumflowprice);
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_SEASON_ID, forecast.get(seasonName).getHarvestSeason());
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_FARMER_ID, farmerId);
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 0);
+                            forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 0);
+
+                            getContentResolver().insert(BfwContract.ForecastFarmer.CONTENT_URI, forecastFarmerValues);
+
+                        }
+
+                        // check if baseline is available for this season and save it
+                        if (baseLine != null && baseLine.containsKey(seasonName)) {
+
+                            totProdInKg = baseLine.get(seasonName).getTotProdInKg();
+                            totLostInKg = baseLine.get(seasonName).getTotLostInKg();
+                            totSoldInKg = baseLine.get(seasonName).getTotSoldInKg();
+                            totVolumeSoldCoopInKg = baseLine.get(seasonName).getTotVolumeSoldCoopInKg();
+                            priceSoldToCoopPerKg = baseLine.get(seasonName).getPriceSoldToCoopPerKg();
+                            totVolSoldInKg = baseLine.get(seasonName).getTotVolSoldInKg();
+                            priceSoldInKg = baseLine.get(seasonName).getPriceSoldInKg();
+
+                            ContentValues baselineValues = new ContentValues();
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_TOT_PROD_B_KG, totProdInKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_TOT_LOST_KG, totLostInKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_TOT_SOLD_KG, totSoldInKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_TOT_VOL_SOLD_COOP, totVolumeSoldCoopInKg);
+
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_PRICE_SOLD_COOP_PER_KG, priceSoldToCoopPerKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_TOT_VOL_SOLD_IN_KG, totVolSoldInKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_PRICE_SOLD_KG, priceSoldInKg);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_SEASON_ID, baseLine.get(seasonName).getHarvestSeason());
+
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_IS_SYNC, 0);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_IS_UPDATE, 0);
+                            baselineValues.put(BfwContract.BaselineFarmer.COLUMN_FARMER_ID, farmerId);
+
+                            getContentResolver().insert(BfwContract.BaselineFarmer.CONTENT_URI, baselineValues);
+
+                        }
+
+                        // check if finance is available for this season and save it
+                        if (finance != null && finance.containsKey(seasonName)) {
+                            outstandingLoan = finance.get(seasonName).isOutstandingLoan();
+                            isMobileMoneyAccount = finance.get(seasonName).isHasMobileMoneyAccount();
+                            isInput = finance.get(seasonName).isInput();
+                            isAggregation = finance.get(seasonName).isAggregation();
+                            isOther = finance.get(seasonName).isOtherLp();
+
+                            totLoanAmount = finance.get(seasonName).getTotLoanAmount();
+                            totOutstanding = finance.get(seasonName).getTotOutstanding();
+                            interestRate = finance.get(seasonName).getInterestRate();
+                            duration = finance.get(seasonName).getDurationInMonth();
+                            loanProvider = finance.get(seasonName).getLoanProvider();
+
+                            ContentValues financeValues = new ContentValues();
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_OUTSANDING_LOAN, outstandingLoan);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_TOT_LOAN_AMOUNT, totLoanAmount);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_TOT_OUTSTANDING, totOutstanding);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_INTEREST_RATE, interestRate);
+
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_DURATION, duration);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_LOAN_PROVIDER, loanProvider);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_LOANPROVIDER_AGGREG, isAggregation);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_LOANPROVIDER_INPUT, isInput);
+
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_LOANPROVIDER_OTHER, isOther);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_MOBILE_MONEY_ACCOUNT, isMobileMoneyAccount);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_SEASON_ID, finance.get(seasonName).getHarvestSeason());
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_FARMER_ID, farmerId);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_IS_SYNC, 0);
+                            financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_IS_UPDATE, 0);
+
+                            getContentResolver().insert(BfwContract.FinanceDataFarmer.CONTENT_URI, financeValues);
+                        }
+
+                        // check if access o Information is available for this season and save it
+                        if (accessToInformation != null && accessToInformation.containsKey(seasonName)) {
+
+                            isAgriculture = accessToInformation.get(seasonName).isAgricultureExtension();
+                            isClimateInfo = accessToInformation.get(seasonName).isClimateRelatedInformation();
+                            isSeeds = accessToInformation.get(seasonName).isSeed();
+                            organicFertilizers = accessToInformation.get(seasonName).isOrganicFertilizers();
+                            inorganicFertilizers = accessToInformation.get(seasonName).isInorganicFertilizers();
+                            labour = accessToInformation.get(seasonName).isLabour();
+                            waterPumps = accessToInformation.get(seasonName).isWaterPumps();
+                            isSpreader = accessToInformation.get(seasonName).isSpreaderOrSprayer();
+
+                            ContentValues farmerInfoValues = new ContentValues();
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_AGRI_EXTENSION_SERV, isAgriculture);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_CLIMATE_RELATED_INFO, isClimateInfo);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SEEDS, isSeeds);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_ORGANIC_FERTILIZER, organicFertilizers);
+
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_INORGANIC_FERTILIZER, inorganicFertilizers);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_LABOUR, labour);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_WATER_PUMPS, waterPumps);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SPRAYERS, isSpreader);
+
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_IS_SYNC, 0);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_IS_UPDATE, 0);
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SEASON_ID, accessToInformation.get(seasonName).getHarvsetSeason());
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_FARMER_ID, farmerId);
+
+                            getContentResolver().insert(BfwContract.FarmerAccessInfo.CONTENT_URI, farmerInfoValues);
+
+                        }
+
+                        // check if land information is available for this season and save it
+                        if (landInformations != null && landInformations.containsKey(seasonName)) {
+
+                            landSize = landInformations.get(seasonName).getLandSize();
+                            lat = landInformations.get(seasonName).getLat();
+                            lng = landInformations.get(seasonName).getLng();
+
+                            ContentValues farmerLandValues = new ContentValues();
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_PLOT_SIZE, landSize);
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_LAT_INFO, lat);
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_LNG_INFO, lng);
+
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 0);
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 0);
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_FARMER_ID, farmerId);
+
+                            getContentResolver().insert(BfwContract.LandPlot.CONTENT_URI, farmerLandValues);
+                        }
+                    }
+                }
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
                 }
             }
 
             //Post event after saving data
-            EventBus.getDefault().post(new SaveDataEvent());
+            EventBus.getDefault().post(new SaveDataEvent("", true));
 
             //sync if network available
             if (Utils.isNetworkAvailable(getApplicationContext())) {

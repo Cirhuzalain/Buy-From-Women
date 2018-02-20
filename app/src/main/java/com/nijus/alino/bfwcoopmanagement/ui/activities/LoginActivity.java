@@ -484,6 +484,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 // check if there's no farmer then prefetch all the farmer with filter
                                 int coopServerId = loginUserInfo.getInt("coop_id");
 
+                                String coopSelect = BfwContract.Coops.TABLE_NAME + "." +
+                                        BfwContract.Coops.COLUMN_COOP_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Coops.CONTENT_URI, null, coopSelect, new String[]{Long.toString(coopServerId)}, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchCoops(client, access_token);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
+
                                 String proxyUrl = BuildConfig.DEV_PROXY_URL + "?model=farmer&attr=coop_id&value=" + coopServerId + "&token=" + access_token;
 
                                 String farmerSelect = BfwContract.Farmer.TABLE_NAME + "." +
@@ -498,17 +510,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     }
                                 }
 
-                                String coopSelect = BfwContract.Coops.TABLE_NAME + "." +
-                                        BfwContract.Coops.COLUMN_COOP_SERVER_ID + " =  ? ";
-
-                                cursor = getContentResolver().query(BfwContract.Coops.CONTENT_URI, null, coopSelect, new String[]{Long.toString(coopServerId)}, null);
-
-                                if (cursor != null && !cursor.moveToFirst()) {
-                                    boolean isSuccess = prefetchCoops(client, access_token);
-                                    if (!isSuccess) {
-                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
-                                    }
-                                }
 
                                 cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, null, null, null);
                                 if (cursor != null && !cursor.moveToFirst()) {
@@ -2015,7 +2016,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             }
 
                             // get base line finance infos (baseline_financeinfos_ids)
-                            baseLinesFinanceInfos = coopObjectInfo.getJSONArray("baseLinesFinanceInfos");
+                            baseLinesFinanceInfos = coopObjectInfo.getJSONArray("baseline_financeinfos_ids");
 
                             for (int n = 0; n < baseLinesFinanceInfos.length(); n++) {
                                 objectBaseLinesFinancesInfos = baseLinesFinanceInfos.getJSONObject(n);

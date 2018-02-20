@@ -14,13 +14,13 @@ public class AccessToInformation implements Parcelable {
     private boolean isWaterPumps;
     private boolean isSpreaderOrSprayer;
 
-    private String harvsetSeason;
+    private int harvsetSeason;
 
 
     public AccessToInformation() {
 
     }
-    public AccessToInformation(String harvsetSeason, boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
+    public AccessToInformation(int harvsetSeason, boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
                                boolean isOrganicFertilizers, boolean isInorganicFertilizers, boolean isLabour,
                                boolean isWaterPumps, boolean isSpreaderOrSprayer){
         this.isAgricultureExtension = isAgricultureExtension;
@@ -36,7 +36,6 @@ public class AccessToInformation implements Parcelable {
     }
 
     public AccessToInformation(Parcel source) {
-        //this.landSize = data.readDouble();
         this.isAgricultureExtension = source.readByte() != 0;
         this.isClimateRelatedInformation = source.readByte() != 0;
         this.isSeed = source.readByte() != 0;
@@ -46,7 +45,7 @@ public class AccessToInformation implements Parcelable {
         this.isWaterPumps = source.readByte() != 0;
         this.isSpreaderOrSprayer = source.readByte() != 0;
 
-        this.harvsetSeason = source.readString();
+        this.harvsetSeason = source.readInt();
 
     }
 
@@ -57,8 +56,7 @@ public class AccessToInformation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        //parcel.writeDouble(landSize);
-        parcel.writeString(harvsetSeason);
+
         parcel.writeByte((byte) (isAgricultureExtension ? 1 : 0));
         parcel.writeByte((byte) (isClimateRelatedInformation ? 1 : 0));
         parcel.writeByte((byte) (isSeed ? 1 : 0));
@@ -66,14 +64,15 @@ public class AccessToInformation implements Parcelable {
         parcel.writeByte((byte) (isInorganicFertilizers ? 1 : 0));
         parcel.writeByte((byte) (isLabour ? 1 : 0));
         parcel.writeByte((byte) (isSpreaderOrSprayer ? 1 : 0));
+        parcel.writeInt(harvsetSeason);
 
     }
 
-    public String getHarvsetSeason() {
+    public int getHarvsetSeason() {
         return harvsetSeason;
     }
 
-    public void setHarvsetSeason(String harvsetSeason) {
+    public void setHarvsetSeason(int harvsetSeason) {
         this.harvsetSeason = harvsetSeason;
     }
 

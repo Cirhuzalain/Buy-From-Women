@@ -17,12 +17,18 @@ public class Forecast implements Parcelable {
     private double totCoopLandSize;
     private double farmerPercentCoopLandSize;
 
+    private double farmerexpectedminppp;
+    private double minimumflowprice;
+
+    private int harvestSeason;
+
     public Forecast() {
 
     }
 
     public Forecast(double arableLandPlot, double landFarmerSize, double totProdKg, double salesOutsidePpp,
-                    double postHarvestLossInKg, double totCoopLandSize, double farmerPercentCoopLandSize) {
+                    double postHarvestLossInKg, double totCoopLandSize, double farmerPercentCoopLandSize,
+                    int harvestSeason, double farmerexpectedminppp, double minimumflowprice) {
         this.arableLandPlot = arableLandPlot;
         this.landFarmerSize = landFarmerSize;
         this.totProdKg = totProdKg;
@@ -30,6 +36,10 @@ public class Forecast implements Parcelable {
         this.postHarvestLossInKg = postHarvestLossInKg;
         this.totCoopLandSize = totCoopLandSize;
         this.farmerPercentCoopLandSize = farmerPercentCoopLandSize;
+        this.harvestSeason = harvestSeason;
+        this.farmerexpectedminppp = farmerexpectedminppp;
+        this.minimumflowprice = minimumflowprice;
+
     }
 
     public Forecast(Parcel data) {
@@ -40,6 +50,9 @@ public class Forecast implements Parcelable {
         this.postHarvestLossInKg = data.readDouble();
         this.totCoopLandSize = data.readDouble();
         this.farmerPercentCoopLandSize = data.readDouble();
+        this.farmerexpectedminppp = data.readDouble();
+        this.minimumflowprice = data.readDouble();
+        this.harvestSeason = data.readInt();
     }
 
     @Override
@@ -56,6 +69,33 @@ public class Forecast implements Parcelable {
         parcel.writeDouble(postHarvestLossInKg);
         parcel.writeDouble(totCoopLandSize);
         parcel.writeDouble(farmerPercentCoopLandSize);
+        parcel.writeDouble(farmerexpectedminppp);
+        parcel.writeDouble(minimumflowprice);
+        parcel.writeInt(harvestSeason);
+    }
+
+    public double getFarmerexpectedminppp() {
+        return farmerexpectedminppp;
+    }
+
+    public void setFarmerexpectedminppp(double farmerexpectedminppp) {
+        this.farmerexpectedminppp = farmerexpectedminppp;
+    }
+
+    public double getMinimumflowprice() {
+        return minimumflowprice;
+    }
+
+    public void setMinimumflowprice(double minimumflowprice) {
+        this.minimumflowprice = minimumflowprice;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
     }
 
     public double getArableLandPlot() {

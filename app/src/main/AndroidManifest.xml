@@ -131,7 +131,9 @@
         <activity
             android:name=".coopAgent.ui.activities.DetailCoopAgentActivity"
             android:label="@string/user_profile"
-            android:parentActivityName=".ui.activities.UserProfileActivityAdmin">
+            android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".coopAgent.ui.activities.CoopAgentActivity" />

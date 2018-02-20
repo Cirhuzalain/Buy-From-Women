@@ -22,11 +22,11 @@ public class FarmerWizardModel extends AbstractWizardModel {
     @Override
     protected PageList onNewRootPageList() {
         return new PageList(new GeneralPage(this, "gen_info"),
-                new ForecastPage(this, "forecast"),
+                new ServicesEquipmentPage(this, "access_service"),
                 new DemographicPage(this, "demographic"),
+                new ForecastPage(this, "forecast"),
                 new BaseLinePage(this, "base_line"),
                 new FinancePage(this, "finance"),
-                new ServicesEquipmentPage(this, "access_service"),
                 new AccessToInformationPage(this, "access_information"),
                 new LandPage(this, "farmer_land"));
     }

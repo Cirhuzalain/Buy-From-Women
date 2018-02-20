@@ -66,7 +66,7 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
         holder.farmerImage.setImageResource(R.drawable.profile);
         //holder.iconBack.setVisibility(View.GONE);
 
-        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_AGENT_NAME)));
 
     }
 
@@ -99,8 +99,6 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
         public LinearLayout view_foreground;
         //lisste des coop agent deja selectionner
         public List<Integer> listsSelectedItem = new ArrayList<>();
-
-        private ActionModeCallback actionModeCallback;
         private ActionMode actionMode;
         private int selectionned;
 
@@ -160,7 +158,7 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
 
         @Override
         public boolean onLongClick(View view) {
-            //annimation et delete un coop agent
+            //animation et delete un coop agent
             if (!listsSelectedItem.contains(Integer.valueOf(this.getAdapterPosition()))) {
                 //actionMode =((AppCompatActivity)mContext).startSupportActionMode(actionModeCallback);
 
@@ -219,47 +217,5 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
             return true;
         }
 
-    }
-    //Class action bar pour ajouter les element selectionner dans la toolbar
-
-    private class ActionModeCallback implements ActionMode.Callback {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete:
-                    // delete all the selected coop agent
-                    //deleteMessages();
-                    mode.finish();
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            //mAdapter.clearSelections();
-            //swipeRefreshLayout.setEnabled(true);
-            //actionMode = null;
-            //recyclerView.post(new Runnable() {
-            //@Override
-            //public void run() {
-            //mAdapter.resetAnimationIndex();
-            // mAdapter.notifyDataSetChanged();
-            //}
-            //});
-        }
     }
 }

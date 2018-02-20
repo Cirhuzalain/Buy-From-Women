@@ -60,8 +60,6 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
 
         coop_image_details = findViewById(R.id.coop_image_details);
         coop_image_details.setImageResource(R.mipmap.coop_bg);
-        //toolbar.setTitle(mCoopId+"");
-        //Log.d("DetailCoopActivity",mCoopId+"");
 
 
         setSupportActionBar(toolbar);
@@ -74,15 +72,12 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(),"eloko",Toast.LENGTH_LONG).show();
 
                 Intent intent1 = new Intent(getApplicationContext(),UpdateCoop.class);
                 intent1.putExtra("coopId", mCoopId);
                 startActivity(intent1);
             }
         });
-
-        //AFFICHAGE DES DETAILS DU COOPERATIVE
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

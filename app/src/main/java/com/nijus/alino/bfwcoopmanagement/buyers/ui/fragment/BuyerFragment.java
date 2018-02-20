@@ -88,10 +88,8 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
 
         recyclerView.setAdapter(buyerRecyclerViewAdapter);
 
-        //ADD LISTENER TO RECYCLEVIEW WHEN SWIPPING IT
-
         //fab coop fragment
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 
@@ -106,7 +104,7 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), BfwContract.Coops.CONTENT_URI, null, null, null,
+        return new CursorLoader(getActivity(), BfwContract.Buyer.CONTENT_URI, null, null, null,
                 null);
     }
 
@@ -135,8 +133,6 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onClick(View view) {
 
         if (view.getId() == R.id.fab) {
-            //Toast.makeText(getContext(), "breee clic fab voir enregistrer", Toast.LENGTH_LONG).show();
-            //Intent intent  = new Intent(getActivity(), CreateCoopActivity.class);
             startActivity(new Intent(getActivity(), CreateBuyerActivity.class));
         }
     }

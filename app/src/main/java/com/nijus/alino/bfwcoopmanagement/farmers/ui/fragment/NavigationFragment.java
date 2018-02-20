@@ -51,7 +51,7 @@ import static com.nijus.alino.bfwcoopmanagement.data.BfwContract.Farmer.CONTENT_
  */
 public class NavigationFragment extends Fragment implements LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+        View.OnClickListener {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
@@ -97,10 +97,6 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
 
-        //recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-
         coordinatorLayout = view.findViewById(R.id.coordinator_layout);
 
 
@@ -116,33 +112,8 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
 
-        //add on 1 febrary 2018 listener to recycleview when touching it
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT /*| ItemTouchHelper.RIGHT | ItemTouchHelper.UP*/) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Row is swiped from recycler view
-                // remove it from adapter
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
-
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
         return view;
@@ -157,7 +128,8 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        getLoaderManager().restartLoader(0, null, this);
+        if (saveDataEvent.isSuccess())
+            getLoaderManager().restartLoader(0, null, this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -196,7 +168,7 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), CONTENT_URI, null, null, null,
+        return new CursorLoader(getActivity(), BfwContract.Farmer.CONTENT_URI, null, null, null,
                 null);
     }
 
@@ -242,52 +214,6 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
             startActivity(new Intent(getActivity(), CreateFarmerActivity.class));
         }
 
-    }
-
-    @Override
-    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof NavigationRecyclerViewAdapter.ViewHolder) {
-            // get the removed item name to display it in snack bar
-            String name = ((NavigationRecyclerViewAdapter.ViewHolder) viewHolder).mUname.getText().toString();
-            String id3 = ((NavigationRecyclerViewAdapter.ViewHolder) viewHolder).mUphone.getText().toString();
-
-            String id = ((NavigationRecyclerViewAdapter.ViewHolder) viewHolder).id_cursor_to_delete;
-
-
-            // backup of removed item for undo purpose
-            final long deletedIte = (((NavigationRecyclerViewAdapter.ViewHolder) viewHolder).getAdapterPosition());
-
-            //Item deletedItem = NavigationRecyclerViewAdapter.ViewHolder.get(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
-
-
-            String farmerRemove = BfwContract.Farmer.TABLE_NAME + "." +
-                    BfwContract.Farmer._ID + " =  ? ";
-
-            mUri = BfwContract.Farmer.buildFarmerUri(Long.valueOf(id));
-            getContext().getContentResolver().delete(BfwContract.Farmer.CONTENT_URI, farmerRemove, new String[]{id});
-
-            // remove the item from recycler view
-            navigationRecyclerViewAdapter.removeItem(deletedIndex);
-
-
-            onRefresh();
-
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(coordinatorLayout, name + " removed! ", Snackbar.LENGTH_LONG);
-            snackbar.setAction("", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // undo is selected, restore the deleted item
-                   // navigationRecyclerViewAdapter.restoreItem(deletedItem, deletedIndex);
-                    //navigationRecyclerViewAdapter.restoreItem(((NavigationRecyclerViewAdapter.ViewHolder) viewHolder).onClick(view),deletedIndex);
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
-        }
     }
 
     /**

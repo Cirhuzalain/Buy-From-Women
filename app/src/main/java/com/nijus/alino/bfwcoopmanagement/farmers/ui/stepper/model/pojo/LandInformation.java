@@ -10,17 +10,26 @@ import android.os.Parcelable;
 public class LandInformation implements Parcelable {
 
     private double landSize;
+    private double lat;
+    private double lng;
+    private int harvestSeason;
 
     public LandInformation() {
 
     }
 
-    public LandInformation(double landSize) {
+    public LandInformation(double landSize, double lat, double lng, int harvestSeason) {
         this.landSize = landSize;
+        this.lat = lat;
+        this.lng = lng;
+        this.harvestSeason = harvestSeason;
     }
 
     public LandInformation(Parcel data) {
         this.landSize = data.readDouble();
+        this.lat = data.readDouble();
+        this.lng = data.readDouble();
+        this.harvestSeason = data.readInt();
     }
 
     @Override
@@ -31,6 +40,33 @@ public class LandInformation implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeDouble(landSize);
+        parcel.writeDouble(lat);
+        parcel.writeDouble(lng);
+        parcel.writeInt(harvestSeason);
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
     }
 
     public double getLandSize() {

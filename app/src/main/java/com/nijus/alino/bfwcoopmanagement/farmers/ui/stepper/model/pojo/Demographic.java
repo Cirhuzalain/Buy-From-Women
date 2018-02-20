@@ -15,21 +15,19 @@ public class Demographic implements Parcelable {
     private String spouseLastName;
     private String cellPhoneAlt;
     private String cellCarrier;
-    private String memberShipId;
 
     public Demographic() {
 
     }
 
     public Demographic(boolean isHouseHold, int houseHoldMember, String spouseFirstName, String spouseLastName,
-                       String cellPhoneAlt, String cellCarrier, String memberShipId) {
+                       String cellPhoneAlt, String cellCarrier) {
         this.isHouseHoldHead = isHouseHold;
         this.houseHoldMember = houseHoldMember;
         this.spouseFirstName = spouseFirstName;
         this.spouseLastName = spouseLastName;
         this.cellPhoneAlt = cellPhoneAlt;
         this.cellCarrier = cellCarrier;
-        this.memberShipId = memberShipId;
     }
 
     public Demographic(Parcel data) {
@@ -39,7 +37,6 @@ public class Demographic implements Parcelable {
         this.spouseLastName = data.readString();
         this.cellPhoneAlt = data.readString();
         this.cellCarrier = data.readString();
-        this.memberShipId = data.readString();
     }
 
     @Override
@@ -55,7 +52,6 @@ public class Demographic implements Parcelable {
         parcel.writeString(spouseLastName);
         parcel.writeString(cellPhoneAlt);
         parcel.writeString(cellCarrier);
-        parcel.writeString(memberShipId);
     }
 
     public boolean isHouseHold() {
@@ -104,14 +100,6 @@ public class Demographic implements Parcelable {
 
     public void setCellCarrier(String cellCarrier) {
         this.cellCarrier = cellCarrier;
-    }
-
-    public String getMemberShipId() {
-        return memberShipId;
-    }
-
-    public void setMemberShipId(String memberShipId) {
-        this.memberShipId = memberShipId;
     }
 
     public static final Parcelable.Creator<Demographic> CREATOR = new Parcelable.Creator<Demographic>() {

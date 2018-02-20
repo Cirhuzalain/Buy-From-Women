@@ -24,12 +24,14 @@ import com.nijus.alino.bfwcoopmanagement.farmers.sync.AddFarmer;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.AbstractWizardModel;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.ModelCallbacks;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BankInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BaseLine;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Demographic;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Forecast;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.General;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.LandInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.ServiceAccess;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallbacks;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.StepPagerStrip;
@@ -183,8 +185,7 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
                 //Save Farmer data
-                Toast.makeText(getActivity(), "Coming Soon !!!", Toast.LENGTH_LONG).show();
-                //saveNewFarmer();
+                saveNewFarmer();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -199,8 +200,7 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
             //Save farmer data
-            //saveNewFarmer();
-            Toast.makeText(getActivity(), "Coming Soon !!!", Toast.LENGTH_LONG).show();
+            saveNewFarmer();
         }
 
     }
@@ -218,7 +218,7 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
             boolean isBaseline = data.containsKey("baseline");
             boolean isFinance = data.containsKey("finance");
             boolean isService = data.containsKey("serviceAccess");
-            boolean isBank = data.containsKey("b_info");
+            boolean isAccessToInformation = data.containsKey("accessToInformation");
 
             if (isData) {
                 General general = data.getParcelable("general");
@@ -230,35 +230,38 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
                 }
                 saveBundle.putParcelable("general", general);
             }
-
-            if (isLandInfo) {
-                HashMap map = (HashMap) data.getSerializable("land_info");
-                saveBundle.putSerializable("land_info", map);
-            }
-
-            if (isForecast) {
-                Forecast forecast = data.getParcelable("forecast");
-                saveBundle.putParcelable("forecast", forecast);
+            if (isService) {
+                ServiceAccess serviceAccess = data.getParcelable("serviceAccess");
+                saveBundle.putParcelable("serviceAccess", serviceAccess);
             }
             if (isDemographic) {
                 Demographic demographic = data.getParcelable("demographic");
                 saveBundle.putParcelable("demographic", demographic);
             }
+
+            if (isLandInfo) {
+                HashMap<String, LandInformation> landInfo = (HashMap<String, LandInformation>) data.getSerializable("land_info");
+                saveBundle.putSerializable("land_info", landInfo);
+            }
+
+            if (isForecast) {
+                HashMap<String, Forecast> forecast = (HashMap<String, Forecast>) data.getSerializable("forecast");
+                saveBundle.putSerializable("forecast", forecast);
+
+            }
             if (isBaseline) {
-                BaseLine baseLine = data.getParcelable("baseline");
-                saveBundle.putParcelable("baseline", baseLine);
+                HashMap<String, BaseLine> baseline = (HashMap<String, BaseLine>) data.getSerializable("baseline");
+                saveBundle.putSerializable("baseline", baseline);
+
             }
             if (isFinance) {
-                Finance finance = data.getParcelable("finance");
-                saveBundle.putParcelable("finance", finance);
+                HashMap<String, Finance> finance = (HashMap<String, Finance>) data.getSerializable("finance");
+                saveBundle.putSerializable("finance", finance);
             }
-            if (isService) {
-                ServiceAccess serviceAccess = data.getParcelable("serviceAccess");
-                saveBundle.putParcelable("serviceAccess", serviceAccess);
-            }
-            if (isBank) {
-                BankInformation bankInformation = data.getParcelable("b_info");
-                saveBundle.putParcelable("b_info", bankInformation);
+
+            if (isAccessToInformation) {
+                HashMap<String, AccessToInformation> accessInfoMap = (HashMap<String, AccessToInformation>) data.getSerializable("accessToInformation");
+                saveBundle.putSerializable("accessToInformation", accessInfoMap);
             }
         }
         Intent intent = new Intent(getContext(), AddFarmer.class);

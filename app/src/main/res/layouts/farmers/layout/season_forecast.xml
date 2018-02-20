@@ -64,7 +64,35 @@
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
-                
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/farmerexpectedminppp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/farmers_expected_minimum_revenue_from_ftma_sale_in_rwf"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/minimumflowprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/flow_price"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
                 <!--Ajoout des detailsforecastVendorcast-->
                 <LinearLayout
                     android:id="@+id/access_info_season_first2"

@@ -99,13 +99,13 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int totProd = 0;
-            int totLost = 0;
-            int totSolKg = 0;
-            int totVSoldCoop = 0;
-            int priceSoldCoop = 0;
-            int totVolSKg = 0;
-            int priceSold = 0;
+            Double totProd = 0.0;
+            Double totLost = 0.0;
+            Double totSolKg = 0.0;
+            Double totVSoldCoop = 0.0;
+            Double priceSoldCoop = 0.0;
+            Double totVolSKg = 0.0;
+            Double priceSold = 0.0;
 
             totProdKg.setText("" + totProd + "");
             totLostKg.setText("" + totLost + "");
@@ -157,7 +157,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotProdInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setTotProdInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -179,7 +179,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotLostInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setTotLostInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -201,7 +201,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotSoldInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setTotSoldInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -224,7 +224,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotVolumeSoldCoopInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setTotVolumeSoldCoopInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -247,7 +247,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setPriceSoldToCoopPerKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setPriceSoldToCoopPerKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -270,7 +270,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotVolSoldInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setTotVolSoldInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
@@ -293,7 +293,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setPriceSoldInKg(Integer.parseInt(charSequence.toString()));
+                    baseLine.setPriceSoldInKg(Double.parseDouble(charSequence.toString()));
                     mPage.getData().putParcelable("baseline", baseLine);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();

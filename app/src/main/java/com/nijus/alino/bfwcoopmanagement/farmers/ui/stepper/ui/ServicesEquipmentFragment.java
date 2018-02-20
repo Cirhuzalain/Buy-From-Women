@@ -3,6 +3,8 @@ package com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +42,8 @@ public class ServicesEquipmentFragment extends Fragment {
     private CheckBox eOther;
 
     private AutoCompleteTextView safeStorage_text;
-    private AutoCompleteTextView other_text;
-    private AutoCompleteTextView other_text2;
+    private AutoCompleteTextView newResources;
+    private AutoCompleteTextView otherwatersource;
 
 
     public ServicesEquipmentFragment() {
@@ -131,12 +133,11 @@ public class ServicesEquipmentFragment extends Fragment {
 
         eOther = rootView.findViewById(R.id.e_other_main);
         boolean isEOther = eOther.isActivated();
-        //serviceAccess.setOrganicFertilizers(isEOther);
+        serviceAccess.setOtherInfo(isEOther);
 
-        //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.other_text);
-        other_text2= rootView.findViewById(R.id.other2_text);
+        newResources = rootView.findViewById(R.id.new_resources);
+        otherwatersource = rootView.findViewById(R.id.other_water_source);
 
         mPage.getData().putParcelable("serviceAccess", serviceAccess);
 
@@ -193,9 +194,25 @@ public class ServicesEquipmentFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    //AJOUTER DETAIKL DU SAFE STRORAGE
                     safeStorage_text.setVisibility(View.VISIBLE);
                     serviceAccess.setSafeStorage(true);
+                    safeStorage_text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setStorageDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     serviceAccess.setSafeStorage(false);
                     safeStorage_text.setText("");
@@ -208,13 +225,29 @@ public class ServicesEquipmentFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    //AJOUTER DETAILS OF OTHERSN RESSOURCES AVAILBLE
-                    other_text.setVisibility(View.VISIBLE);
+                    newResources.setVisibility(View.VISIBLE);
                     serviceAccess.setOtherResourceInfo(true);
+                    newResources.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setNewResourcesDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     serviceAccess.setOtherResourceInfo(false);
-                    other_text.setText("");
-                    other_text.setVisibility(View.GONE);
+                    newResources.setText("");
+                    newResources.setVisibility(View.GONE);
                 }
                 mPage.getData().putParcelable("serviceAccess", serviceAccess);
             }
@@ -308,11 +341,28 @@ public class ServicesEquipmentFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text2.setVisibility(View.VISIBLE);
+                    otherwatersource.setVisibility(View.VISIBLE);
                     serviceAccess.setOtherInfo(true);
+                    otherwatersource.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setMainWaterSourceDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
-                    other_text2.setText("");
-                    other_text2.setVisibility(View.GONE);
+                    otherwatersource.setText("");
+                    otherwatersource.setVisibility(View.GONE);
                     serviceAccess.setOtherInfo(false);
                 }
                 mPage.getData().putParcelable("serviceAccess", serviceAccess);

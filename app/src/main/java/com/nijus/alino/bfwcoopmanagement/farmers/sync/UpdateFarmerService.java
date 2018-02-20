@@ -72,8 +72,9 @@ public class UpdateFarmerService extends IntentService {
             HashMap map = (HashMap) farmerData.getSerializable("land_info");
 
             //save data
-            int duration = 0, coopServerId = 43, houseHoldMember = 0, totProductionKg = 0, totLostKg = 0, totSolddKg = 0,
-                    totSoldVolCoop = 0, totPriceSoldCoopPerKG = 0, priceSoldKg = 0, totVolSideSold = 0, totLoanAmount = 0, totOutstanding = 0;
+            int duration = 0, coopServerId = 43, houseHoldMember = 0;
+            double totProductionKg = 0.0, totLostKg = 0.0, totSolddKg = 0.0,
+                    totSoldVolCoop = 0.0, totPriceSoldCoopPerKG = 0.0, priceSoldKg = 0.0, totVolSideSold = 0.0;
             String name = "", phoneNumber = "", coopName = "", fName = null, lName = null, cellPhoneAlt = null, cellCarrier = null, memeberShipId = null, loanProvider = null;
 
             boolean gender = false, isHouseHoldHead = false, isMobileMoneyAccount = false, isInput = false, isAggregation = false, isOther = false, outstandingLoan = false,
@@ -81,7 +82,7 @@ public class UpdateFarmerService extends IntentService {
                     waterPumps = false, isTractors = false, isHarvester = false, isSpreader = false, isDryer = false, isTresher = false, isSafeStorage = false, isOtherResourceInfo = false,
                     isDam = false, isWell = false, isBoreHole = false, isPipeBorne = false, isRiverStream = false, isIrrigation = false, hasNoWaterSource = false, isOtherInfo = false;
 
-            double arableLandPlot = 0.0, interestRate = 0.0;
+            double arableLandPlot = 0.0, interestRate = 0.0, totLoanAmount = 0.0, totOutstanding = 0.0;
 
             if (general != null) {
 
@@ -123,7 +124,6 @@ public class UpdateFarmerService extends IntentService {
                 lName = demographic.getSpouseLastName();
                 cellPhoneAlt = demographic.getCellPhoneAlt();
                 cellCarrier = demographic.getCellCarrier();
-                memeberShipId = demographic.getMemberShipId();
             }
 
             if (baseLine != null) {
@@ -171,8 +171,7 @@ public class UpdateFarmerService extends IntentService {
                 hasNoWaterSource = serviceAccess.isHasNoWaterSource();
                 isOtherInfo = serviceAccess.isOtherInfo();
             }
-            if (accessToInformation != null)
-            {
+            if (accessToInformation != null) {
                 isAgriculture = accessToInformation.isAgricultureExtension();
                 isClimateInfo = accessToInformation.isClimateRelatedInformation();
                 isSeeds = accessToInformation.isSeed();
@@ -195,7 +194,6 @@ public class UpdateFarmerService extends IntentService {
             contentValues.put(BfwContract.Farmer.COLUMN_LAST_NAME, lName);
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_PHONE, cellPhoneAlt);
             contentValues.put(BfwContract.Farmer.COLUMN_CELL_CARRIER, cellCarrier);
-            contentValues.put(BfwContract.Farmer.COLUMN_MEMBER_SHIP, memeberShipId);
             contentValues.put(BfwContract.Farmer.COLUMN_TRACTORS, isTractors ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_HARVESTER, isHarvester ? 1 : 0);
             contentValues.put(BfwContract.Farmer.COLUMN_DRYER, isDryer ? 1 : 0);

@@ -24,8 +24,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_loan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         save_loan = findViewById(R.id.save_loan);
         ed_date_value = findViewById(R.id.ed_date_value);
@@ -35,7 +33,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         date.setOnClickListener(this);
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }

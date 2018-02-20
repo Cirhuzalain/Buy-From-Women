@@ -135,8 +135,8 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
 
         //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.other_text);
-        other_text2= rootView.findViewById(R.id.other2_text);
+        other_text= rootView.findViewById(R.id.new_resources);
+        other_text2= rootView.findViewById(R.id.other_water_source);
 
         mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
 

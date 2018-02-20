@@ -137,7 +137,6 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             int cother = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER));
 
 
-
             if (isTract == 1) {
                 tractors.setChecked(true);
                 serviceAccessVendor.setTractor(false);
@@ -308,12 +307,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
         eOther = rootView.findViewById(R.id.e_other_main);
         boolean isEOther = eOther.isActivated();
-        //serviceAccessVendor.setOrganicFertilizers(isEOther);
 
         //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.other_text);
-        other_text2= rootView.findViewById(R.id.other2_text);
+        other_text = rootView.findViewById(R.id.new_resources);
+        other_text2 = rootView.findViewById(R.id.other_water_source);
 
         mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
 

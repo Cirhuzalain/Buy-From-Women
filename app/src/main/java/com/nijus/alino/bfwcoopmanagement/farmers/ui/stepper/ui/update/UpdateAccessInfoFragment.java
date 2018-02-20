@@ -25,7 +25,7 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallbacks;
 
-public class UpdateAccessInfoFragment extends Fragment implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class UpdateAccessInfoFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_KEY = "key";
     private String mKey;
@@ -267,8 +267,6 @@ public class UpdateAccessInfoFragment extends Fragment implements AdapterView.On
                 R.array.harverstSeason, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         harvsetSeason.setAdapter(adapter);
-
-        harvsetSeason.setOnItemSelectedListener(this);
         return rootView;
     }
 
@@ -283,16 +281,5 @@ public class UpdateAccessInfoFragment extends Fragment implements AdapterView.On
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        accessToInformation.setHarvsetSeason(adapterView.getItemAtPosition(i).toString());
-        mPage.getData().putParcelable("accessToInformation", accessToInformation);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }

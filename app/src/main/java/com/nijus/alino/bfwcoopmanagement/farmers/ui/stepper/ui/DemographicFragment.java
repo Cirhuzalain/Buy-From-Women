@@ -32,7 +32,6 @@ public class DemographicFragment extends Fragment {
     private AutoCompleteTextView sLastName;
     private AutoCompleteTextView cellPhoneAlt;
     private AutoCompleteTextView cellCarrier;
-    private AutoCompleteTextView memberShipId;
 
     public DemographicFragment() {
         super();
@@ -72,7 +71,6 @@ public class DemographicFragment extends Fragment {
         sLastName = rootView.findViewById(R.id.s_last_name);
         cellPhoneAlt = rootView.findViewById(R.id.cell_phone_alt);
         cellCarrier = rootView.findViewById(R.id.cell_carrier);
-        memberShipId = rootView.findViewById(R.id.m_id);
 
         //set default household
         if (houseHold.getCheckedRadioButtonId() == R.id.household_y) {
@@ -80,8 +78,9 @@ public class DemographicFragment extends Fragment {
             mPage.getData().putParcelable("demographic", demographic);
         } else if (houseHold.getCheckedRadioButtonId() == R.id.household_n) {
             demographic.setHouseHold(false);
-            mPage.getData().putParcelable("demographic", demographic);
         }
+        demographic.setHouseHoldMember(0);
+        mPage.getData().putParcelable("demographic", demographic);
 
         //listen for change on Household Head
         houseHold.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -182,24 +181,6 @@ public class DemographicFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 demographic.setCellCarrier(charSequence.toString());
-                mPage.getData().putParcelable("demographic", demographic);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        memberShipId.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                demographic.setMemberShipId(charSequence.toString());
                 mPage.getData().putParcelable("demographic", demographic);
             }
 

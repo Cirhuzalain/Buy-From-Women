@@ -98,7 +98,6 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
 
-        //recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
@@ -117,7 +116,6 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
 
-        //add on 1 febrary 2018 listener to recycleview when touching it
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelperVendor(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -143,7 +141,7 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
         // attaching the touch helper to recycler view
         new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
         return view;
@@ -197,7 +195,7 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), CONTENT_URI, null, null, null,
+        return new CursorLoader(getActivity(), BfwContract.Vendor.CONTENT_URI, null, null, null,
                 null);
     }
 

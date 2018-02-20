@@ -312,8 +312,8 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
 
         //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.other_text);
-        other_text2= rootView.findViewById(R.id.other2_text);
+        other_text= rootView.findViewById(R.id.new_resources);
+        other_text2= rootView.findViewById(R.id.other_water_source);
 
         mPage.getData().putParcelable("serviceAccess", serviceAccess);
 

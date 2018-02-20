@@ -87,20 +87,6 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        /*navigationRecyclerViewAdapter = new CoopAgentAdapter(getContext(), emptyView, new CoopAgentAdapter.CoopAgentAdapterOnClickHandler() {
-            @Override
-            public void onClick(Long farmerId, CoopAgentAdapter.ViewHolder vh) {
-                ((CoopAgentFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
-            }
-
-        }, new CoopAgentAdapter.CoopAgentAdapterOnLongClickHandler() {
-            @Override
-            public boolean onLongClick(Long farmerId, CoopAgentAdapter.ViewHolder vh) {
-                return ((CoopAgentFragment.OnListFragmentInteractionListener) getActivity()).onLong2FragmentInteraction(farmerId, vh);
-                //return true;
-            }
-        });*/
         navigationRecyclerViewAdapter = new CoopAgentAdapter(getContext(), emptyView, new CoopAgentAdapter.CoopAgentAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, CoopAgentAdapter.ViewHolder vh) {
@@ -138,7 +124,7 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), BfwContract.Coops.CONTENT_URI, null, null, null,
+        return new CursorLoader(getActivity(), BfwContract.CoopAgent.CONTENT_URI, null, null, null,
                 null);
     }
 

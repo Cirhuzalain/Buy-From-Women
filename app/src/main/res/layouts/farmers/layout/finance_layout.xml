@@ -179,7 +179,7 @@
                         android:id="@+id/l_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/other" />
+                        android:text="@string/others_finance_source" />
 
 
                 </LinearLayout>

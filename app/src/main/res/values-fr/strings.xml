@@ -412,6 +412,13 @@
     <string name="aggrgation_post_harvset_loan_duration">Aggregation/Post harvest loan duration in months </string>
     <string name="aggrgation_post_harvset_laon_disbursement_method">Aggregation/Post harvest loan disbursement method</string>
     <string name="total_expected_coop_production">Total expected coop production in MT</string>
+    <string name="new_resources">Other available resource</string>
+    <string name="product_name">Product name</string>
+    <string name="sale_price">Sale price</string>
+    <string name="cost">Cost</string>
+    <string name="details_coop_">Cooperative Details</string>
+    <string name="update_loan">Update Loan</string>
+    <string name="parse_error">An Error occur while parsing Date Information</string>
 
     <string name="input_prov_in_kind">Input provided in kind</string>
     <string name="cash_provided_purchase_inputs">Cash provided to purchase inputs </string>
@@ -427,4 +434,7 @@
     <string name="date_select">Select a date</string>
     <string name="princip_amount">Principal amount (RWF)</string>
     <string name="financial_institution">Financial institution</string>
+    <string name="others_finance_source">Others</string>
+    <string name="farmers_expected_minimum_revenue_from_ftma_sale_in_rwf">Farmers expected minimum revenue from FTMA sale in RWF</string>
+    <string name="flow_price">Minimum floor price per kg in RWF</string>
 </resources>

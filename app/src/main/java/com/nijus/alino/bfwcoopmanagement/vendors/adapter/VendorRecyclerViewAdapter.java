@@ -31,7 +31,6 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
     //private String id_cursor_to_delete ;
 
 
-
     public VendorRecyclerViewAdapter(Context context, View view, VendorAdapterOnClickHandler vh) {
         mContext = context;
         mEmptyView = view;
@@ -52,12 +51,10 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
 
         holder.farmerImage.setImageResource(R.drawable.profile);
 
-        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_NAME)));
-        holder.mUphone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE)));
+        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_NAME)));
+        holder.mUphone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE)));
 
         holder.id_cursor_to_delete = mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer._ID));
-
-        //COLUMN_PHONE
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC)) == 1;
         if (isSync) {
@@ -87,7 +84,6 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
         notifyItemRemoved(position);
         //notifyItemRangeChanged(position,mCursor.getCount() +1);
     }
-
 
 
     public void restoreItem(View v, int position) {

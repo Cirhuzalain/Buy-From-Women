@@ -221,8 +221,9 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         Cursor cursor = (Cursor) spinner.getSelectedItem();
-        general.setCoopsName(cursor.getString(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+        general.setCoopId(cursor.getInt(cursor.getColumnIndex(BfwContract.Coops._ID)));
         mPage.setData("general", general);
+
     }
 
     @Override

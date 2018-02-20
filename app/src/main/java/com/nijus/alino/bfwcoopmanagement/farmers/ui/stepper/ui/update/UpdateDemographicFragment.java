@@ -140,7 +140,6 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
             }
             if (mId != null) {
                 memberShipId.setText(mId);
-                demographic.setMemberShipId(mId);
             }
             mPage.getData().putParcelable("demographic", demographic);
         }
@@ -282,24 +281,6 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 demographic.setCellCarrier(charSequence.toString());
-                mPage.getData().putParcelable("demographic", demographic);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        memberShipId.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                demographic.setMemberShipId(charSequence.toString());
                 mPage.getData().putParcelable("demographic", demographic);
             }
 
