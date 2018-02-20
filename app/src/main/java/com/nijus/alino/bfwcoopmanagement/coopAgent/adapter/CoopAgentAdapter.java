@@ -48,7 +48,6 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-
         holder.farmerImage.setImageResource(R.drawable.profile);
         //holder.iconBack.setVisibility(View.GONE);
 
@@ -85,8 +84,9 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
         public final TextView mUname;
         public RelativeLayout iconBack, iconFront, iconContainer;
         public LinearLayout view_foreground;
-
         public List<Integer> listsSelectedItem = new ArrayList<>();
+        private ActionMode actionMode;
+        private int selectionned;
 
 
         public ViewHolder(View view) {

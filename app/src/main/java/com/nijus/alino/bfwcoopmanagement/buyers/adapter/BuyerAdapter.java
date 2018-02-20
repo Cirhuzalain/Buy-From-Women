@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +92,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             iconBack = view.findViewById(R.id.icon_back);
             iconFront = view.findViewById(R.id.icon_front);
             iconContainer = view.findViewById(R.id.icon_container);
+            iconContainer = view.findViewById(R.id.icon_container);
             view_foreground = view.findViewById(R.id.view_foreground);
 
             view.setOnClickListener(this);
@@ -123,7 +123,6 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
 
         @Override
         public boolean onLongClick(View view) {
-
             if (!return_if_val_in_array(Integer.valueOf(this.getAdapterPosition()))) {
                 this.iconFront.setVisibility(View.GONE);
                 this.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
