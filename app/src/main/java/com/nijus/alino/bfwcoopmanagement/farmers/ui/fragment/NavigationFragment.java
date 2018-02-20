@@ -3,36 +3,27 @@ package com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.RecyclerItemTouchHelper;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.CreateFarmerActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
@@ -41,30 +32,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import static com.nijus.alino.bfwcoopmanagement.data.BfwContract.Farmer.CONTENT_URI;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class NavigationFragment extends Fragment implements LoaderCallbacks<Cursor>,
-        SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener {
+public class NavigationFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
     private NavigationRecyclerViewAdapter navigationRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
     private CoordinatorLayout coordinatorLayout;
-    private Uri mUri;
 
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public NavigationFragment() {
     }
 
@@ -97,13 +78,14 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
 
-        coordinatorLayout = view.findViewById(R.id.coordinator_layout);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        coordinatorLayout = view.findViewById(R.id.coordinator_layout);
 
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(getContext(), emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-                ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
+                // ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
             }
         });
 
@@ -111,7 +93,6 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
-
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
@@ -186,23 +167,6 @@ public class NavigationFragment extends Fragment implements LoaderCallbacks<Curs
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
         navigationRecyclerViewAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     @Override

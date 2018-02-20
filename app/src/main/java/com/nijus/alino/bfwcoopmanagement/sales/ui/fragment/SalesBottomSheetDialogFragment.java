@@ -59,7 +59,6 @@ public class SalesBottomSheetDialogFragment extends BottomSheetDialogFragment im
         }
 
     };
-    //@SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
@@ -68,34 +67,17 @@ public class SalesBottomSheetDialogFragment extends BottomSheetDialogFragment im
         View viewContainer = View.inflate(getContext(), R.layout.sale_fragment_bottom_sheet, null);
 
         dialog.setContentView(viewContainer);
-
-        float heightDp = getResources().getDisplayMetrics().widthPixels;
-
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) viewContainer.getParent()).getLayoutParams();
 
-        //Toast.makeText(getContext()," "+f, Toast.LENGTH_LONG).show();
-
-        //params.setMargins(50,50,50,50);
+        //Make responsive bottom sheet
         int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
         params.setMargins(width,0,width,0);
 
-
-
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
-
-
         if( behavior != null && behavior instanceof BottomSheetBehavior ) {
-            //((BottomSheetBehavior) behavior).setPeekHeight(100);
-            //int f = ((BottomSheetBehavior) behavior).getPeekHeight();
-            //oast.makeText(getContext()," "+f, Toast.LENGTH_LONG).show();
-
-
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
-
-
-        //View viewContainer = getActivity().getLayoutInflater().inflate(R.layout.add_sales_order, null);
 
         mProductContainer = viewContainer.findViewById(R.id.saleOrderContainer);
         addProductItem = viewContainer.findViewById(R.id.add_so_order);

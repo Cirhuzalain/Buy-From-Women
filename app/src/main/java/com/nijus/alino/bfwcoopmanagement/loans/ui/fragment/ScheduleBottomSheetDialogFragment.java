@@ -28,6 +28,7 @@ public class ScheduleBottomSheetDialogFragment extends BottomSheetDialogFragment
         SwipeRefreshLayout.OnRefreshListener {
     private ScheduleAdapter loanRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
+    private long id_long;
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback =
             new BottomSheetBehavior.BottomSheetCallback() {
@@ -47,12 +48,10 @@ public class ScheduleBottomSheetDialogFragment extends BottomSheetDialogFragment
         }
 
     };
-    //@SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        //super.setupDialog(dialog,style);
-        //getSupportLoaderManager().initLoader(0,null,this);
+
         getLoaderManager().initLoader(0,null,this);
 
         View contentView = View.inflate(getContext(), R.layout.schedule_fragment_bottom_sheet, null);
@@ -61,10 +60,13 @@ public class ScheduleBottomSheetDialogFragment extends BottomSheetDialogFragment
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
+        //Make responsive bottom sheet
+        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
+        params.setMargins(width,0,width,0);
+
         if( behavior != null && behavior instanceof BottomSheetBehavior ) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
-
 
         View emptyView = contentView.findViewById(R.id.recyclerview_empty_schedule);
         //Context context = this;
@@ -84,8 +86,20 @@ public class ScheduleBottomSheetDialogFragment extends BottomSheetDialogFragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), BfwContract.Coops.CONTENT_URI, null, null, null,
-                null);
+        /*return new CursorLoader(getContext(), BfwContract.LoanLine.CONTENT_URI,
+                null, null, null,
+                null);*/
+        long id_loan = getArguments().getLong("id_loan");
+        String loanLineSelection = BfwContract.LoanLine.TABLE_NAME + "." +
+                BfwContract.LoanLine.COLUMN_LOAN_ID + " =  ? ";
+        return new CursorLoader(
+                getContext(),
+                BfwContract.LoanLine.CONTENT_URI,
+                null,
+                loanLineSelection,
+                new String[]{Long.toString(id_loan)},
+                null
+        );
     }
 
     @Override

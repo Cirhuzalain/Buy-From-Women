@@ -17,11 +17,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextClock;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.PaymentBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class DetailLoanActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener {
@@ -32,9 +41,14 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
     public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-    private ImageView loan_details;
+    private ImageView loan_details,gen_info_pic;
+    private TextView name_b_details,start_date,loan_purpose,
+            principal_amount, interest_rate, duration_month,
+            fin_inst_spinner;
 
     private Button schedule,payment, save;
+
+    private  long loan_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +61,9 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         Intent intent = this.getIntent();
         if (intent.hasExtra("loanId")) {
             mLoanId = intent.getLongExtra("loanId", 0);
-            mUri = BfwContract.Coops.buildCoopUri(mLoanId);
+            mUri = BfwContract.Loan.buildLoanUri(mLoanId);
         }
-
-        collapsingToolbarLayout = findViewById(R.id.name_loan);
-        toolbar = findViewById(R.id.toolbar_loan);
-        setSupportActionBar(toolbar);
+        //Toast.makeText(this,"get "+mLoanId,Toast.LENGTH_LONG).show();
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_loan);
         loan_details = findViewById(R.id.loan_details);
@@ -67,6 +78,17 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
+        gen_info_pic = findViewById(R.id.gen_info_pic);
+
+
+        name_b_details = findViewById(R.id.name_b_details);
+        start_date = findViewById(R.id.phone_b_details);
+        loan_purpose = findViewById(R.id.mail_b_details);
+        principal_amount = findViewById(R.id.principal_amount);
+        interest_rate = findViewById(R.id.interest_rate);
+        duration_month = findViewById(R.id.duration_month);
+        fin_inst_spinner = findViewById(R.id.fin_inst_spinner);
+
         //les ecouteur sur les button pour appeler les style sheet bottom
         schedule = findViewById(R.id.schedule_);
         payment = findViewById(R.id.payment_);
@@ -76,20 +98,24 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         payment.setOnClickListener(this);
         save.setOnClickListener(this);
 
+        collapsingToolbarLayout = findViewById(R.id.name_loan);
+        toolbar = findViewById(R.id.toolbar_loan);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String coopSelection = BfwContract.Coops.TABLE_NAME + "." +
-                BfwContract.Coops._ID + " =  ? ";
+        String loanSelection = BfwContract.Loan.TABLE_NAME + "." +
+                BfwContract.Loan._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
                     this,
                     mUri,
                     null,
-                    coopSelection,
+                    loanSelection,
                     new String[]{Long.toString(mLoanId)},
                     null
             );
@@ -102,9 +128,38 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
 
         if (data != null && data.moveToFirst()) {
 
-            name = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME));
+            int vendor_id = data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
+            loan_id = data.getInt(data.getColumnIndex(BfwContract.Loan._ID));
+            //recuper le vrai nom du vendor
+            String vendorSelect = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer._ID + " =  ? ";
+
+            Cursor cursor = getContentResolver().query(BfwContract.Farmer.CONTENT_URI, null,
+                    vendorSelect,
+                    new String[]{Long.toString(vendor_id)},
+                    null);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    name = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
+                }
+            }
+
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
+            gen_info_pic.setImageResource(R.mipmap.male);
+            name_b_details.setText(name);
+
+            Long getDate = data.getLong(data.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE));
+            Date start_date_date = new Date(getDate);
+            String date_string = DateFormat.getDateInstance().format(start_date_date);
+
+            start_date.setText(date_string);
+
+            loan_purpose.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE)));
+            principal_amount.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)));
+            interest_rate.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
+            duration_month.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_DURATION)));
+            fin_inst_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
         }
     }
 
@@ -116,13 +171,21 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
     public void onClick(View v) {
         switch( v.getId() ) {
             case R.id.schedule_: {
+                Bundle bundle = new Bundle();
+                bundle.putLong("id_loan",loan_id ); // set Fragmentclass Arguments
                 BottomSheetDialogFragment bottomSheetDialogFragment = new ScheduleBottomSheetDialogFragment();
+                bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+
                 break;
             }
             case R.id.payment_: {
+                Bundle bundle = new Bundle();
+                bundle.putLong("id_loan",loan_id ); // set Fragmentclass Arguments
                 BottomSheetDialogFragment bottomSheetDialogFragment = new PaymentBottomSheetDialogFragment();
+                bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+
                 break;
             }
             case R.id.save_: {

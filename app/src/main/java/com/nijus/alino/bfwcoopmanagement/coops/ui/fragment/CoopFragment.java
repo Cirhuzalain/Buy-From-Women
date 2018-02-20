@@ -28,15 +28,8 @@ import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.CreateCoopActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CoopFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CoopFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CoopFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class CoopFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -46,12 +39,9 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
     private CoopAdapter navigationRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
 
-    private OnFragmentInteractionListener mListener;
-
     public CoopFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -97,12 +87,12 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
         navigationRecyclerViewAdapter = new CoopAdapter(getContext(), emptyView, new CoopAdapter.CoopAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, CoopAdapter.ViewHolder vh) {
-                ((CoopFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
+                //((CoopFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
             }
         }, new CoopAdapter.CoopAdapterOnLongClickHandler() {
             @Override
             public void onLongClick(Long farmerId, CoopAdapter.ViewHolder vh) {
-                ((CoopFragment.OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
+                //((CoopFragment.OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
             }
         });
 
@@ -155,23 +145,6 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onClick(View view) {
 
         if (view.getId() == R.id.fab) {
@@ -180,23 +153,5 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
             startActivity(new Intent(getActivity(), CreateCoopActivity.class));
             //startActivity(new Intent(getActivity(), CreateVendorActivity.class));
         }
-    }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(long item, CoopAdapter.ViewHolder vh);
-    }
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(long item, CoopAdapter.ViewHolder vh);
     }
 }

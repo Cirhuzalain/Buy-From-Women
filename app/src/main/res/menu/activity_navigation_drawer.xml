@@ -35,7 +35,7 @@
             android:title="@string/purchase" />
         <item
             android:id="@+id/loan"
-            android:icon="@mipmap/sale_white"
+            android:icon="@mipmap/loan_balck"
             android:title="@string/loan" />
         <item
             android:id="@+id/product"

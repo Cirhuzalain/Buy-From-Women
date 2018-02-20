@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
@@ -24,6 +25,8 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         SwipeRefreshLayout.OnRefreshListener {
     private PaymentAdapter loanRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
+    private long id_long, id_loan;
+
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback =
             new BottomSheetBehavior.BottomSheetCallback() {
@@ -51,16 +54,22 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         //getSupportLoaderManager().initLoader(0,null,this);
         getLoaderManager().initLoader(0,null,this);
 
+        id_loan = getArguments().getLong("id_loan");
+        //Toast.makeText(getContext(),id_loan+"",Toast.LENGTH_LONG).show();
+
         View contentView = View.inflate(getContext(), R.layout.payment_fragment_bottom_sheet, null);
         dialog.setContentView(contentView);
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
+        //Make responsive bottom sheet
+        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
+        params.setMargins(width,0,width,0);
+
         if( behavior != null && behavior instanceof BottomSheetBehavior ) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
-
 
         View emptyView = contentView.findViewById(R.id.recyclerview_empty_payment);
         //Context context = this;
@@ -75,13 +84,22 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(loanRecyclerViewAdapter);
-
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), BfwContract.Coops.CONTENT_URI, null, null, null,
-                null);
+        id_loan = getArguments().getLong("id_loan");
+        String loanPaymentSelection = BfwContract.LoanPayment.TABLE_NAME + "." +
+                BfwContract.LoanPayment.COLUMN_LOAN_ID + " =  ? ";
+         return new CursorLoader(
+                    getContext(),
+                    BfwContract.LoanPayment.CONTENT_URI,
+                    null,
+                    loanPaymentSelection,
+                    new String[]{Long.toString(id_loan)},
+                    null
+            );
+
     }
 
     @Override

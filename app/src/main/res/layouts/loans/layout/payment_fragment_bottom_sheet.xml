@@ -4,10 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/recyclerview_empty_payment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
@@ -39,8 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".loans.ui.fragment.LoanFragment"
-            tools:listitem="@layout/schedule_item" />
+            tools:context=".loans.ui.activities.LoanActivity"
+            tools:listitem="@layout/payment_item" />
     </ScrollView>
 
 

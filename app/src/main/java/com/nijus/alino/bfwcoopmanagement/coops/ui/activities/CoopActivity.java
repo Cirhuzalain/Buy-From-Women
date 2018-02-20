@@ -17,7 +17,7 @@ import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.ViewCoopsSalePurchase;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 
-public class CoopActivity extends BaseActivity implements CoopFragment.OnListFragmentInteractionListener, CoopFragment.OnFragmentInteractionListener {
+public class CoopActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +63,5 @@ public class CoopActivity extends BaseActivity implements CoopFragment.OnListFra
         } else {
             NavUtils.navigateUpFromSameTask(this);
         }
-    }
-
-
-   @Override
-    public void onFragmentInteraction(long itemId, CoopAdapter.ViewHolder vh) {
-        Toast.makeText(this,"breee 1",Toast.LENGTH_LONG).show();
-        //Intent intent = new Intent(this, DetailVendorActivity.class);
-        //intent.putExtra("farmerId", itemId);
-        //startActivity(intent);
-    }
-
-    @Override
-    public void onListFragmentInteraction(long item, CoopAdapter.ViewHolder vh) {
-        Toast.makeText(this,"breee 2",Toast.LENGTH_LONG).show();
-
     }
 }

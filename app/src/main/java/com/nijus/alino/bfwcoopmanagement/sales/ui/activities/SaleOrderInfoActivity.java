@@ -35,8 +35,6 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 
-        //mRefreshData = findViewById(R.id.refresh_data_done);
-       // mRefreshData.setOnRefreshListener(this);
     }
 
     @Override
@@ -44,8 +42,7 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
         if (view.getId() == R.id.fab_sale_order) {
             BottomSheetDialogFragment bottomSheetDialogFragment = new SalesBottomSheetDialogFragment();
             bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-            /*SaleOrderDialogFragment dialogFragment = new SaleOrderDialogFragment();
-            dialogFragment.show(getSupportFragmentManager(), "saleDialog");*/
+
         }
     }
 
@@ -100,9 +97,4 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
 
         return super.onOptionsItemSelected(item);
     }
-
-   /* @Override
-    public void onRefresh() {
-        mRefreshData.setRefreshing(false);
-    }*/
 }

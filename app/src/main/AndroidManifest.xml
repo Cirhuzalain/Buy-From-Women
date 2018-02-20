@@ -133,7 +133,6 @@
             android:label="@string/user_profile"
             android:parentActivityName=".ui.activities.UserProfileActivityAdmin"
             android:theme="@style/AppTheme.NoActionBar">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".coopAgent.ui.activities.CoopAgentActivity" />
@@ -289,6 +288,16 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+        <service
+            android:name=".products.sync.SyncProduct"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service android:name=".products.sync.AddProduct" />
+        <service android:name=".products.sync.SyncProductBackground" />
+
 
         <provider
             android:name=".data.BfwProvider"

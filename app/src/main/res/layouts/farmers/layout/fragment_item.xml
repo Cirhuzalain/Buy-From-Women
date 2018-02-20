@@ -4,57 +4,68 @@
     android:layout_height="wrap_content"
     android:background="@drawable/touch_selector"
     android:paddingLeft="@dimen/list_item_extra_padding"
-    android:paddingRight="@dimen/list_item_extra_padding">
-
-    <RelativeLayout
-        android:id="@+id/view_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_row_background">
-
-        <ImageView
-            android:id="@+id/delete_icon"
-            android:layout_width="@dimen/ic_delete"
-            android:layout_height="@dimen/ic_delete"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/padd_10"
-            android:src="@drawable/ic_delete_white_24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/padd_10"
-            android:layout_toRightOf="@id/delete_icon"
-            android:text="@string/delete"
-            android:textColor="#fff"
-            android:textSize="13dp" />
-
-    </RelativeLayout>
+    android:padding="5dp"
+    android:paddingRight="@dimen/list_item_extra_padding"
+    android:elevation="6dp">
 
     <LinearLayout
         android:id="@+id/view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/default_color"
+        android:elevation="4dp"
+        android:background="#fff"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
         android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
 
-        <ImageView
-            android:id="@+id/u_icon"
-            android:layout_width="@dimen/list_icon"
-            android:layout_height="@dimen/list_icon"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/abc_list_item_padding_horizontal_material"
-            android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material" />
+        <RelativeLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/icon_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillAfter="false"
+                android:fillEnabled="false"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:alpha="0.8"
+                    android:src="@drawable/bg_circle" />
+
+                <ImageView
+                    android:id="@+id/image_done"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/icon_front"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fillAfter="false"
+                android:fillEnabled="false">
+
+                <ImageView
+                    android:id="@+id/u_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_weight="7"
             android:orientation="vertical">
 
@@ -79,6 +90,5 @@
             android:layout_gravity="center"
             android:layout_marginEnd="@dimen/abc_list_item_padding_horizontal_material"
             android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material" />
-
     </LinearLayout>
 </FrameLayout>
