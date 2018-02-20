@@ -25,7 +25,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_loan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         save_loan = findViewById(R.id.save_loan);
         ed_date_value = findViewById(R.id.ed_date_value);

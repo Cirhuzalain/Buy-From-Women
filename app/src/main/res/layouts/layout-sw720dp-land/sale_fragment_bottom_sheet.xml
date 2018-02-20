@@ -5,8 +5,8 @@
     android:layout_gravity="center_horizontal"
     android:layout_height="wrap_content">
 <!--
-    android:layout_marginEnd="@dimen/padding_land"
-    android:layout_marginRight="@dimen/padding_land"-->
+    android:layout_marginEnd="@dimen/padding_sw720_land"
+    android:layout_marginRight="@dimen/padding_sw720_land"-->
 
     <LinearLayout
         android:layout_width="match_parent"

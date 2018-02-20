@@ -474,8 +474,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 }
 
                                 //Prefetch sale,purchase,product
+                                cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchProduct(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
+
 
                                 //Prefetch loan
+                                //Prefetch sale,purchase,product
+                                cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchLoan(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
                             }
 
                             if (groupName.equals("Agent")) {
@@ -519,6 +537,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 }
 
                                 //Prefetch sale,purchase,product
+                                cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchProduct(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
 
                                 //Prefetch loan
                             }
@@ -2011,11 +2037,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                                 getContentResolver().insert(BfwContract.BaselineSalesCoop.CONTENT_URI, saleLinesValues);
 
-
                             }
 
                             // get base line finance infos (baseline_financeinfos_ids)
-                            baseLinesFinanceInfos = coopObjectInfo.getJSONArray("baseLinesFinanceInfos");
+                            baseLinesFinanceInfos = coopObjectInfo.getJSONArray("baseline_financeinfos_ids");
 
                             for (int n = 0; n < baseLinesFinanceInfos.length(); n++) {
                                 objectBaseLinesFinancesInfos = baseLinesFinanceInfos.getJSONObject(n);
@@ -2310,6 +2335,394 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
             return true;
         }
+
+        private boolean prefetchLoan(String token, OkHttpClient client) {
+            getContentResolver().delete(BfwContract.Loan.CONTENT_URI, null, null);
+            Cursor cursor = null;
+            try {
+                Response loanData = Utils.getServerData(client, token, BuildConfig.DEV_API_URL + "res.partner.loan");
+                if (loanData != null) {
+                    ResponseBody loanInfo = loanData.body();
+                    if (loanInfo != null) {
+                        String loanList = loanInfo.string();
+
+                        JSONObject loanInfos = new JSONObject(loanList);
+                        JSONArray loanArray = loanInfos.getJSONArray("results");
+                        JSONObject loanObject;
+
+                        for (int s = 0; s < loanArray.length(); s++) {
+                            loanObject = loanArray.getJSONObject(s);
+
+                            String name = null;
+                            Integer farmer_id = null;//json array
+                            Integer coop_id = null;
+                            Integer vendor_id = null; // json array
+                            Long start_date = null;
+                            Double amount = null;
+                            Double interest_rate = null;
+                            Double duration = null;
+                            String purpose = null;
+                            String financial_institution = null;
+                            Integer amount_due = null;
+                            Integer amount_total = null;
+                            String state = null;
+                            Date startDate = null;
+
+
+                            int loanId = loanObject.getInt("id");
+
+                            name = loanObject.getString("name");
+                            purpose = loanObject.getString("purpose");
+                            financial_institution = loanObject.getString("financial_institution");
+
+                            if (!loanObject.getString("coop_id").equals("null")) {
+                                coop_id = loanObject.getInt("coop_id");
+                            }
+                            if (!loanObject.getString("start_date").equals("null")) {
+                                // convert data
+                                String getDate = loanObject.getString("start_date");
+                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                startDate = df.parse(getDate);
+                            }
+                            if (!loanObject.getString("amount").equals("null")) {
+                                amount = loanObject.getDouble("amount");
+                            }
+                            if (!loanObject.getString("interest_rate").equals("null")) {
+                                interest_rate = loanObject.getDouble("interest_rate");
+                            }
+                            if (!loanObject.getString("duration").equals("null")) {
+                                duration = loanObject.getDouble("duration");
+                            }
+                            if (!loanObject.getString("amount_due").equals("null")) {
+                                amount_due = loanObject.getInt("amount_due");
+                            }
+                            if (!loanObject.getString("amount_total").equals("null")) {
+                                amount_total = loanObject.getInt("amount_total");
+                            }
+                            if (!loanObject.getString("state").equals("null")) {
+                                state = loanObject.getString("state");
+                            }
+
+                            JSONArray partenerArray;
+                            JSONArray vendorArray;
+
+                            JSONObject partenerObject;
+                            JSONObject vendorObject;
+
+                            partenerArray = loanObject.getJSONArray("partner_id");
+                            vendorArray = loanObject.getJSONArray("vendor_id");
+
+                            for (int a = 0; a < partenerArray.length(); a++) {
+                                partenerObject = partenerArray.getJSONObject(a);
+                                farmer_id = partenerObject.getInt("id");
+
+                                String partenerSelect = BfwContract.Farmer.TABLE_NAME + "." +
+                                        BfwContract.Farmer.COLUMN_FARMER_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Farmer.CONTENT_URI, null,
+                                        partenerSelect,
+                                        new String[]{Long.toString(farmer_id)},
+                                        null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        farmer_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+                                    }
+                                }
+                            }
+
+                            for (int a = 0; a < vendorArray.length(); a++) {
+                                vendorObject = vendorArray.getJSONObject(a);
+                                vendor_id = vendorObject.getInt("id");
+
+                                String vendorSelect = BfwContract.Vendor.TABLE_NAME + "." +
+                                        BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null,
+                                        vendorSelect,
+                                        new String[]{Long.toString(vendor_id)},
+                                        null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        vendor_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                                    }
+                                }
+                            }
+
+                            ContentValues loanValues = new ContentValues();
+
+                            loanValues.put(BfwContract.Loan.COLUMN_SERVER_ID,loanId );
+                            loanValues.put(BfwContract.Loan.COLUMN_NAME,name );
+                            loanValues.put(BfwContract.Loan.COLUMN_PURPOSE,purpose );
+                            loanValues.put(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION,financial_institution );
+                            loanValues.put(BfwContract.Loan.COLUMN_COOP_ID,coop_id );
+                            loanValues.put(BfwContract.Loan.COLUMN_START_DATE,startDate.getTime() );
+                            loanValues.put(BfwContract.Loan.COLUMN_AMOUNT,amount );
+                            loanValues.put(BfwContract.Loan.COLUMN_INTEREST_RATE,interest_rate );
+                            loanValues.put(BfwContract.Loan.COLUMN_DURATION,duration );
+                            loanValues.put(BfwContract.Loan.COLUMN_AMOUNT_DUE,amount_due );
+                            loanValues.put(BfwContract.Loan.COLUMN_AMOUNT_TOTAL,amount_total );
+                            loanValues.put(BfwContract.Loan.COLUMN_STATE,state );
+
+                            loanValues.put(BfwContract.Loan.COLUMN_FARMER_ID,farmer_id );
+                            loanValues.put(BfwContract.Loan.COLUMN_VENDOR_ID,vendor_id );
+
+                            loanValues.put(BfwContract.Loan.COLUMN_IS_SYNC, 1);
+                            loanValues.put(BfwContract.Loan.COLUMN_IS_UPDATE, 1);
+
+                            Uri loanUri = getContentResolver().insert(BfwContract.Loan.CONTENT_URI,loanValues);
+
+                            long localLoanId = ContentUris.parseId(loanUri);
+
+                            //declaration des array et leurs objects
+                            JSONArray lineArray;
+                            JSONArray paymentArray;
+
+                            JSONObject lineObject;
+                            JSONObject paymentObject;
+
+
+                            lineArray = loanObject.getJSONArray("line_ids");
+
+                            for (int a = 0; a < lineArray.length(); a++) {
+                                lineObject = lineArray.getJSONObject(a);
+
+                                Date payment_date = null;
+                                Double principal = null;
+                                Double interest = null;
+                                Double remaining_amount = null;
+                                Double next_payment_amount = null;
+
+                                if (!lineObject.getString("payment_date").equals("null")) {
+                                    //payment_date = lineObject.getLong("payment_date");
+                                    String getDate = lineObject.getString("payment_date");
+                                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                    payment_date = df.parse(getDate);
+                                }
+                                if (!lineObject.getString("principal").equals("null")) {
+                                    principal = lineObject.getDouble("principal");
+                                }
+                                if (!lineObject.getString("interest").equals("null")) {
+                                    interest = lineObject.getDouble("interest");
+                                }
+                                if (!lineObject.getString("remaining_amount").equals("null")) {
+                                    remaining_amount = lineObject.getDouble("remaining_amount");
+                                }
+                                if (!lineObject.getString("next_payment_amount").equals("null")) {
+                                    next_payment_amount = lineObject.getDouble("next_payment_amount");
+                                }
+
+                                ContentValues lineValues = new ContentValues();
+
+                                lineValues.put(BfwContract.LoanLine.COLUMN_LOAN_ID,localLoanId );
+                                lineValues.put(BfwContract.LoanLine.COLUMN_PAYMENT_DATE, payment_date.getTime());
+                                lineValues.put(BfwContract.LoanLine.COLUMN_PRINCIPAL, principal);
+                                lineValues.put(BfwContract.LoanLine.COLUMN_INTEREST, interest);
+                                lineValues.put(BfwContract.LoanLine.COLUMN_REMAINING_AMOUNT, remaining_amount);
+                                lineValues.put(BfwContract.LoanLine.COLUMN_NEXT_PAYMENT_AMOUNT, next_payment_amount);
+
+                                getContentResolver().insert(BfwContract.LoanLine.CONTENT_URI,lineValues);
+                            }
+
+                            paymentArray = loanObject.getJSONArray("payment_ids");
+
+                            for (int a = 0; a < paymentArray.length(); a++) {
+                                paymentObject = paymentArray.getJSONObject(a);
+
+                                Date payment_date = null;
+                                Double amount_payment = null;
+
+                                if (!paymentObject.getString("payment_date").equals("null")) {
+                                    //payment_date = paymentObject.getLong("payment_date");
+                                    String getDate = paymentObject.getString("payment_date");
+                                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                    payment_date = df.parse(getDate);
+
+                                }
+
+                                if (!paymentObject.getString("amount").equals("null")) {
+                                    amount_payment = paymentObject.getDouble("amount");
+                                }
+
+                                ContentValues paymentValues = new ContentValues();
+
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_LOAN_ID,localLoanId );
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_PAYMENT_DATE, payment_date.getTime());
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_AMOUNT, amount_payment);
+
+                                getContentResolver().insert(BfwContract.LoanPayment.CONTENT_URI,paymentValues);
+                            }
+                        }
+
+                    }
+                } else {
+                    return false;
+                }
+            } catch (IOException | JSONException exp) {
+                return false;
+            } catch (ParseException e) {
+                return false;
+            }
+            return true;
+        }
+
+        private boolean prefetchProduct(String token, OkHttpClient client) {
+            getContentResolver().delete(BfwContract.ProductTemplate.CONTENT_URI, null, null);
+            Cursor cursor = null;
+            try {
+                Response productData = Utils.getServerData(client, token, BuildConfig.DEV_API_URL + "product.template");
+                if (productData != null) {
+                    ResponseBody productInfo = productData.body();
+                    if (productInfo != null) {
+                        String productList = productInfo.string();
+
+                        JSONObject productInfos = new JSONObject(productList);
+                        JSONArray productArray = productInfos.getJSONArray("results");
+                        JSONObject productObject;
+
+                        for (int s = 0; s < productArray.length(); s++) {
+                            productObject = productArray.getJSONObject(s);
+
+                            //declaration des array et leurs objects
+                            JSONArray farmerArray;
+                            JSONArray buyerArray;
+                            JSONArray vendorArray;
+
+                            JSONObject farmerObject;
+                            JSONObject buyerObject;
+                            JSONObject vendorObject;
+
+                            Integer product_harvest_season = null;
+                            String product_name = null;
+                            String product_harvest_grade = null;
+                            String product_state = null;
+                            Integer product_vendor_qty = null;
+                            Double product_price = null;
+
+                            Integer product_farmer_id = null;
+                            Integer product_buyer_id = null;
+                            Integer product_vendor_id = null;
+
+                            int productId = productObject.getInt("id");
+                            product_name = productObject.getString("name");
+
+                            if(!productObject.getString("harvest_season").equals("null")){
+                                int serverID_harvest_season = productObject.getInt("harvest_season");
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+                                //int seasonId = 0;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(serverID_harvest_season)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        product_harvest_season = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+                            }
+
+                            product_harvest_grade = productObject.getString("harvest_grade");
+                            product_state = productObject.getString("state");
+
+                            if(!productObject.getString("vendor_qty").equals("null")){
+                                product_vendor_qty = productObject.getInt("vendor_qty");
+                            }
+
+                            if(!productObject.getString("standard_price").equals("null")){
+                                product_price  = productObject.getDouble("standard_price");
+                            }
+
+                            farmerArray = productObject.getJSONArray("farmer_id");
+                            vendorArray = productObject.getJSONArray("vendor_farmer_id");
+                            buyerArray = productObject.getJSONArray("buyer_id");
+
+                            for (int a = 0; a < farmerArray.length(); a++) {
+                                farmerObject = farmerArray.getJSONObject(a);
+                                product_farmer_id = farmerObject.getInt("id");
+                                int farmerIdLocal = 0;
+
+                                String farmerSelect = BfwContract.Farmer.TABLE_NAME + "." +
+                                        BfwContract.Farmer.COLUMN_FARMER_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Farmer.CONTENT_URI, null,
+                                        farmerSelect,
+                                        new String[]{Long.toString(product_farmer_id)},
+                                        null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        product_farmer_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                            }
+
+                            for (int a = 0; a < vendorArray.length(); a++) {
+                                vendorObject = vendorArray.getJSONObject(a);
+                                product_vendor_id = vendorObject.getInt("id");
+                                int vendorIdLocal = 0;
+
+                                String vendorSelect = BfwContract.Vendor.TABLE_NAME + "." +
+                                        BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null,
+                                        vendorSelect,
+                                        new String[]{Long.toString(product_vendor_id)},
+                                        null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        product_vendor_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                                    }
+                                }
+                            }
+
+                            for (int a = 0; a < buyerArray.length(); a++) {
+                                buyerObject = buyerArray.getJSONObject(a);
+                                product_buyer_id = buyerObject.getInt("id");
+                                int buyerIdLocal = 0;
+
+                                String buyerSelect = BfwContract.Buyer.TABLE_NAME + "." +
+                                        BfwContract.Buyer.COLUMN_BUYER_SERVER_ID + " =  ? ";
+
+                                cursor = getContentResolver().query(BfwContract.Buyer.CONTENT_URI, null,
+                                        buyerSelect,
+                                        new String[]{Long.toString(product_buyer_id)},
+                                        null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        product_buyer_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Buyer._ID));
+                                    }
+                                }
+                            }
+
+
+                            ContentValues productValues = new ContentValues();
+
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_SERVER_ID,productId );
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_HARVEST_SEASON, product_harvest_season);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME, product_name);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE, product_harvest_grade);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_STATE, product_state);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY, product_vendor_qty);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_FARMER_ID, product_farmer_id);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_PRICE, product_price);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_BUYER_ID, product_buyer_id);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_VENDOR_ID, product_vendor_id);
+
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_IS_SYNC, 1);
+                            productValues.put(BfwContract.ProductTemplate.COLUMN_IS_UPDATE, 1);
+
+                            getContentResolver().insert(BfwContract.ProductTemplate.CONTENT_URI, productValues);
+
+                        }
+
+                    }
+                } else {
+                    return false;
+                }
+            } catch (IOException | JSONException exp) {
+                return false;
+            }
+            return true;
+        }
+
 
         private boolean prefetchCoopAgent(String token, OkHttpClient client) {
             getContentResolver().delete(BfwContract.CoopAgent.CONTENT_URI, null, null);

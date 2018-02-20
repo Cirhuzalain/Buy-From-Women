@@ -25,7 +25,7 @@ public class ProductActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_product_container);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_product_orders);
+        FloatingActionButton fab = findViewById(R.id.fab_product_orders);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
     }

@@ -50,31 +50,27 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
         collapsingToolbarLayout = findViewById(R.id.name_coop);
         toolbar = findViewById(R.id.toolbar_coop);
 
+        setSupportActionBar(toolbar);
+
 
         coop_image_details = findViewById(R.id.coop_image_details);
         coop_image_details.setImageResource(R.mipmap.agent_bg);
-        //toolbar.setTitle(mCoopAgentId+"");
-        //Log.d("DetailCoopActivity",mCoopAgentId+"");
-
-
-       // setSupportActionBar(toolbar);
 
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_coop);
         ImageView imageView = findViewById(R.id.coop_image_details);
-        imageView.setImageResource(R.mipmap.coop_bg);
+        imageView.setImageResource(R.mipmap.agent_bg);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(),"eloko",Toast.LENGTH_LONG).show();
                 Intent intent1 = new Intent(getApplicationContext(),UpdateCoopAgent.class);
-                intent1.putExtra("coopId", mCoopAgentId);
+                intent1.putExtra("coopAgentId", mCoopAgentId);
                 startActivity(intent1);
             }
         });
 
-        //AFFICHAGE DES DETAILS DU COOPERATIVE
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

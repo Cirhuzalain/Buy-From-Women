@@ -39,8 +39,6 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
     private LoanAdapter loanRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +47,6 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
         setSupportActionBar(toolbar);
 
         getSupportLoaderManager().initLoader(0,null,this);
-
 
         View emptyView = findViewById(R.id.recyclerview_empty_loan);
         Context context = this;
@@ -73,20 +70,14 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
         });
 
         mRefreshData = findViewById(R.id.refresh_data_done);
-        //mRefreshData.setOnRefreshListener(this);
+        mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(loanRecyclerViewAdapter);
 
-        //fab coop fragment
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab loan fragment
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
-
-
-
-        //Button button3 = (Button) findViewById( R.id.button_3 );
-
-        //button3.setOnClickListener(this);
 
 
     }
@@ -125,7 +116,7 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, BfwContract.Coops.CONTENT_URI, null, null, null,
+        return new CursorLoader(this, BfwContract.Loan.CONTENT_URI, null, null, null,
                 null);
     }
 
@@ -157,7 +148,6 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onRefresh() {
-        //getLoaderManager().restartLoader(0, null, this);
         getSupportLoaderManager().restartLoader(0,null,this);
 
     }

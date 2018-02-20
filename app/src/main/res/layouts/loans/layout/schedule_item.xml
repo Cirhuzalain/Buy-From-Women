@@ -78,7 +78,7 @@
                 android:weightSum="2">
 
                 <TextView
-                    android:id="@+id/l_institution"
+                    android:id="@+id/amount_principal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -100,79 +100,3 @@
 
     </LinearLayout>
 </FrameLayout>
-
-<!--
-<?xml version="1.0" encoding="utf-8"?>&lt;!&ndash; Make the background of our selector a non-transparent color &ndash;&gt;
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/touch_selector"
-    android:elevation="6dp"
-    android:padding="5dp"
-    android:paddingLeft="@dimen/list_item_extra_padding"
-    android:paddingRight="@dimen/list_item_extra_padding">
-
-
-    <LinearLayout
-        android:id="@+id/view_foreground"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
-        android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/sc_next_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Next payment 25,000 FRW"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-            <TextView
-                android:id="@+id/l_institution"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="(5.5%)"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/l_name2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Date 18/12/1018" />
-
-            <TextView
-                android:id="@+id/l_institution2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="Principal 50,000 RWF" />
-        </LinearLayout>
-
-    </LinearLayout>
-</FrameLayout>-->

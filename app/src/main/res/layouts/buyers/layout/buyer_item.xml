@@ -33,7 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fillAfter="false"
-                android:fillEnabled="false">
+                android:fillEnabled="false"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="40dp"
@@ -45,7 +46,7 @@
                     android:id="@+id/image_done"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true" />
 
             </RelativeLayout>
 

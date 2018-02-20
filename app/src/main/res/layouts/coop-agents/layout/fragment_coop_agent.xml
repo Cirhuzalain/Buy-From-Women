@@ -28,13 +28,11 @@
         android:id="@+id/refresh_data_done"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:elevation="6dp">
 
         <android.support.v7.widget.RecyclerView
-            android:elevation="6dp"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+            android:elevation="4dp"
             android:id="@+id/coopsagent_list"
             android:name="com.example.alino.bfwcoopmanagement.ui.fragment.NavigationFragment"
             android:layout_width="match_parent"

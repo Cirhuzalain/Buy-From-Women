@@ -22,6 +22,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="guy"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded.Shadow"
             app:titleEnabled="true"
             app:toolbarId="@+id/toolbar_coop">
 
@@ -39,7 +40,6 @@
                 app:layout_collapseMode="pin"
                 app:layout_collapseParallaxMultiplier="1.0"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

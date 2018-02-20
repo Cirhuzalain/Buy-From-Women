@@ -34,75 +34,9 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileActivityAdmin extends BaseActivity implements VendorFragment.OnListFragmentInteractionListener, CoopFragment.OnFragmentInteractionListener, CoopFragment.OnListFragmentInteractionListener, NavigationFragment.OnListFragmentInteractionListener {
+public class UserProfileActivityAdmin extends BaseActivity{
 
-
-    private static int currentSelectedIndex = -1;
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
-    private SparseBooleanArray animationItemsIndex = new SparseBooleanArray();
-    private ActionMode actionMode;
-    private MenuItem del_menu;
     private MenuInflater inflater;
-
-    @Override
-    public void onFragmentInteraction(long item, CoopAdapter.ViewHolder vh) {
-        //Toast.makeText(this," position"+item ,Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, DetailCoopActivity.class);
-        intent.putExtra("coopId", item);
-        startActivity(intent);
-
-    }
-
-    private void resetIconYAxis(View view) {
-        if (view.getRotationY() != 0) {
-            view.setRotationY(0);
-        }
-    }
-
-    public List<Integer> listsSelectedItem = new ArrayList<>();
-
-    @Override
-    public void onListFragmentInteraction(long item, CoopAdapter.ViewHolder vh) {
-
-        //listsSelectedItem.add(Integer.valueOf(vh.getAdapterPosition()));
-        if (!listsSelectedItem.contains(Integer.valueOf(vh.getAdapterPosition()))) {
-            vh.iconFront.setVisibility(View.GONE);
-            vh.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
-            resetIconYAxis(vh.iconBack);
-            vh.iconBack.setVisibility(View.VISIBLE);
-            vh.iconBack.setAlpha(1);
-            currentSelectedIndex = vh.getAdapterPosition();
-            listsSelectedItem.add(Integer.valueOf(vh.getAdapterPosition()));
-
-        } else {
-            vh.iconBack.setVisibility(View.GONE);
-            resetIconYAxis(vh.iconFront);
-            vh.view_foreground.setBackgroundColor(Color.argb(2, 0, 0, 0));
-            vh.iconFront.setVisibility(View.VISIBLE);
-            vh.iconFront.setAlpha(1);
-            FlipAnimator.flipView(this, vh.iconBack, vh.iconFront, false);
-
-            listsSelectedItem.remove(Integer.valueOf(vh.getAdapterPosition()));
-
-        }
-
-
-    }
-
-    @Override
-    public void onListFragmentInteraction(long item, VendorRecyclerViewAdapter.ViewHolder vh) {
-        Intent intent = new Intent(this, DetailVendorActivity.class);
-        intent.putExtra("farmerId", item);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onListFragmentInteraction(long itemId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-        Intent intent = new Intent(this, DetailFarmerActivity.class);
-        intent.putExtra("farmerId", itemId);
-        startActivity(intent);
-    }
-
     //This is our tablayout
     private TabLayout tabLayout;
     //This is our viewPager
@@ -221,7 +155,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements VendorFrag
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -237,6 +170,4 @@ public class UserProfileActivityAdmin extends BaseActivity implements VendorFrag
             tv_count.setVisibility(View.GONE);
         return view;
     }
-
-
 }

@@ -19,16 +19,22 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_image_height"
             android:scaleType="centerCrop" />
+        <View
+            android:id="@+id/scrim"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_image_height"
+            android:background="@drawable/srim"/>
 
         <TextView
             android:id="@+id/productName"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_title_height"
+            android:layout_height="match_parent"
             android:layout_alignBottom="@+id/productImage"
-            tools:text="MAIZE"
+            android:gravity="center_vertical|fill_vertical|fill_horizontal|center"
+            android:padding="3dp"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/cardview_light_background" />
+            android:textColor="@color/cardview_light_background"
+            tools:text="MAIZE" />
 
         <TextView
             android:id="@+id/productQty"

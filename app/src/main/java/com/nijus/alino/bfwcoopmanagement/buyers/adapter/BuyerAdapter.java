@@ -4,19 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.v7.view.ActionMode;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.DetailBuyerActivity;
@@ -51,7 +47,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
 
-        holder.farmerImage.setImageResource(R.drawable.profile);
+        holder.farmerImage.setImageResource(R.mipmap.male);
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
     }
 
@@ -93,10 +89,10 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
             mUname = view.findViewById(R.id.b_name);
-            iconBack = (RelativeLayout) view.findViewById(R.id.icon_back);
-            iconFront = (RelativeLayout) view.findViewById(R.id.icon_front);
-            iconContainer = (RelativeLayout) view.findViewById(R.id.icon_container);
-            view_foreground = (LinearLayout) view.findViewById(R.id.view_foreground);
+            iconBack = view.findViewById(R.id.icon_back);
+            iconFront = view.findViewById(R.id.icon_front);
+            iconContainer =  view.findViewById(R.id.icon_container);
+            view_foreground = view.findViewById(R.id.view_foreground);
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
@@ -112,6 +108,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             int buyerColumnIndex = mCursor.getColumnIndex(BfwContract.Coops._ID);
             mClickHandler.onClick(mCursor.getLong(buyerColumnIndex), this);
 
+            //si click simple, appel de l'activity  details
             Intent intent = new Intent(mContext, DetailBuyerActivity.class);
             intent.putExtra("buyerId", buyerColumnIndex);
             mContext.startActivity(intent);
@@ -126,7 +123,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
         @Override
         public boolean onLongClick(View view) {
             //annimation et delete un coop agent
-            if (!listsSelectedItem.contains(Integer.valueOf(this.getAdapterPosition()))) {
+            if (!return_if_val_in_array(Integer.valueOf(this.getAdapterPosition()))) {
                 this.iconFront.setVisibility(View.GONE);
                 this.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
                 resetIconYAxis(this.iconBack);
@@ -147,6 +144,15 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
                 listsSelectedItem.remove(Integer.valueOf(this.getAdapterPosition()));
             }
             return true;
+        }
+        boolean return_if_val_in_array(int val)
+        {
+            for (int v : listsSelectedItem){
+                if (val == v){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

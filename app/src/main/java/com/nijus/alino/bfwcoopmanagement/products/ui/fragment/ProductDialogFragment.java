@@ -1,42 +1,42 @@
 package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
+import com.nijus.alino.bfwcoopmanagement.products.sync.AddProduct;
+import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
 
-import java.util.Calendar;
-
-public class ProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
-
-    private LinearLayout mProductContainer;
-    private Button addProductItem;
-    private Spinner vendor;
-    private Spinner harvsetSeason;
-    private Spinner grade;
+public class ProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
+        View.OnClickListener {
 
     AutoCompleteTextView product_name;
     AutoCompleteTextView quantity;
-    AutoCompleteTextView cost;
     AutoCompleteTextView sale_price;
+    private LinearLayout mProductContainer;
+    private Spinner farmer;
+    private Spinner harvsetSeason;
+    private Spinner grade;
+    private Button create_product;
+    private ProgressDialog progressDialog = new ProgressDialog();
+
 
     @Override
     @NonNull
@@ -46,35 +46,41 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
         View viewContainer = getActivity().getLayoutInflater().inflate(R.layout.product_order_detail, null);
 
         mProductContainer = viewContainer.findViewById(R.id.productContainer);
-        addProductItem = viewContainer.findViewById(R.id.add_po_proposal);
-        addProductItem.setOnClickListener(this);
 
-        vendor = viewContainer.findViewById(R.id.vendor);
+        farmer = viewContainer.findViewById(R.id.vendor);
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
+        create_product = viewContainer.findViewById(R.id.create_product);
+        create_product.setOnClickListener(this);
 
         product_name = viewContainer.findViewById(R.id.product_name);
         quantity = viewContainer.findViewById(R.id.quantity);
-        cost = viewContainer.findViewById(R.id.cost);
+
         sale_price = viewContainer.findViewById(R.id.sale_price);
 
+        populateSpinnerHarvestSeason();
+        populateSpinnerFarmer();
+        ArrayAdapter<CharSequence> adapter_grade = ArrayAdapter.createFromResource(getContext(),
+                R.array.grade_array, android.R.layout.simple_spinner_item);
+        adapter_grade.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        grade.setAdapter(adapter_grade);
+
         builder.setView(viewContainer)
-                .setPositiveButton(R.string.msg_ok, this)
+                //.setPositiveButton(R.string.msg_ok, this)
                 .setNegativeButton(R.string.msg_cancel, this);
 
-        populateSpinner();
         return builder.create();
     }
 
-    public void populateSpinner() {
-        String[] fromColumns = {BfwContract.Coops.COLUMN_COOP_NAME};
+    public void populateSpinnerHarvestSeason() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
 
         // View IDs to map the columns (fetched above) into
         int[] toViews = {
                 android.R.id.text1
         };
         Cursor cursor = getActivity().getContentResolver().query(
-                BfwContract.Coops.CONTENT_URI,
+                BfwContract.HarvestSeason.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -93,44 +99,105 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             // Create the list view and bind the adapter
-            //coops.setAdapter(adapter);
+            harvsetSeason.setAdapter(adapter);
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.add_po_proposal) {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
+    public void populateSpinnerFarmer() {
+        String[] fromColumns = {BfwContract.Farmer.COLUMN_NAME};
 
-            //add product data structure
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.Farmer.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
 
-            Spinner spinner = new Spinner(getContext());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            AutoCompleteTextView quantity = new AutoCompleteTextView(getContext());
-            quantity.setWidth(AppBarLayout.LayoutParams.MATCH_PARENT);
-            quantity.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
-            quantity.setHint(getResources().getString(R.string.quantity));
-            quantity.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
-
-            AutoCompleteTextView unitPrice = new AutoCompleteTextView(getContext());
-            unitPrice.setWidth(AppBarLayout.LayoutParams.MATCH_PARENT);
-            unitPrice.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
-            unitPrice.setHint(getResources().getString(R.string.sale_price));
-            unitPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
-
-            linearLayout.addView(spinner);
-            linearLayout.addView(quantity);
-            linearLayout.addView(unitPrice);
-
-            mProductContainer.addView(linearLayout, 1);
+            // Create the list view and bind the adapter
+            farmer.setAdapter(adapter);
         }
     }
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        if (Dialog.BUTTON_POSITIVE == i) {
-            Toast.makeText(getContext(), "Save product Coming soon !!!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        try {
+
+            int farmer_spiner_id, harvest_s_spinner_id;
+            String grade_spinner_name;
+
+            // Check if value's length entered is > 3 char .
+            if (!isValidString(String.valueOf(product_name.getText()))) {
+                product_name.setError(getString(R.string.error_invalid_password));
+            }
+
+            // Check for a valid qty
+            if (TextUtils.isEmpty(quantity.getText())) {
+                quantity.setError(getString(R.string.error_field_required));
+            }
+            if (TextUtils.isEmpty(sale_price.getText())) {
+                sale_price.setError(getString(R.string.error_field_required));
+            }
+
+            if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
+                    && !TextUtils.isEmpty(sale_price.getText())) {
+
+                Cursor cursor = (Cursor) farmer.getSelectedItem();
+                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                grade_spinner_name = (String) grade.getSelectedItem();
+
+                PojoProduct pojoProduct = new PojoProduct();
+                pojoProduct.setName(String.valueOf(product_name.getText()));
+                pojoProduct.setFarmer(farmer_spiner_id);
+                pojoProduct.setGrade(grade_spinner_name);
+                pojoProduct.setHarvest_season(harvest_s_spinner_id);
+                pojoProduct.setPrice(Integer.valueOf(sale_price.getText().toString()));
+                pojoProduct.setQuantity(Double.valueOf(quantity.getText().toString()));
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("product", pojoProduct);
+
+                Intent intent = new Intent(getContext(), AddProduct.class);
+                intent.putExtra("product_data", bundle);
+
+                getContext().startService(intent);
+                //Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
+                dismiss();
+
+            }
+            else {
+                Toast.makeText(getContext(),"Erreur des donnees",Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e){
+            return;
         }
     }
+
+    private boolean isValidString(String word) {
+        return word.length() >= 3;
+    }
+
 }

@@ -1,17 +1,33 @@
 package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.loans.adapter.PaymentAdapter;
 import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
+import com.nijus.alino.bfwcoopmanagement.products.sync.RefreshData;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,25 +37,15 @@ import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
  * Use the {@link ProductListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ProductListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
 
-    private Product[] productArrayList = {
-            new Product("MAIZEIII", "25000 RWF", "150 KG"),
-            new Product("MAIZEII", "2500 RWF", "15000 KG"),
-            new Product("MAIZEI", "25000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "10000 KG"),
-            new Product("MAIZEI II", "25000 RWF", "15000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "15000 KG"),
-            new Product("MAIZEII", "25000 RWF", "150000 KG"),
-            new Product("MAIZE", "250000 RWF", "150 KG"),
-            new Product("MAIZEIII", "250000 RWF", "1500 KG"),
-            new Product("MAIZE II", "250000 RWF", "150000 KG")
-    };
+    private ProductAdapter productRecyclerViewAdapter;
+    private SwipeRefreshLayout mRefreshData;
 
     private OnListFragmentInteractionListener mListener;
 
@@ -76,20 +82,26 @@ public class ProductListFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0,null,this);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.activity_product_order, container, false);
 
         GridView gridView = root.findViewById(R.id.productGridview);
+        View emptyView = root.findViewById(R.id.girdview_empty);
 
-        ProductAdapter adapter = new ProductAdapter(getContext(), productArrayList, true);
-        gridView.setAdapter(adapter);
+        //ProductAdapter adapter = new ProductAdapter(getContext(), productArrayList, true);
+        productRecyclerViewAdapter = new ProductAdapter(getContext(),emptyView, true);
+        gridView.setAdapter(productRecyclerViewAdapter);
         gridView.setOnItemClickListener(this);
+
+        mRefreshData = root.findViewById(R.id.refresh_data_done);
+        mRefreshData.setOnRefreshListener(this);
         return root;
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Product product = productArrayList[i];
+        //Product product = productArrayList[i];
         UpdateProductDialogFragment dialogFragment = new UpdateProductDialogFragment();
         dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
     }
@@ -110,6 +122,62 @@ public class ProductListFragment extends Fragment implements AdapterView.OnItemC
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                getContext(),
+                BfwContract.ProductTemplate.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        productRecyclerViewAdapter.swapCursor(data);
+        mRefreshData.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshData.setRefreshing(false);
+            }
+        });
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        productRecyclerViewAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onRefresh() {
+        getLoaderManager().restartLoader(0, null, this);
+        if (Utils.isNetworkAvailable(getContext())) {
+            getActivity().startService(new Intent(getContext(), RefreshData.class));
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()) {
+            getLoaderManager().restartLoader(0, null, this);
+        } else {
+            Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

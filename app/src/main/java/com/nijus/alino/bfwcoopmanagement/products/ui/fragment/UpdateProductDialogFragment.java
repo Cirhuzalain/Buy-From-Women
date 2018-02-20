@@ -1,7 +1,6 @@
 package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -26,17 +25,16 @@ import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 import java.util.Calendar;
 
-public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
+public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
     private LinearLayout mProductContainer;
-    private Button addProductItem;
     private Spinner vendor;
     private Spinner harvsetSeason;
     private Spinner grade;
 
     AutoCompleteTextView product_name;
     AutoCompleteTextView quantity;
-    AutoCompleteTextView cost;
+    //AutoCompleteTextView cost;
     AutoCompleteTextView sale_price;
 
     @Override
@@ -47,8 +45,6 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         View viewContainer = getActivity().getLayoutInflater().inflate(R.layout.product_order_detail, null);
 
         mProductContainer = viewContainer.findViewById(R.id.productContainer);
-        addProductItem = viewContainer.findViewById(R.id.add_po_proposal);
-        addProductItem.setOnClickListener(this);
 
         vendor = viewContainer.findViewById(R.id.vendor);
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
@@ -56,7 +52,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
 
         product_name = viewContainer.findViewById(R.id.product_name);
         quantity = viewContainer.findViewById(R.id.quantity);
-        cost = viewContainer.findViewById(R.id.cost);
+        //cost = viewContainer.findViewById(R.id.cost);
         sale_price = viewContainer.findViewById(R.id.sale_price);
 
         builder.setView(viewContainer)
@@ -95,36 +91,6 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
 
             // Create the list view and bind the adapter
             //coops.setAdapter(adapter);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.add_po_proposal) {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-            //add product datastructure
-
-            Spinner spinner = new Spinner(getContext());
-
-            EditText quantity = new EditText(getContext());
-            quantity.setWidth(AppBarLayout.LayoutParams.MATCH_PARENT);
-            quantity.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
-            quantity.setHint(getResources().getString(R.string.quantity));
-            quantity.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
-
-            EditText unitPrice = new EditText(getContext());
-            unitPrice.setWidth(AppBarLayout.LayoutParams.MATCH_PARENT);
-            unitPrice.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
-            unitPrice.setHint(getResources().getString(R.string.price_rwf));
-            unitPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
-
-            linearLayout.addView(spinner);
-            linearLayout.addView(quantity);
-            linearLayout.addView(unitPrice);
-
-            mProductContainer.addView(linearLayout, 1);
         }
     }
 

@@ -51,16 +51,13 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             if (slideOffset < 0) {dismiss();
-            //Toast.makeText(getContext()," "+slideOffset, Toast.LENGTH_LONG).show();
             }
         }
 
     };
-    //@SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        //setupDialog(dialog,style);
 
         View viewContainer = View.inflate(getContext(), R.layout.purchase_fragment_bottom_sheet, null);
 
@@ -68,6 +65,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) viewContainer.getParent()).getLayoutParams();
 
+        //Make responsive bottom sheet
         int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
         params.setMargins(width,0,width,0);
 
@@ -147,6 +145,4 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
             Toast.makeText(getContext(),"Save sales comming soon",Toast.LENGTH_LONG).show();
         }
     }
-
-
 }

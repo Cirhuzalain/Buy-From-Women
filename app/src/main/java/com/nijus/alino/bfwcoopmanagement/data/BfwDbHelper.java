@@ -526,7 +526,7 @@ public class BfwDbHelper extends SQLiteOpenHelper {
                 BfwContract.ProductTemplate._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 BfwContract.ProductTemplate.COLUMN_HARVEST_SEASON + " INTEGER," +
                 BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME + " TEXT," +
-                BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE + "TEXT," +
+                BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE + " TEXT," +
                 BfwContract.ProductTemplate.COLUMN_STATE + " TEXT," +
                 BfwContract.ProductTemplate.COLUMN_VENDOR_QTY + " INTEGER," +
                 BfwContract.ProductTemplate.COLUMN_PRICE + " INTEGER," +
