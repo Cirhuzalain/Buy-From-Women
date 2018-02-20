@@ -3,7 +3,6 @@ package com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,7 +16,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +27,6 @@ import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
-import com.nijus.alino.bfwcoopmanagement.vendors.adapter.RecyclerItemTouchHelperVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.VendorRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.vendors.sync.RefreshDataVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.CreateVendorActivity;
@@ -108,7 +105,6 @@ public class VendorFragment extends Fragment implements LoaderCallbacks<Cursor>,
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
-
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);

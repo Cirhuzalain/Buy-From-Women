@@ -71,7 +71,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main2, container, false);
-        //View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_farmer);
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.farmers_list);
@@ -93,7 +92,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(navigationRecyclerViewAdapter);
-
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
@@ -171,10 +169,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onClick(View view) {
-        //Toast.makeText(getContext(), "breee clic fab", Toast.LENGTH_LONG).show();
         if (view.getId() == R.id.fab) {
-            //Intent intent  = new Intent(getActivity(), CreateVendorActivity.class);
-            //startActivity(new Intent(this, CreateVendorActivity.class));
             startActivity(new Intent(getActivity(), CreateFarmerActivity.class));
         }
 

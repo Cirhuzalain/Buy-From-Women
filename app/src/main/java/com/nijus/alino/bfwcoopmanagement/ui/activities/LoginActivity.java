@@ -536,7 +536,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
-
                                 //Prefetch sale,purchase,product
                                 cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
 
@@ -546,7 +545,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
-
                                 //Prefetch loan
                             }
 
