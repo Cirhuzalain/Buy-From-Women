@@ -1,6 +1,7 @@
 package com.nijus.alino.bfwcoopmanagement.loans.ui.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.adapter.PaymentAdapter;
+import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoanPayment;
+import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoanPayment;
 
 public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener {
@@ -123,5 +126,12 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         getLoaderManager().restartLoader(0, null, this);
         //getSupportLoaderManager().restartLoader(0,null,this);
 
+    }
+    public void back2(PojoLoanPayment p) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("loan_payment", p);
+        Intent intent = new Intent(getContext(), UpdateLoanPayment.class);
+        intent.putExtra("loan_payment_data", bundle);
+        getContext().startService(intent);
     }
 }

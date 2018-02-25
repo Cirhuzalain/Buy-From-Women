@@ -1,7 +1,10 @@
 package com.nijus.alino.bfwcoopmanagement.products.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ public class ProductAdapter extends BaseAdapter {
     private final Context mContext;
     private View mEmptyView;
     private final boolean mIsProduct;
+    private CardView cardView;
 
     public ProductAdapter(Context context, Product[] product, boolean isProduct) {
         this.mContext = context;
@@ -41,6 +45,18 @@ public class ProductAdapter extends BaseAdapter {
     public Object getItem(int i) {
         return null;
     }
+    public String getName(int i)
+    {
+        mCursor.moveToPosition(i);
+        String n = mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
+        return n;
+    }
+    public int getServerProductId(int i)
+    {
+        mCursor.moveToPosition(i);
+        int id = mCursor.getInt(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_SERVER_ID));
+        return id;
+    }
 
     @Override
     public long getItemId(int i) {
@@ -56,14 +72,12 @@ public class ProductAdapter extends BaseAdapter {
         }
 
         mCursor.moveToPosition(i);
-        /*holder.txt_loan.setText((position+1)+"");
-        Double np = mCursor.getDouble(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_AMOUNT));*/
 
-        //final Product product = mProduct[i];
         final ImageView imageView = view.findViewById(R.id.productImage);
         final TextView productName = view.findViewById(R.id.productName);
         final TextView productQty = view.findViewById(R.id.productQty);
         final TextView productPrice = view.findViewById(R.id.productPrice);
+        cardView = view.findViewById(R.id.card_view);
 
         if (mIsProduct) {
             imageView.setImageResource(R.mipmap.farmer_bg);
@@ -74,17 +88,21 @@ public class ProductAdapter extends BaseAdapter {
         final View scrim = view.findViewById(R.id.scrim);
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_SYNC)) == 1;
-        if (isSync) {
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_UPDATE))==1;
+        if (isUpdate && isSync) {
             scrim.setBackgroundResource(R.drawable.srim_success);
-        } else {
+        }/*else if(isUpdate)
+        {
+            scrim.setBackgroundResource(R.drawable.srim_error);
+        }*/
+        else  {
             scrim.setBackgroundResource(R.drawable.srim_error);
         }
-
+        Double qty = Double.valueOf(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY)));
         productName.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME))
                 .toUpperCase());
-        productPrice.setText(""+mCursor.getDouble(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE))+" RWF");
-        productQty.setText(""+mCursor.getInt(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY))+" KG");
-
+        productPrice.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE))+" RWF");
+        productQty.setText(String.valueOf(qty)+" KG");
 
         return view;
     }
@@ -99,6 +117,17 @@ public class ProductAdapter extends BaseAdapter {
         {
 
         }
+    }
+    public CardView selectedCardView (int i){
+        mCursor.moveToPosition(i);
+
+        notifyDataSetChanged();
+
+        //View v = getView();
+        /*cardView.setCardBackgroundColor(R.drawable.gradient_button);
+        cardView.setVisibility(View.GONE);*/
+        //cardView.setSelected(true);
+        return cardView;
     }
 
 }

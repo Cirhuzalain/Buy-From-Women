@@ -18,9 +18,11 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.DetailLoanActivity;
+import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.SelectedItems;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +33,9 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     final private Context mContext;
     final private View mEmptyView;
     final private LoanAdapterOnClickHandler mClickHandler;
+    public List<Long> listsSelectedItem = new ArrayList<Long>();
     private Cursor mCursor;
+    private View view;
 
     public LoanAdapter(Context mContext, View mEmptyView, LoanAdapterOnClickHandler mClickHandler,
                        LoanAdapterOnLongClickHandler mLongClickHandler) {
@@ -42,7 +46,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.loan_item, parent, false);
         return new ViewHolder(view);
     }
@@ -55,7 +59,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         //holder.iconBack.setVisibility(View.GONE);
 
         holder.mInstitution.setText("From " + mCursor.getString(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
-        holder.amount_tot.setText(""+mCursor.getDouble(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT))+" RWF");
+        holder.amount_tot.setText("" + mCursor.getDouble(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)) + " RWF");
 
         Long getDate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -64,6 +68,16 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
         holder.start_date.setText(date_string);
         holder.end_date.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_STATE)));
+
+
+        boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_SYNC)) == 1;
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_UPDATE))==1;
+        if (isUpdate && isSync) {
+            holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
+        }
+        else  {
+            holder.imageView.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
+        }
     }
 
     @Override
@@ -78,6 +92,17 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
+    public void reset() {
+        ViewHolder h = new ViewHolder(view);
+        //h.resetAll(1);
+        TextView v =(TextView) h.resetAll(1);
+        //TextView amount_tot = view.findViewById(R.id.l_name);
+        String s = (String) v.getText();
+
+        //ImageView f = v.findViewById(R.id.l_icon);
+        //f.setImageResource(R.mipmap.calendar_one);
+    }
+
     public interface LoanAdapterOnClickHandler {
         void onClick(Long farmerId, ViewHolder vh);
     }
@@ -88,20 +113,23 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public final View mView;
-        public final ImageView farmerImage;
+        public final ImageView farmerImage, imageView;
         public final TextView amount_tot, start_date, end_date;
         public final TextView mInstitution;
         public RelativeLayout iconBack, iconFront, iconContainer;
         public LinearLayout view_foreground;
+        private FlipAnimator flipAnimator;
         //lisste des LOANS deja selectionner
-        public List<Integer> listsSelectedItem = new ArrayList<>();
+
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             farmerImage = view.findViewById(R.id.l_icon);
+            imageView = view.findViewById(R.id.loan_sync);
             amount_tot = view.findViewById(R.id.l_name);
             start_date = view.findViewById(R.id.date_start);
+            start_date.setEnabled(false);
             end_date = view.findViewById(R.id.date_end);
             mInstitution = view.findViewById(R.id.l_institution);
             iconBack = view.findViewById(R.id.icon_back);
@@ -111,19 +139,14 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-
         }
 
         @Override
         public void onClick(View view) {
-
             int position = getAdapterPosition();
             mCursor.moveToPosition(position);
             int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
             Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
-
-            //Toast.makeText(mContext,c+" --ok-- "+loanColumnIndex ,Toast.LENGTH_LONG).show();
-            //mClickHandler.onClick(mCursor.getLong(loanColumnIndex), this);
 
             Intent intent = new Intent(mContext, DetailLoanActivity.class);
             intent.putExtra("loanId", loanColumnIndex);
@@ -136,18 +159,24 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
             }
         }
 
+
         @Override
         public boolean onLongClick(View view) {
-            //annimation et delete un loan agent
-            if (!return_if_val_in_array(Integer.valueOf(this.getAdapterPosition()))) {
+            int position = getAdapterPosition();
+            mCursor.moveToPosition(position);
+            int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
+            Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
+            //annimation and delete and loan agent
+
+            if (!return_if_val_in_array(loanColumnIndex)) {
                 this.iconFront.setVisibility(View.GONE);
                 this.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
                 resetIconYAxis(this.iconBack);
                 this.iconBack.setVisibility(View.VISIBLE);
                 this.iconBack.setAlpha(1);
-                FlipAnimator.flipView(mContext.getApplicationContext(), this.iconBack, this.iconFront, true);
-
-                listsSelectedItem.add(Integer.valueOf(this.getAdapterPosition()));
+                flipAnimator.flipView(mContext, this.iconBack, this.iconFront, true);
+                listsSelectedItem.add(loanColumnIndex);
+                EventBus.getDefault().post(new SelectedItems(listsSelectedItem));
 
             } else {
                 this.iconBack.setVisibility(View.GONE);
@@ -156,20 +185,34 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
                 this.iconFront.setVisibility(View.VISIBLE);
                 this.iconFront.setAlpha(1);
 
-                FlipAnimator.flipView(mContext.getApplicationContext(), this.iconBack, this.iconFront, false);
-                listsSelectedItem.remove(Integer.valueOf(this.getAdapterPosition()));
+                flipAnimator.flipView(mContext, this.iconBack, this.iconFront, false);
+                listsSelectedItem.remove(loanColumnIndex);
+                EventBus.getDefault().post(new SelectedItems(listsSelectedItem));
             }
             return true;
         }
 
-        boolean return_if_val_in_array(int val) {
-            for (int v : listsSelectedItem) {
+        public View resetAll(int i) {
+            mCursor.moveToPosition(i);
+            int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
+
+            //int position = getAdapterPosition();
+
+            //mCursor.moveToPosition(i);
+            Toast.makeText(mContext,"Amount " +c,Toast.LENGTH_LONG).show();
+
+
+            return this.amount_tot;
+        }
+
+        boolean return_if_val_in_array(Long val) {
+            //Toast.makeText(mContext,return_count()+" selected",Toast.LENGTH_LONG).show();
+            for (Long v : listsSelectedItem) {
                 if (val == v) {
                     return true;
                 }
             }
             return false;
         }
-
     }
 }

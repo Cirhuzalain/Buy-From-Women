@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:layout_margin="16dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -35,7 +34,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/vendor"
+                        android:text="@string/farmer"
                         android:textSize="16sp" />
 
                     <Spinner
@@ -46,7 +45,6 @@
 
                 </LinearLayout>
 
-                <!--date-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -55,7 +53,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Select date"
+                        android:background="@drawable/gradient_normal_button"
                         android:id="@+id/date_selected"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableLeft="@mipmap/calendar_white"
+                        android:textColor="@color/cardview_light_background"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
@@ -71,24 +75,28 @@
                         android:layout_alignParentEnd="true" />
 
                 </RelativeLayout>
+                <LinearLayout
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                <!--findate-->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/loan_purpose"
+                        android:textSize="16sp" />
+
+                    <Spinner
+                        android:id="@+id/purpose_loan_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
 
                <!-- <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/loan_star_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/start_loan_date"
-                        android:inputType="date" />
-
-                </android.support.design.widget.TextInputLayout>-->
-
-                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -100,7 +108,7 @@
                         android:inputType="text"
                         android:maxLines="1" />
 
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -146,6 +154,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="8dp"
                     android:id="@+id/content_spiner_ca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,32 +176,18 @@
 
                 </LinearLayout>
                 <Button
+                    android:layout_marginTop="15dp"
                     android:id="@+id/save_loan"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_gravity="center"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/cardview_light_background"
+                    android:background="@drawable/gradient_button"
                     android:text="@string/title_activity_create_loan" />
-
-
 
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>
-
-
-    <!--
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.nijus.alino.bfwcoopmanagement.loans.ui.activities.CreateLoanActivity"
-        tools:showIn="@layout/activity_create_loan">
-
-
-    </android.support.constraint.ConstraintLayout>
-    -->

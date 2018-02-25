@@ -18,8 +18,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'DEV_API_URL', "\"http://13.90.147.208:8069/api/\""
-            it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://13.90.147.208:1993/\""
+            it.buildConfigField 'String', 'DEV_API_URL', "\"http://52.234.227.106:8069/api/\""
+            it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://52.234.227.106:1993/\""
             it.buildConfigField 'String', 'DEV_DB_NAME', "\"bfwend\""
         }
     }

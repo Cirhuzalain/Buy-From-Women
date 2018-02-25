@@ -54,7 +54,7 @@
                     android:id="@+id/textView80"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@string/harvsetSeason"
+                    android:text="Season"
                     android:textSize="16sp" />
 
                 <Spinner

@@ -54,7 +54,7 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_AGENT_NAME)));
 
         holder.farmerImage.setImageResource(R.mipmap.male);
-        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+        //holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_COOP_NAME)));
     }
 
     @Override

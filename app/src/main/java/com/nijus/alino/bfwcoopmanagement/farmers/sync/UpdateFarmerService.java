@@ -104,7 +104,6 @@ public class UpdateFarmerService extends IntentService {
                     if (cursor != null && cursor.moveToFirst()) {
                         cursor.moveToFirst();
                         coopServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));
-
                     }
                 } finally {
                     if (cursor != null) {

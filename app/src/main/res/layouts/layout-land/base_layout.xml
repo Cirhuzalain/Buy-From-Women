@@ -25,11 +25,11 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_main"
-                android:layout_height="?attr/actionBarSize"
                 android:layout_width="match_parent"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:layout_height="46dp"
+                app:elevation="0dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:elevation="0dp"/>
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <android.support.v4.widget.Space
                     android:id="@+id/space"
@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="46dp"
             app:cardPreventCornerOverlap="false">
             <include
                 layout="@layout/activity_content"

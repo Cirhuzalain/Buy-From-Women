@@ -32,6 +32,7 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     final private Context mContext;
     final private View mEmptyView;
     final private FarmerAdapterOnClickHandler mClickHandler;
+    public List<Integer> listsSelectedItem = new ArrayList<>();
 
     public NavigationRecyclerViewAdapter(Context context, View view, FarmerAdapterOnClickHandler vh) {
         mContext = context;
@@ -94,7 +95,7 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         public LinearLayout viewForeground;
         public String id_cursor_to_delete;
         public RelativeLayout iconBack, iconFront, iconContainer;
-        public List<Integer> listsSelectedItem = new ArrayList<>();
+
 
         public ViewHolder(View view) {
             super(view);
