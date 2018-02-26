@@ -22,6 +22,6 @@ public class RefreshData extends IntentService {
         startService(new Intent(this, SyncProductBackground.class));
 
         //Check non update data and update
-        //startService(new Intent(this, UpdateSyncFarmer.class));
+        startService(new Intent(this, UpdateSyncProductBkgrnd.class));
     }
 }

@@ -49,10 +49,10 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.farmerImage.setImageResource(R.drawable.profile);
-        //holder.iconBack.setVisibility(View.GONE);
 
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_AGENT_NAME)));
         holder.farmerImage.setImageResource(R.mipmap.male);
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +39,12 @@ import org.greenrobot.eventbus.ThreadMode;
  * create an instance of this fragment.
  */
 public class ProductListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+        AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemLongClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
+    private Cursor mCursor;
 
     private ProductAdapter productRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
@@ -89,10 +91,11 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
         GridView gridView = root.findViewById(R.id.productGridview);
         View emptyView = root.findViewById(R.id.girdview_empty);
 
-        //ProductAdapter adapter = new ProductAdapter(getContext(), productArrayList, true);
         productRecyclerViewAdapter = new ProductAdapter(getContext(),emptyView, true);
         gridView.setAdapter(productRecyclerViewAdapter);
+
         gridView.setOnItemClickListener(this);
+        gridView.setOnItemLongClickListener(this);
 
         mRefreshData = root.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
@@ -101,10 +104,29 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //Product product = productArrayList[i];
+
+        int id  = productRecyclerViewAdapter.getServerProductId(i);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id_product",id ); // set Fragmentclass Arguments
         UpdateProductDialogFragment dialogFragment = new UpdateProductDialogFragment();
+        dialogFragment.setArguments(bundle);
         dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
+
     }
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        int id  = productRecyclerViewAdapter.getServerProductId(i);
+        String name = productRecyclerViewAdapter.getName(i);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id_product",id ); // set Fragmentclass Arguments
+        bundle.putString("name_product",name ); // set Fragmentclass Arguments
+        DeleteProductDialogFragment dialogFragment = new DeleteProductDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
+
+        return true;
+    }
+
 
     @Override
     public void onAttach(Context context) {

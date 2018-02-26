@@ -9,11 +9,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
         import android.view.View;
 
-/**
- * Created by Ravi Tamada on 22/02/17.
- * www.androidhive.info
- */
-
 public class FlipAnimator {
     private static String TAG = FlipAnimator.class.getSimpleName();
     private static AnimatorSet leftIn, rightOut, leftOut, rightIn;

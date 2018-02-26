@@ -180,6 +180,15 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="fin_institution">
+        <item>bank</item>
+        <item>sacco</item>
+        <item>cooperative</item>
+    </string-array>
+    <string-array name="purpose_loan">
+        <item>aggregation</item>
+    </string-array>
+
     <string-array name="payment_detail">
         <item>15 Days</item>
         <item>30 Net Days</item>
@@ -334,7 +343,7 @@
     <string name="update_coop">Update Cooperative</string>
     <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
-    <string name="update_msg">Information update successfully</string>
+    <string name="update_msg">Information updated successfully</string>
     <string name="coops">Coops</string>
 
     <string name="there_s_no_cooperative">There\'s no cooperative</string>
@@ -448,6 +457,7 @@
     <string name="title_activity_update_coop_agent">Update Coop Agent</string>
     <string name="title_activity_buyer">Buyer</string>
     <string name="title_activity_update_buyer">Update Buyer</string>
+    <string name="title_activity_update_loan">Update Loan</string>
     <string name="title_activity_detail_buyer">Buyer Detail</string>
     <string name="title_activity_create_loan">Save Loan</string>
     <string name="start_loan_date">Loan start date</string>
