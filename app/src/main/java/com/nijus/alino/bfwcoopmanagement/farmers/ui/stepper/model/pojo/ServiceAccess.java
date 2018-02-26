@@ -30,6 +30,7 @@ public class ServiceAccess implements Parcelable {
     private String storageDetails;
     private String newResourcesDetails;
     private String mainWaterSourceDetails;
+    private String seasonName;
 
     public ServiceAccess() {
 
@@ -79,6 +80,7 @@ public class ServiceAccess implements Parcelable {
         this.storageDetails = source.readString();
         this.mainWaterSourceDetails = source.readString();
         this.newResourcesDetails = source.readString();
+        this.seasonName = source.readString();
     }
 
     @Override
@@ -104,8 +106,17 @@ public class ServiceAccess implements Parcelable {
         parcel.writeByte((byte) (hasNoWaterSource ? 1 : 0));
         parcel.writeByte((byte) (isOtherInfo ? 1 : 0));
         parcel.writeString(storageDetails);
-        parcel.writeString(newResourcesDetails);
         parcel.writeString(mainWaterSourceDetails);
+        parcel.writeString(newResourcesDetails);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
     }
 
     public String getStorageDetails() {

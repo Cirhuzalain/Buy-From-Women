@@ -15,6 +15,7 @@ public class General implements Parcelable {
     private String address;
     private String phoneNumber;
     private boolean gender;
+    private String seasonName;
 
     public General() {
 
@@ -36,6 +37,7 @@ public class General implements Parcelable {
         this.address = data.readString();
         this.gender = data.readByte() != 0;
         this.coopId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -51,7 +53,16 @@ public class General implements Parcelable {
         parcel.writeString(address);
         parcel.writeByte((byte) (gender ? 1 : 0));
         parcel.writeInt(coopId);
+        parcel.writeString(seasonName);
 
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
     }
 
     public String getName() {

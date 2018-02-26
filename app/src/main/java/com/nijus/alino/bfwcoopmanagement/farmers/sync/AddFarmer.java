@@ -57,7 +57,7 @@ public class AddFarmer extends IntentService {
             HashMap<String, Forecast> forecast = (HashMap<String, Forecast>) farmerData.getSerializable("forecast");
             HashMap<String, BaseLine> baseLine = (HashMap<String, BaseLine>) farmerData.getSerializable("baseline");
             HashMap<String, Finance> finance = (HashMap<String, Finance>) farmerData.getSerializable("finance");
-            HashMap<String, AccessToInformation> accessToInformation = (HashMap<String, AccessToInformation>) farmerData.getSerializable("access_information");
+            HashMap<String, AccessToInformation> accessToInformation = (HashMap<String, AccessToInformation>) farmerData.getSerializable("accessToInformation");
             HashMap<String, LandInformation> landInformations = (HashMap<String, LandInformation>) farmerData.getSerializable("land_info");
 
             Cursor cursor = null;
@@ -84,29 +84,28 @@ public class AddFarmer extends IntentService {
             Double minimumflowprice;
 
             //Baseline data field
-            Double totProdInKg = null;
-            Double totLostInKg = null;
-            Double totSoldInKg = null;
-            Double totVolumeSoldCoopInKg = null;
-            Double priceSoldToCoopPerKg = null;
-            Double totVolSoldInKg = null;
-            Double priceSoldInKg = null;
-            Double harvestSeason = null;
+            Double totProdInKg;
+            Double totLostInKg;
+            Double totSoldInKg;
+            Double totVolumeSoldCoopInKg;
+            Double priceSoldToCoopPerKg;
+            Double totVolSoldInKg;
+            Double priceSoldInKg ;
 
             //Finance data field;
-            Boolean outstandingLoan = null, isInput = null, isAggregation = null, isOther = null, isMobileMoneyAccount = null;
-            Double interestRate = null, totLoanAmount = null, totOutstanding = null;
-            Integer duration = null;
-            String loanProvider = null;
+            Boolean outstandingLoan, isInput, isAggregation, isOther, isMobileMoneyAccount;
+            Double interestRate, totLoanAmount, totOutstanding;
+            Integer duration;
+            String loanProvider;
 
             //Access to information data field
-            Boolean isAgriculture = null, isClimateInfo = null, isSeeds = null, organicFertilizers = null,
-                    inorganicFertilizers = null, labour = null,
-                    waterPumps = null, isSpreader = null;
+            Boolean isAgriculture, isClimateInfo, isSeeds, organicFertilizers,
+                    inorganicFertilizers, labour,
+                    waterPumps, isSpreader;
 
 
             //Land information data field
-            Double landSize = null, lat = null, lng = null;
+            Double landSize, lat, lng;
 
             // farmer table
             if (general != null) {
@@ -305,7 +304,7 @@ public class AddFarmer extends IntentService {
 
                             farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_IS_SYNC, 0);
                             farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_IS_UPDATE, 0);
-                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SEASON_ID, accessToInformation.get(seasonName).getHarvsetSeason());
+                            farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SEASON_ID, accessToInformation.get(seasonName).getHarvestSeason());
                             farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_FARMER_ID, farmerId);
 
                             getContentResolver().insert(BfwContract.FarmerAccessInfo.CONTENT_URI, farmerInfoValues);
@@ -323,7 +322,7 @@ public class AddFarmer extends IntentService {
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_PLOT_SIZE, landSize);
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_LAT_INFO, lat);
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_LNG_INFO, lng);
-
+                            farmerLandValues.put(BfwContract.LandPlot.COLUMN_SEASON_ID, landInformations.get(seasonName).getHarvestSeason());
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 0);
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 0);
                             farmerLandValues.put(BfwContract.LandPlot.COLUMN_FARMER_ID, farmerId);

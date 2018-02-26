@@ -117,28 +117,45 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
             } else {
                 radioN.setChecked(true);
             }
-            setDefaultHouseHoldHead();
+            setDefaultHouseHoldHead(houseHoldHead);
 
             String houseMemb = "" + houseMember + "";
             numHouseHoldMember.setText(houseMemb);
             demographic.setHouseHoldMember(houseMember);
-            if (sFName != null) {
+            if (sFName == null || sFName.equals("null")) {
+                sFirstName.setText("");
+                demographic.setSpouseFirstName(null);
+            } else {
                 sFirstName.setText(sFName);
                 demographic.setSpouseFirstName(sFName);
             }
-            if (sLName != null) {
+
+            if (sLName == null || sLName.equals("null")) {
+                sLastName.setText("");
+                demographic.setSpouseLastName(null);
+            } else {
                 sLastName.setText(sLName);
                 demographic.setSpouseLastName(sLName);
             }
-            if (celPhone != null) {
+
+            if (celPhone == null || celPhone.equals("null")) {
+                cellPhoneAlt.setText("");
+                demographic.setCellPhoneAlt(null);
+            } else {
                 cellPhoneAlt.setText(celPhone);
                 demographic.setCellPhoneAlt(celPhone);
             }
-            if (celCarrier != null) {
+
+            if (celCarrier == null || celCarrier.equals("null")) {
+                cellCarrier.setText("");
+                demographic.setCellCarrier(null);
+            } else {
                 cellCarrier.setText(celCarrier);
                 demographic.setCellCarrier(celCarrier);
             }
-            if (mId != null) {
+            if (mId == null || mId.equals("null")) {
+                memberShipId.setText("");
+            } else {
                 memberShipId.setText(mId);
             }
             mPage.getData().putParcelable("demographic", demographic);
@@ -148,16 +165,6 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-    }
-
-    public void setDefaultHouseHoldHead() {
-        if (houseHold.getCheckedRadioButtonId() == R.id.household_y) {
-            demographic.setHouseHold(true);
-            mPage.getData().putParcelable("demographic", demographic);
-        } else if (houseHold.getCheckedRadioButtonId() == R.id.household_n) {
-            demographic.setHouseHold(false);
-            mPage.getData().putParcelable("demographic", demographic);
-        }
     }
 
     @Override
@@ -178,9 +185,6 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
         cellPhoneAlt = rootView.findViewById(R.id.cell_phone_alt);
         cellCarrier = rootView.findViewById(R.id.cell_carrier);
         memberShipId = rootView.findViewById(R.id.m_id);
-
-        //set default household
-        setDefaultHouseHoldHead();
 
         //listen for change on Household Head
         houseHold.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -291,6 +295,20 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
         });
 
         return rootView;
+    }
+
+    public void setDefaultHouseHoldHead(int houseHoldHead) {
+        if (houseHoldHead == 1) {
+            demographic.setHouseHold(true);
+            mPage.getData().putParcelable("demographic", demographic);
+            radioY.setChecked(true);
+            radioN.setChecked(false);
+        } else if (houseHoldHead == 0) {
+            demographic.setHouseHold(false);
+            mPage.getData().putParcelable("demographic", demographic);
+            radioN.setChecked(true);
+            radioY.setChecked(false);
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ public class AccessToInformationFragment extends Fragment {
     private String mKey;
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
-    private AccessToInformation accessToInformation = new AccessToInformation();
+    private AccessToInformation accessInfo = new AccessToInformation();
 
     private Cursor cursor;
     private String seasonName;
@@ -43,6 +43,7 @@ public class AccessToInformationFragment extends Fragment {
     private CheckBox inorganicFertilizers;
     private CheckBox labour;
     private CheckBox irrigation;
+    private CheckBox spreaders;
     private Spinner harvsetSeason;
 
 
@@ -82,44 +83,46 @@ public class AccessToInformationFragment extends Fragment {
 
         populateSpinner();
 
-        cursor = (Cursor) harvsetSeason.getSelectedItem();
-        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
-        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-        accessToInformation.setHarvsetSeason(seasonId);
-
-
 
         agriculturalExtension = rootView.findViewById(R.id.agricultural_ext);
         boolean isAgriExt = agriculturalExtension.isActivated();
 
-        accessToInformation.setAgricultureExtension(isAgriExt);
+        accessInfo.setAgricultureExtension(isAgriExt);
 
         climateInfo = rootView.findViewById(R.id.climate_info);
         boolean isClimateInfo = climateInfo.isActivated();
-        accessToInformation.setClimateRelatedInformation(isClimateInfo);
+        accessInfo.setClimateRelatedInformation(isClimateInfo);
 
         seeds = rootView.findViewById(R.id.seeds);
         boolean isSeeds = seeds.isActivated();
-        accessToInformation.setSeed(isSeeds);
+        accessInfo.setSeed(isSeeds);
 
         organicFertilizers = rootView.findViewById(R.id.organic_fertilizers);
         boolean isFertilizer = organicFertilizers.isActivated();
-        accessToInformation.setOrganicFertilizers(isFertilizer);
+        accessInfo.setOrganicFertilizers(isFertilizer);
 
         inorganicFertilizers = rootView.findViewById(R.id.inorganic_fertilizers);
         boolean isInorganicFertilizer = inorganicFertilizers.isActivated();
-        accessToInformation.setInorganicFertilizers(isInorganicFertilizer);
+        accessInfo.setInorganicFertilizers(isInorganicFertilizer);
 
         labour = rootView.findViewById(R.id.labour);
         boolean isLabour = labour.isActivated();
-        accessToInformation.setLabour(isLabour);
+        accessInfo.setLabour(isLabour);
 
         irrigation = rootView.findViewById(R.id.irrigation);
         boolean isIrrigation = irrigation.isActivated();
-        accessToInformation.setWaterPumps(isIrrigation);
+        accessInfo.setWaterPumps(isIrrigation);
 
+        spreaders = rootView.findViewById(R.id.spreader);
+        boolean isSpreader = spreaders.isActivated();
+        accessInfo.setSpreaderOrSprayer(isSpreader);
 
-        seasonAccessToInfo.put(seasonName, accessToInformation);
+        cursor = (Cursor) harvsetSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        accessInfo.setHarvestSeason(seasonId);
+
+        seasonAccessToInfo.put(seasonName, accessInfo);
 
 
         mPage.getData().putSerializable("accessToInformation", seasonAccessToInfo);
@@ -138,7 +141,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setAgricultureExtension(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -147,7 +150,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setAgricultureExtension(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }
@@ -170,7 +173,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setClimateRelatedInformation(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -179,7 +182,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setClimateRelatedInformation(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }
@@ -202,7 +205,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setSeed(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -211,7 +214,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setSeed(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }
@@ -233,7 +236,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setOrganicFertilizers(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -242,7 +245,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setOrganicFertilizers(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }
@@ -264,7 +267,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setInorganicFertilizers(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -273,7 +276,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setInorganicFertilizers(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }
@@ -296,7 +299,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setLabour(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -304,7 +307,7 @@ public class AccessToInformationFragment extends Fragment {
                         seasonAccessToInfo.get(seasonName).setLabour(false);
                     } else {
                         AccessToInformation information = new AccessToInformation();
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         information.setLabour(false);
                         seasonAccessToInfo.put(seasonName, information);
                     }
@@ -327,7 +330,7 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setWaterPumps(true);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 } else {
@@ -336,7 +339,37 @@ public class AccessToInformationFragment extends Fragment {
                     } else {
                         AccessToInformation information = new AccessToInformation();
                         information.setWaterPumps(false);
-                        information.setHarvsetSeason(seasonId);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
+                }
+                mPage.getData().putSerializable("accessToInformation", seasonAccessToInfo);
+            }
+        });
+
+        spreaders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                if (b) {
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSpreaderOrSprayer(true);
+                    } else {
+                        AccessToInformation information = new AccessToInformation();
+                        information.setSpreaderOrSprayer(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
+                } else {
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSpreaderOrSprayer(false);
+                    } else {
+                        AccessToInformation information = new AccessToInformation();
+                        information.setSpreaderOrSprayer(false);
+                        information.setHarvestSeason(seasonId);
                         seasonAccessToInfo.put(seasonName, information);
                     }
                 }

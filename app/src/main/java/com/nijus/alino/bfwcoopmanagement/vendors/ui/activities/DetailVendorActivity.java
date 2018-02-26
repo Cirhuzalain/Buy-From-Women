@@ -245,15 +245,6 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
             final AccordionView access_info_accordion = findViewById(R.id.access_info_accordion);
             access_info_accordion.setHeadingString("ACCESS TO INFORMATION");
 
-            ImageView pic_agri_extension_details = findViewById(R.id.pic_agri_extension_details);
-
-           /* ImageView pic_inorg_fert_details = findViewById(R.id.pic_inorg_fert_details2);
-            pic_inorg_fert_details.setImageResource((inorganic_fertilizer == 1)? R.mipmap.icon_sm_ok:R.mipmap.icon_sm_error);*/
-
-            ImageView pic_labour_details = findViewById(R.id.pic_labour_details);
-
-            //second
-
             ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
 
             ImageView pic_clim_rel_details2 = findViewById(R.id.pic_clim_rel_details2);

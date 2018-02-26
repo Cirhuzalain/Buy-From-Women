@@ -71,7 +71,7 @@
     <string name="image_profile">Image Profile</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="househol_head">Househol Head</string>
+    <string name="househol_head">Household Head</string>
     <string name="family_in_house_hold">Family # in House Hold</string>
     <string name="spouse_name">Spouse Name</string>
     <string name="mobile_money_account">Mobile Money Account</string>
@@ -460,4 +460,10 @@
     <string name="others_finance_source">Others</string>
     <string name="farmers_expected_minimum_revenue_from_ftma_sale_in_rwf">Farmers expected minimum revenue from FTMA sale in RWF</string>
     <string name="flow_price">Minimum floor price per kg in RWF</string>
+    <string name="loc_gps">Check your location here</string>
+    <string name="man_gps">Manual</string>
+    <string name="gps_automatic">Automatic</string>
+    <string name="harvest_season_2016">Harvest Season 2016</string>
+    <string name="others_fin">Others</string>
+    <string name="harvest_season_2017">Harvest Season 2017</string>
 </resources>

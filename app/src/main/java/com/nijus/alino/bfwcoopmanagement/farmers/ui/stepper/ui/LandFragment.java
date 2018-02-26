@@ -49,7 +49,6 @@ public class LandFragment extends Fragment implements AdapterView.OnItemClickLis
     private LinearLayout landContainer;
     private Switch switchlocation;
     private Spinner harvsetSeason;
-    private HashMap<String, Double> mapLand = new HashMap<>();
 
     public LandFragment() {
         super();

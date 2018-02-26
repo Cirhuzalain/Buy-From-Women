@@ -22,11 +22,11 @@ public class UpdateWizardModel extends AbstractWizardModel {
     @Override
     protected PageList onNewRootPageList() {
         return new PageList(new UpdateGeneralPage(this, "gen_info"),
-                new UpdateForecastPage(this, "forecast"),
+                new UpdateServicePage(this, "access_service"),
                 new UpdateDemographicPage(this, "demographic"),
+                new UpdateForecastPage(this, "forecast"),
                 new UpdateBaseLinePage(this, "base_line"),
                 new UpdateFinancePage(this, "finance"),
-                new UpdateServicePage(this, "access_service"),
                 new UpdateAccessInfoPage(this, "access_information"),
                 new UpdateLandPage(this, "farmer_land"));
     }

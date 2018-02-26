@@ -183,8 +183,8 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                //Save Farmer data
-                saveNewCoop();
+                Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+                //saveNewCoop();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -198,8 +198,8 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
-            //Save coop data
-            saveNewCoop();
+            Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+            //saveNewCoop();
         }
 
     }

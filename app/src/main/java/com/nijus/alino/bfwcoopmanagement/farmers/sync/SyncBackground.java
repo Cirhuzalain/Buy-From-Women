@@ -68,7 +68,7 @@ public class SyncBackground extends IntentService {
         Cursor cursor = null, farmerInfoCursor = null, cursorFarmerServerId = null, serverSeasonCursor = null;
 
         String seasonSelection = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+                BfwContract.HarvestSeason._ID + " =  ? ";
 
         String selection = BfwContract.Farmer.TABLE_NAME + "." +
                 BfwContract.Farmer.COLUMN_IS_SYNC + " =  0 ";
@@ -86,25 +86,25 @@ public class SyncBackground extends IntentService {
                 BfwContract.LandPlot._ID + " = ? ";
 
         String accessInfoSelection = BfwContract.FarmerAccessInfo.TABLE_NAME + "." +
-                BfwContract.FarmerAccessInfo.COLUMN_FARMER_ID + " = ? AND " + BfwContract.LandPlot.COLUMN_IS_SYNC + " = 0 ";
+                BfwContract.FarmerAccessInfo.COLUMN_FARMER_ID + " = ? AND " + BfwContract.FarmerAccessInfo.COLUMN_IS_SYNC + " = 0 ";
 
         String accessInfo = BfwContract.FarmerAccessInfo.TABLE_NAME + "." +
                 BfwContract.FarmerAccessInfo._ID + " = ? ";
 
         String baselineFarmerSelection = BfwContract.BaselineFarmer.TABLE_NAME + "." +
-                BfwContract.BaselineFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.LandPlot.COLUMN_IS_SYNC + " = 0 ";
+                BfwContract.BaselineFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.BaselineFarmer.COLUMN_IS_SYNC + " = 0 ";
 
         String baselineFarmerInfo = BfwContract.BaselineFarmer.TABLE_NAME + "." +
                 BfwContract.BaselineFarmer._ID + " = ? ";
 
         String forecastFarmerSelection = BfwContract.ForecastFarmer.TABLE_NAME + "." +
-                BfwContract.ForecastFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.LandPlot.COLUMN_IS_SYNC + " = 0 ";
+                BfwContract.ForecastFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.ForecastFarmer.COLUMN_IS_SYNC + " = 0 ";
 
         String forecastFarmerInfo = BfwContract.ForecastFarmer.TABLE_NAME + "." +
                 BfwContract.ForecastFarmer._ID + " = ? ";
 
         String financeDataSelection = BfwContract.FinanceDataFarmer.TABLE_NAME + "." +
-                BfwContract.FinanceDataFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.LandPlot.COLUMN_IS_SYNC + " = 0 ";
+                BfwContract.FinanceDataFarmer.COLUMN_FARMER_ID + " = ? AND " + BfwContract.FinanceDataFarmer.COLUMN_IS_SYNC + " = 0 ";
 
         String financeDataInfo = BfwContract.FinanceDataFarmer.TABLE_NAME + "." +
                 BfwContract.FinanceDataFarmer._ID + " = ? ";
@@ -255,80 +255,15 @@ public class SyncBackground extends IntentService {
                             JSONObject farmerInfo = new JSONObject(farmerDataInfo);
                             if (farmerInfo.has("id")) {
                                 farmerServerId = farmerInfo.getInt("id");
+                                String membershipId = farmerInfo.getString("membership_id");
 
-                                //update localId
+                                //set membership id
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put(BfwContract.Farmer.COLUMN_FARMER_SERVER_ID, farmerServerId);
+                                contentValues.put(BfwContract.Farmer.COLUMN_MEMBER_SHIP, membershipId);
                                 contentValues.put(BfwContract.Farmer.COLUMN_IS_SYNC, 1);
                                 contentValues.put(BfwContract.Farmer.COLUMN_IS_UPDATE, 1);
                                 getContentResolver().update(BfwContract.Farmer.CONTENT_URI, contentValues, farmerSelection, new String[]{Long.toString(id)});
-                            }
-                        }
-
-                        //sync land information if available
-                        farmerInfoCursor = getContentResolver().query(BfwContract.LandPlot.CONTENT_URI, null, landSelection,
-                                new String[]{Long.toString(id)}, null);
-
-                        if (farmerInfoCursor != null) {
-                            long landId;
-                            while (farmerInfoCursor.moveToNext()) {
-
-                                landId = farmerInfoCursor.getInt(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot._ID));
-                                double plotSize = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_PLOT_SIZE));
-                                double lat = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_LAT_INFO));
-                                double lng = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_LNG_INFO));
-
-                                seasonId = farmerInfoCursor.getInt(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_SEASON_ID));
-
-                                serverSeasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null,
-                                        seasonSelection, new String[]{Long.toString(seasonId)}, null);
-
-                                if (serverSeasonCursor != null) {
-                                    while (serverSeasonCursor.moveToNext()) {
-                                        serverSeasonId = serverSeasonCursor.getInt(serverSeasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_SERVER_ID));
-                                    }
-                                }
-
-                                if (farmerServerId != 0) {
-                                    String plotInfo = "{" +
-                                            "\"plot_size\": " + plotSize + "," +
-                                            "\"lat\": " + lat + "," +
-                                            "\"lng\": " + lng + "," +
-                                            "\"harvest_id\": " + serverSeasonId + "," +
-                                            "\"farmer_id\": " + farmerServerId + "" +
-                                            "}";
-
-                                    String API_INFO = BuildConfig.DEV_API_URL + "farmer.land";
-
-                                    RequestBody bodyLand = RequestBody.create(JSON, plotInfo);
-
-                                    Request requestLand = new Request.Builder()
-                                            .url(API_INFO)
-                                            .header("Content-Type", "text/html")
-                                            .header("Access-Token", appToken)
-                                            .method("POST", bodyLand)
-                                            .build();
-
-                                    Response responseLand = client.newCall(requestLand).execute();
-                                    ResponseBody responseBodyLand = responseLand.body();
-
-                                    if (responseBodyLand != null) {
-                                        String bodyLandInfo = responseBodyLand.string();
-
-                                        //set server id land in local db
-                                        JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
-                                        if (bodyLandObject.has("id")) {
-                                            int landServerId = bodyLandObject.getInt("id");
-
-                                            ContentValues contentValues = new ContentValues();
-                                            contentValues.put(BfwContract.LandPlot.COLUMN_SERVER_ID, landServerId);
-                                            contentValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 1);
-                                            contentValues.put(BfwContract.LandPlot.COLUMN_IS_UPDATE, 1);
-
-                                            getContentResolver().update(BfwContract.LandPlot.CONTENT_URI, contentValues, landInfo, new String[]{Long.toString(landId)});
-                                        }
-                                    }
-                                }
                             }
                         }
 
@@ -403,7 +338,6 @@ public class SyncBackground extends IntentService {
                                     if (responseBodyLand != null) {
                                         String bodyLandInfo = responseBodyLand.string();
 
-                                        //set server id land in local db
                                         JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
                                         if (bodyLandObject.has("id")) {
                                             int infoServerId = bodyLandObject.getInt("id");
@@ -493,7 +427,6 @@ public class SyncBackground extends IntentService {
                                     if (responseBodyLand != null) {
                                         String bodyLandInfo = responseBodyLand.string();
 
-                                        //set server id land in local db
                                         JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
                                         if (bodyLandObject.has("id")) {
                                             int infoServerId = bodyLandObject.getInt("id");
@@ -503,7 +436,7 @@ public class SyncBackground extends IntentService {
                                             contentValues.put(BfwContract.BaselineFarmer.COLUMN_IS_SYNC, 1);
                                             contentValues.put(BfwContract.BaselineFarmer.COLUMN_IS_UPDATE, 1);
 
-                                            getContentResolver().update(BfwContract.FarmerAccessInfo.CONTENT_URI, contentValues, baselineFarmerInfo,
+                                            getContentResolver().update(BfwContract.BaselineFarmer.CONTENT_URI, contentValues, baselineFarmerInfo,
                                                     new String[]{Long.toString(baselineId)});
                                         }
                                     }
@@ -518,17 +451,17 @@ public class SyncBackground extends IntentService {
                         if (farmerInfoCursor != null) {
 
                             int financeId;
-                            Boolean outstandingloan = null;
-                            Boolean loanPurposeI = null;
-                            Boolean loanPurposeA = null;
-                            Boolean loanPurposeO = null;
-                            Boolean mobileMoneyAccount = null;
+                            Boolean outstandingloan;
+                            Boolean loanPurposeI;
+                            Boolean loanPurposeA;
+                            Boolean loanPurposeO;
+                            Boolean mobileMoneyAccount;
 
-                            Double totalLoanAmount = null;
-                            Double totaloutstanding = null;
-                            Double interestrate = null;
-                            Integer duration = null;
-                            String loanProvider = null;
+                            Double totalLoanAmount;
+                            Double totaloutstanding;
+                            Double interestrate;
+                            Integer duration;
+                            String loanProvider;
                             int financeSeasonId;
 
                             while (farmerInfoCursor.moveToNext()) {
@@ -593,7 +526,6 @@ public class SyncBackground extends IntentService {
 
                                         String bodyLandInfo = responseBodyLand.string();
 
-                                        //set server id land in local db
                                         JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
                                         if (bodyLandObject.has("id")) {
                                             int infoServerId = bodyLandObject.getInt("id");
@@ -680,13 +612,27 @@ public class SyncBackground extends IntentService {
 
                                         String bodyLandInfo = responseBodyLand.string();
 
-                                        //set server id land in local db
                                         JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
                                         if (bodyLandObject.has("id")) {
                                             int infoServerId = bodyLandObject.getInt("id");
 
+                                            expectedProductionInMt = bodyLandObject.getDouble("expected_production_in_mt");
+                                            forecastedyieldmt = bodyLandObject.getDouble("forecasted_yield_mt");
+                                            forecastedharvestsalevalue = bodyLandObject.getDouble("forecasted_harvest_sale_value");
+                                            totalcooplandsize = bodyLandObject.getDouble("total_coop_land_size");
+                                            farmerpercentageland = bodyLandObject.getDouble("farmer_percentage_land");
+                                            currentpppcommitment = bodyLandObject.getDouble("current_ppp_commitment");
+                                            farmercontributionppp = bodyLandObject.getDouble("farmer_contribution_ppp");
+
                                             ContentValues contentValues = new ContentValues();
                                             contentValues.put(BfwContract.ForecastFarmer.COLUMN_SERVER_ID, infoServerId);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_PRODUCTION_MT, expectedProductionInMt);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_YIELD_MT, forecastedyieldmt);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_PPP_COMMITMENT, currentpppcommitment);
+                                            contentValues.put(BfwContract.ForecastFarmer.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
                                             contentValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 1);
                                             contentValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
 
@@ -697,6 +643,73 @@ public class SyncBackground extends IntentService {
                                 }
                             }
                         }
+
+                        //sync land information if available
+                        farmerInfoCursor = getContentResolver().query(BfwContract.LandPlot.CONTENT_URI, null, landSelection,
+                                new String[]{Long.toString(id)}, null);
+
+                        if (farmerInfoCursor != null) {
+                            long landId;
+                            while (farmerInfoCursor.moveToNext()) {
+
+                                landId = farmerInfoCursor.getInt(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot._ID));
+                                double plotSize = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_PLOT_SIZE));
+                                double lat = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_LAT_INFO));
+                                double lng = farmerInfoCursor.getDouble(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_LNG_INFO));
+
+                                seasonId = farmerInfoCursor.getInt(farmerInfoCursor.getColumnIndex(BfwContract.LandPlot.COLUMN_SEASON_ID));
+
+                                serverSeasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null,
+                                        seasonSelection, new String[]{Long.toString(seasonId)}, null);
+
+                                if (serverSeasonCursor != null) {
+                                    while (serverSeasonCursor.moveToNext()) {
+                                        serverSeasonId = serverSeasonCursor.getInt(serverSeasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_SERVER_ID));
+                                    }
+                                }
+
+                                if (farmerServerId != 0) {
+                                    String plotInfo = "{" +
+                                            "\"plot_size\": " + plotSize + "," +
+                                            "\"lat\": " + lat + "," +
+                                            "\"lng\": " + lng + "," +
+                                            "\"harvest_id\": " + serverSeasonId + "," +
+                                            "\"farmer_id\": " + farmerServerId + "" +
+                                            "}";
+
+                                    String API_INFO = BuildConfig.DEV_API_URL + "farmer.land";
+
+                                    RequestBody bodyLand = RequestBody.create(JSON, plotInfo);
+
+                                    Request requestLand = new Request.Builder()
+                                            .url(API_INFO)
+                                            .header("Content-Type", "text/html")
+                                            .header("Access-Token", appToken)
+                                            .method("POST", bodyLand)
+                                            .build();
+
+                                    Response responseLand = client.newCall(requestLand).execute();
+                                    ResponseBody responseBodyLand = responseLand.body();
+
+                                    if (responseBodyLand != null) {
+                                        String bodyLandInfo = responseBodyLand.string();
+
+                                        JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
+                                        if (bodyLandObject.has("id")) {
+                                            int landServerId = bodyLandObject.getInt("id");
+
+                                            ContentValues contentValues = new ContentValues();
+                                            contentValues.put(BfwContract.LandPlot.COLUMN_SERVER_ID, landServerId);
+                                            contentValues.put(BfwContract.LandPlot.COLUMN_IS_SYNC, 1);
+                                            contentValues.put(BfwContract.LandPlot.COLUMN_IS_UPDATE, 1);
+
+                                            getContentResolver().update(BfwContract.LandPlot.CONTENT_URI, contentValues, landInfo, new String[]{Long.toString(landId)});
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                     } catch (IOException | JSONException exp) {
                         EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
                     }

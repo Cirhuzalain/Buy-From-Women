@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +20,17 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.LandInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallbacks;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class UpdateLandFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener {
 
@@ -36,23 +40,23 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
 
-    private AutoCompleteTextView landSizeHa;
     private Uri mUri;
     private long mFarmerId;
 
-    private TextInputLayout textInputLayout;
-    private AutoCompleteTextView autoCompleteTextView;
-    private String[] newVal;
+    private Cursor cursor;
+    private String seasonName;
+    private int seasonId;
+    private HashMap<String, LandInformation> seasonLand = new HashMap<>();
+    private boolean isDataAvailable;
 
-    //private Button addNewLandLocation;
     private LinearLayout landContainer;
+    private LandInformation landInformation = new LandInformation();
 
     private Switch switchlocationView;
     private AutoCompleteTextView longitude;
     private AutoCompleteTextView latitude;
-
-    private HashMap<String, String[]> mapLand = new HashMap<>();
-    private final String firstSize = UUID.randomUUID().toString();
+    private AutoCompleteTextView landSizeHa;
+    private Spinner harvsetSeason;
 
     public UpdateLandFragment() {
         super();
@@ -68,64 +72,6 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.land_stepper_info, container, false);
-
-        TextView textView = rootView.findViewById(R.id.page_title);
-
-        landSizeHa = rootView.findViewById(R.id.land_size_ha);
-        landContainer = rootView.findViewById(R.id.land_container);
-
-        //switch
-        switchlocationView = rootView.findViewById(R.id.switchlocation);
-        switchlocationView.setText("Check your location here");
-        switchlocationView.setTextOff("Manual");
-        switchlocationView.setTextOn("Automatic");
-
-        longitude = rootView.findViewById(R.id.longitude);
-        latitude = rootView.findViewById(R.id.latitude);
-
-
-        final String firstSize = UUID.randomUUID().toString();
-
-        if (switchlocationView != null){
-            switchlocationView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        //Toast.makeText(getContext(), "Automatic", Toast.LENGTH_LONG).show();
-                        latitude.setText("98,45");
-                        longitude.setText("80,04");
-                        //latitude.setHint("breeee");
-                        latitude.setEnabled(false);
-                        longitude.setEnabled(false);
-                        //longitude.setError("Invalide");
-                    }
-
-                    else {
-                        //Toast.makeText(getContext(),"Manual",Toast.LENGTH_LONG).show();
-                        latitude.setText("");
-                        longitude.setText("");
-                        latitude.setEnabled(true);
-                        longitude.setEnabled(true);
-                    }
-
-                }
-            });
-        }
-
-        textView.setText(getContext().getString(R.string.farmer_land));
-        return rootView;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -137,7 +83,6 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
 
         if (intent.hasExtra("farmerId")) {
             mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.LandPlot.buildLandPlotUri(mFarmerId);
         }
 
     }
@@ -150,13 +95,19 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                BfwContract.Farmer._ID + " =  ? ";
+
+        mUri = BfwContract.LandPlot.buildLandPlotUri(mFarmerId);
+
         if (mUri != null) {
             return new CursorLoader(
                     getActivity(),
                     mUri,
                     null,
-                    null,
-                    null,
+                    farmerSelection,
+                    new String[]{Long.toString(mFarmerId)},
                     null
             );
         }
@@ -164,7 +115,284 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.land_stepper_info, container, false);
+
+        TextView textView = rootView.findViewById(R.id.page_title);
+        textView.setText(getContext().getString(R.string.farmer_land));
+        landSizeHa = rootView.findViewById(R.id.land_size_ha);
+        longitude = rootView.findViewById(R.id.longitude);
+        latitude = rootView.findViewById(R.id.latitude);
+        landContainer = rootView.findViewById(R.id.land_container);
+
+        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+
+        populateSpinner();
+
+        //switch
+        switchlocationView = rootView.findViewById(R.id.switchlocation);
+        switchlocationView.setText(getString(R.string.loc_gps));
+        switchlocationView.setTextOff(getString(R.string.man_gps));
+        switchlocationView.setTextOn(getString(R.string.gps_automatic));
+
+        cursor = (Cursor) harvsetSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+        landInformation = new LandInformation(0.0, 0.0, 0.0, seasonId);
+        seasonLand.put(seasonName, landInformation);
+
+        mPage.getData().putSerializable("land_info", seasonLand);
+
+        if (switchlocationView != null) {
+            switchlocationView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        latitude.setText("");
+                        longitude.setText("");
+                        latitude.setEnabled(false);
+                        longitude.setEnabled(false);
+                        //call fence API for gps update
+                    } else {
+                        latitude.setText("");
+                        longitude.setText("");
+                        latitude.setEnabled(true);
+                        longitude.setEnabled(true);
+                    }
+
+                }
+            });
+        }
+
+        longitude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+
+                    if (seasonLand.containsKey(seasonName)) {
+                        seasonLand.get(seasonName).setLng(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                        LandInformation landInformation = new LandInformation();
+                        landInformation.setLng(Double.parseDouble(charSequence.toString()));
+                        landInformation.setHarvestSeason(seasonId);
+                        seasonLand.put(seasonName, landInformation);
+                    }
+
+                    mPage.getData().putSerializable("land_info", seasonLand);
+
+                } catch (NumberFormatException exp) {
+                    exp.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+        latitude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+                    if (seasonLand.containsKey(seasonName)) {
+                        seasonLand.get(seasonName).setLat(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        LandInformation landInformation = new LandInformation();
+                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                        landInformation.setHarvestSeason(seasonId);
+                        landInformation.setLat(Double.parseDouble(charSequence.toString()));
+                        seasonLand.put(seasonName, landInformation);
+                    }
+
+                    mPage.getData().putSerializable("land_info", seasonLand);
+
+                } catch (NumberFormatException exp) {
+                    exp.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+        landSizeHa.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+                    if (seasonLand.containsKey(seasonName)) {
+                        seasonLand.get(seasonName).setLandSize(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        LandInformation landInformation = new LandInformation();
+                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                        landInformation.setHarvestSeason(seasonId);
+                        landInformation.setLandSize(Double.parseDouble(charSequence.toString()));
+                        seasonLand.put(seasonName, landInformation);
+                    }
+
+                    mPage.getData().putSerializable("land_info", seasonLand);
+
+                } catch (NumberFormatException exp) {
+                    exp.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        return rootView;
+    }
+
+    public void populateSpinner() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvsetSeason.setAdapter(adapter);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if (data != null) {
+            double landSize;
+            double lat;
+            double lng;
+            int seasonId;
+            int landId;
+
+            String seasonName;
+
+            Cursor seasonCursor = null;
+            String farmerSelection = BfwContract.HarvestSeason.TABLE_NAME
+                    + "." + BfwContract.HarvestSeason._ID
+                    + " = ?";
+
+            while (data.moveToNext()) {
+
+                landId = data.getInt(data.getColumnIndex(BfwContract.LandPlot._ID));
+                seasonId = data.getInt(data.getColumnIndex(BfwContract.LandPlot.COLUMN_SEASON_ID));
+                lat = data.getDouble(data.getColumnIndex(BfwContract.LandPlot.COLUMN_LAT_INFO));
+                lng = data.getDouble(data.getColumnIndex(BfwContract.LandPlot.COLUMN_LNG_INFO));
+                landSize = data.getDouble(data.getColumnIndex(BfwContract.LandPlot.COLUMN_PLOT_SIZE));
+
+                try {
+                    seasonCursor = getActivity().getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, farmerSelection,
+                            new String[]{Integer.toString(seasonId)}, null);
+
+                    if (seasonCursor != null) {
+                        seasonCursor.moveToFirst();
+                        seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        landInformation = new LandInformation(landSize, lat, lng, seasonId);
+                        landInformation.setLandId(landId);
+                        seasonLand.put(seasonName, landInformation);
+                        isDataAvailable = true;
+                    }
+                } finally {
+                    if (seasonCursor != null) {
+                        seasonCursor.close();
+                    }
+                }
+            }
+            //set field to default value value inside the spinner
+            cursor = (Cursor) harvsetSeason.getSelectedItem();
+            setLandFarmerItem(cursor);
+            mPage.getData().putSerializable("land_info", seasonLand);
+        }
+    }
+
+    private void setLandFarmerItem(Cursor cursor) {
+
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+        if (isDataAvailable && seasonLand.containsKey(seasonName)) {
+
+            String landInfo = seasonLand.get(seasonName).getLandSize() + "";
+            String latInfo = seasonLand.get(seasonName).getLat() + "";
+            String lngInfo = seasonLand.get(seasonName).getLng() + "";
+
+            landSizeHa.setText(landInfo);
+            longitude.setText(latInfo);
+            latitude.setText(lngInfo);
+
+        } else {
+
+            String landInfo = "";
+            String latInfo = "";
+            String lngInfo = "";
+
+            landSizeHa.setText(landInfo);
+            longitude.setText(latInfo);
+            latitude.setText(lngInfo);
+
+        }
+
+    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -186,7 +414,8 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Cursor cursor = (Cursor) harvsetSeason.getSelectedItem();
+        setLandFarmerItem(cursor);
     }
 
     @Override

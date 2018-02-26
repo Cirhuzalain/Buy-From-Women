@@ -48,7 +48,6 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
         holder.farmerImage.setImageResource(R.drawable.profile);
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME)));
         holder.farmerImage.setImageResource(R.mipmap.male);
-        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
     }
 
     @Override

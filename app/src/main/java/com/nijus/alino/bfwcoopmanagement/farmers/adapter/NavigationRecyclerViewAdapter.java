@@ -1,11 +1,8 @@
 package com.nijus.alino.bfwcoopmanagement.farmers.adapter;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.DetailBuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.DetailFarmerActivity;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.NavigationFragment;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyContents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +51,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
         holder.id_cursor_to_delete = mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer._ID));
 
-        //COLUMN_PHONE
-
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC)) == 1;
         if (isSync) {
             holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
@@ -89,8 +80,7 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         public final ImageView farmerImage;
         public final TextView mUname;
         public final TextView mUphone;
-        public final ImageView imageView,imagedone;
-        public RelativeLayout viewBackground;
+        public final ImageView imageView, imagedone;
         public LinearLayout viewForeground;
         public String id_cursor_to_delete;
         public RelativeLayout iconBack, iconFront, iconContainer;
@@ -103,7 +93,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
             mUname = view.findViewById(R.id.u_name);
             mUphone = view.findViewById(R.id.u_phone);
             imageView = view.findViewById(R.id.u_sync);
-            //id_cursor_to_delete = null;
 
             viewForeground = view.findViewById(R.id.view_foreground);
 
@@ -125,12 +114,8 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
             mCursor.moveToPosition(position);
             int farmerColumnIndex = mCursor.getColumnIndex(BfwContract.Farmer._ID);
             mClickHandler.onClick(mCursor.getLong(farmerColumnIndex), this);
-
-            //si click simple, appel de l'activity  details farmer
-            Intent intent = new Intent(mContext, DetailFarmerActivity.class);
-            intent.putExtra("farmerId", farmerColumnIndex);
-            mContext.startActivity(intent);
         }
+
         private void resetIconYAxis(View view) {
             if (view.getRotationY() != 0) {
                 view.setRotationY(0);
@@ -139,7 +124,7 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
         @Override
         public boolean onLongClick(View view) {
-            //annimation et delete un coop agent
+
             if (!return_if_val_in_array(Integer.valueOf(this.getAdapterPosition()))) {
                 this.iconFront.setVisibility(View.GONE);
                 this.viewForeground.setBackgroundColor(Color.argb(20, 0, 0, 0));
@@ -162,10 +147,10 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
             }
             return true;
         }
-        boolean return_if_val_in_array(int val)
-        {
-            for (int v : listsSelectedItem){
-                if (val == v){
+
+        boolean return_if_val_in_array(int val) {
+            for (int v : listsSelectedItem) {
+                if (val == v) {
                     return true;
                 }
             }

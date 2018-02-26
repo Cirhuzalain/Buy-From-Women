@@ -3,7 +3,6 @@ package com.nijus.alino.bfwcoopmanagement.coops.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,12 +13,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
@@ -36,12 +33,13 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
     private String mParam1;
     private String mParam2;
 
-    private CoopAdapter navigationRecyclerViewAdapter;
+    private CoopAdapter coopAdapter;
     private SwipeRefreshLayout mRefreshData;
 
     public CoopFragment() {
         // Required empty public constructor
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -75,36 +73,27 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
         View view = inflater.inflate(R.layout.fragment_coop_agent, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_coop_Agent);
 
-        TextView textView = view.findViewById(R.id.recyclerview_empty_coop_Agent);
-        textView.setText(R.string.there_s_no_cooperative);
-
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.coopsagent_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        navigationRecyclerViewAdapter = new CoopAdapter(getContext(), emptyView, new CoopAdapter.CoopAdapterOnClickHandler() {
+
+        coopAdapter = new CoopAdapter(getContext(), emptyView, new CoopAdapter.CoopAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, CoopAdapter.ViewHolder vh) {
-                //((CoopFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
-            }
-        }, new CoopAdapter.CoopAdapterOnLongClickHandler() {
-            @Override
-            public void onLongClick(Long farmerId, CoopAdapter.ViewHolder vh) {
-                //((CoopFragment.OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
+                ((OnCoopFragmentInteractionListener) getActivity()).onCoopFragmentInteraction(farmerId, vh);
             }
         });
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
 
-        recyclerView.setAdapter(navigationRecyclerViewAdapter);
-
-        //ADD LISTENER TO RECYCLEVIEW WHEN SWIPPING IT
+        recyclerView.setAdapter(coopAdapter);
 
         //fab coop fragment
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 
@@ -125,7 +114,7 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        navigationRecyclerViewAdapter.swapCursor(data);
+        coopAdapter.swapCursor(data);
         mRefreshData.post(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +125,7 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        navigationRecyclerViewAdapter.swapCursor(null);
+        coopAdapter.swapCursor(null);
     }
 
     @Override
@@ -148,10 +137,11 @@ public class CoopFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onClick(View view) {
 
         if (view.getId() == R.id.fab) {
-            //Toast.makeText(getContext(), "breee clic fab", Toast.LENGTH_LONG).show();
-            //Intent intent  = new Intent(getActivity(), CreateCoopActivity.class);
             startActivity(new Intent(getActivity(), CreateCoopActivity.class));
-            //startActivity(new Intent(getActivity(), CreateVendorActivity.class));
         }
+    }
+
+    public interface OnCoopFragmentInteractionListener {
+        void onCoopFragmentInteraction(long item, CoopAdapter.ViewHolder vh);
     }
 }

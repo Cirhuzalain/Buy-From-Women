@@ -25,7 +25,6 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Abstract
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.ModelCallbacks;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.AccessToInformation;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BankInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BaseLine;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Demographic;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
@@ -42,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.

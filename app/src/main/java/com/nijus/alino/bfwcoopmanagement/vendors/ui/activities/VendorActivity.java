@@ -147,32 +147,6 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
         final AccordionView access_info_accordion = findViewById(R.id.access_info_accordion);
         access_info_accordion.setHeadingString("ACCESS TO INFORMATION");
 
-        ImageView pic_agri_extension_details = findViewById(R.id.pic_agri_extension_details);
-        pic_agri_extension_details.setImageResource(R.mipmap.icon_sm_error);
-
-        ImageView pic_clim_rel_details = findViewById(R.id.pic_clim_rel_details);
-        pic_clim_rel_details.setImageResource(R.mipmap.icon_sm_error);
-
-        ImageView pic_seed_details = findViewById(R.id.pic_seed_details);
-        pic_seed_details.setImageResource(R.mipmap.icon_sm_error);
-
-        ImageView pic_org_fert_details = findViewById(R.id.pic_org_fert_details);
-        pic_org_fert_details.setImageResource(R.mipmap.icon_sm_error);
-
-           /* ImageView pic_inorg_fert_details = findViewById(R.id.pic_inorg_fert_details2);
-            pic_inorg_fert_details.setImageResource((inorganic_fertilizer == 1)? R.mipmap.icon_sm_ok:R.mipmap.icon_sm_error);*/
-
-        ImageView pic_labour_details = findViewById(R.id.pic_labour_details);
-        pic_labour_details.setImageResource(R.mipmap.icon_sm_error);
-
-        ImageView pic_irr_w_p_details = findViewById(R.id.pic_irr_w_p_details);
-        pic_irr_w_p_details.setImageResource(R.mipmap.icon_sm_error);
-
-        ImageView pic_spread_or_spray_details = findViewById(R.id.pic_spread_or_spray_details);
-        pic_spread_or_spray_details.setImageResource(R.mipmap.icon_sm_error);
-
-        //second
-
         ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
         pic_agri_extension_details2.setImageResource(R.mipmap.icon_sm_error);
 

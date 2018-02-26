@@ -15,6 +15,7 @@ public class Demographic implements Parcelable {
     private String spouseLastName;
     private String cellPhoneAlt;
     private String cellCarrier;
+    private String seasonName;
 
     public Demographic() {
 
@@ -37,6 +38,7 @@ public class Demographic implements Parcelable {
         this.spouseLastName = data.readString();
         this.cellPhoneAlt = data.readString();
         this.cellCarrier = data.readString();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -52,6 +54,23 @@ public class Demographic implements Parcelable {
         parcel.writeString(spouseLastName);
         parcel.writeString(cellPhoneAlt);
         parcel.writeString(cellCarrier);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public boolean isHouseHoldHead() {
+        return isHouseHoldHead;
+    }
+
+    public void setHouseHoldHead(boolean houseHoldHead) {
+        isHouseHoldHead = houseHoldHead;
     }
 
     public boolean isHouseHold() {

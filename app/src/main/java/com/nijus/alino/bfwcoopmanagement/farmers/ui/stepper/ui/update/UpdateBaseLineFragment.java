@@ -10,12 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -24,7 +27,9 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BaseLine;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallbacks;
 
-public class UpdateBaseLineFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+import java.util.HashMap;
+
+public class UpdateBaseLineFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener {
 
     public static final String ARG_KEY = "key";
     private String mKey;
@@ -33,7 +38,14 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
     private Uri mUri;
     private long mFarmerId;
 
+    private Cursor cursor;
+    private String seasonName;
+    private int seasonId;
+    private HashMap<String, BaseLine> seasonBaseline = new HashMap<>();
+
     private BaseLine baseLine = new BaseLine();
+    private Spinner harvsetSeason;
+    private boolean isDataAvailable;
 
     private AutoCompleteTextView totProdKg;
     private AutoCompleteTextView totLostKg;
@@ -68,7 +80,6 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
 
         if (intent.hasExtra("farmerId")) {
             mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
     }
 
@@ -83,6 +94,8 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
         String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
                 BfwContract.Farmer._ID + " =  ? ";
 
+        mUri = BfwContract.BaselineFarmer.buildBaselineFarmerUri(mFarmerId);
+
         if (mUri != null) {
             return new CursorLoader(
                     getActivity(),
@@ -95,41 +108,6 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
         }
         return null;
     }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            Double totProd = 0.0;
-            Double totLost = 0.0;
-            Double totSolKg = 0.0;
-            Double totVSoldCoop = 0.0;
-            Double priceSoldCoop = 0.0;
-            Double totVolSKg = 0.0;
-            Double priceSold = 0.0;
-
-            totProdKg.setText("" + totProd + "");
-            totLostKg.setText("" + totLost + "");
-            totSoldKg.setText("" + totSolKg + "");
-            totVolSoldCoops.setText("" + totVSoldCoop + "");
-            priceSoldToCoop.setText("" + priceSoldCoop + "");
-            totVolSoldKg.setText("" + totVolSKg + "");
-            priceSoldKg.setText("" + priceSold + "");
-
-            baseLine.setTotProdInKg(totProd);
-            baseLine.setTotLostInKg(totLost);
-            baseLine.setTotSoldInKg(totSolKg);
-            baseLine.setTotVolumeSoldCoopInKg(totVSoldCoop);
-            baseLine.setPriceSoldToCoopPerKg(priceSoldCoop);
-            baseLine.setTotVolSoldInKg(totVolSKg);
-            baseLine.setPriceSoldInKg(priceSold);
-            mPage.getData().putParcelable("baseline", baseLine);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,6 +126,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
         totVolSoldKg = rootView.findViewById(R.id.tot_vol_side_sold);
         priceSoldKg = rootView.findViewById(R.id.pr_sold_kg);
 
+        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvsetSeason.setOnItemSelectedListener(this);
+
+        populateSpinner();
+
+        //set default value
+        cursor = (Cursor) harvsetSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        baseLine = new BaseLine(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, seasonId);
+        seasonBaseline.put(seasonName, baseLine);
+
+        mPage.getData().putSerializable("baseline", seasonBaseline);
+
         totProdKg.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -157,8 +149,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotProdInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setTotProdInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setTotProdInKg(Double.parseDouble(charSequence.toString()));
+                        baseLine.setHarvestSeason(seasonId);
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -179,8 +183,21 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotLostInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setTotLostInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setTotLostInKg(Double.parseDouble(charSequence.toString()));
+                        baseLine.setHarvestSeason(seasonId);
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -201,8 +218,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotSoldInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setTotSoldInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setTotSoldInKg(Double.parseDouble(charSequence.toString()));
+                        baseLine.setHarvestSeason(seasonId);
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -224,8 +253,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotVolumeSoldCoopInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setTotVolumeSoldCoopInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setTotVolumeSoldCoopInKg(Double.parseDouble(charSequence.toString()));
+                        baseLine.setHarvestSeason(seasonId);
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -247,8 +288,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setPriceSoldToCoopPerKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setPriceSoldToCoopPerKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setHarvestSeason(seasonId);
+                        baseLine.setPriceSoldToCoopPerKg(Double.parseDouble(charSequence.toString()));
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -270,8 +323,20 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setTotVolSoldInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setTotVolSoldInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setHarvestSeason(seasonId);
+                        baseLine.setTotVolSoldInKg(Double.parseDouble(charSequence.toString()));
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -293,8 +358,19 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    baseLine.setPriceSoldInKg(Double.parseDouble(charSequence.toString()));
-                    mPage.getData().putParcelable("baseline", baseLine);
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    if (seasonBaseline.containsKey(seasonName)) {
+                        seasonBaseline.get(seasonName).setPriceSoldInKg(Double.parseDouble(charSequence.toString()));
+                    } else {
+                        BaseLine baseLine = new BaseLine();
+                        baseLine.setHarvestSeason(seasonId);
+                        baseLine.setPriceSoldInKg(Double.parseDouble(charSequence.toString()));
+                        seasonBaseline.put(seasonName, baseLine);
+                    }
+                    mPage.getData().putSerializable("baseline", seasonBaseline);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -308,6 +384,150 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null) {
+            Double totProd;
+            Double totLost;
+            Double totSolKg;
+            Double totVSoldCoop;
+            Double priceSoldCoop;
+            Double totVolSKg;
+            Double priceSold;
+
+            int seasonId;
+            int forecastId;
+            String seasonName;
+
+            Cursor seasonCursor = null;
+            String farmerSelection = BfwContract.HarvestSeason.TABLE_NAME
+                    + "." + BfwContract.HarvestSeason._ID
+                    + " = ?";
+
+            while (data.moveToNext()) {
+                seasonId = data.getInt(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_SEASON_ID));
+                forecastId = data.getInt(data.getColumnIndex(BfwContract.BaselineFarmer._ID));
+
+                totProd = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_TOT_PROD_B_KG));
+                totLost = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_TOT_LOST_KG));
+                totSolKg = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_TOT_SOLD_KG));
+                totVSoldCoop = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_TOT_VOL_SOLD_COOP));
+                priceSoldCoop = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_PRICE_SOLD_COOP_PER_KG));
+                totVolSKg = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_TOT_VOL_SOLD_IN_KG));
+                priceSold = data.getDouble(data.getColumnIndex(BfwContract.BaselineFarmer.COLUMN_PRICE_SOLD_KG));
+
+                try {
+                    seasonCursor = getActivity().getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, farmerSelection,
+                            new String[]{Integer.toString(seasonId)}, null);
+
+                    if (seasonCursor != null) {
+                        seasonCursor.moveToFirst();
+                        seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        baseLine = new BaseLine(totProd, totLost, totSolKg, totVSoldCoop, priceSoldCoop, totVolSKg, priceSold, seasonId);
+                        baseLine.setBaselineId(forecastId);
+                        seasonBaseline.put(seasonName, baseLine);
+                        isDataAvailable = true;
+                    }
+                } finally {
+                    if (seasonCursor != null) {
+                        seasonCursor.close();
+                    }
+                }
+            }
+
+            //set field to default value value inside the spinner
+            cursor = (Cursor) harvsetSeason.getSelectedItem();
+            setBaselineFarmerItem(cursor);
+            mPage.getData().putSerializable("baseline", seasonBaseline);
+        }
+    }
+
+    private void setBaselineFarmerItem(Cursor cursor) {
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+        if (isDataAvailable && seasonBaseline.containsKey(seasonName)) {
+
+            String prodInfo = seasonBaseline.get(seasonName).getTotProdInKg() + "";
+            String soldInfo = seasonBaseline.get(seasonName).getTotSoldInKg() + "";
+            String lostInfo = seasonBaseline.get(seasonName).getTotLostInKg() + "";
+            String volCoopInfo = seasonBaseline.get(seasonName).getTotVolumeSoldCoopInKg() + "";
+            String priceCoopInfo = seasonBaseline.get(seasonName).getPriceSoldToCoopPerKg() + "";
+            String totVolSoldInfo = seasonBaseline.get(seasonName).getTotVolSoldInKg() + "";
+            String priceSoldInfo = seasonBaseline.get(seasonName).getPriceSoldInKg() + "";
+
+            totProdKg.setText(prodInfo);
+            totLostKg.setText(lostInfo);
+            totSoldKg.setText(soldInfo);
+            totVolSoldCoops.setText(volCoopInfo);
+            priceSoldToCoop.setText(priceCoopInfo);
+            totVolSoldKg.setText(totVolSoldInfo);
+            priceSoldKg.setText(priceSoldInfo);
+
+        } else {
+
+            String prodInfo = "";
+            String soldInfo = "";
+            String lostInfo = "";
+            String volCoopInfo = "";
+            String priceCoopInfo = "";
+            String totVolSoldInfo = "";
+            String priceSoldInfo = "";
+
+            totProdKg.setText(prodInfo);
+            totLostKg.setText(lostInfo);
+            totSoldKg.setText(soldInfo);
+            totVolSoldCoops.setText(volCoopInfo);
+            priceSoldToCoop.setText(priceCoopInfo);
+            totVolSoldKg.setText(totVolSoldInfo);
+            priceSoldKg.setText(priceSoldInfo);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Cursor cursor = (Cursor) harvsetSeason.getSelectedItem();
+        setBaselineFarmerItem(cursor);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    public void populateSpinner() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvsetSeason.setAdapter(adapter);
+        }
     }
 
     @Override

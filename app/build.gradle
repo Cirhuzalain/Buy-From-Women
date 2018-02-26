@@ -18,8 +18,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         buildTypes.each {
-            it.buildConfigField 'String', 'DEV_API_URL', "\"http://13.90.147.208:8069/api/\""
-            it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://13.90.147.208:1993/\""
+            it.buildConfigField 'String', 'DEV_API_URL', "\"http://52.234.227.106:8069/api/\""
+            it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://52.234.227.106:1993/\""
             it.buildConfigField 'String', 'DEV_DB_NAME', "\"bfwend\""
         }
     }
@@ -62,7 +62,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:27.0.2'
     compile 'com.android.support:cardview-v7:27.0.2'
     compile 'com.android.support:support-vector-drawable:27.0.2'
-    //add ACCORDION DEPENDEBCES
     compile 'com.riyagayasen.android:easyaccordion:1.0.3'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'

@@ -2,6 +2,7 @@ package com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -84,7 +85,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(getContext(), emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
             public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
-                // ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
+                ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
             }
         });
 
@@ -147,8 +148,23 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), BfwContract.Farmer.CONTENT_URI, null, null, null,
-                null);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+        if (groupName.equals("Agent")) {
+            int serverId = prefs.getInt(getResources().getString(R.string.coop_id), 1);
+
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " =  ? ";
+            return new CursorLoader(getActivity(), BfwContract.Farmer.CONTENT_URI, null, farmerSelection, new String[]{Integer.toString(serverId)},
+                    null);
+        } else {
+            return new CursorLoader(getActivity(), BfwContract.Farmer.CONTENT_URI, null, null, null,
+                    null);
+        }
+
     }
 
     @Override

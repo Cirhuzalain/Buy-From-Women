@@ -13,9 +13,11 @@ public class LandInformation implements Parcelable {
     private double lat;
     private double lng;
     private int harvestSeason;
+    private int landId;
+    private String seasonName;
 
     public LandInformation() {
-
+        this.landId = 0;
     }
 
     public LandInformation(double landSize, double lat, double lng, int harvestSeason) {
@@ -30,6 +32,8 @@ public class LandInformation implements Parcelable {
         this.lat = data.readDouble();
         this.lng = data.readDouble();
         this.harvestSeason = data.readInt();
+        this.landId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -43,6 +47,24 @@ public class LandInformation implements Parcelable {
         parcel.writeDouble(lat);
         parcel.writeDouble(lng);
         parcel.writeInt(harvestSeason);
+        parcel.writeInt(landId);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getLandId() {
+        return landId;
+    }
+
+    public void setLandId(int landId) {
+        this.landId = landId;
     }
 
     public double getLat() {

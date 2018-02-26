@@ -48,6 +48,7 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     private PageFragmentCallbacks mCallbacks;
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
+    private AutoCompleteTextView addressView;
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
@@ -112,37 +113,6 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-
-            String name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
-            String phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
-            String gender = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_GENDER));
-
-            coopId = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_COOP_USER_ID));
-            if (gender.equals("male")) {
-                male.setChecked(true);
-            } else {
-                female.setChecked(true);
-            }
-            names.setText(name);
-            phoneNumber.setText(phone);
-            general.setName(name);
-            general.setPhoneNumber(phone);
-            mPage.setData("general", general);
-
-            setDefaultGender();
-
-            setSpinnerItemById(spinner, coopId);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -181,13 +151,11 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
 
         names = rootView.findViewById(R.id.name_f);
         phoneNumber = rootView.findViewById(R.id.name_phone);
+        addressView = rootView.findViewById(R.id.address);
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
         spinner = rootView.findViewById(R.id.spinner_coops_infos);
         mGenderGroup = rootView.findViewById(R.id.gender_group);
-
-        //set default gender
-        setDefaultGender();
 
         //listen for change on gender
         mGenderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -243,14 +211,54 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
         return rootView;
     }
 
-    public void setDefaultGender() {
-        if (mGenderGroup.getCheckedRadioButtonId() == R.id.radio_male) {
-            general.setGender(true);
-            mPage.getData().putParcelable("general", general);
-        } else if (mGenderGroup.getCheckedRadioButtonId() == R.id.radio_female) {
-            general.setGender(false);
-            mPage.getData().putParcelable("general", general);
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+
+            String name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
+            String phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
+            String gender = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_GENDER));
+            String address = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_ADDRESS));
+
+            coopId = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_COOP_USER_ID));
+            if (gender.equals("male")) {
+                male.setChecked(true);
+            } else {
+                female.setChecked(true);
+            }
+            names.setText(name);
+            phoneNumber.setText(phone);
+
+            if (address == null || address.equals("null")) {
+                addressView.setText("");
+            } else {
+                addressView.setText(address);
+            }
+
+            general.setName(name);
+            general.setAddress(address);
+            general.setPhoneNumber(phone);
+            mPage.setData("general", general);
+
+            setDefaultGender(gender);
+
+            setSpinnerItemById(spinner, coopId);
         }
+    }
+
+
+    public void setDefaultGender(String gender) {
+        if (gender.equals("male")) {
+            general.setGender(true);
+            male.setChecked(true);
+            mPage.getData().putParcelable("general", general);
+        } else if (gender.equals("female")) {
+            general.setGender(false);
+            female.setChecked(true);
+        }
+        mPage.getData().putParcelable("general", general);
+
     }
 
     public void populateSpinner() {
@@ -285,6 +293,11 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     }
 
     @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mCallbacks = (PageFragmentCallbacks) context;
@@ -300,7 +313,7 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         Cursor cursor = (Cursor) spinner.getSelectedItem();
-        general.setCoopsName(cursor.getString(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+        general.setCoopId(cursor.getInt(cursor.getColumnIndex(BfwContract.Coops._ID)));
         mPage.setData("general", general);
     }
 
@@ -308,10 +321,10 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
             Cursor value = (Cursor) spinner.getItemAtPosition(i);
-            long id = value.getLong(value.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));
+            long id = value.getLong(value.getColumnIndex(BfwContract.Coops._ID));
             if (id == _id) {
                 spinner.setSelection(i);
-                general.setCoopsName(value.getString(value.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+                general.setCoopId(value.getInt(value.getColumnIndex(BfwContract.Coops._ID)));
                 mPage.setData("general", general);
             }
         }

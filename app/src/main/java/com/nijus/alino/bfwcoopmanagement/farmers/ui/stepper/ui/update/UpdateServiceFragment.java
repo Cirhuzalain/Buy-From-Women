@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +54,8 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
 
 
     private AutoCompleteTextView safeStorage_text;
-    private AutoCompleteTextView other_text;
-    private AutoCompleteTextView other_text2;
+    private AutoCompleteTextView newResources;
+    private AutoCompleteTextView otherwatersource;
 
 
     public UpdateServiceFragment() {
@@ -113,16 +115,8 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            /*int aggriExt = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_AGRI_EXTENSION_SERV));
-            int cInfo = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_CLIMATE_RELATED_INFO));
-            int seedInf = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SEEDS));
-            int organicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_ORGANIC_FERTILIZER));
-            int inorganicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_INORGANIC_FERTILIZER));
-            int isLabour = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LABOUR));
-            int isWp = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_PUMPS));*/
             int isTract = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRACTORS));
             int harv = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HARVESTER));
-            //int cSprayer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SPRAYERS));
             int cDryer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DRYER));
             int cTresher = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRESHER));
             int safeStor = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SAFE_STORAGE));
@@ -136,6 +130,33 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
             int cnoWater = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_NONE));
             int cother = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER));
 
+            String storageDetail = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_STORAGE_DETAIL));
+            String otherResources = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NEW_SOURCE_DETAIL));
+            String otherWater = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS));
+
+            if (storageDetail == null || storageDetail.equals("null")) {
+                safeStorage_text.setText("");
+                serviceAccess.setStorageDetails(null);
+            } else {
+                safeStorage_text.setText(storageDetail);
+                serviceAccess.setStorageDetails(storageDetail);
+            }
+
+            if (otherResources == null || otherResources.equals("null")) {
+                newResources.setText("");
+                serviceAccess.setNewResourcesDetails(null);
+            } else {
+                newResources.setText(otherResources);
+                serviceAccess.setNewResourcesDetails(otherResources);
+            }
+
+            if (otherWater == null || otherWater.equals("null")) {
+                otherwatersource.setText("");
+                serviceAccess.setNewResourcesDetails(null);
+            } else {
+                otherwatersource.setText(otherWater);
+                serviceAccess.setNewResourcesDetails(otherWater);
+            }
 
 
             if (isTract == 1) {
@@ -308,12 +329,11 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
 
         eOther = rootView.findViewById(R.id.e_other_main);
         boolean isEOther = eOther.isActivated();
-        //serviceAccess.setOrganicFertilizers(isEOther);
+        serviceAccess.setOtherInfo(isEOther);
 
-        //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.new_resources);
-        other_text2= rootView.findViewById(R.id.other_water_source);
+        newResources = rootView.findViewById(R.id.new_resources);
+        otherwatersource = rootView.findViewById(R.id.other_water_source);
 
         mPage.getData().putParcelable("serviceAccess", serviceAccess);
 
@@ -371,6 +391,23 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
                 if (b) {
                     safeStorage_text.setVisibility(View.VISIBLE);
                     serviceAccess.setSafeStorage(true);
+                    safeStorage_text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setStorageDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     safeStorage_text.setText("");
                     safeStorage_text.setVisibility(View.GONE);
@@ -383,12 +420,29 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text.setVisibility(View.VISIBLE);
+                    newResources.setVisibility(View.VISIBLE);
                     serviceAccess.setOtherResourceInfo(true);
+                    newResources.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setNewResourcesDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     serviceAccess.setOtherResourceInfo(false);
-                    other_text.setText("");
-                    other_text.setVisibility(View.GONE);
+                    newResources.setText("");
+                    newResources.setVisibility(View.GONE);
                 }
                 mPage.getData().putParcelable("serviceAccess", serviceAccess);
             }
@@ -482,11 +536,28 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text2.setVisibility(View.VISIBLE);
+                    otherwatersource.setVisibility(View.VISIBLE);
                     serviceAccess.setOtherInfo(true);
+                    otherwatersource.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setMainWaterSourceDetails(charSequence.toString());
+                            mPage.setData("serviceAccess", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
-                    other_text2.setVisibility(View.GONE);
-                    other_text2.setText("");
+                    otherwatersource.setVisibility(View.GONE);
+                    otherwatersource.setText("");
                     serviceAccess.setOtherInfo(false);
                 }
                 mPage.getData().putParcelable("serviceAccess", serviceAccess);

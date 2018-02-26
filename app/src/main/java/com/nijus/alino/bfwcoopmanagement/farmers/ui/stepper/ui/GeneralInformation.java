@@ -41,6 +41,7 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
     private PageFragmentCallbacks mCallbacks;
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
+    private AutoCompleteTextView addressTextView;
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
@@ -107,6 +108,7 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
 
         names = rootView.findViewById(R.id.name_f);
         phoneNumber = rootView.findViewById(R.id.name_phone);
+        addressTextView = rootView.findViewById(R.id.address);
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
         spinner = rootView.findViewById(R.id.spinner_coops_infos);
@@ -149,6 +151,24 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        addressTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                general.setAddress(charSequence.toString());
+                mPage.setData("general", general);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 

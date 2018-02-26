@@ -13,17 +13,19 @@ public class AccessToInformation implements Parcelable {
     private boolean isLabour;
     private boolean isWaterPumps;
     private boolean isSpreaderOrSprayer;
+    private int seasonId;
+    private int infoId;
 
     private String harvsetSeason;
 
 
     public AccessToInformation() {
-
+        this.infoId = 0;
     }
 
     public AccessToInformation(String harvsetSeason, boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
                                boolean isOrganicFertilizers, boolean isInorganicFertilizers, boolean isLabour,
-                               boolean isWaterPumps, boolean isSpreaderOrSprayer){
+                               boolean isWaterPumps, boolean isSpreaderOrSprayer, int seasonId) {
         this.isAgricultureExtension = isAgricultureExtension;
         this.isClimateRelatedInformation = isClimateRelatedInformation;
         this.isSeed = isSeed;
@@ -32,13 +34,12 @@ public class AccessToInformation implements Parcelable {
         this.isLabour = isLabour;
         this.isWaterPumps = isWaterPumps;
         this.isSpreaderOrSprayer = isSpreaderOrSprayer;
-
         this.harvsetSeason = harvsetSeason;
+        this.seasonId = seasonId;
     }
 
 
     public AccessToInformation(Parcel source) {
-        //this.landSize = data.readDouble();
         this.isAgricultureExtension = source.readByte() != 0;
         this.isClimateRelatedInformation = source.readByte() != 0;
         this.isSeed = source.readByte() != 0;
@@ -49,7 +50,8 @@ public class AccessToInformation implements Parcelable {
         this.isSpreaderOrSprayer = source.readByte() != 0;
 
         this.harvsetSeason = source.readString();
-
+        this.seasonId = source.readInt();
+        this.infoId = source.readInt();
     }
 
     @Override
@@ -59,8 +61,6 @@ public class AccessToInformation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        //parcel.writeDouble(landSize);
-        parcel.writeString(harvsetSeason);
         parcel.writeByte((byte) (isAgricultureExtension ? 1 : 0));
         parcel.writeByte((byte) (isClimateRelatedInformation ? 1 : 0));
         parcel.writeByte((byte) (isSeed ? 1 : 0));
@@ -68,7 +68,25 @@ public class AccessToInformation implements Parcelable {
         parcel.writeByte((byte) (isInorganicFertilizers ? 1 : 0));
         parcel.writeByte((byte) (isLabour ? 1 : 0));
         parcel.writeByte((byte) (isSpreaderOrSprayer ? 1 : 0));
+        parcel.writeString(harvsetSeason);
+        parcel.writeInt(seasonId);
+        parcel.writeInt(infoId);
+    }
 
+    public int getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(int seasonId) {
+        this.seasonId = seasonId;
+    }
+
+    public int getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(int infoId) {
+        this.infoId = infoId;
     }
 
     public String getHarvsetSeason() {

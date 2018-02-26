@@ -34,12 +34,10 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileActivityAdmin extends BaseActivity{
+public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener {
 
     private MenuInflater inflater;
-    //This is our tablayout
     private TabLayout tabLayout;
-    //This is our viewPager
     private ViewPager viewPager;
 
     //Fragments
@@ -48,9 +46,6 @@ public class UserProfileActivityAdmin extends BaseActivity{
     CoopFragment coopFragment;
     NavigationFragment farmer_fragment;
     CoopAgentFragment coopAgentFragment;
-
-    String[] tabTitle = {"vendor", "Coops", "Buyer"};
-    int[] unreadCount = {5, 6, 8};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +112,19 @@ public class UserProfileActivityAdmin extends BaseActivity{
         }
     }
 
+    @Override
+    public void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh) {
+        Intent intent = new Intent(this, DetailFarmerActivity.class);
+        intent.putExtra("farmerId", item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCoopFragmentInteraction(long item, CoopAdapter.ViewHolder vh) {
+        Intent intent = new Intent(this, DetailCoopActivity.class);
+        intent.putExtra("coopId", item);
+        startActivity(intent);
+    }
 
     @Override
     public void onNewIntent(Intent intent) {
@@ -156,18 +164,5 @@ public class UserProfileActivityAdmin extends BaseActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private View prepareTabView(int pos) {
-        View view = getLayoutInflater().inflate(R.layout.custom_tab_u_p, null);
-        TextView tv_title = view.findViewById(R.id.tv_title);
-        TextView tv_count = view.findViewById(R.id.tv_count);
-        tv_title.setText(tabTitle[pos]);
-        if (unreadCount[pos] > 0) {
-            tv_count.setVisibility(View.VISIBLE);
-            tv_count.setText("" + unreadCount[pos]);
-        } else
-            tv_count.setVisibility(View.GONE);
-        return view;
     }
 }

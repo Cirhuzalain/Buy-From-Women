@@ -24,11 +24,13 @@ import com.nijus.alino.bfwcoopmanagement.farmers.sync.UpdateFarmerService;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.AbstractWizardModel;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.ModelCallbacks;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BaseLine;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Demographic;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Forecast;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.General;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.LandInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.ServiceAccess;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallbacks;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.StepPagerStrip;
@@ -178,7 +180,6 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button_update) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                //Update Farmer data
                 updateFarmer();
 
             } else {
@@ -193,7 +194,6 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button_update) {
-            //Update farmer data
             updateFarmer();
         }
 
@@ -201,17 +201,18 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
 
     public void updateFarmer() {
         //Get each page data
-        //check if first page is filled if not hide progress dialog and show error message
         for (Page page : mCurrentPageSequence) {
             Bundle data = page.getData();
 
             boolean isData = data.containsKey("general");
-            boolean isLandInfo = data.containsKey("land_info");
-            boolean isForecast = data.containsKey("forecast");
             boolean isDemographic = data.containsKey("demographic");
+            boolean isService = data.containsKey("serviceAccess");
+
+            boolean isForecast = data.containsKey("forecast");
             boolean isBaseline = data.containsKey("baseline");
             boolean isFinance = data.containsKey("finance");
-            boolean isService = data.containsKey("serviceAccess");
+            boolean isAccessToInformation = data.containsKey("accessToInformation");
+            boolean isLandInfo = data.containsKey("land_info");
 
             if (isData) {
                 General general = data.getParcelable("general");
@@ -223,32 +224,40 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
                 }
                 saveBundle.putParcelable("general", general);
             }
-
-            if (isLandInfo) {
-                HashMap map = (HashMap) data.getSerializable("land_info");
-                saveBundle.putSerializable("land_info", map);
-            }
-
-            if (isForecast) {
-                Forecast forecast = data.getParcelable("forecast");
-                saveBundle.putParcelable("forecast", forecast);
-            }
             if (isDemographic) {
                 Demographic demographic = data.getParcelable("demographic");
                 saveBundle.putParcelable("demographic", demographic);
-            }
-            if (isBaseline) {
-                BaseLine baseLine = data.getParcelable("baseline");
-                saveBundle.putParcelable("baseline", baseLine);
-            }
-            if (isFinance) {
-                Finance finance = data.getParcelable("finance");
-                saveBundle.putParcelable("finance", finance);
             }
             if (isService) {
                 ServiceAccess serviceAccess = data.getParcelable("serviceAccess");
                 saveBundle.putParcelable("serviceAccess", serviceAccess);
             }
+
+            if (isLandInfo) {
+                HashMap<String, LandInformation> landInfo = (HashMap<String, LandInformation>) data.getSerializable("land_info");
+                saveBundle.putSerializable("land_info", landInfo);
+            }
+
+            if (isForecast) {
+                HashMap<String, Forecast> forecast = (HashMap<String, Forecast>) data.getSerializable("forecast");
+                saveBundle.putSerializable("forecast", forecast);
+
+            }
+            if (isBaseline) {
+                HashMap<String, BaseLine> baseline = (HashMap<String, BaseLine>) data.getSerializable("baseline");
+                saveBundle.putSerializable("baseline", baseline);
+
+            }
+            if (isFinance) {
+                HashMap<String, Finance> finance = (HashMap<String, Finance>) data.getSerializable("finance");
+                saveBundle.putSerializable("finance", finance);
+            }
+
+            if (isAccessToInformation) {
+                HashMap<String, AccessToInformation> accessInfoMap = (HashMap<String, AccessToInformation>) data.getSerializable("accessToInformation");
+                saveBundle.putSerializable("accessToInformation", accessInfoMap);
+            }
+
         }
         Intent intent = new Intent(getContext(), UpdateFarmerService.class);
         intent.putExtra("farmer_data", saveBundle);
@@ -268,6 +277,7 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         progressDialog.dismiss();
         Toast.makeText(getContext(), getResources().getString(R.string.update_msg), Toast.LENGTH_SHORT).show();
+        getActivity().finish();
     }
 
     /**

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * AvailableRessourcesFragment data
+ * Available Resources Fragment data
  */
 
 public class BaseLine implements Parcelable {
@@ -17,10 +17,12 @@ public class BaseLine implements Parcelable {
     private Double totVolSoldInKg;
     private Double priceSoldInKg;
     private int harvestSeason;
+    private int baselineId;
+    private String seasonName;
 
 
     public BaseLine() {
-
+        this.baselineId = 0;
     }
 
     public BaseLine(Double totProdInKg, Double totLostInKg, Double totSoldInKg, Double totVolumeSoldCoopInKg,
@@ -44,6 +46,8 @@ public class BaseLine implements Parcelable {
         this.totVolSoldInKg = data.readDouble();
         this.priceSoldInKg = data.readDouble();
         this.harvestSeason = data.readInt();
+        this.baselineId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -61,6 +65,24 @@ public class BaseLine implements Parcelable {
         parcel.writeDouble(totVolSoldInKg);
         parcel.writeDouble(priceSoldInKg);
         parcel.writeInt(harvestSeason);
+        parcel.writeInt(baselineId);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getBaselineId() {
+        return baselineId;
+    }
+
+    public void setBaselineId(int baselineId) {
+        this.baselineId = baselineId;
     }
 
     public int getHarvestSeason() {

@@ -71,7 +71,7 @@ public class ForecastFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.forecast));
 
-        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvsetSeason = rootView.findViewById(R.id.harvestSeason);
 
         numLandPlot = rootView.findViewById(R.id.num_land);
         minimumflowprice = rootView.findViewById(R.id.minimumflowprice);
@@ -91,6 +91,7 @@ public class ForecastFragment extends Fragment {
         forecast.setFarmerexpectedminppp(0.0);
         forecast.setHarvestSeason(seasonId);
         seasonForecast.put(seasonName, forecast);
+        mPage.getData().putSerializable("forecast", seasonForecast);
 
 
         minimumflowprice.addTextChangedListener(new TextWatcher() {

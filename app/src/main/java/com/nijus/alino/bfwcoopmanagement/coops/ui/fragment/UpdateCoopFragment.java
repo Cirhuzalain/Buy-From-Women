@@ -179,8 +179,8 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button_update) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                //Update Farmer data
-                updateCoop();
+                //updateCoop();
+                Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -194,8 +194,8 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button_update) {
-            //Update farmer data
-            updateCoop();
+            //updateCoop();
+            Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
         }
 
     }

@@ -23,9 +23,11 @@ public class Finance implements Parcelable {
     private int durationInMonth;
     private String loanProvider;
     private int harvestSeason;
+    private int financeId;
+    private String seasonName;
 
     public Finance() {
-
+        this.financeId = 0;
     }
 
     public Finance(boolean isOutstandingLoan, boolean hasMobileMoneyAccount, boolean isInput, boolean isAggregation,
@@ -56,6 +58,8 @@ public class Finance implements Parcelable {
         this.durationInMonth = data.readInt();
         this.loanProvider = data.readString();
         this.harvestSeason = data.readInt();
+        this.financeId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -76,6 +80,24 @@ public class Finance implements Parcelable {
         parcel.writeInt(durationInMonth);
         parcel.writeString(loanProvider);
         parcel.writeInt(harvestSeason);
+        parcel.writeInt(financeId);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(int financeId) {
+        this.financeId = financeId;
     }
 
     public int getHarvestSeason() {

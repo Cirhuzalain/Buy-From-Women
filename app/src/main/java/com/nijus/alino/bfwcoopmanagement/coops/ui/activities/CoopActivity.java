@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.DetailFarmerActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.ViewCoopsSalePurchase;
@@ -25,12 +26,6 @@ public class CoopActivity extends BaseActivity  {
         setContentView(R.layout.activity_coop);
     }
 
-  /*  @Override
-    public void onFragmentInteraction(long id, CoopAdapter.ViewHolder vh) {
-        ViewCoopsSalePurchase coopsSalePurchase = new ViewCoopsSalePurchase();
-        coopsSalePurchase.show(getFragmentManager(), "viewCoopSalePurchase");
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
