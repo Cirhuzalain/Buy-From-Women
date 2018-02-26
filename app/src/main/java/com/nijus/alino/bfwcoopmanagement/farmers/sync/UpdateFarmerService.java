@@ -129,30 +129,6 @@ public class UpdateFarmerService extends IntentService {
                 gender = general.isGender();
                 address = general.getAddress();
                 coopServerId = general.getCoopId();
-
-                Cursor cursor = null;
-
-                String selection = BfwContract.Coops.TABLE_NAME + "." +
-                        BfwContract.Coops.COLUMN_COOP_NAME + " =  ? ";
-
-                String[] selectionArgs = {coopName};
-
-                try {
-                    cursor = getContentResolver().query(BfwContract.Coops.CONTENT_URI, null, selection, selectionArgs, null);
-
-                    if (cursor != null && cursor.moveToFirst()) {
-                        cursor.moveToFirst();
-                        coopServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));
-                    }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
-            }
-
-            if (forecast != null) {
-                arableLandPlot = forecast.getArableLandPlot();
             }
 
             if (demographic != null) {
