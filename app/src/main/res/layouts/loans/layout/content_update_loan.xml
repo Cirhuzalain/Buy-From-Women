@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.nijus.alino.bfwcoopmanagement.loans.ui.activities.UpdateLoanActivity"
+    tools:context="com.nijus.alino.bfwcoopmanagement.loans.ui.activities.CreateLoanActivity"
     tools:showIn="@layout/activity_create_loan">
 
     <LinearLayout
@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/vendor"
+                        android:text="@string/farmer"
                         android:textSize="16sp" />
 
                     <Spinner
@@ -46,7 +45,6 @@
 
                 </LinearLayout>
 
-                <!--date-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -55,7 +53,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Select date"
+                        android:background="@drawable/gradient_normal_button"
                         android:id="@+id/date_selected"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:layout_marginTop="8dp"
+                        android:drawableLeft="@mipmap/calendar_white"
+                        android:textColor="@color/cardview_light_background"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
@@ -71,20 +75,40 @@
                         android:layout_alignParentEnd="true" />
 
                 </RelativeLayout>
-
-                <android.support.design.widget.TextInputLayout
+                <LinearLayout
+                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/purpose_loan"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/loan_purpose"
-                        android:inputType="text"
-                        android:maxLines="1" />
+                        android:layout_weight="1"
+                        android:text="@string/loan_purpose"
+                        android:textSize="16sp" />
 
-                </android.support.design.widget.TextInputLayout>
+                    <Spinner
+                        android:id="@+id/purpose_loan_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <!-- <android.support.design.widget.TextInputLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+                     <AutoCompleteTextView
+                         android:id="@+id/purpose_loan"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:hint="@string/loan_purpose"
+                         android:inputType="text"
+                         android:maxLines="1" />
+
+                 </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -130,6 +154,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="8dp"
                     android:id="@+id/content_spiner_ca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,12 +176,15 @@
 
                 </LinearLayout>
                 <Button
+                    android:layout_marginTop="15dp"
                     android:id="@+id/save_loan"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_gravity="center"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/title_activity_create_loan" />
+                    android:textColor="@color/cardview_light_background"
+                    android:background="@drawable/gradient_button"
+                    android:text="@string/title_activity_update_loan" />
 
             </LinearLayout>
 

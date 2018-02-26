@@ -1,0 +1,21 @@
+package com.nijus.alino.bfwcoopmanagement.loans.sync;
+
+import android.content.Intent;
+
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
+import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateSyncProductBkgrnd;
+
+public class UpdateSyncLoan extends JobService {
+
+    @Override
+    public boolean onStartJob(JobParameters job) {
+        startService(new Intent(this, UpdateSyncLoanBkgrnd.class));
+        return false;
+    }
+
+    @Override
+    public boolean onStopJob(JobParameters job) {
+        return false;
+    }
+}

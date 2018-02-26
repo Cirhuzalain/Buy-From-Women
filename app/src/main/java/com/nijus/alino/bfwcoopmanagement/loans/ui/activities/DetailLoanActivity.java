@@ -14,56 +14,60 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
+import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoanPayment;
+import com.nijus.alino.bfwcoopmanagement.loans.sync.AddLoan;
+import com.nijus.alino.bfwcoopmanagement.loans.sync.AddPayment;
+import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoanPayment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.PaymentBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class DetailLoanActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
-        View.OnClickListener {
+        View.OnClickListener{
+    public static final String ARG_KEY = "key";
     Long mLoanId;
     private Uri mUri;
     private String name;
     private String mKey;
-    public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-    private ImageView loan_details,gen_info_pic;
-    private TextView name_b_details,start_date,loan_purpose,
+    private ImageView loan_details, gen_info_pic;
+    private TextView name_b_details, start_date, loan_purpose,
             principal_amount, interest_rate, duration_month,
             fin_inst_spinner;
 
-    private Button schedule,payment, save;
+    private Button schedule, payment, save;
 
-    private  long loan_id;
+    private long loan_id, loan_id_from_server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_loan);
-        
-        getSupportLoaderManager().initLoader(0,null,this);
 
-        //get Coop Id
+        getSupportLoaderManager().initLoader(0, null, this);
+
+        //get Id
         Intent intent = this.getIntent();
         if (intent.hasExtra("loanId")) {
             mLoanId = intent.getLongExtra("loanId", 0);
             mUri = BfwContract.Loan.buildLoanUri(mLoanId);
         }
-        //Toast.makeText(this,"get "+mLoanId,Toast.LENGTH_LONG).show();
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_loan);
         loan_details = findViewById(R.id.loan_details);
@@ -72,9 +76,9 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),UpdateLoanActivity.class);
-                intent1.putExtra("loanId", mLoanId);
-                startActivity(intent1);
+                Intent intent = new Intent(getApplicationContext(), UpdateLoanActivity.class);
+                intent.putExtra("loanId", loan_id_from_server);
+                startActivity(intent);
             }
         });
 
@@ -89,7 +93,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         duration_month = findViewById(R.id.duration_month);
         fin_inst_spinner = findViewById(R.id.fin_inst_spinner);
 
-        //les ecouteur sur les button pour appeler les style sheet bottom
+        //Listeners to buttons to call bottom sheets
         schedule = findViewById(R.id.schedule_);
         payment = findViewById(R.id.payment_);
         save = findViewById(R.id.save_);
@@ -130,7 +134,10 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
 
             int vendor_id = data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
             loan_id = data.getInt(data.getColumnIndex(BfwContract.Loan._ID));
-            //recuper le vrai nom du vendor
+            loan_id_from_server = data.getLong(data.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
+            /**
+             * Get the real name of farmer
+             * **/
             String vendorSelect = BfwContract.Farmer.TABLE_NAME + "." +
                     BfwContract.Farmer._ID + " =  ? ";
 
@@ -156,9 +163,9 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             start_date.setText(date_string);
 
             loan_purpose.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE)));
-            principal_amount.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)));
-            interest_rate.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
-            duration_month.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_DURATION)));
+            principal_amount.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)));
+            interest_rate.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
+            duration_month.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_DURATION)));
             fin_inst_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
         }
     }
@@ -167,12 +174,13 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
     @Override
     public void onClick(View v) {
-        switch( v.getId() ) {
+        switch (v.getId()) {
             case R.id.schedule_: {
                 Bundle bundle = new Bundle();
-                bundle.putLong("id_loan",loan_id ); // set Fragmentclass Arguments
+                bundle.putLong("id_loan", loan_id); // set Fragmentclass Arguments
                 BottomSheetDialogFragment bottomSheetDialogFragment = new ScheduleBottomSheetDialogFragment();
                 bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -181,7 +189,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             }
             case R.id.payment_: {
                 Bundle bundle = new Bundle();
-                bundle.putLong("id_loan",loan_id ); // set Fragmentclass Arguments
+                bundle.putLong("id_loan", loan_id); // set Fragmentclass Arguments
                 BottomSheetDialogFragment bottomSheetDialogFragment = new PaymentBottomSheetDialogFragment();
                 bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -189,21 +197,56 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
                 break;
             }
             case R.id.save_: {
-                final  View alertLayout = View.inflate(this,R.layout.save_payment_details_dialog,null);
+                final View alertLayout = View.inflate(this, R.layout.save_payment_details_dialog, null);
+                final AutoCompleteTextView amount_pay = alertLayout.findViewById(R.id.amount_pay);
+                Button confirm = alertLayout.findViewById(R.id.save_pay);
+
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (TextUtils.isEmpty(amount_pay.getText())) {
+                            amount_pay.setError(getString(R.string.error_field_required));
+                        }
+                        else
+                        {
+                            PojoLoanPayment pojoLoanPayment = new PojoLoanPayment();
+                            pojoLoanPayment.setAmount(Double.valueOf(amount_pay.getText().toString()));
+                            Date start_date_date = new Date();
+
+                            pojoLoanPayment.setPayment_date(start_date_date.getTime());
+                            pojoLoanPayment.setLoan_id((int)loan_id);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("loan_payment", pojoLoanPayment);
+
+                            Intent intent = new Intent(getBaseContext(), AddPayment.class);
+                            intent.putExtra("loan_payment_data", bundle);
+                            getBaseContext().startService(intent);
+                        }
+
+                        Toast.makeText(getApplicationContext(), "bree",Toast.LENGTH_LONG).show();
+                    }
+                });
+
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
                 adb.setView(alertLayout);
-                adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                adb.setPositiveButton("Cancel",null);
+
+                /*adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
-                });
+                });*/
                 adb.show();
                 break;
             }
         }
     }
+
 }
 
 

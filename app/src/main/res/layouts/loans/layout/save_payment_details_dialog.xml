@@ -14,7 +14,6 @@
 
         <TextView
             android:id="@+id/title"
-
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="PAYMENT"
@@ -58,7 +57,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/duration_month"
+                    android:id="@+id/amount_pay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Amount payment"
@@ -66,7 +65,12 @@
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
+
             <Button
+                android:layout_marginTop="15dp"
+                android:id="@+id/save_pay"
+                android:textColor="@color/cardview_light_background"
+                android:background="@drawable/gradient_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Save your payment"/>

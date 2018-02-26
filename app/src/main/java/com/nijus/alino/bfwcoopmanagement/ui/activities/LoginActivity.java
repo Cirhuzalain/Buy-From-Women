@@ -2365,7 +2365,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             String state = null;
                             Date startDate = null;
 
-
                             int loanId = loanObject.getInt("id");
 
                             name = loanObject.getString("name");
@@ -2488,6 +2487,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 Double interest = null;
                                 Double remaining_amount = null;
                                 Double next_payment_amount = null;
+                                int loan_line_id = 0;
 
                                 if (!lineObject.getString("payment_date").equals("null")) {
                                     //payment_date = lineObject.getLong("payment_date");
@@ -2507,6 +2507,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 if (!lineObject.getString("next_payment_amount").equals("null")) {
                                     next_payment_amount = lineObject.getDouble("next_payment_amount");
                                 }
+                                if (!lineObject.getString("id").equals("null")) {
+                                    loan_line_id = lineObject.getInt("id");
+                                }
 
                                 ContentValues lineValues = new ContentValues();
 
@@ -2516,6 +2519,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 lineValues.put(BfwContract.LoanLine.COLUMN_INTEREST, interest);
                                 lineValues.put(BfwContract.LoanLine.COLUMN_REMAINING_AMOUNT, remaining_amount);
                                 lineValues.put(BfwContract.LoanLine.COLUMN_NEXT_PAYMENT_AMOUNT, next_payment_amount);
+                                lineValues.put(BfwContract.LoanLine.COLUMN_SERVER_ID, loan_line_id);
 
                                 getContentResolver().insert(BfwContract.LoanLine.CONTENT_URI, lineValues);
                             }
@@ -2527,17 +2531,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                                 Date payment_date = null;
                                 Double amount_payment = null;
+                                int loan_payment_id = 0;
 
                                 if (!paymentObject.getString("payment_date").equals("null")) {
                                     //payment_date = paymentObject.getLong("payment_date");
                                     String getDate = paymentObject.getString("payment_date");
                                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                                     payment_date = df.parse(getDate);
-
                                 }
 
                                 if (!paymentObject.getString("amount").equals("null")) {
                                     amount_payment = paymentObject.getDouble("amount");
+                                }
+                                if (!paymentObject.getString("id").equals("null")) {
+                                    loan_payment_id = paymentObject.getInt("id");
                                 }
 
                                 ContentValues paymentValues = new ContentValues();
@@ -2545,6 +2552,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 paymentValues.put(BfwContract.LoanPayment.COLUMN_LOAN_ID, localLoanId);
                                 paymentValues.put(BfwContract.LoanPayment.COLUMN_PAYMENT_DATE, payment_date.getTime());
                                 paymentValues.put(BfwContract.LoanPayment.COLUMN_AMOUNT, amount_payment);
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_SERVER_ID, loan_payment_id);
+
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_IS_SYNC, 1);
+                                paymentValues.put(BfwContract.LoanPayment.COLUMN_IS_UPDATE, 1);
 
                                 getContentResolver().insert(BfwContract.LoanPayment.CONTENT_URI, paymentValues);
                             }
