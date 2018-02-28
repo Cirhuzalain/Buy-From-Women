@@ -55,7 +55,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
         long id;
         Cursor cursor = null;
         int id_loan = intent.getIntExtra("loan_id", 0);
-        ArrayList<Integer> selected_item_list =  intent.getIntegerArrayListExtra("list_items_to_delete");
+        ArrayList<Integer> selected_item_list = intent.getIntegerArrayListExtra("list_items_to_delete");
         String c = "";
         for (int id_loan_from_list : selected_item_list) {
 
@@ -77,8 +77,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                         id = cursor.getLong(cursor.getColumnIndex(BfwContract.Loan._ID));
                         loanServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
 
-                        /** select all loan line and delete them one by one
-                         */
+                        // select all loan line and delete them one by one
                         String selectionLoanLine = BfwContract.LoanLine.TABLE_NAME + "." +
                                 BfwContract.LoanLine.COLUMN_LOAN_ID + " =  ? ";
 
@@ -92,10 +91,9 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                         if (cursor_delete_line != null) {
                             dataCount = cursor_delete_line.getCount();
 
-                            while (cursor_delete_line.moveToNext())
-                            {
-                                int loan_line_id_server  = cursor_delete_line.getInt(cursor_delete_line.getColumnIndex(BfwContract.LoanLine.COLUMN_SERVER_ID));
-                                int loan_line_id_local  = cursor_delete_line.getInt(cursor_delete_line.getColumnIndex(BfwContract.LoanLine._ID));
+                            while (cursor_delete_line.moveToNext()) {
+                                int loan_line_id_server = cursor_delete_line.getInt(cursor_delete_line.getColumnIndex(BfwContract.LoanLine.COLUMN_SERVER_ID));
+                                int loan_line_id_local = cursor_delete_line.getInt(cursor_delete_line.getColumnIndex(BfwContract.LoanLine._ID));
                                 OkHttpClient client = new OkHttpClient.Builder()
                                         .connectTimeout(240, TimeUnit.SECONDS)
                                         .writeTimeout(240, TimeUnit.SECONDS)
@@ -104,7 +102,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
 
                                 String bodyContent = "{}";
 
-                                String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.line" + "/"+loan_line_id_server;
+                                String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.line" + "/" + loan_line_id_server;
 
                                 RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 
@@ -131,8 +129,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                             }
                         }
 
-                        /** select all loan payment and delete them one by one
-                         */
+                        // select all loan payment and delete them one by one
                         String selectionLoanPayment = BfwContract.LoanPayment.TABLE_NAME + "." +
                                 BfwContract.LoanPayment.COLUMN_LOAN_ID + " =  ? ";
 
@@ -184,8 +181,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                         }
 
 
-
-                                OkHttpClient client = new OkHttpClient.Builder()
+                        OkHttpClient client = new OkHttpClient.Builder()
                                 .connectTimeout(240, TimeUnit.SECONDS)
                                 .writeTimeout(240, TimeUnit.SECONDS)
                                 .readTimeout(240, TimeUnit.SECONDS)

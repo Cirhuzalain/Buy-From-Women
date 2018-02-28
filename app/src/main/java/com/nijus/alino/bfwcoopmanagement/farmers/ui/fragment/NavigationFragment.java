@@ -22,8 +22,16 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.DisableFarmerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventFarmerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerList;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventFarmerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventFarmerToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.CreateFarmerActivity;
@@ -46,6 +54,9 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
     private NavigationRecyclerViewAdapter navigationRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
     private CoordinatorLayout coordinatorLayout;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton fab;
 
     public NavigationFragment() {
     }
@@ -74,11 +85,13 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         View view = inflater.inflate(R.layout.activity_main2, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_farmer);
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.farmers_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setHasFixedSize(true);
+        mRecyclerView = view.findViewById(R.id.farmers_list);
+        mLayoutManager = new LinearLayoutManager(context);
 
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         coordinatorLayout = view.findViewById(R.id.coordinator_layout);
 
@@ -87,13 +100,18 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
             public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
                 ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
             }
-        });
+        }, new NavigationRecyclerViewAdapter.FarmerAdapterOnLongClickListener() {
+            @Override
+            public void onLongClick(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh) {
+                ((OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(item, position, vh);
+            }
+        }, mLayoutManager);
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
 
-        recyclerView.setAdapter(navigationRecyclerViewAdapter);
-        FloatingActionButton fab = view.findViewById(R.id.fab);
+        mRecyclerView.setAdapter(navigationRecyclerViewAdapter);
+        fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
         return view;
@@ -106,13 +124,59 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
+    public void onToggleFarmerRequestEvent(ToggleFarmerRequestEvent farmerRequestEvent) {
+
+        navigationRecyclerViewAdapter.toggleSelection(farmerRequestEvent.getPosition());
+        int count = navigationRecyclerViewAdapter.getSelectedItemCount();
+
+        EventBus.getDefault().post(new ToggleFarmerResponseEvent(count));
+
+    }
+
+    @Subscribe
+    public void onRequestFarmerToDelete(RequestEventFarmerToDelete farmerToDelete) {
+
+        EventBus.getDefault().post(new ResponseEventFarmerToDelete(navigationRecyclerViewAdapter.getSelectedItems()));
+
+    }
+
+    @Subscribe
+    public void onDisableFarmerSwipeEvent(DisableFarmerSwipeEvent disableFarmerSwipeEvent) {
+
+        mRefreshData.setEnabled(false);
+        fab.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Subscribe
+    public void onEventFarmerResetItems(EventFarmerResetItems eventFarmerResetItems) {
+
+        navigationRecyclerViewAdapter.clearSelections();
+        mRefreshData.setEnabled(true);
+        fab.setVisibility(View.VISIBLE);
+
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                navigationRecyclerViewAdapter.resetAnimationIndex();
+            }
+        });
+
+    }
+
+    @Subscribe
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         if (saveDataEvent.isSuccess())
             getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
+    public void onRefreshFarmerLoader(RefreshFarmerLoader farmerLoader) {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
             getLoaderManager().restartLoader(0, null, this);
@@ -131,7 +195,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         } else {
             Toast.makeText(getContext(), getResources().getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
@@ -203,5 +266,9 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh);
+    }
+
+    public interface OnLongClickFragmentInteractionListener {
+        void onLongClickFragmentInteractionListener(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh);
     }
 }

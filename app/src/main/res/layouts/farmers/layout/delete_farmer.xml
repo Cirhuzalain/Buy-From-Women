@@ -16,7 +16,7 @@
             android:layout_height="60dp"
             android:background="@color/colorAccent"
             android:gravity="center"
-            android:text="@string/delete_loan"
+            android:text="@string/del_farmer"
             android:textColor="@color/colorTextPrimary"
             android:textSize="24sp" />
 
@@ -56,7 +56,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:background="@drawable/gradient_button"
-        android:text="Confirm"
+        android:text="@string/del_confirm"
         android:textAlignment="center"
         android:textColor="@color/cardview_light_background" />
 

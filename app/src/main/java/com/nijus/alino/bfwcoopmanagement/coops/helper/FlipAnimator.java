@@ -1,16 +1,15 @@
 package com.nijus.alino.bfwcoopmanagement.coops.helper;
+
 import com.nijus.alino.bfwcoopmanagement.R;
 
 import android.animation.AnimatorSet;
 
-        import android.animation.AnimatorInflater;
-        import android.animation.AnimatorSet;
+import android.animation.AnimatorInflater;
 import android.annotation.SuppressLint;
 import android.content.Context;
-        import android.view.View;
+import android.view.View;
 
 public class FlipAnimator {
-    private static String TAG = FlipAnimator.class.getSimpleName();
     private static AnimatorSet leftIn, rightOut, leftOut, rightIn;
 
     /**

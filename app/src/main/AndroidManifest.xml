@@ -267,97 +267,6 @@
                 android:value=".farmers.ui.activities.NavigationActivity" />
         </activity>
 
-        <service android:name=".farmers.sync.DeleteTokenService" />
-        <service android:name=".farmers.sync.AddFarmer" />
-        <service android:name=".farmers.sync.SyncBackground" />
-        <service android:name=".farmers.sync.RefreshData" />
-        <service android:name=".farmers.sync.UpdateFarmerService" />
-        <service android:name=".farmers.sync.UpdateSyncFarmer" />
-        <service android:name=".coops.sync.UpdateCoopService" />
-        <service
-            android:name=".farmers.sync.UpdateSyncFarmerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".farmers.sync.SyncFarmer"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".products.sync.SyncProduct"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".products.sync.UpdateSyncProduct"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <service android:name=".products.sync.AddProduct" />
-        <service android:name=".products.sync.UpdateProduct" />
-        <service android:name=".products.sync.SyncProductBackground" />
-        <service android:name=".products.sync.UpdateSyncProductBkgrnd" />
-        <service android:name=".products.sync.DeleteSyncProductBkgrnd" />
-
-        <service android:name=".loans.sync.AddLoan" />
-        <service android:name=".loans.sync.UpdateLoan" />
-        <service android:name=".loans.sync.SyncLoanBackground" />
-        <service android:name=".loans.sync.UpdateSyncLoanBkgrnd" />
-        <service android:name=".loans.sync.DeleteSyncLoanBkgrnd" />
-
-        <service android:name=".loans.sync.AddPayment" />
-        <service android:name=".loans.sync.SyncLoanPaymentBackground" />
-        <service android:name=".loans.sync.UpdateLoanPayment" />
-        <service android:name=".loans.sync.UpdateSyncLoanPaymentBkgrnd" />
-
-        <service android:name=".loans.sync.DeleteSyncLoanPaymentBkgrnd" />
-
-
-        <service
-            android:name=".loans.sync.SyncLoan"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".loans.sync.UpdateSyncLoan"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".loans.sync.UpdateSyncLoanPayment"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".loans.sync.SyncLoanPayment"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <provider
-            android:name=".data.BfwProvider"
-            android:authorities="com.nijus.alino.bfwcoopmanagement"
-            android:enabled="true"
-            android:exported="false" />
-
         <activity
             android:name=".coops.ui.activities.CoopProfileActivity"
             android:label="@string/title_activity_coop_profile"
@@ -420,6 +329,99 @@
             android:label="@string/title_activity_detail_buyer"
             android:parentActivityName=".loans.ui.activities.LoanActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <service
+            android:name=".farmers.sync.UpdateSyncFarmerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".farmers.sync.SyncFarmer"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".products.sync.SyncProduct"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".products.sync.UpdateSyncProduct"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".products.sync.AddProduct" />
+        <service android:name=".products.sync.UpdateProduct" />
+        <service android:name=".products.sync.SyncProductBackground" />
+        <service android:name=".products.sync.UpdateSyncProductBkgrnd" />
+        <service android:name=".products.sync.DeleteSyncProductBkgrnd" />
+
+        <service android:name=".loans.sync.AddLoan" />
+        <service android:name=".loans.sync.UpdateLoan" />
+        <service android:name=".loans.sync.SyncLoanBackground" />
+        <service android:name=".loans.sync.UpdateSyncLoanBkgrnd" />
+        <service android:name=".loans.sync.DeleteSyncLoanBkgrnd" />
+
+        <service android:name=".loans.sync.AddPayment" />
+        <service android:name=".loans.sync.SyncLoanPaymentBackground" />
+        <service android:name=".loans.sync.UpdateLoanPayment" />
+        <service android:name=".loans.sync.UpdateSyncLoanPaymentBkgrnd" />
+
+        <service android:name=".loans.sync.DeleteSyncLoanPaymentBkgrnd" />
+        <service android:name=".farmers.sync.DeleteTokenService" />
+        <service android:name=".farmers.sync.AddFarmer" />
+        <service android:name=".farmers.sync.SyncBackground" />
+        <service android:name=".farmers.sync.RefreshData" />
+        <service android:name=".farmers.sync.UpdateFarmerService" />
+        <service android:name=".farmers.sync.UpdateSyncFarmer" />
+        <service android:name=".coops.sync.UpdateCoopService" />
+        <service android:name=".farmers.sync.DeleteFarmerService" />
+
+        <service
+            android:name=".loans.sync.SyncLoan"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".loans.sync.UpdateSyncLoan"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".loans.sync.UpdateSyncLoanPayment"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".loans.sync.SyncLoanPayment"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name=".data.BfwProvider"
+            android:authorities="com.nijus.alino.bfwcoopmanagement"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -43,6 +43,7 @@ public class NavigationActivity extends BaseActivity implements
     private NavigationRecyclerViewAdapter navigationRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
     private CoordinatorLayout coordinatorLayout;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,8 @@ public class NavigationActivity extends BaseActivity implements
         View emptyView = findViewById(R.id.recyclerview_empty_farmer);
         Context context = this;
         RecyclerView recyclerView = findViewById(R.id.farmers_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -66,7 +68,12 @@ public class NavigationActivity extends BaseActivity implements
             @Override
             public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
             }
-        });
+        }, new NavigationRecyclerViewAdapter.FarmerAdapterOnLongClickListener() {
+            @Override
+            public void onLongClick(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh) {
+
+            }
+        }, mLayoutManager);
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 

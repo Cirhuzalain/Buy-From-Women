@@ -94,13 +94,8 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
     public void reset() {
         ViewHolder h = new ViewHolder(view);
-        //h.resetAll(1);
         TextView v =(TextView) h.resetAll(1);
-        //TextView amount_tot = view.findViewById(R.id.l_name);
         String s = (String) v.getText();
-
-        //ImageView f = v.findViewById(R.id.l_icon);
-        //f.setImageResource(R.mipmap.calendar_one);
     }
 
     public interface LoanAdapterOnClickHandler {
@@ -119,7 +114,6 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         public RelativeLayout iconBack, iconFront, iconContainer;
         public LinearLayout view_foreground;
         private FlipAnimator flipAnimator;
-        //lisste des LOANS deja selectionner
 
 
         public ViewHolder(View view) {
@@ -145,7 +139,6 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition();
             mCursor.moveToPosition(position);
-            int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
             Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
 
             Intent intent = new Intent(mContext, DetailLoanActivity.class);
@@ -164,9 +157,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         public boolean onLongClick(View view) {
             int position = getAdapterPosition();
             mCursor.moveToPosition(position);
-            int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
             Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
-            //annimation and delete and loan agent
 
             if (!return_if_val_in_array(loanColumnIndex)) {
                 this.iconFront.setVisibility(View.GONE);
@@ -194,19 +185,10 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
         public View resetAll(int i) {
             mCursor.moveToPosition(i);
-            int c = mCursor.getColumnIndex(BfwContract.Loan._ID);
-
-            //int position = getAdapterPosition();
-
-            //mCursor.moveToPosition(i);
-            Toast.makeText(mContext,"Amount " +c,Toast.LENGTH_LONG).show();
-
-
             return this.amount_tot;
         }
 
         boolean return_if_val_in_array(Long val) {
-            //Toast.makeText(mContext,return_count()+" selected",Toast.LENGTH_LONG).show();
             for (Long v : listsSelectedItem) {
                 if (val == v) {
                     return true;

@@ -2,39 +2,46 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
-import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
+import com.nijus.alino.bfwcoopmanagement.events.DeleteFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DisableFarmerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventFarmerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventFarmerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventFarmerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.ViewPagerAdapter;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.fragment.BuyerFragment;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.CoopAgentFragment;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.DetailFarmerActivity;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.DeleteFarmerDialog;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.NavigationFragment;
-import com.nijus.alino.bfwcoopmanagement.vendors.adapter.VendorRecyclerViewAdapter;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.DetailVendorActivity;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener {
+import java.util.ArrayList;
+
+public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener,
+        NavigationFragment.OnLongClickFragmentInteractionListener {
 
     private MenuInflater inflater;
     private TabLayout tabLayout;
@@ -47,6 +54,9 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     NavigationFragment farmer_fragment;
     CoopAgentFragment coopAgentFragment;
 
+    private ActionModeCallback actionModeCallback;
+    private ActionMode actionMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +67,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         viewPager.setOffscreenPageLimit(5);
         setupViewPager(viewPager);
 
-        //Initializing the tablayout
         tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -77,7 +86,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
 
             }
         });
-
+        actionModeCallback = new ActionModeCallback();
     }
 
 
@@ -120,6 +129,61 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     }
 
     @Override
+    public void onLongClickFragmentInteractionListener(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh) {
+        enableActionMode((int) position);
+    }
+
+    @Subscribe
+    public void onToggleFarmerResponseEvent(ToggleFarmerResponseEvent farmerResponseEvent) {
+        int count = farmerResponseEvent.getCount();
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count) + " selected");
+            actionMode.invalidate();
+        }
+    }
+
+    @Subscribe
+    public void onDeleteFarmerEvent(DeleteFarmerEvent deleteFarmerEvent) {
+        if (deleteFarmerEvent.isSuccess()) {
+            EventBus.getDefault().post(new RefreshFarmerLoader());
+            Toast.makeText(this, deleteFarmerEvent.getMessage(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, deleteFarmerEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe
+    public void onResponseEventFarmerToDelete(ResponseEventFarmerToDelete eventFarmerToDelete) {
+
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            ArrayList<Integer> farmerIds = eventFarmerToDelete.getFarmerIds();
+
+            DeleteFarmerDialog farmerDeleteDialog = new DeleteFarmerDialog();
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList("farmer_ids", farmerIds);
+            farmerDeleteDialog.setArguments(bundle);
+            farmerDeleteDialog.show(getSupportFragmentManager(), "dialogLoanTag");
+
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void toggleSelection(int position) {
+        // dispatch event to toggle action
+        EventBus.getDefault().post(new ToggleFarmerRequestEvent(position));
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            actionMode = startSupportActionMode(actionModeCallback);
+        }
+        toggleSelection(position);
+    }
+
+    @Override
     public void onCoopFragmentInteraction(long item, CoopAdapter.ViewHolder vh) {
         Intent intent = new Intent(this, DetailCoopActivity.class);
         intent.putExtra("coopId", item);
@@ -142,11 +206,9 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.navigation, menu);
 
         inflater = getMenuInflater();
-        inflater.inflate(R.menu.navigation, menu);//.xml file name
-        menu.findItem(R.id.action_delete).setVisible(false);
+        inflater.inflate(R.menu.navigation, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -158,11 +220,49 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+
+            // dispatch event to disable  swipe refresh
+            EventBus.getDefault().post(new DisableFarmerSwipeEvent());
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    // dispatch event to request data to delete
+                    // Use Tab Position to call the correct event  tabLayout.getSelectedTabPosition()
+                    EventBus.getDefault().post(new RequestEventFarmerToDelete());
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            // dispatch event to disable  swipe and clear adapter
+            EventBus.getDefault().post(new EventFarmerResetItems());
+        }
+    }
+
 }

@@ -476,4 +476,8 @@
     <string name="harvest_season_2016">Harvest Season 2016</string>
     <string name="others_fin">Others</string>
     <string name="harvest_season_2017">Harvest Season 2017</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove</string>
+    <string name="delete_loan">Delete Loan</string>
+    <string name="del_farmer">Delete Farmer</string>
+    <string name="del_confirm">Confirm</string>
 </resources>

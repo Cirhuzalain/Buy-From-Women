@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteLoanDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
-    private  int id_to_delete;
+    private int id_to_delete;
     private String name_product;
     private TextView mesg_textView;
     private Button confirm;
@@ -37,23 +37,17 @@ public class DeleteLoanDialogFragment extends DialogFragment implements DialogIn
 
         mesg_textView = viewContainer.findViewById(R.id.msg);
 
-        //GET values for array  to delete from listview
+        //GET values for array  to delete from list view
         tab = getArguments().getLongArray("list_items_to_delete");
-       /* String s="";
-        for(long t: tab)
-        {
-            s=s+" - "+ String.valueOf(t);
-        }*/
 
 
-        String print_msg = mesg_textView.getText()+" "+tab.length+" item(s)? ";
+        String print_msg = mesg_textView.getText() + " " + tab.length + " item(s)? ";
         mesg_textView.setText(print_msg);
 
         confirm = viewContainer.findViewById(R.id.confirm);
         confirm.setOnClickListener(this);
 
         builder.setView(viewContainer)
-                //.setPositiveButton(R.string.msg_ok, this)
                 .setNegativeButton(R.string.msg_cancel, this);
 
         return builder.create();
@@ -68,20 +62,12 @@ public class DeleteLoanDialogFragment extends DialogFragment implements DialogIn
     @Override
     public void onClick(View view) {
         try {
-            //Toast.makeText(getContext(), ""+id_to_delete, Toast.LENGTH_LONG).show();
-
             if (Utils.isNetworkAvailable(getContext())) {
 
-                //Bundle bundle = new Bundle();
-                //bundle.putLongArray("list_items_to_delete",tab);
-                //dialogFragment.setArguments(bundle);
-
                 ArrayList<Integer> listsSelectedItem = new ArrayList<Integer>();
-                for(long t: tab)
-                {
+                for (long t : tab) {
                     listsSelectedItem.add((int) t);
                 }
-
 
 
                 Intent intent = new Intent(getContext(), DeleteSyncLoanBkgrnd.class);
@@ -90,9 +76,11 @@ public class DeleteLoanDialogFragment extends DialogFragment implements DialogIn
                 getContext().startService(intent);
                 dismiss();
             } else {
-                Toast.makeText(getContext(), "ERROR, WAIT FOR THE INTERNET CONNECTION", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
             }
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
