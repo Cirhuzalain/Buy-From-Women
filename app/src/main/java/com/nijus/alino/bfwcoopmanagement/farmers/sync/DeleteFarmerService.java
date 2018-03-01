@@ -12,6 +12,7 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -75,6 +76,9 @@ public class DeleteFarmerService extends IntentService {
                                 new String[]{Integer.toString(farmerId)}, null);
 
                         if (farmerDataCursor != null && farmerDataCursor.moveToFirst()) {
+
+                            EventBus.getDefault().post(new ProcessingFarmerEvent("Processing your request ..."));
+
                             isSync = farmerDataCursor.getInt(farmerDataCursor.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC));
 
                             if (isSync == 1) {

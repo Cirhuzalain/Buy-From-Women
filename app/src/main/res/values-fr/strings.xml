@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bfw App</string>
     <string name="action_settings">Settings</string>
@@ -18,12 +17,13 @@
     <string name="title_activity_login">Login</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">Login</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short (>= 3 characters)</string>
+    <string name="error_invalid_product_name">This name is too short (>= 3 characters)</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
@@ -36,12 +36,12 @@
     <string name="profiles">Farmers</string>
     <string name="sales">Sales</string>
     <string name="loan">Loan</string>
-    <string name="user_profile">User profile</string>
+    <string name="user_profile">Users Profile</string>
     <string name="user_profile_simple">Profile</string>
-    <string name="user_profile_coop_agent">Profile coop</string>
-    <string name="liste_farmer">Farmer\'s list</string>
-    <string name="user_profile_buyer">Profile buyer</string>
-    <string name="user_profile_vendor">Profile vendor</string>
+    <string name="user_profile_coop_agent">Coop Profile</string>
+    <string name="liste_farmer">Farmers</string>
+    <string name="user_profile_buyer">Buyer Profile</string>
+    <string name="user_profile_vendor">Vendor Profile</string>
     <string name="purchase">Purchases</string>
     <string name="stats">Summary</string>
     <string name="settings">Settings</string>
@@ -71,7 +71,7 @@
     <string name="image_profile">Image Profile</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="househol_head">Househol Head</string>
+    <string name="househol_head">Household Head</string>
     <string name="family_in_house_hold">Family # in House Hold</string>
     <string name="spouse_name">Spouse Name</string>
     <string name="mobile_money_account">Mobile Money Account</string>
@@ -105,15 +105,17 @@
     <string name="total_loan_amount_in_rwf">Total loan amount (in RWF)</string>
     <string name="tot_outstanding">Total outstanding (in RWF)</string>
     <string name="interest_rate">Interest Rate (% in months)</string>
+    <string name="interest_rate_simple">Interest Rate</string>
     <string name="duration_month">Duration (months)</string>
     <string name="loan_provider">Loan Provider</string>
     <string name="outstanding_loan">Outstanding Loan</string>
     <string name="loan_purpose">Loan Purpose</string>
     <string name="input">Input</string>
     <string name="aggregation">Aggregation</string>
-    <string name="other">Other</string>
+    <string name="other">Other Water source</string>
+    <string name="new_resources">Other available resource</string>
     <string name="mm_acct">Mobile Money Account</string>
-    <string name="harvsetSeason">Harvset Season</string>
+    <string name="harvsetSeason">Harvest Season</string>
     <string name="available_resources">Available Resources</string>
     <string name="agri_extension">Agricultural extension services</string>
     <string name="climate_related_information_e_g_weather_forecasts">Climate related information (e.g. weather forecasts)</string>
@@ -128,7 +130,7 @@
     <string name="spreaders_or_sprayers">Spreaders or Sprayers</string>
     <string name="dryer">Dryer</string>
     <string name="thresher">Thresher</string>
-    <string name="safe_storage">Safe storage</string>
+    <string name="safe_storage">Storage Information</string>
     <string name="other_res_av">Other</string>
     <string name="main_water_source">Main water source</string>
     <string name="dam">Dam</string>
@@ -172,6 +174,21 @@
         <item>2018B</item>
     </string-array>
 
+    <string-array name="grade_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="fin_institution">
+        <item>bank</item>
+        <item>sacco</item>
+        <item>cooperative</item>
+    </string-array>
+    <string-array name="purpose_loan">
+        <item>aggregation</item>
+    </string-array>
+
     <string-array name="payment_detail">
         <item>15 Days</item>
         <item>30 Net Days</item>
@@ -202,6 +219,9 @@
     <string name="harvest_season">Harvest Season</string>
     <string name="order_lines">Order Lines</string>
     <string name="product">Product</string>
+    <string name="product_name">Product name</string>
+    <string name="sale_price">Sale price</string>
+    <string name="cost">Cost</string>
     <string name="quantity">Quantity (Kg)</string>
     <string name="add_so_contract">Add New Product</string>
     <string name="payment_term">Payment Term</string>
@@ -220,7 +240,10 @@
     <string name="validate">Validate</string>
     <string name="val_so_settings">Settings</string>
     <string name="vendor">Vendor</string>
+    <string name="farmer">Farmer</string>
+    <string name="vendor_name">Vendor name</string>
     <string name="coop_agent">Coop Agent</string>
+    <string name="details_coop_">Cooperative Details</string>
     <string name="date">Date</string>
     <string name="deliveries_and_invoices">Deliveries and Invoices</string>
     <string name="title_activity_purchase_order">Purchase Order</string>
@@ -266,14 +289,14 @@
     <string name="forecast">Forecast</string>
     <string name="demographicVendor">Demographics</string>
     <string name="demographic">Demographics</string>
-    <string name="base_line">BaseLine For Previous Season</string>
+    <string name="base_line">BaseLine</string>
     <string name="financeVendor">Finance</string>
     <string name="finance">Finance</string>
     <string name="access_service">Access to other services, inputs and equipment</string>
     <string name="access_to_info">Access to Information</string>
     <string name="system">System</string>
-    <string name="farmer_land">Farmer Land Information</string>
-    <string name="vender_land">Vender Land Information</string>
+    <string name="farmer_land">Land Information</string>
+    <string name="vender_land">Land Information</string>
     <string name="bank_info">Bank Information</string>
     <string name="payment_detail">Payment Detail</string>
     <string name="left_icon">Next Step Left Icon</string>
@@ -310,16 +333,21 @@
     <string name="syncing_error">An error occur while syncing farmer data</string>
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
+    <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
-    <string name="update_msg">Information update successfully</string>
+    <string name="update_msg">Information updated successfully</string>
     <string name="coops">Coops</string>
 
     <string name="there_s_no_cooperative">There\'s no cooperative</string>
-    <string name="there_s_no_cooperative_agent">There\'s no cooperative\' agent</string>
+    <string name="there_s_no_cooperative_agent">There\'s no cooperative\'s agent</string>
     <string name="there_s_no_buyer">There\'s no buyer</string>
     <string name="there_s_no_vendor">There\'s no vendor</string>
     <string name="there_s_no_loan">There\'s no loan</string>
+    <string name="there_s_no_product">There\'s no product</string>
+    <string name="there_s_no_loan_line">There\'s no loan schedule</string>
+    <string name="there_is_loan_line">Loan schedule</string>
     <string name="there_s_no_payment">There\'s no payment</string>
+    <string name="there_is_payment">Loan payment</string>
     <string name="cooperativ">Coops</string>
     <string name="add_farmer_msg">Farmer added successfully</string>
     <string name="view_sale">Sale</string>
@@ -412,13 +440,6 @@
     <string name="aggrgation_post_harvset_loan_duration">Aggregation/Post harvest loan duration in months </string>
     <string name="aggrgation_post_harvset_laon_disbursement_method">Aggregation/Post harvest loan disbursement method</string>
     <string name="total_expected_coop_production">Total expected coop production in MT</string>
-    <string name="new_resources">Other available resource</string>
-    <string name="product_name">Product name</string>
-    <string name="sale_price">Sale price</string>
-    <string name="cost">Cost</string>
-    <string name="details_coop_">Cooperative Details</string>
-    <string name="update_loan">Update Loan</string>
-    <string name="parse_error">An Error occur while parsing Date Information</string>
 
     <string name="input_prov_in_kind">Input provided in kind</string>
     <string name="cash_provided_purchase_inputs">Cash provided to purchase inputs </string>
@@ -428,13 +449,27 @@
     <string name="title_activity_update_coop_agent">Update Coop Agent</string>
     <string name="title_activity_buyer">Buyer</string>
     <string name="title_activity_update_buyer">Update Buyer</string>
+    <string name="title_activity_update_loan">Update Loan</string>
     <string name="title_activity_detail_buyer">Buyer Detail</string>
     <string name="title_activity_create_loan">Save Loan</string>
     <string name="start_loan_date">Loan start date</string>
     <string name="date_select">Select a date</string>
     <string name="princip_amount">Principal amount (RWF)</string>
+    <string name="principal_amount">Principal amount</string>
     <string name="financial_institution">Financial institution</string>
+    <string name="financial_inst">Institution</string>
+    <string name="parse_error">An Error occur while parsing Date Information</string>
     <string name="others_finance_source">Others</string>
     <string name="farmers_expected_minimum_revenue_from_ftma_sale_in_rwf">Farmers expected minimum revenue from FTMA sale in RWF</string>
     <string name="flow_price">Minimum floor price per kg in RWF</string>
+    <string name="loc_gps">Check your location here</string>
+    <string name="man_gps">Manual</string>
+    <string name="gps_automatic">Automatic</string>
+    <string name="harvest_season_2016">Harvest Season 2016</string>
+    <string name="others_fin">Others</string>
+    <string name="harvest_season_2017">Harvest Season 2017</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove</string>
+    <string name="delete_loan">Delete Loan</string>
+    <string name="del_farmer">Delete Farmer</string>
+    <string name="del_confirm">Confirm</string>
 </resources>

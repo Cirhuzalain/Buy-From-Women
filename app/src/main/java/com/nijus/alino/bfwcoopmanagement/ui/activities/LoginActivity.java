@@ -2847,7 +2847,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         JSONObject farmersJsonObject = new JSONObject(farmersList);
 
-                        JSONArray farmerArrayLists = null;
+                        JSONArray farmerArrayLists;
                         if (!isAgent) {
                             farmerArrayLists = farmersJsonObject.getJSONArray("results");
                         } else {
@@ -3125,74 +3125,74 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 Integer ss = null;
                                 long infoSeasonId = 1;
 
-                                if (farmerObjectInfo.has("ar_aes")) {
-                                    if (!farmerObjectInfo.getString("ar_aes").equals("null")) {
-                                        Boolean arAes = farmerObjectInfo.getBoolean("ar_aes");
+                                if (accessInfoObject.has("ar_aes")) {
+                                    if (!accessInfoObject.getString("ar_aes").equals("null")) {
+                                        Boolean arAes = accessInfoObject.getBoolean("ar_aes");
                                         if (arAes != null) {
                                             aes = arAes ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_cri")) {
-                                    if (!farmerObjectInfo.getString("ar_cri").equals("null")) {
-                                        Boolean arCri = farmerObjectInfo.getBoolean("ar_cri");
+                                if (accessInfoObject.has("ar_cri")) {
+                                    if (!accessInfoObject.getString("ar_cri").equals("null")) {
+                                        Boolean arCri = accessInfoObject.getBoolean("ar_cri");
                                         if (arCri != null) {
                                             cri = arCri ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_seeds")) {
-                                    if (!farmerObjectInfo.getString("ar_seeds").equals("null")) {
-                                        Boolean arSeeds = farmerObjectInfo.getBoolean("ar_seeds");
+                                if (accessInfoObject.has("ar_seeds")) {
+                                    if (!accessInfoObject.getString("ar_seeds").equals("null")) {
+                                        Boolean arSeeds = accessInfoObject.getBoolean("ar_seeds");
                                         if (arSeeds != null) {
                                             seeds = arSeeds ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_of")) {
-                                    if (!farmerObjectInfo.getString("ar_of").equals("null")) {
-                                        Boolean arof = farmerObjectInfo.getBoolean("ar_of");
+                                if (accessInfoObject.has("ar_of")) {
+                                    if (!accessInfoObject.getString("ar_of").equals("null")) {
+                                        Boolean arof = accessInfoObject.getBoolean("ar_of");
                                         if (arof != null) {
                                             orgFert = arof ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_if")) {
-                                    if (!farmerObjectInfo.getString("ar_if").equals("null")) {
-                                        Boolean arif = farmerObjectInfo.getBoolean("ar_if");
+                                if (accessInfoObject.has("ar_if")) {
+                                    if (!accessInfoObject.getString("ar_if").equals("null")) {
+                                        Boolean arif = accessInfoObject.getBoolean("ar_if");
                                         if (arif != null) {
                                             inorgFert = arif ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_labour")) {
-                                    if (farmerObjectInfo.getString("ar_labour").equals("null")) {
-                                        Boolean arlabour = farmerObjectInfo.getBoolean("ar_labour");
+                                if (accessInfoObject.has("ar_labour")) {
+                                    if (!accessInfoObject.getString("ar_labour").equals("null")) {
+                                        Boolean arlabour = accessInfoObject.getBoolean("ar_labour");
                                         if (arlabour != null) {
                                             labour = arlabour ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_iwp")) {
-                                    if (!farmerObjectInfo.getString("ar_iwp").equals("null")) {
-                                        Boolean ariwp = farmerObjectInfo.getBoolean("ar_iwp");
+                                if (accessInfoObject.has("ar_iwp")) {
+                                    if (!accessInfoObject.getString("ar_iwp").equals("null")) {
+                                        Boolean ariwp = accessInfoObject.getBoolean("ar_iwp");
                                         if (ariwp != null) {
                                             iwp = ariwp ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("ar_ss")) {
-                                    if (!farmerObjectInfo.getString("ar_ss").equals("null")) {
-                                        Boolean arss = farmerObjectInfo.getBoolean("ar_ss");
+                                if (accessInfoObject.has("ar_ss")) {
+                                    if (!accessInfoObject.getString("ar_ss").equals("null")) {
+                                        Boolean arss = accessInfoObject.getBoolean("ar_ss");
                                         if (arss != null) {
                                             ss = arss ? 1 : 0;
                                         }
                                     }
                                 }
 
-                                if (farmerObjectInfo.has("harvest_id")) {
-                                    if (!farmerObjectInfo.getString("harvest_id").equals("null")) {
-                                        infoSeasonId = farmerObjectInfo.getLong("harvest_id");
+                                if (accessInfoObject.has("harvest_id")) {
+                                    if (!accessInfoObject.getString("harvest_id").equals("null")) {
+                                        infoSeasonId = accessInfoObject.getLong("harvest_id");
                                     }
                                 }
 
@@ -3417,75 +3417,75 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 String loanProvider = null;
                                 long financeSeasonId = 1;
 
-                                if (farmerObjectInfo.has("outstanding_loan")) {
-                                    if (!farmerObjectInfo.getString("outstanding_loan").equals("null")) {
-                                        Boolean outstandingLoan = farmerObjectInfo.getBoolean("outstanding_loan");
+                                if (financeDataObject.has("outstanding_loan")) {
+                                    if (!financeDataObject.getString("outstanding_loan").equals("null")) {
+                                        Boolean outstandingLoan = financeDataObject.getBoolean("outstanding_loan");
                                         if (outstandingLoan != null) {
                                             outstandingloan = outstandingLoan ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("loan_purpose_i")) {
-                                    if (!farmerObjectInfo.getString("loan_purpose_i").equals("null")) {
-                                        Boolean loanpurposei = farmerObjectInfo.getBoolean("loan_purpose_i");
+                                if (financeDataObject.has("loan_purpose_i")) {
+                                    if (!financeDataObject.getString("loan_purpose_i").equals("null")) {
+                                        Boolean loanpurposei = financeDataObject.getBoolean("loan_purpose_i");
                                         if (loanpurposei != null) {
                                             loanPurposeI = loanpurposei ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("loan_purpose_a")) {
-                                    if (!farmerObjectInfo.getString("loan_purpose_a").equals("null")) {
-                                        Boolean loanpurposea = farmerObjectInfo.getBoolean("loan_purpose_a");
+                                if (financeDataObject.has("loan_purpose_a")) {
+                                    if (!financeDataObject.getString("loan_purpose_a").equals("null")) {
+                                        Boolean loanpurposea = financeDataObject.getBoolean("loan_purpose_a");
                                         if (loanpurposea != null) {
                                             loanPurposeA = loanpurposea ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("loan_purpose_o")) {
-                                    if (!farmerObjectInfo.getString("loan_purpose_o").equals("null")) {
-                                        Boolean loanpurposeo = farmerObjectInfo.getBoolean("loan_purpose_o");
+                                if (financeDataObject.has("loan_purpose_o")) {
+                                    if (!financeDataObject.getString("loan_purpose_o").equals("null")) {
+                                        Boolean loanpurposeo = financeDataObject.getBoolean("loan_purpose_o");
                                         if (loanpurposeo != null) {
                                             loanPurposeO = loanpurposeo ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("mobile_money_account")) {
-                                    if (!farmerObjectInfo.getString("mobile_money_account").equals("null")) {
-                                        Boolean mobilemoneyaccount = farmerObjectInfo.getBoolean("mobile_money_account");
+                                if (financeDataObject.has("mobile_money_account")) {
+                                    if (!financeDataObject.getString("mobile_money_account").equals("null")) {
+                                        Boolean mobilemoneyaccount = financeDataObject.getBoolean("mobile_money_account");
                                         if (mobilemoneyaccount != null) {
                                             mobileMoneyAccount = mobilemoneyaccount ? 1 : 0;
                                         }
                                     }
                                 }
-                                if (farmerObjectInfo.has("total_loan_amount")) {
-                                    if (!farmerObjectInfo.getString("total_loan_amount").equals("null")) {
-                                        totalLoanAmount = farmerObjectInfo.getDouble("total_loan_amount");
+                                if (financeDataObject.has("total_loan_amount")) {
+                                    if (!financeDataObject.getString("total_loan_amount").equals("null")) {
+                                        totalLoanAmount = financeDataObject.getDouble("total_loan_amount");
                                     }
                                 }
-                                if (farmerObjectInfo.has("total_outstanding")) {
-                                    if (!farmerObjectInfo.getString("total_outstanding").equals("null")) {
-                                        totaloutstanding = farmerObjectInfo.getDouble("total_outstanding");
+                                if (financeDataObject.has("total_outstanding")) {
+                                    if (!financeDataObject.getString("total_outstanding").equals("null")) {
+                                        totaloutstanding = financeDataObject.getDouble("total_outstanding");
                                     }
                                 }
-                                if (farmerObjectInfo.has("interest_rate")) {
-                                    if (!farmerObjectInfo.getString("interest_rate").equals("null")) {
-                                        interestrate = farmerObjectInfo.getDouble("interest_rate");
+                                if (financeDataObject.has("interest_rate")) {
+                                    if (!financeDataObject.getString("interest_rate").equals("null")) {
+                                        interestrate = financeDataObject.getDouble("interest_rate");
                                     }
                                 }
-                                if (farmerObjectInfo.has("duration")) {
-                                    if (!farmerObjectInfo.getString("duration").equals("null")) {
-                                        duration = farmerObjectInfo.getInt("duration");
+                                if (financeDataObject.has("duration")) {
+                                    if (!financeDataObject.getString("duration").equals("null")) {
+                                        duration = financeDataObject.getInt("duration");
                                     }
                                 }
-                                if (farmerObjectInfo.has("loan_provider")) {
-                                    if (farmerObjectInfo.has("loan_provider")) {
-                                        loanProvider = farmerObjectInfo.getString("loan_provider");
+                                if (financeDataObject.has("loan_provider")) {
+                                    if (financeDataObject.has("loan_provider")) {
+                                        loanProvider = financeDataObject.getString("loan_provider");
                                     }
                                 }
 
-                                if (farmerObjectInfo.has("harvest_id")) {
-                                    if (!farmerObjectInfo.getString("harvest_id").equals("null")) {
-                                        financeSeasonId = farmerObjectInfo.getLong("harvest_id");
+                                if (financeDataObject.has("harvest_id")) {
+                                    if (!financeDataObject.getString("harvest_id").equals("null")) {
+                                        financeSeasonId = financeDataObject.getLong("harvest_id");
                                     }
                                 }
 

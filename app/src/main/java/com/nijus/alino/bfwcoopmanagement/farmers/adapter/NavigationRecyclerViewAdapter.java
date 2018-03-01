@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<NavigationRecyclerViewAdapter.ViewHolder> {
 
     private Cursor mCursor;
-    private LinearLayoutManager mLinearLayoutManager;
     final private Context mContext;
     final private View mEmptyView;
     final private FarmerAdapterOnClickHandler mClickHandler;
@@ -35,11 +34,10 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     private boolean reverseAllAnimations = false;
     private static int currentSelectedIndex = -1;
 
-    public NavigationRecyclerViewAdapter(Context context, View view, FarmerAdapterOnClickHandler vh, FarmerAdapterOnLongClickListener vLong, LinearLayoutManager linearLayoutManager) {
+    public NavigationRecyclerViewAdapter(Context context, View view, FarmerAdapterOnClickHandler vh, FarmerAdapterOnLongClickListener vLong) {
         mContext = context;
         mEmptyView = view;
         mClickHandler = vh;
-        mLinearLayoutManager = linearLayoutManager;
         mOnLongClickListener = vLong;
         selectedItems = new SparseBooleanArray();
         animationItemsIndex = new SparseBooleanArray();
@@ -62,8 +60,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_NAME)));
         holder.mUphone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE)));
-
-        holder.id_cursor_to_delete = mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer._ID));
 
         holder.imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
@@ -174,10 +170,8 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         public final TextView mUphone;
         public final ImageView imageView, imagedone;
         public LinearLayout viewForeground;
-        public String id_cursor_to_delete;
         public RelativeLayout iconBack, iconFront, iconContainer;
         private int position = 0;
-        private boolean isVisible;
 
         public ViewHolder(View view) {
             super(view);
@@ -194,8 +188,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
             iconBack = view.findViewById(R.id.icon_back);
             iconFront = view.findViewById(R.id.icon_front);
             iconContainer = view.findViewById(R.id.icon_container);
-
-            isVisible = false;
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
@@ -222,14 +214,6 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
             mOnLongClickListener.onLongClick(mCursor.getLong(farmerColumnIndex), position, this);
             return true;
-        }
-
-        public boolean isVisible() {
-            return isVisible;
-        }
-
-        public void setVisible(boolean visible) {
-            isVisible = visible;
         }
 
         public void resetIconYAxis(View view) {

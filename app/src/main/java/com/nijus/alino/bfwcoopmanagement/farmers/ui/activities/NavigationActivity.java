@@ -22,9 +22,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.RecyclerItemTouchHelper;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.RefreshData;
@@ -73,7 +70,7 @@ public class NavigationActivity extends BaseActivity implements
             public void onLongClick(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh) {
 
             }
-        }, mLayoutManager);
+        });
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
 

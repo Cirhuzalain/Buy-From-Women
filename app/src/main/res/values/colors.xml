@@ -17,6 +17,7 @@
     <!-- the color used for the low temperature in forecastVendorcast list -->
     <color name="forecast_low_text">#607D8B</color>
     <color name="default_color">#FBFFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
 
     <color name="step_pager_previous_tab_color">#4433b5e5</color>
     <color name="step_pager_selected_tab_color">#ff0099cc</color>

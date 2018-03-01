@@ -1,10 +1,10 @@
 package com.nijus.alino.bfwcoopmanagement.loans.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,36 +12,41 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.DetailLoanActivity;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.SelectedItems;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     final private Context mContext;
     final private View mEmptyView;
     final private LoanAdapterOnClickHandler mClickHandler;
-    public List<Long> listsSelectedItem = new ArrayList<Long>();
+    final private LoanAdapterOnLongClickHandler mOnLongClickListener;
     private Cursor mCursor;
     private View view;
 
+    private SparseBooleanArray selectedItems;
+    private SparseBooleanArray animationItemsIndex;
+    private SparseBooleanArray itemsValues;
+    private boolean reverseAllAnimations = false;
+    private static int currentSelectedIndex = -1;
+    private int position;
+
     public LoanAdapter(Context mContext, View mEmptyView, LoanAdapterOnClickHandler mClickHandler,
-                       LoanAdapterOnLongClickHandler mLongClickHandler) {
+                       LoanAdapterOnLongClickHandler mOnLongClickListener) {
         this.mContext = mContext;
         this.mEmptyView = mEmptyView;
         this.mClickHandler = mClickHandler;
+        this.mOnLongClickListener = mOnLongClickListener;
+        selectedItems = new SparseBooleanArray();
+        animationItemsIndex = new SparseBooleanArray();
+        itemsValues = new SparseBooleanArray();
     }
 
     @Override
@@ -56,10 +61,12 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         mCursor.moveToPosition(position);
 
         holder.farmerImage.setImageResource(R.mipmap.get_loan);
-        //holder.iconBack.setVisibility(View.GONE);
 
-        holder.mInstitution.setText("From " + mCursor.getString(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
-        holder.amount_tot.setText("" + mCursor.getDouble(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)) + " RWF");
+        String institution = "From " + mCursor.getString(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION));
+        String amountTot = "" + mCursor.getDouble(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)) + " RWF";
+
+        holder.mInstitution.setText(institution);
+        holder.amount_tot.setText(amountTot);
 
         Long getDate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -71,13 +78,14 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_SYNC)) == 1;
-        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_UPDATE))==1;
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_UPDATE)) == 1;
         if (isUpdate && isSync) {
             holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
-        }
-        else  {
+        } else {
             holder.imageView.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
         }
+
+        applyIconAnimation(holder, position);
     }
 
     @Override
@@ -86,24 +94,88 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         return mCursor.getCount();
     }
 
+    private void applyIconAnimation(ViewHolder holder, int position) {
+        if (selectedItems.get(position, false)) {
+            holder.iconFront.setVisibility(View.GONE);
+            holder.resetIconYAxis(holder.iconBack);
+            holder.iconBack.setVisibility(View.VISIBLE);
+            holder.iconBack.setAlpha(1);
+            if (currentSelectedIndex == position) {
+                FlipAnimator.flipView(mContext, holder.iconBack, holder.iconFront, true);
+                resetCurrentIndex();
+            }
+        } else {
+            holder.iconBack.setVisibility(View.GONE);
+            holder.resetIconYAxis(holder.iconFront);
+            holder.iconFront.setVisibility(View.VISIBLE);
+            holder.iconFront.setAlpha(1);
+            if ((reverseAllAnimations && animationItemsIndex.get(position, false)) || currentSelectedIndex == position) {
+                FlipAnimator.flipView(mContext, holder.iconBack, holder.iconFront, false);
+                resetCurrentIndex();
+            }
+        }
+    }
+
+    public void resetAnimationIndex() {
+        reverseAllAnimations = false;
+        animationItemsIndex.clear();
+    }
+
+    public void clearSelections() {
+        reverseAllAnimations = true;
+        selectedItems.clear();
+        itemsValues.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Integer> getSelectedItems() {
+        ArrayList<Integer> items =
+                new ArrayList<>(itemsValues.size());
+        for (int i = 0; i < itemsValues.size(); i++) {
+            items.add(itemsValues.keyAt(i));
+        }
+        return items;
+    }
+
+    private void resetCurrentIndex() {
+        currentSelectedIndex = -1;
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndex = pos;
+
+        mCursor.moveToPosition(pos);
+
+        int id = mCursor.getInt(mCursor.getColumnIndex(BfwContract.Farmer._ID));
+
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+            animationItemsIndex.delete(pos);
+            itemsValues.delete(id);
+        } else {
+            selectedItems.put(pos, true);
+            animationItemsIndex.put(pos, true);
+            itemsValues.put(id, true);
+        }
+        notifyItemChanged(pos);
+    }
+
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void reset() {
-        ViewHolder h = new ViewHolder(view);
-        TextView v =(TextView) h.resetAll(1);
-        String s = (String) v.getText();
+    public int getSelectedItemCount() {
+        return selectedItems.size();
     }
 
     public interface LoanAdapterOnClickHandler {
-        void onClick(Long farmerId, ViewHolder vh);
+        void onItemClick(Long farmerId, ViewHolder vh);
     }
 
     public interface LoanAdapterOnLongClickHandler {
-        boolean onLongClick(Long farmerId, ViewHolder vh);
+        boolean onLongClick(int position, ViewHolder vh);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -141,60 +213,24 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
             mCursor.moveToPosition(position);
             Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
 
-            Intent intent = new Intent(mContext, DetailLoanActivity.class);
-            intent.putExtra("loanId", loanColumnIndex);
-            mContext.startActivity(intent);
+            mClickHandler.onItemClick(loanColumnIndex, this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            position = getAdapterPosition();
+            mCursor.moveToPosition(position);
+
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+
+            mOnLongClickListener.onLongClick(position, this);
+            return true;
         }
 
         private void resetIconYAxis(View view) {
             if (view.getRotationY() != 0) {
                 view.setRotationY(0);
             }
-        }
-
-
-        @Override
-        public boolean onLongClick(View view) {
-            int position = getAdapterPosition();
-            mCursor.moveToPosition(position);
-            Long loanColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan._ID));
-
-            if (!return_if_val_in_array(loanColumnIndex)) {
-                this.iconFront.setVisibility(View.GONE);
-                this.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                resetIconYAxis(this.iconBack);
-                this.iconBack.setVisibility(View.VISIBLE);
-                this.iconBack.setAlpha(1);
-                flipAnimator.flipView(mContext, this.iconBack, this.iconFront, true);
-                listsSelectedItem.add(loanColumnIndex);
-                EventBus.getDefault().post(new SelectedItems(listsSelectedItem));
-
-            } else {
-                this.iconBack.setVisibility(View.GONE);
-                resetIconYAxis(this.iconFront);
-                this.view_foreground.setBackgroundColor(Color.argb(2, 0, 0, 0));
-                this.iconFront.setVisibility(View.VISIBLE);
-                this.iconFront.setAlpha(1);
-
-                flipAnimator.flipView(mContext, this.iconBack, this.iconFront, false);
-                listsSelectedItem.remove(loanColumnIndex);
-                EventBus.getDefault().post(new SelectedItems(listsSelectedItem));
-            }
-            return true;
-        }
-
-        public View resetAll(int i) {
-            mCursor.moveToPosition(i);
-            return this.amount_tot;
-        }
-
-        boolean return_if_val_in_array(Long val) {
-            for (Long v : listsSelectedItem) {
-                if (val == v) {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

@@ -24,11 +24,10 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DisableFarmerSwipeEvent;
 import com.nijus.alino.bfwcoopmanagement.events.EventFarmerResetItems;
-import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerList;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
 import com.nijus.alino.bfwcoopmanagement.events.RequestEventFarmerToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.ResponseEventFarmerToDelete;
-import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SaveLocalFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerRequestEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerResponseEvent;
@@ -105,7 +104,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
             public void onLongClick(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh) {
                 ((OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(item, position, vh);
             }
-        }, mLayoutManager);
+        });
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
@@ -151,7 +150,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     @Subscribe
     public void onEventFarmerResetItems(EventFarmerResetItems eventFarmerResetItems) {
-
         navigationRecyclerViewAdapter.clearSelections();
         mRefreshData.setEnabled(true);
         fab.setVisibility(View.VISIBLE);
@@ -162,13 +160,11 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
                 navigationRecyclerViewAdapter.resetAnimationIndex();
             }
         });
-
     }
 
-    @Subscribe
-    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess())
-            getLoaderManager().restartLoader(0, null, this);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveLocalFarmerEvent(SaveLocalFarmerEvent saveLocalFarmerEvent) {
+        getLoaderManager().restartLoader(0, null, this);
     }
 
     @Subscribe
@@ -176,7 +172,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
             getLoaderManager().restartLoader(0, null, this);

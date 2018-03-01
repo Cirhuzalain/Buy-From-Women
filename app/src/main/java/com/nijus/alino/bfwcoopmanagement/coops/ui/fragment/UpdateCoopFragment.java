@@ -180,7 +180,7 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
         if (view.getId() == R.id.next_button_update) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
                 //updateCoop();
-                Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -195,7 +195,7 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
             updateBottomBar();
         } else if (view.getId() == R.id.save_button_update) {
             //updateCoop();
-            Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
         }
 
     }

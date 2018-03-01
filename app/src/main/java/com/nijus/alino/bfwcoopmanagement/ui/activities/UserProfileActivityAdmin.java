@@ -19,6 +19,7 @@ import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.DisableFarmerSwipeEvent;
 import com.nijus.alino.bfwcoopmanagement.events.EventFarmerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
 import com.nijus.alino.bfwcoopmanagement.events.RequestEventFarmerToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.ResponseEventFarmerToDelete;
@@ -37,6 +38,7 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -47,7 +49,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    //Fragments
     BuyerFragment buyerFragment;
     VendorFragment vendorFragment;
     CoopFragment coopFragment;
@@ -144,22 +145,25 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeleteFarmerEvent(DeleteFarmerEvent deleteFarmerEvent) {
         if (deleteFarmerEvent.isSuccess()) {
-            EventBus.getDefault().post(new RefreshFarmerLoader());
             Toast.makeText(this, deleteFarmerEvent.getMessage(), Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new RefreshFarmerLoader());
         } else {
             Toast.makeText(this, deleteFarmerEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingFarmerEvent(ProcessingFarmerEvent processingFarmerEvent) {
+        Toast.makeText(this, processingFarmerEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
     @Subscribe
     public void onResponseEventFarmerToDelete(ResponseEventFarmerToDelete eventFarmerToDelete) {
-
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             ArrayList<Integer> farmerIds = eventFarmerToDelete.getFarmerIds();
-
             DeleteFarmerDialog farmerDeleteDialog = new DeleteFarmerDialog();
             Bundle bundle = new Bundle();
             bundle.putIntegerArrayList("farmer_ids", farmerIds);

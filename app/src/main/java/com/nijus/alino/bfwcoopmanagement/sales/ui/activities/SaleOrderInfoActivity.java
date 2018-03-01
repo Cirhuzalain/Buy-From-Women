@@ -31,7 +31,7 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sales_order_fragment);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sale_order);
+        FloatingActionButton fab = findViewById(R.id.fab_sale_order);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 

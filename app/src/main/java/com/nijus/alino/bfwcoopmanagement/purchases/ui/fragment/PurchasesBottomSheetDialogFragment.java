@@ -142,7 +142,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
             dialog.show();
         }
         if (view == ok){
-            Toast.makeText(getContext(),"Save sales comming soon",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -14,6 +14,7 @@ import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -212,9 +213,9 @@ public class UpdateSyncFarmer extends IntentService {
                     }
 
                     if (waterSourceDetails != null) {
-                        bodyInfo = bodyInfo + "\"other_details\" : \"" + waterSourceDetails + "\",";
+                        bodyInfo = bodyInfo + "\"other_water_source\" : \"" + waterSourceDetails + "\",";
                     } else {
-                        bodyInfo = bodyInfo + "\"other_details\" : " + waterSourceDetails + ",";
+                        bodyInfo = bodyInfo + "\"other_water_source\" : " + waterSourceDetails + ",";
                     }
 
                     bodyInfo = bodyInfo + "\"ar_tractors\" : " + tractors + "," +
@@ -624,13 +625,13 @@ public class UpdateSyncFarmer extends IntentService {
                                     Double farmerexpectedminppp;
                                     Double minimumflowprice;
 
-                                    Double expectedProductionInMt;
-                                    Double forecastedyieldmt;
-                                    Double forecastedharvestsalevalue;
-                                    Double totalcooplandsize;
-                                    Double farmerpercentageland;
-                                    Double currentpppcommitment;
-                                    Double farmercontributionppp;
+                                    Double expectedProductionInMt = null;
+                                    Double forecastedyieldmt = null;
+                                    Double forecastedharvestsalevalue = null;
+                                    Double totalcooplandsize = null;
+                                    Double farmerpercentageland = null;
+                                    Double currentpppcommitment = null;
+                                    Double farmercontributionppp = null;
 
                                     int forecastSeasonId;
 
@@ -692,62 +693,245 @@ public class UpdateSyncFarmer extends IntentService {
                                                 }
                                             }
                                         } else {
-                                            String accInFoData = "{" +
-                                                    "\"total_arable_land_plots\": " + totalArableLandPlots + "," +
-                                                    "\"farmer_expected_min_ppp\": " + farmerexpectedminppp + "," +
-                                                    "\"minimum_flow_price\": " + minimumflowprice + "," +
-                                                    "\"harvest_id\": " + serverSeasonId + "," +
-                                                    "\"farmer_id\": " + farmerServerId + "" +
-                                                    "}";
-                                            String API_INFO = BuildConfig.DEV_API_URL + "forecast.farmer";
 
-                                            RequestBody bodyLand = RequestBody.create(JSON, accInFoData);
 
+                                            // get all the forecast for a given farmer and check if there's one that match with serverSeasonId
+                                            String proxyUrl = BuildConfig.DEV_PROXY_URL + "?model=forecast.farmer&attr=farmer_id&value=" + farmerServerId + "&token=" + appToken;
                                             Request requestLand = new Request.Builder()
-                                                    .url(API_INFO)
+                                                    .url(proxyUrl)
                                                     .header("Content-Type", "text/html")
                                                     .header("Access-Token", appToken)
-                                                    .method("POST", bodyLand)
+                                                    .get()
                                                     .build();
 
                                             Response responseLand = client.newCall(requestLand).execute();
                                             ResponseBody responseBodyLand = responseLand.body();
-
                                             if (responseBodyLand != null) {
+                                                String forecastsList = responseBodyLand.string();
+                                                JSONObject farmersJsonObject = new JSONObject(forecastsList);
 
-                                                String bodyLandInfo = responseBodyLand.string();
 
-                                                JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
-                                                if (bodyLandObject.has("id")) {
-                                                    int infoServerId = bodyLandObject.getInt("id");
+                                                String filterServerResponse = farmersJsonObject.getString("response");
+                                                JSONObject filterServerObject = new JSONObject(filterServerResponse);
+                                                JSONArray forecastArrayLists = filterServerObject.getJSONArray("results");
+                                                JSONObject forecastObject;
+                                                int availableSeasonId = 0;
 
-                                                    expectedProductionInMt = bodyLandObject.getDouble("expected_production_in_mt");
-                                                    forecastedyieldmt = bodyLandObject.getDouble("forecasted_yield_mt");
-                                                    forecastedharvestsalevalue = bodyLandObject.getDouble("forecasted_harvest_sale_value");
-                                                    totalcooplandsize = bodyLandObject.getDouble("total_coop_land_size");
-                                                    farmerpercentageland = bodyLandObject.getDouble("farmer_percentage_land");
-                                                    currentpppcommitment = bodyLandObject.getDouble("current_ppp_commitment");
-                                                    farmercontributionppp = bodyLandObject.getDouble("farmer_contribution_ppp");
+                                                if (forecastArrayLists.length() > 0) {
+                                                    for (int f = 0; f < forecastArrayLists.length(); f++) {
 
-                                                    ContentValues forecastContentValues = new ContentValues();
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_SERVER_ID, infoServerId);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_PRODUCTION_MT, expectedProductionInMt);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_YIELD_MT, forecastedyieldmt);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_PPP_COMMITMENT, currentpppcommitment);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 1);
-                                                    forecastContentValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
+                                                        forecastObject = forecastArrayLists.getJSONObject(f);
 
-                                                    getContentResolver().update(BfwContract.ForecastFarmer.CONTENT_URI, forecastContentValues, forecastFarmerInfo,
-                                                            new String[]{Long.toString(forecastId)});
+                                                        int forecastServerNewId = forecastObject.getInt("id");
+                                                        if (forecastObject.has("harvest_id")) {
+                                                            if (!forecastObject.getString("harvest_id").equals("null")) {
+                                                                availableSeasonId = forecastObject.getInt("harvest_id");
+                                                            }
+                                                        }
+
+                                                        if (serverSeasonId == availableSeasonId) {
+
+                                                            // there's forecast for a given farmer on season X
+
+                                                            if (forecastObject.has("expected_production_in_mt")) {
+                                                                if (!forecastObject.getString("expected_production_in_mt").equals("null")) {
+                                                                    expectedProductionInMt = forecastObject.getDouble("expected_production_in_mt");
+                                                                }
+                                                            }
+
+                                                            if (forecastObject.has("forecasted_yield_mt")) {
+                                                                if (!forecastObject.getString("forecasted_yield_mt").equals("null")) {
+                                                                    forecastedyieldmt = forecastObject.getDouble("forecasted_yield_mt");
+                                                                }
+                                                            }
+                                                            if (forecastObject.has("forecasted_harvest_sale_value")) {
+                                                                if (!forecastObject.getString("forecasted_harvest_sale_value").equals("null")) {
+                                                                    forecastedharvestsalevalue = forecastObject.getDouble("forecasted_harvest_sale_value");
+                                                                }
+                                                            }
+                                                            if (forecastObject.has("total_coop_land_size")) {
+                                                                if (!forecastObject.getString("total_coop_land_size").equals("null")) {
+                                                                    totalcooplandsize = forecastObject.getDouble("total_coop_land_size");
+                                                                }
+                                                            }
+                                                            if (forecastObject.has("farmer_percentage_land")) {
+                                                                if (!forecastObject.getString("farmer_percentage_land").equals("null")) {
+                                                                    farmerpercentageland = forecastObject.getDouble("farmer_percentage_land");
+                                                                }
+                                                            }
+                                                            if (forecastObject.has("current_ppp_commitment")) {
+                                                                if (!forecastObject.getString("current_ppp_commitment").equals("null")) {
+                                                                    currentpppcommitment = forecastObject.getDouble("current_ppp_commitment");
+                                                                }
+                                                            }
+
+                                                            if (forecastObject.has("farmer_contribution_ppp")) {
+                                                                if (!forecastObject.getString("farmer_contribution_ppp").equals("null")) {
+                                                                    farmercontributionppp = forecastObject.getDouble("farmer_contribution_ppp");
+                                                                }
+                                                            }
+
+                                                            String accInFoData = "{" +
+                                                                    "\"total_arable_land_plots\": " + totalArableLandPlots + "," +
+                                                                    "\"farmer_expected_min_ppp\": " + farmerexpectedminppp + "," +
+                                                                    "\"minimum_flow_price\": " + minimumflowprice + "," +
+                                                                    "\"harvest_id\": " + serverSeasonId + "," +
+                                                                    "\"farmer_id\": " + farmerServerId + "" +
+                                                                    "}";
+                                                            String API_INFO = BuildConfig.DEV_API_URL + "forecast.farmer" + "/" + forecastServerId;
+
+                                                            RequestBody bodyLand = RequestBody.create(JSON, accInFoData);
+
+                                                            requestLand = new Request.Builder()
+                                                                    .url(API_INFO)
+                                                                    .header("Content-Type", "text/html")
+                                                                    .header("Access-Token", appToken)
+                                                                    .method("PUT", bodyLand)
+                                                                    .build();
+
+                                                            responseLand = client.newCall(requestLand).execute();
+                                                            responseBodyLand = responseLand.body();
+
+                                                            if (responseBodyLand != null) {
+
+                                                                String bodyLandInfo = responseBodyLand.string();
+                                                                if (bodyLandInfo.equals("{}")) {
+
+                                                                    ContentValues forecastValues = new ContentValues();
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_SERVER_ID, forecastServerNewId);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PRODUCTION_MT, expectedProductionInMt);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_YIELD_MT, forecastedyieldmt);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PPP_COMMITMENT, currentpppcommitment);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 1);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
+
+                                                                    getContentResolver().update(BfwContract.ForecastFarmer.CONTENT_URI, forecastValues, forecastFarmerInfo,
+                                                                            new String[]{Long.toString(forecastId)});
+                                                                }
+                                                            }
+
+
+                                                        } else {
+                                                            // there's no forecast for a given farmer on season X
+                                                            String accInFoData = "{" +
+                                                                    "\"total_arable_land_plots\": " + totalArableLandPlots + "," +
+                                                                    "\"farmer_expected_min_ppp\": " + farmerexpectedminppp + "," +
+                                                                    "\"minimum_flow_price\": " + minimumflowprice + "," +
+                                                                    "\"harvest_id\": " + serverSeasonId + "," +
+                                                                    "\"farmer_id\": " + farmerServerId + "" +
+                                                                    "}";
+                                                            String API_INFO = BuildConfig.DEV_API_URL + "forecast.farmer";
+
+                                                            RequestBody bodyLand = RequestBody.create(JSON, accInFoData);
+
+                                                            requestLand = new Request.Builder()
+                                                                    .url(API_INFO)
+                                                                    .header("Content-Type", "text/html")
+                                                                    .header("Access-Token", appToken)
+                                                                    .method("POST", bodyLand)
+                                                                    .build();
+
+                                                            responseLand = client.newCall(requestLand).execute();
+                                                            responseBodyLand = responseLand.body();
+
+                                                            if (responseBodyLand != null) {
+
+                                                                String bodyLandInfo = responseBodyLand.string();
+
+                                                                JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
+                                                                if (bodyLandObject.has("id")) {
+                                                                    int infoServerId = bodyLandObject.getInt("id");
+
+                                                                    expectedProductionInMt = bodyLandObject.getDouble("expected_production_in_mt");
+                                                                    forecastedyieldmt = bodyLandObject.getDouble("forecasted_yield_mt");
+                                                                    forecastedharvestsalevalue = bodyLandObject.getDouble("forecasted_harvest_sale_value");
+                                                                    totalcooplandsize = bodyLandObject.getDouble("total_coop_land_size");
+                                                                    farmerpercentageland = bodyLandObject.getDouble("farmer_percentage_land");
+                                                                    currentpppcommitment = bodyLandObject.getDouble("current_ppp_commitment");
+                                                                    farmercontributionppp = bodyLandObject.getDouble("farmer_contribution_ppp");
+
+                                                                    ContentValues forecastValues = new ContentValues();
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_SERVER_ID, infoServerId);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PRODUCTION_MT, expectedProductionInMt);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_YIELD_MT, forecastedyieldmt);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PPP_COMMITMENT, currentpppcommitment);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 1);
+                                                                    forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
+
+                                                                    getContentResolver().update(BfwContract.ForecastFarmer.CONTENT_URI, forecastValues, forecastFarmerInfo,
+                                                                            new String[]{Long.toString(forecastId)});
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } else {
+                                                    // there's no forecast for a given farmer
+                                                    String accInFoData = "{" +
+                                                            "\"total_arable_land_plots\": " + totalArableLandPlots + "," +
+                                                            "\"farmer_expected_min_ppp\": " + farmerexpectedminppp + "," +
+                                                            "\"minimum_flow_price\": " + minimumflowprice + "," +
+                                                            "\"harvest_id\": " + serverSeasonId + "," +
+                                                            "\"farmer_id\": " + farmerServerId + "" +
+                                                            "}";
+                                                    String API_INFO = BuildConfig.DEV_API_URL + "forecast.farmer";
+
+                                                    RequestBody bodyLand = RequestBody.create(JSON, accInFoData);
+
+                                                    requestLand = new Request.Builder()
+                                                            .url(API_INFO)
+                                                            .header("Content-Type", "text/html")
+                                                            .header("Access-Token", appToken)
+                                                            .method("POST", bodyLand)
+                                                            .build();
+
+                                                    responseLand = client.newCall(requestLand).execute();
+                                                    responseBodyLand = responseLand.body();
+
+                                                    if (responseBodyLand != null) {
+
+                                                        String bodyLandInfo = responseBodyLand.string();
+
+                                                        JSONObject bodyLandObject = new JSONObject(bodyLandInfo);
+                                                        if (bodyLandObject.has("id")) {
+                                                            int infoServerId = bodyLandObject.getInt("id");
+
+                                                            expectedProductionInMt = bodyLandObject.getDouble("expected_production_in_mt");
+                                                            forecastedyieldmt = bodyLandObject.getDouble("forecasted_yield_mt");
+                                                            forecastedharvestsalevalue = bodyLandObject.getDouble("forecasted_harvest_sale_value");
+                                                            totalcooplandsize = bodyLandObject.getDouble("total_coop_land_size");
+                                                            farmerpercentageland = bodyLandObject.getDouble("farmer_percentage_land");
+                                                            currentpppcommitment = bodyLandObject.getDouble("current_ppp_commitment");
+                                                            farmercontributionppp = bodyLandObject.getDouble("farmer_contribution_ppp");
+
+                                                            ContentValues forecastValues = new ContentValues();
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_SERVER_ID, infoServerId);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PRODUCTION_MT, expectedProductionInMt);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_YIELD_MT, forecastedyieldmt);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_PPP_COMMITMENT, currentpppcommitment);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_SYNC, 1);
+                                                            forecastValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
+
+                                                            getContentResolver().update(BfwContract.ForecastFarmer.CONTENT_URI, forecastValues, forecastFarmerInfo,
+                                                                    new String[]{Long.toString(forecastId)});
+                                                        }
+                                                    }
                                                 }
                                             }
+
                                         }
                                     }
-
                                 }
 
                                 //update finance data if available

@@ -147,7 +147,7 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
         mNextButton = rootView.findViewById(R.id.next_button);
         mPrevButton = rootView.findViewById(R.id.prev_button);
         mSaveFarmer = rootView.findViewById(R.id.save_button);
-        
+
         mImageView = rootView.findViewById(R.id.left_icon);
         mImageView.setImageResource(R.drawable.ic_chevron_left_black_24dp);
         mRightImageView = rootView.findViewById(R.id.right_icon);
@@ -183,7 +183,7 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
                 //saveNewCoop();
 
             } else {
@@ -198,7 +198,7 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
-            Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
             //saveNewCoop();
         }
 

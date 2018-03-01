@@ -1,13 +1,8 @@
 package com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -15,7 +10,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 public class CreateCoopAgentActivity extends AppCompatActivity {
     private AutoCompleteTextView name;
@@ -29,7 +23,7 @@ public class CreateCoopAgentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_coop_agent);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         name = findViewById(R.id.name_ca);
@@ -41,23 +35,14 @@ public class CreateCoopAgentActivity extends AppCompatActivity {
         create_coop_agent_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //intent.putExtra("coop_agent", new CoopAgentParcelable(,phone.getText().toString(),
-                        //email.getText().toString(),coop.getSelectedItem().toString()));
-/*
-                Bundle data = getIntent().getExtras();
-                CoopAgentParcelable coopAgentParcelable = (CoopAgentParcelable) data.getParcelable("coop_agent");*/
-
-                Toast.makeText(getApplicationContext()," enregister coop agent ",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
             }
         });
 
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-
 
 
 }

@@ -20,7 +20,7 @@ public class UpdateBuyerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_buyer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -30,7 +30,7 @@ public class UpdateBuyerActivity extends AppCompatActivity {
         update_buyer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Update buyer comming soon",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
             }
         });
     }

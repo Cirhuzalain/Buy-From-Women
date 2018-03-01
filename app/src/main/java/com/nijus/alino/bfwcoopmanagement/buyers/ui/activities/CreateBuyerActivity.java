@@ -23,7 +23,7 @@ public class CreateBuyerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_buyer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         name = findViewById(R.id.name_b);
@@ -34,14 +34,12 @@ public class CreateBuyerActivity extends AppCompatActivity {
         create_buyer_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(getApplicationContext()," Commingg soon",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
             }
         });
 
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

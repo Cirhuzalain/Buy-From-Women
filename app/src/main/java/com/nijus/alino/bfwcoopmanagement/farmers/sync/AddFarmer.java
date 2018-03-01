@@ -90,7 +90,7 @@ public class AddFarmer extends IntentService {
             Double totVolumeSoldCoopInKg;
             Double priceSoldToCoopPerKg;
             Double totVolSoldInKg;
-            Double priceSoldInKg ;
+            Double priceSoldInKg;
 
             //Finance data field;
             Boolean outstandingLoan, isInput, isAggregation, isOther, isMobileMoneyAccount;
@@ -357,6 +357,8 @@ public class AddFarmer extends IntentService {
 
                 dispatcher.mustSchedule(job);
             }
+        } else {
+            EventBus.getDefault().post(new SaveDataEvent("No data Available", false));
         }
 
     }

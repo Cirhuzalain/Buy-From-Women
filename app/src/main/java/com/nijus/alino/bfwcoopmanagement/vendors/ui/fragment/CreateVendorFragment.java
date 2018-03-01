@@ -183,7 +183,7 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageVendorSequence.size() - 1) {
                 //Save Farmer data
-                Toast.makeText(getContext(), "Coming soon !!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
                 //saveNewFarmer();
 
             } else {
@@ -199,7 +199,7 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
             //Save farmer data
-            Toast.makeText(getContext(), "Coming soon !!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
             //saveNewFarmer();
         }
 

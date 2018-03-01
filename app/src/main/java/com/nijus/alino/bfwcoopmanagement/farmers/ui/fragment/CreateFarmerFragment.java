@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.events.SaveLocalFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.CreateFarmerStepper;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventB;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
@@ -38,6 +39,7 @@ import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -184,7 +186,6 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                //Save Farmer data
                 saveNewFarmer();
 
             } else {
@@ -199,7 +200,6 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
-            //Save farmer data
             saveNewFarmer();
         }
 
@@ -277,10 +277,13 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        progressDialog.dismiss();
-        getActivity().finish();
+        if (saveDataEvent.isSuccess()){
+            EventBus.getDefault().post(new SaveLocalFarmerEvent());
+            progressDialog.dismiss();
+            getActivity().finish();
+        }
     }
 
     /**
