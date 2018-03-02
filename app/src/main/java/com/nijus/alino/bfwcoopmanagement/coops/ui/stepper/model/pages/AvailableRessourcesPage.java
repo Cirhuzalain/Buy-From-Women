@@ -3,8 +3,8 @@ package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableRessources;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.AvailableRessourcesFragment;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableResources;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.AvailableResourcesFragment;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ public class AvailableRessourcesPage extends Page {
 
     public static final String AVAILABLE_RES_KEY = "key";
 
-   private AvailableRessources availableRessources = new AvailableRessources();
+   private AvailableResources availableRessources = new AvailableResources();
 
     public AvailableRessourcesPage(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
@@ -20,7 +20,7 @@ public class AvailableRessourcesPage extends Page {
 
     @Override
     public Fragment createFragment() {
-        return AvailableRessourcesFragment.create(getKey());
+        return AvailableResourcesFragment.create(getKey());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class AvailableRessourcesPage extends Page {
         return super.setRequired(required);
     }
 
-   public AvailableRessourcesPage setValue(AvailableRessources availableRessources) {
+   public AvailableRessourcesPage setValue(AvailableResources availableRessources) {
         mData.putParcelable(AVAILABLE_RES_KEY, availableRessources);
         return this;
     }

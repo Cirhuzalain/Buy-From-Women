@@ -1,8 +1,10 @@
 package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineYield;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+
+import java.util.HashMap;
 
 public class BaselineYieldFragment extends Fragment {
 
@@ -26,13 +31,18 @@ public class BaselineYieldFragment extends Fragment {
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
 
-    private Spinner harvsetSeason;
+    private Spinner harvestSeason;
+
+    private Cursor cursor;
+    private String seasonName;
+    private int seasonId;
+    private HashMap<String, BaselineYield> baselineYieldSeason = new HashMap<>();
 
     private CheckBox maize;
     private CheckBox bean;
     private CheckBox soy;
     private CheckBox other;
-    
+
     public BaselineYieldFragment() {
         super();
     }
@@ -65,7 +75,9 @@ public class BaselineYieldFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.baseline_yield));
 
-        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvestSeason = rootView.findViewById(R.id.harvestSeason);
+
+        populateSpinner();
 
         maize = rootView.findViewById(R.id.maize);
         boolean isMaize = maize.isActivated();
@@ -83,60 +95,169 @@ public class BaselineYieldFragment extends Fragment {
         boolean isother = other.isActivated();
         baselineYield.setOther(isother);
 
-        //les checkk button
+        cursor = (Cursor) harvestSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+        baselineYieldSeason.put(seasonName, baselineYield);
+
+        mPage.getData().putSerializable("baselines_yield", baselineYieldSeason);
+
+
         maize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    baselineYield.setMaize(true);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setMaize(true);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setMaize(true);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 } else {
-                    baselineYield.setMaize(false);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setMaize(false);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setMaize(false);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 }
-                mPage.getData().putParcelable("baselineYield", baselineYield);
+                mPage.getData().putSerializable("baselines_yield", baselineYieldSeason);
             }
         });
 
         soy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    baselineYield.setSoy(true);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setSoy(true);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setSoy(true);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 } else {
-                    baselineYield.setSoy(false);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setSoy(false);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setSoy(false);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 }
-                mPage.getData().putParcelable("baselineYield", baselineYield);
+                mPage.getData().putSerializable("baselines_yield", baselineYieldSeason);
             }
         });
 
         bean.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    baselineYield.setBean(true);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setBean(true);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setBean(true);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 } else {
-                    baselineYield.setBean(false);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setBean(false);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setBean(false);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 }
-                mPage.getData().putParcelable("baselineYield", baselineYield);
+                mPage.getData().putSerializable("baselines_yield", baselineYieldSeason);
             }
         });
 
         other.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    baselineYield.setOther(true);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setOther(true);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setOther(true);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 } else {
-                    baselineYield.setOther(false);
+                    if (baselineYieldSeason.containsKey(seasonName)) {
+                        baselineYieldSeason.get(seasonName).setOther(false);
+                    } else {
+                        BaselineYield baselineYield = new BaselineYield();
+                        baselineYield.setOther(false);
+                        baselineYield.setSeasonId(seasonId);
+                        baselineYieldSeason.put(seasonName, baselineYield);
+                    }
                 }
-                mPage.getData().putParcelable("baselineYield", baselineYield);
+                mPage.getData().putSerializable("baselines_yield", baselineYieldSeason);
             }
         });
 
-        //les spiners
-
-
-
         return rootView;
+    }
+
+    public void populateSpinner() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvestSeason.setAdapter(adapter);
+        }
     }
 
     @Override

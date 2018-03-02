@@ -20,5 +20,21 @@ public class UpdateCoopService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
+        // grab data
+
+        // prepare and set variable
+
+        // handle coops table
+
+        // handle baseline finance info table
+
+        // handle baseline sales table
+
+        // handle baseline yield table
+
+        // handle forecast sales table
+
+        // handle access  to information table
+
     }
 }

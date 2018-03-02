@@ -198,7 +198,7 @@ public class UpdateInternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setYearRcaRegistration(Integer.parseInt(charSequence.toString()));
+                internalInformation.setYearRcaRegistration(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 

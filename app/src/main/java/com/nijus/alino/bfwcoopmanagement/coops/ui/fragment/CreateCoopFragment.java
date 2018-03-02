@@ -22,7 +22,7 @@ import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.AbstractWi
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.ModelCallbacks;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableRessources;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableResources;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineFinanceInfo;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineSales;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineYield;
@@ -219,10 +219,12 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             boolean isBaselineSales = data.containsKey("baseline_sales");
             boolean isBaselineFin = data.containsKey("baseline_fin");
 
+            // get data
+
             if (isData) {
                 GeneralInformation general = data.getParcelable("general");
                 if (general != null) {
-                    if (general.getName() == null || general.getAdress() == null) {
+                    if (general.getName() == null || general.getAddress() == null) {
                         Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error_coop), Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -230,17 +232,12 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
                 saveBundle.putParcelable("general", general);
             }
 
-           /* if (isInternal) {
-                HashMap map = (HashMap) data.getSerializable("land_info");
-                saveBundle.putSerializable("land_info", map);
-            }*/
-
             if (isInternal) {
                 InternalInformation internalInformation = data.getParcelable("internal");
                 saveBundle.putParcelable("internal", internalInformation);
             }
             if (isAvailbaleRes) {
-                AvailableRessources availableRessources = data.getParcelable("available_res");
+                AvailableResources availableRessources = data.getParcelable("available_res");
                 saveBundle.putParcelable("available_res", availableRessources);
             }
             if (isAccessInfo) {

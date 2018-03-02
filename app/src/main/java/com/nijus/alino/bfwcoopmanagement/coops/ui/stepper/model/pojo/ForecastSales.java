@@ -5,8 +5,7 @@ import android.os.Parcelable;
 
 
 public class ForecastSales implements Parcelable {
-    private String havrestSeason;
-    private String othetText;
+    private String seasonName;
     private String minFloorPerGrade;
     private String grade;
 
@@ -20,16 +19,16 @@ public class ForecastSales implements Parcelable {
     private boolean none;
     private boolean other;
 
-
-   //constructeur vide et contructeur non vide
+    private int seasonId;
+    private int forecastId;
 
 
     public ForecastSales() {
+        this.forecastId = 0;
     }
 
-    public ForecastSales(String havrestSeason, String othetText, String minFloorPerGrade, String grade, int commitedContractQty, boolean rgcc, boolean prodev, boolean sarura, boolean aif, boolean eax, boolean none, boolean other) {
-        this.havrestSeason = havrestSeason;
-        this.othetText = othetText;
+    public ForecastSales(String seasonName, String minFloorPerGrade, String grade, int commitedContractQty, boolean rgcc, boolean prodev, boolean sarura, boolean aif, boolean eax, boolean none, boolean other) {
+        this.seasonName = seasonName;
         this.minFloorPerGrade = minFloorPerGrade;
         this.grade = grade;
         this.commitedContractQty = commitedContractQty;
@@ -43,9 +42,8 @@ public class ForecastSales implements Parcelable {
     }
 
     public ForecastSales(Parcel data) {
-        this.havrestSeason = data.readString();
-        this.othetText = data.readString();
-        this.minFloorPerGrade =data.readString();
+        this.seasonName = data.readString();
+        this.minFloorPerGrade = data.readString();
         this.grade = data.readString();
         this.commitedContractQty = data.readInt();
         this.rgcc = data.readByte() != 0;
@@ -55,6 +53,8 @@ public class ForecastSales implements Parcelable {
         this.eax = data.readByte() != 0;
         this.none = data.readByte() != 0;
         this.other = data.readByte() != 0;
+        this.seasonId = data.readInt();
+        this.forecastId = data.readInt();
 
     }
 
@@ -65,36 +65,43 @@ public class ForecastSales implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(havrestSeason);
-        parcel.writeString(othetText);
-        parcel.writeString(minFloorPerGrade );
-        parcel.writeString(grade );
+        parcel.writeString(seasonName);
+        parcel.writeString(minFloorPerGrade);
+        parcel.writeString(grade);
         parcel.writeInt(commitedContractQty);
-        parcel.writeByte((byte)(rgcc  ? 1 : 0));
-        parcel.writeByte((byte)(prodev  ? 1 : 0));
-        parcel.writeByte((byte)(sarura  ? 1 : 0));
-        parcel.writeByte((byte)(aif  ? 1 : 0));
-        parcel.writeByte((byte)(eax  ? 1 : 0));
-        parcel.writeByte((byte)(none  ? 1 : 0));
-        parcel.writeByte((byte)(other  ? 1 : 0));
-    }
-   //setters et getters
-
-
-    public String getHavrestSeason() {
-        return havrestSeason;
+        parcel.writeByte((byte) (rgcc ? 1 : 0));
+        parcel.writeByte((byte) (prodev ? 1 : 0));
+        parcel.writeByte((byte) (sarura ? 1 : 0));
+        parcel.writeByte((byte) (aif ? 1 : 0));
+        parcel.writeByte((byte) (eax ? 1 : 0));
+        parcel.writeByte((byte) (none ? 1 : 0));
+        parcel.writeByte((byte) (other ? 1 : 0));
+        parcel.writeInt(seasonId);
+        parcel.writeInt(forecastId);
     }
 
-    public void setHavrestSeason(String havrestSeason) {
-        this.havrestSeason = havrestSeason;
+    public String getSeasonName() {
+        return seasonName;
     }
 
-    public String getOthetText() {
-        return othetText;
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
     }
 
-    public void setOthetText(String othetText) {
-        this.othetText = othetText;
+    public int getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(int seasonId) {
+        this.seasonId = seasonId;
+    }
+
+    public int getForecastId() {
+        return forecastId;
+    }
+
+    public void setForecastId(int forecastId) {
+        this.forecastId = forecastId;
     }
 
     public String getMinFloorPerGrade() {

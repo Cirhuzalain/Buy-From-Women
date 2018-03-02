@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 
 public class BaselineSales implements Parcelable {
-    private String harvsetSeason;
+    private String seasonName;
     private String rgccContractUnderFtma;
 
     private int qtyAgregatedFromMember;
@@ -22,15 +22,16 @@ public class BaselineSales implements Parcelable {
     private boolean isInformalBuyer;
     private boolean isOther;
 
-
-   //constructeur vide et contructeur non vide
+    private int seasonId;
+    private int baselineId;
 
 
     public BaselineSales() {
+        this.baselineId = 0;
     }
 
-    public BaselineSales(String harvsetSeason, String rgccContractUnderFtma, int qtyAgregatedFromMember, int cycleHarvsetAtPricePerKg, int qtyPurchaseFromNonMember, int nonMemberAtPricePerKg, double qtyOfRgccContract, double qtySoldToRgcc, double pricePerKgSoldToRgcc, double qtySoldOutOfRgcc, double pricePerKkSoldOutFtma, int textOther, boolean isFormalBuyer, boolean isInformalBuyer, boolean isOther) {
-        this.harvsetSeason = harvsetSeason;
+    public BaselineSales(String seasonName, String rgccContractUnderFtma, int qtyAgregatedFromMember, int cycleHarvsetAtPricePerKg, int qtyPurchaseFromNonMember, int nonMemberAtPricePerKg, double qtyOfRgccContract, double qtySoldToRgcc, double pricePerKgSoldToRgcc, double qtySoldOutOfRgcc, double pricePerKkSoldOutFtma, int textOther, boolean isFormalBuyer, boolean isInformalBuyer, boolean isOther) {
+        this.seasonName = seasonName;
         this.rgccContractUnderFtma = rgccContractUnderFtma;
         this.qtyAgregatedFromMember = qtyAgregatedFromMember;
         this.cycleHarvsetAtPricePerKg = cycleHarvsetAtPricePerKg;
@@ -48,20 +49,22 @@ public class BaselineSales implements Parcelable {
 
     public BaselineSales(Parcel data) {
 
-        this.harvsetSeason =data.readString();
-        this.rgccContractUnderFtma =data.readString();
+        this.seasonName = data.readString();
+        this.rgccContractUnderFtma = data.readString();
         this.qtyAgregatedFromMember = data.readInt();
         this.cycleHarvsetAtPricePerKg = data.readInt();
-        this.qtyPurchaseFromNonMember =data.readInt();
-        this.nonMemberAtPricePerKg =data.readInt();
-        this.qtyOfRgccContract =data.readDouble();
-        this.qtySoldToRgcc =data.readDouble();
-        this.pricePerKgSoldToRgcc =data.readDouble();
-        this.qtySoldOutOfRgcc =data.readDouble();
-        this.pricePerKkSoldOutFtma =data.readDouble();
-        this.isFormalBuyer =data.readByte() != 0;
-        this.isInformalBuyer =data.readByte() != 0;
-        this.isOther =data.readByte() != 0;
+        this.qtyPurchaseFromNonMember = data.readInt();
+        this.nonMemberAtPricePerKg = data.readInt();
+        this.qtyOfRgccContract = data.readDouble();
+        this.qtySoldToRgcc = data.readDouble();
+        this.pricePerKgSoldToRgcc = data.readDouble();
+        this.qtySoldOutOfRgcc = data.readDouble();
+        this.pricePerKkSoldOutFtma = data.readDouble();
+        this.isFormalBuyer = data.readByte() != 0;
+        this.isInformalBuyer = data.readByte() != 0;
+        this.isOther = data.readByte() != 0;
+        this.seasonId = data.readInt();
+        this.baselineId = data.readInt();
 
     }
 
@@ -73,7 +76,7 @@ public class BaselineSales implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(harvsetSeason);
+        parcel.writeString(seasonName);
         parcel.writeString(rgccContractUnderFtma);
         parcel.writeInt(qtyAgregatedFromMember);
         parcel.writeInt(cycleHarvsetAtPricePerKg);
@@ -81,22 +84,38 @@ public class BaselineSales implements Parcelable {
         parcel.writeInt(nonMemberAtPricePerKg);
         parcel.writeDouble(qtyOfRgccContract);
         parcel.writeDouble(qtySoldToRgcc);
-        parcel.writeDouble(pricePerKgSoldToRgcc );
-        parcel.writeDouble(qtySoldOutOfRgcc );
-        parcel.writeDouble(pricePerKkSoldOutFtma );
+        parcel.writeDouble(pricePerKgSoldToRgcc);
+        parcel.writeDouble(qtySoldOutOfRgcc);
+        parcel.writeDouble(pricePerKkSoldOutFtma);
         parcel.writeByte((byte) (isFormalBuyer ? 1 : 0));
         parcel.writeByte((byte) (isInformalBuyer ? 1 : 0));
-        parcel.writeByte((byte) (isOther? 1 : 0));
-    }
-   //setters et getters
-
-
-    public String getHarvsetSeason() {
-        return harvsetSeason;
+        parcel.writeByte((byte) (isOther ? 1 : 0));
+        parcel.writeInt(seasonId);
+        parcel.writeInt(baselineId);
     }
 
-    public void setHarvsetSeason(String harvsetSeason) {
-        this.harvsetSeason = harvsetSeason;
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(int seasonId) {
+        this.seasonId = seasonId;
+    }
+
+    public int getBaselineId() {
+        return baselineId;
+    }
+
+    public void setBaselineId(int baselineId) {
+        this.baselineId = baselineId;
     }
 
     public String getRgccContractUnderFtma() {

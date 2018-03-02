@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 public class ServiceAccess implements Parcelable {
 
-    //Available Resources
     private boolean isTractor;
     private boolean isHarvester;
     private boolean isDryer;
@@ -17,7 +16,6 @@ public class ServiceAccess implements Parcelable {
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
 
-    //Main Water source
     private boolean isDam;
     private boolean isWell;
     private boolean isBoreHole;

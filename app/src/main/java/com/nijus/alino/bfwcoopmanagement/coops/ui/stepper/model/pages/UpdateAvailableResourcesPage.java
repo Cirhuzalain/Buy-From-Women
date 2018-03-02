@@ -3,24 +3,25 @@ package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableRessources;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.AvailableRessourcesFragment;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableResources;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.AvailableResourcesFragment;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.update.UpdateAvailableResourcesFragment;
 
 import java.util.ArrayList;
 
-public class UpdateAvailableRessourcesPage extends Page {
+public class UpdateAvailableResourcesPage extends Page {
 
     public static final String AVAILABLE_RES_KEY = "key";
 
-   private AvailableRessources availableRessources = new AvailableRessources();
+    private AvailableResources availableResources = new AvailableResources();
 
-    public UpdateAvailableRessourcesPage(ModelCallbacks callbacks, String title) {
+    public UpdateAvailableResourcesPage(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
     }
 
     @Override
     public Fragment createFragment() {
-        return AvailableRessourcesFragment.create(getKey());
+        return UpdateAvailableResourcesFragment.create(getKey());
     }
 
     @Override
@@ -78,8 +79,8 @@ public class UpdateAvailableRessourcesPage extends Page {
         return super.setRequired(required);
     }
 
-   public UpdateAvailableRessourcesPage setValue(AvailableRessources availableRessources) {
-        mData.putParcelable(AVAILABLE_RES_KEY, availableRessources);
+    public UpdateAvailableResourcesPage setValue(AvailableResources availableResources) {
+        mData.putParcelable(AVAILABLE_RES_KEY, availableResources);
         return this;
     }
 }

@@ -37,28 +37,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/available_resources"
-                        android:textSize="16sp" />\
+                        android:textSize="16sp" />
 
                     <CheckBox
                         android:id="@+id/office_space"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/office_space" />
+
                     <CheckBox
                         android:id="@+id/moisture_meter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/moisture_meter" />
+
                     <CheckBox
                         android:id="@+id/weighting_scales"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/weighting_scales" />
+
                     <CheckBox
                         android:id="@+id/qlt_inputs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/qlt_inputs" />
+
                     <CheckBox
                         android:id="@+id/tractors"
                         android:layout_width="match_parent"
@@ -114,19 +118,17 @@
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
-                            android:visibility="gone"
                             android:id="@+id/other_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/other"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:visibility="gone" />
                     </android.support.design.widget.TextInputLayout>
 
 
                 </LinearLayout>
-
-
 
 
             </LinearLayout>

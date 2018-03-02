@@ -1,13 +1,17 @@
 package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -16,20 +20,32 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.ForecastSales;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
+
+import java.util.HashMap;
 
 public class ForecastSalesFragment extends Fragment {
 
     public static final String ARG_KEY = "key";
     public final String LOG_TAG = ForecastSalesFragment.class.getSimpleName();
     private String mKey;
-    
+
     private ForecastSales forecastSales = new ForecastSales();
-    
+
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
 
-    private Spinner harvsetSeason;
+    private Spinner harvestSeason;
+    private Spinner minFloorPerGrade;
+    private Spinner grade;
+
+    private Cursor cursor;
+    private String seasonName;
+    private int seasonId;
+    private HashMap<String, ForecastSales> forecastSalesSeason = new HashMap<>();
 
     private CheckBox rgcc;
     private CheckBox prodev;
@@ -39,10 +55,7 @@ public class ForecastSalesFragment extends Fragment {
     private CheckBox none;
     private CheckBox other;
 
-    private AutoCompleteTextView other_text;
-    private AutoCompleteTextView commired_contract_qty;
-    private Spinner grade;
-    private AutoCompleteTextView min_floor_per_grade;
+    private AutoCompleteTextView commitedContractQty;
 
     public ForecastSalesFragment() {
         super();
@@ -76,7 +89,11 @@ public class ForecastSalesFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.forecast_sales));
 
-        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvestSeason = rootView.findViewById(R.id.harvestSeason);
+        grade = rootView.findViewById(R.id.grade);
+        minFloorPerGrade = rootView.findViewById(R.id.min_floor_per_grade);
+
+        populateSpinner();
 
         rgcc = rootView.findViewById(R.id.rgcc);
         boolean isrgcc = rgcc.isActivated();
@@ -106,45 +123,79 @@ public class ForecastSalesFragment extends Fragment {
         boolean isother = other.isActivated();
         forecastSales.setOther(isother);
 
-        other_text = rootView.findViewById(R.id.other_text);
-        commired_contract_qty = rootView.findViewById(R.id.commired_contract_qty);
+        commitedContractQty = rootView.findViewById(R.id.commired_contract_qty);
+
         grade = rootView.findViewById(R.id.grade);
-        min_floor_per_grade = rootView.findViewById(R.id.min_floor_per_grade);
+        minFloorPerGrade = rootView.findViewById(R.id.min_floor_per_grade);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.coop_grade, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        grade.setAdapter(adapter);
+        minFloorPerGrade.setAdapter(adapter);
 
-        //les texts
-        other_text.addTextChangedListener(new TextWatcher() {
+        String selectedGrade = grade.getSelectedItem().toString();
+        String florPrice = minFloorPerGrade.getSelectedItem().toString();
+        forecastSales.setGrade(selectedGrade);
+        forecastSales.setGrade(florPrice);
+
+        cursor = (Cursor) harvestSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+        forecastSalesSeason.put(seasonName, forecastSales);
+
+        mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
+
+        grade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                forecastSales.setOthetText(charSequence.toString());
-                mPage.setData("forecastSales", forecastSales);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+                if (forecastSalesSeason.containsKey(seasonName)) {
+                    forecastSalesSeason.get(seasonName).setGrade(adapterView.getItemAtPosition(i).toString());
+                } else {
+                    ForecastSales forecastSales = new ForecastSales();
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                    forecastSales.setSeasonId(seasonId);
+                    forecastSales.setGrade(adapterView.getItemAtPosition(i).toString());
+                    forecastSalesSeason.put(seasonName, forecastSales);
+                }
+
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
-        /*commired_contract_qty.addTextChangedListener(new TextWatcher() {
+        minFloorPerGrade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+                if (forecastSalesSeason.containsKey(seasonName)) {
+                    forecastSalesSeason.get(seasonName).setMinFloorPerGrade(adapterView.getItemAtPosition(i).toString());
+                } else {
+                    ForecastSales forecastSales = new ForecastSales();
+                    seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                    forecastSales.setSeasonId(seasonId);
+                    forecastSales.setMinFloorPerGrade(adapterView.getItemAtPosition(i).toString());
+                    forecastSalesSeason.put(seasonName, forecastSales);
+                }
+
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                forecastSales.setCommitedContractQty(charSequence.toString());
-                mPage.setData("forecastSales", forecastSales);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
 
-        commired_contract_qty.addTextChangedListener(new TextWatcher() {
+        commitedContractQty.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -153,8 +204,20 @@ public class ForecastSalesFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    forecastSales.setCommitedContractQty(Integer.parseInt(charSequence.toString()));
-                    mPage.getData().putParcelable("forecastSales", forecastSales);
+                    cursor = (Cursor) harvestSeason.getSelectedItem();
+                    seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setCommitedContractQty(Integer.parseInt(charSequence.toString()));
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSales.setCommitedContractQty(Integer.parseInt(charSequence.toString()));
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
+
+                    mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
                 } catch (NumberFormatException exp) {
                     exp.printStackTrace();
                 }
@@ -166,145 +229,256 @@ public class ForecastSalesFragment extends Fragment {
             }
         });
 
-        min_floor_per_grade.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                forecastSales.setMinFloorPerGrade(charSequence.toString());
-                mPage.setData("forecastSales", forecastSales);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        //les checkk button
         rgcc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setRgcc(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setRgcc(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setRgcc(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setRgcc(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setRgcc(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setRgcc(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         prodev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setProdev(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setProdev(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setProdev(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setProdev(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setProdev(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setProdev(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         sasura.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setSarura(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setSarura(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setSarura(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setSarura(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setSarura(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setSarura(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         aif.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setAif(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setAif(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setAif(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setAif(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setAif(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setAif(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         eax.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setEax(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setEax(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setEax(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setEax(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setEax(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setEax(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
+
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         none.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setNone(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setNone(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setNone(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setNone(false);
+
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setNone(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setNone(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
 
         other.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvestSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    forecastSales.setOther(true);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setOther(true);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setOther(true);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 } else {
-                    forecastSales.setOther(false);
+                    if (forecastSalesSeason.containsKey(seasonName)) {
+                        forecastSalesSeason.get(seasonName).setOther(false);
+                    } else {
+                        ForecastSales forecastSales = new ForecastSales();
+                        forecastSales.setOther(false);
+                        forecastSales.setSeasonId(seasonId);
+                        forecastSalesSeason.put(seasonName, forecastSales);
+                    }
                 }
-                mPage.getData().putParcelable("forecastSales", forecastSales);
+                mPage.getData().putSerializable("forecast_sales", forecastSalesSeason);
             }
         });
-
-        //les spiners
-        /*harvsetSeason.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                forecastSales.setTexteSafeStorage(charSequence.toString());
-                mPage.setData("forecastSales", forecastSales);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        grade.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                forecastSales.setTextOtherResourceInfo(charSequence.toString());
-                mPage.setData("forecastSales", forecastSales);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
-
-
-
 
         return rootView;
+    }
+
+    public void populateSpinner() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvestSeason.setAdapter(adapter);
+        }
     }
 
     @Override

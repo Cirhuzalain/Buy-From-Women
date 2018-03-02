@@ -17,14 +17,15 @@ public class InternalInformation implements Parcelable {
     private String viceChairCell;
     private String secCell;
 
-    private int yearRcaRegistration;
+    private String yearRcaRegistration;
+    private String seasonName;
 
-   //constructeur vide et contructeur non vide
 
+    public InternalInformation() {
+    }
 
-    public InternalInformation() {}
-
-    public InternalInformation(String chairName, String viceChairName, String secName, boolean isChairGender, boolean isViceChairGender, boolean isSecGender, String chairCell, String viceChairCell, String secCell, int yearRcaRegistration) {
+    public InternalInformation(String chairName, String viceChairName, String secName, boolean isChairGender, boolean isViceChairGender, boolean isSecGender,
+                               String chairCell, String viceChairCell, String secCell, String yearRcaRegistration) {
         this.chairName = chairName;
         this.viceChairName = viceChairName;
         this.secName = secName;
@@ -35,7 +36,7 @@ public class InternalInformation implements Parcelable {
         this.viceChairCell = viceChairCell;
         this.secCell = secCell;
         this.yearRcaRegistration = yearRcaRegistration;
-}
+    }
 
 
     public InternalInformation(Parcel data) {
@@ -48,7 +49,8 @@ public class InternalInformation implements Parcelable {
         this.chairCell = data.readString();
         this.viceChairCell = data.readString();
         this.secCell = data.readString();
-        this.yearRcaRegistration = data.readInt();
+        this.yearRcaRegistration = data.readString();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -62,16 +64,23 @@ public class InternalInformation implements Parcelable {
         parcel.writeString(viceChairName);
         parcel.writeString(secName);
         parcel.writeByte((byte) (isChairGender ? 1 : 0));
-        parcel.writeByte((byte) (isViceChairGender  ? 1 : 0));
-        parcel.writeByte((byte) (isSecGender  ? 1 : 0));
-        parcel.writeString(chairCell );
+        parcel.writeByte((byte) (isViceChairGender ? 1 : 0));
+        parcel.writeByte((byte) (isSecGender ? 1 : 0));
+        parcel.writeString(chairCell);
         parcel.writeString(viceChairCell);
-        parcel.writeString(secCell );
-        parcel.writeInt(yearRcaRegistration );
+        parcel.writeString(secCell);
+        parcel.writeString(yearRcaRegistration);
+        parcel.writeString(seasonName);
 
     }
-   //setters et getters
 
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
 
     public String getChairName() {
         return chairName;
@@ -145,11 +154,11 @@ public class InternalInformation implements Parcelable {
         this.secCell = secCell;
     }
 
-    public int getYearRcaRegistration() {
+    public String getYearRcaRegistration() {
         return yearRcaRegistration;
     }
 
-    public void setYearRcaRegistration(int yearRcaRegistration) {
+    public void setYearRcaRegistration(String yearRcaRegistration) {
         this.yearRcaRegistration = yearRcaRegistration;
     }
 

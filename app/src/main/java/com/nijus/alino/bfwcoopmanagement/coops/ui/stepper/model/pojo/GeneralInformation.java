@@ -8,11 +8,10 @@ public class GeneralInformation implements Parcelable {
     private String name;
     private String phone;
     private String mail;
-    private String adress;
+    private String address;
     private double landSize;
-
-
-   //constructeur vide et contructeur non vide
+    private String seasonName;
+    private int coopId;
 
 
     public GeneralInformation() {
@@ -22,16 +21,18 @@ public class GeneralInformation implements Parcelable {
         this.name = name;
         this.phone = phone;
         this.mail = mail;
-        this.adress = adress;
+        this.address = adress;
         this.landSize = landSize;
     }
 
     public GeneralInformation(Parcel data) {
         this.name = data.readString();
         this.phone = data.readString();
-        this.mail =data.readString();
-        this.adress = data.readString();
+        this.mail = data.readString();
+        this.address = data.readString();
         this.landSize = data.readDouble();
+        this.seasonName = data.readString();
+        this.coopId = data.readInt();
 
     }
 
@@ -45,12 +46,28 @@ public class GeneralInformation implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(phone);
         parcel.writeString(mail);
-        parcel.writeString(adress);
-
+        parcel.writeString(address);
         parcel.writeDouble(landSize);
+        parcel.writeString(seasonName);
+        parcel.writeInt(coopId);
 
     }
-    //setters et getters
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getCoopId() {
+        return coopId;
+    }
+
+    public void setCoopId(int coopId) {
+        this.coopId = coopId;
+    }
 
     public String getName() {
         return name;
@@ -76,12 +93,12 @@ public class GeneralInformation implements Parcelable {
         this.mail = mail;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public double getLandSize() {

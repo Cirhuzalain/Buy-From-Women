@@ -4,10 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * AvailableRessourcesFragment data
+ * Available Resources Fragment data
  */
 
-public class AvailableRessources implements Parcelable {
+public class AvailableResources implements Parcelable {
     private boolean isOfficeSpace;
     private boolean isMoistureMeter;
     private boolean isWeightingScales;
@@ -19,13 +19,14 @@ public class AvailableRessources implements Parcelable {
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
 
-    private String texteSafeStorage;
+    private String textSafeStorage;
     private String textOtherResourceInfo;
+    private String seasonName;
 
-    public AvailableRessources() {
+    public AvailableResources() {
     }
 
-    public AvailableRessources(boolean isOfficeSpace, boolean isMoistureMeter, boolean isWeightingScales, boolean isQualityInput, boolean isTractor, boolean isHarvester, boolean isDryer, boolean isTresher, boolean isSafeStorage, boolean isOtherResourceInfo, String texteSafeStorage, String textOtherResourceInfo) {
+    public AvailableResources(boolean isOfficeSpace, boolean isMoistureMeter, boolean isWeightingScales, boolean isQualityInput, boolean isTractor, boolean isHarvester, boolean isDryer, boolean isTresher, boolean isSafeStorage, boolean isOtherResourceInfo, String texteSafeStorage, String textOtherResourceInfo) {
         this.isOfficeSpace = isOfficeSpace;
         this.isMoistureMeter = isMoistureMeter;
         this.isWeightingScales = isWeightingScales;
@@ -36,11 +37,11 @@ public class AvailableRessources implements Parcelable {
         this.isTresher = isTresher;
         this.isSafeStorage = isSafeStorage;
         this.isOtherResourceInfo = isOtherResourceInfo;
-        this.texteSafeStorage = texteSafeStorage;
+        this.textSafeStorage = texteSafeStorage;
         this.textOtherResourceInfo = textOtherResourceInfo;
     }
 
-    public AvailableRessources(Parcel data) {
+    public AvailableResources(Parcel data) {
 
         this.isOfficeSpace = data.readByte() != 0;
         this.isMoistureMeter = data.readByte() != 0;
@@ -53,8 +54,9 @@ public class AvailableRessources implements Parcelable {
         this.isSafeStorage = data.readByte() != 0;
         this.isOtherResourceInfo = data.readByte() != 0;
 
-        this.texteSafeStorage = data.readString();
+        this.textSafeStorage = data.readString();
         this.textOtherResourceInfo = data.readString();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -64,20 +66,29 @@ public class AvailableRessources implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (isOfficeSpace  ? 1 : 0));
-        parcel.writeByte((byte) (isMoistureMeter  ? 1 : 0));
-        parcel.writeByte((byte) (isWeightingScales  ? 1 : 0));
-        parcel.writeByte((byte) (isQualityInput  ? 1 : 0));
-        parcel.writeByte((byte) (isTractor  ? 1 : 0));
-        parcel.writeByte((byte) (isHarvester  ? 1 : 0));
-        parcel.writeByte((byte) (isDryer  ? 1 : 0));
-        parcel.writeByte((byte) (isTresher  ? 1 : 0));
-        parcel.writeByte((byte) (isSafeStorage  ? 1 : 0));
-        parcel.writeByte((byte) (isOtherResourceInfo  ? 1 : 0));
+        parcel.writeByte((byte) (isOfficeSpace ? 1 : 0));
+        parcel.writeByte((byte) (isMoistureMeter ? 1 : 0));
+        parcel.writeByte((byte) (isWeightingScales ? 1 : 0));
+        parcel.writeByte((byte) (isQualityInput ? 1 : 0));
+        parcel.writeByte((byte) (isTractor ? 1 : 0));
+        parcel.writeByte((byte) (isHarvester ? 1 : 0));
+        parcel.writeByte((byte) (isDryer ? 1 : 0));
+        parcel.writeByte((byte) (isTresher ? 1 : 0));
+        parcel.writeByte((byte) (isSafeStorage ? 1 : 0));
+        parcel.writeByte((byte) (isOtherResourceInfo ? 1 : 0));
 
-        parcel.writeString(texteSafeStorage);
+        parcel.writeString(textSafeStorage);
         parcel.writeString(textOtherResourceInfo);
+        parcel.writeString(seasonName);
 
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
     }
 
     public boolean isOfficeSpace() {
@@ -160,12 +171,12 @@ public class AvailableRessources implements Parcelable {
         isOtherResourceInfo = otherResourceInfo;
     }
 
-    public String getTexteSafeStorage() {
-        return texteSafeStorage;
+    public String getTextSafeStorage() {
+        return textSafeStorage;
     }
 
-    public void setTexteSafeStorage(String texteSafeStorage) {
-        this.texteSafeStorage = texteSafeStorage;
+    public void setTextSafeStorage(String texteSafeStorage) {
+        this.textSafeStorage = texteSafeStorage;
     }
 
     public String getTextOtherResourceInfo() {
@@ -176,15 +187,15 @@ public class AvailableRessources implements Parcelable {
         this.textOtherResourceInfo = textOtherResourceInfo;
     }
 
-    public static final Creator<AvailableRessources> CREATOR = new Creator<AvailableRessources>() {
+    public static final Creator<AvailableResources> CREATOR = new Creator<AvailableResources>() {
         @Override
-        public AvailableRessources createFromParcel(Parcel parcel) {
-            return new AvailableRessources(parcel);
+        public AvailableResources createFromParcel(Parcel parcel) {
+            return new AvailableResources(parcel);
         }
 
         @Override
-        public AvailableRessources[] newArray(int i) {
-            return new AvailableRessources[0];
+        public AvailableResources[] newArray(int i) {
+            return new AvailableResources[0];
         }
     };
 }

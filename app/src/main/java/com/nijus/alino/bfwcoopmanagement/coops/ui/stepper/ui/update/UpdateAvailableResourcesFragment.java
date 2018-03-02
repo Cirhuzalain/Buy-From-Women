@@ -1,8 +1,7 @@
-package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui;
+package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.update;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,21 +11,21 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableRessources;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableResources;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.PageFragmentCallbacks;
 
-public class AvailableRessourcesFragment extends Fragment {
+public class UpdateAvailableResourcesFragment extends Fragment {
 
     public static final String ARG_KEY = "key";
-    public final String LOG_TAG = AvailableRessourcesFragment.class.getSimpleName();
+    public final String LOG_TAG = UpdateAvailableResourcesFragment.class.getSimpleName();
     private String mKey;
-    
-    private AvailableRessources availableRessources = new AvailableRessources();
-    
+
+    private AvailableResources availableResources = new AvailableResources();
+
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
 
@@ -45,15 +44,15 @@ public class AvailableRessourcesFragment extends Fragment {
     private AutoCompleteTextView safe_storage_text;
     private AutoCompleteTextView other_text;
 
-    public AvailableRessourcesFragment() {
+    public UpdateAvailableResourcesFragment() {
         super();
     }
 
-    public static AvailableRessourcesFragment create(String key) {
+    public static UpdateAvailableResourcesFragment create(String key) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
 
-        AvailableRessourcesFragment fragment = new AvailableRessourcesFragment();
+        UpdateAvailableResourcesFragment fragment = new UpdateAvailableResourcesFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,43 +78,43 @@ public class AvailableRessourcesFragment extends Fragment {
 
         office_space = rootView.findViewById(R.id.office_space) ;
         boolean isoffice_space = office_space.isActivated();
-        availableRessources.setOfficeSpace(isoffice_space);
+        availableResources.setOfficeSpace(isoffice_space);
 
         moisture_meter = rootView.findViewById(R.id.moisture_meter) ;
         boolean ismoisture_meter = moisture_meter.isActivated();
-        availableRessources.setMoistureMeter(ismoisture_meter);
+        availableResources.setMoistureMeter(ismoisture_meter);
 
         weighting_scales = rootView.findViewById(R.id.weighting_scales) ;
         boolean isweighting_scales = weighting_scales.isActivated();
-        availableRessources.setWeightingScales(isweighting_scales);
+        availableResources.setWeightingScales(isweighting_scales);
 
         qlt_inputs = rootView.findViewById(R.id.qlt_inputs) ;
         boolean isqlt_inputs = qlt_inputs.isActivated();
-        availableRessources.setQualityInput(isqlt_inputs);
+        availableResources.setQualityInput(isqlt_inputs);
 
         tractors = rootView.findViewById(R.id.tractors) ;
         boolean istractors = tractors.isActivated();
-        availableRessources.setTractor(istractors);
+        availableResources.setTractor(istractors);
 
         harvester = rootView.findViewById(R.id.harvester) ;
         boolean isharvester = harvester.isActivated();
-        availableRessources.setHarvester(isharvester);
+        availableResources.setHarvester(isharvester);
 
         dryer = rootView.findViewById(R.id.dryer) ;
         boolean isdryer = dryer.isActivated();
-        availableRessources.setDryer(isdryer);
+        availableResources.setDryer(isdryer);
 
         thresher = rootView.findViewById(R.id.thresher) ;
         boolean isthresher = thresher.isActivated();
-        availableRessources.setTresher(isthresher);
+        availableResources.setTresher(isthresher);
 
         safe_storage = rootView.findViewById(R.id.safe_storage) ;
         boolean issafe_storage = safe_storage.isActivated();
-        availableRessources.setSafeStorage(issafe_storage);
+        availableResources.setSafeStorage(issafe_storage);
 
         e_other_av_res = rootView.findViewById(R.id.e_other_av_res) ;
         boolean ise_other_av_res = e_other_av_res.isActivated();
-        availableRessources.setOtherResourceInfo(ise_other_av_res);
+        availableResources.setOtherResourceInfo(ise_other_av_res);
 
 
         safe_storage_text = rootView.findViewById(R.id.safe_storage_text) ;
@@ -129,11 +128,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setOfficeSpace(true);
+                    availableResources.setOfficeSpace(true);
                 } else {
-                    availableRessources.setOfficeSpace(false);
+                    availableResources.setOfficeSpace(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -141,11 +140,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setMoistureMeter(true);
+                    availableResources.setMoistureMeter(true);
                 } else {
-                    availableRessources.setMoistureMeter(false);
+                    availableResources.setMoistureMeter(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -153,11 +152,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setWeightingScales(true);
+                    availableResources.setWeightingScales(true);
                 } else {
-                    availableRessources.setWeightingScales(false);
+                    availableResources.setWeightingScales(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -165,11 +164,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setQualityInput(true);
+                    availableResources.setQualityInput(true);
                 } else {
-                    availableRessources.setQualityInput(false);
+                    availableResources.setQualityInput(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -177,11 +176,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setTractor(true);
+                    availableResources.setTractor(true);
                 } else {
-                    availableRessources.setTractor(false);
+                    availableResources.setTractor(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -189,11 +188,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setHarvester(true);
+                    availableResources.setHarvester(true);
                 } else {
-                    availableRessources.setHarvester(false);
+                    availableResources.setHarvester(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -201,11 +200,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setDryer(true);
+                    availableResources.setDryer(true);
                 } else {
-                    availableRessources.setDryer(false);
+                    availableResources.setDryer(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -213,11 +212,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setTresher(true);
+                    availableResources.setTresher(true);
                 } else {
-                    availableRessources.setTresher(false);
+                    availableResources.setTresher(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -225,11 +224,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setSafeStorage(true);
+                    availableResources.setSafeStorage(true);
                 } else {
-                    availableRessources.setSafeStorage(false);
+                    availableResources.setSafeStorage(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -237,11 +236,11 @@ public class AvailableRessourcesFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    availableRessources.setOtherResourceInfo(true);
+                    availableResources.setOtherResourceInfo(true);
                 } else {
-                    availableRessources.setOtherResourceInfo(false);
+                    availableResources.setOtherResourceInfo(false);
                 }
-                mPage.getData().putParcelable("availableRessources", availableRessources);
+                mPage.getData().putParcelable("availableResources", availableResources);
             }
         });
 
@@ -253,8 +252,8 @@ public class AvailableRessourcesFragment extends Fragment {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                availableRessources.setTexteSafeStorage(charSequence.toString());
-                mPage.setData("availableRessources", availableRessources);
+                availableResources.setTextSafeStorage(charSequence.toString());
+                mPage.setData("availableResources", availableResources);
             }
 
             @Override
@@ -269,8 +268,8 @@ public class AvailableRessourcesFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                availableRessources.setTextOtherResourceInfo(charSequence.toString());
-                mPage.setData("availableRessources", availableRessources);
+                availableResources.setTextOtherResourceInfo(charSequence.toString());
+                mPage.setData("availableResources", availableResources);
             }
 
             @Override

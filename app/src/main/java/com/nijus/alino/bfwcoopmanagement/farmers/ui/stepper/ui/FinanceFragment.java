@@ -128,6 +128,9 @@ public class FinanceFragment extends Fragment implements AdapterView.OnItemSelec
         boolean isOther = other.isChecked();
         finance.setOtherLp(isOther);
 
+        String selectedLoanProvider = loanProvider.getSelectedItem().toString();
+        finance.setLoanProvider(selectedLoanProvider);
+
         seasonFinance.put(seasonName, finance);
 
         mPage.getData().putSerializable("finance", seasonFinance);

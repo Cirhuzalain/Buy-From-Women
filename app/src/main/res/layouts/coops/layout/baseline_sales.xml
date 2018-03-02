@@ -27,8 +27,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -48,7 +46,7 @@
                             android:textSize="16sp" />
 
                         <Spinner
-                            android:id="@+id/harvsetSeason"
+                            android:id="@+id/harvestSeason"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
@@ -122,7 +120,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:text="@string/rgcc_contact_under_ftma"
                             android:textSize="16sp" />
 
@@ -207,8 +205,8 @@
                         android:id="@+id/other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/other" />
-                  
+                        android:text="@string/other_res_av" />
+
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -224,13 +222,7 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-
-
-
                 </LinearLayout>
-
-
-
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

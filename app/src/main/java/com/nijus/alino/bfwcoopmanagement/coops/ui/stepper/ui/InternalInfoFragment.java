@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -31,19 +29,21 @@ public class InternalInfoFragment extends Fragment {
     private PageFragmentCallbacks mCallbacks;
 
     private AutoCompleteTextView chair_name_c;
+    private AutoCompleteTextView chair_phone;
     private RadioGroup chair_gender_group;
 
-    private AutoCompleteTextView chair_phone;
     private AutoCompleteTextView v_chair_name_c;
+    private AutoCompleteTextView v_chair_phone;
     private RadioGroup v_chair_gender_group;
 
-    private AutoCompleteTextView v_chair_phone;
+
+
     private AutoCompleteTextView sec_name_c;
+    private AutoCompleteTextView sec_phone;
     private RadioGroup sec_gender_group;
 
-    private AutoCompleteTextView sec_phone;
-    private AutoCompleteTextView year_rca_registration;
 
+    private AutoCompleteTextView year_rca_registration;
 
 
     public InternalInfoFragment() {
@@ -96,9 +96,10 @@ public class InternalInfoFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setChairName(charSequence.toString());
+                internalInformation.setChairName(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -114,7 +115,7 @@ public class InternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setChairCell(charSequence.toString());
+                internalInformation.setChairCell(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -131,7 +132,7 @@ public class InternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setViceChairName(charSequence.toString());
+                internalInformation.setViceChairName(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -148,7 +149,7 @@ public class InternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setViceChairCell(charSequence.toString());
+                internalInformation.setViceChairCell(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -165,7 +166,7 @@ public class InternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setSecName(charSequence.toString());
+                internalInformation.setSecName(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -182,7 +183,7 @@ public class InternalInfoFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                internalInformation.setSecCell(charSequence.toString());
+                internalInformation.setSecCell(charSequence.toString().trim());
                 mPage.setData("internalInformation", internalInformation);
             }
 
@@ -200,15 +201,11 @@ public class InternalInfoFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                //forecastSales.setCommitedContractQty(Integer.parseInt(charSequence.toString()));
-                    internalInformation.setYearRcaRegistration(Integer.parseInt(charSequence.toString()));
+                    internalInformation.setYearRcaRegistration(charSequence.toString().trim());
                     mPage.setData("internalInformation", internalInformation);
-                    //mPage.getData().putParcelable("forecastSales", forecastSales);
-            } catch (NumberFormatException exp) {
-                exp.printStackTrace();
-            }
-                /*internalInformation.setYearRcaRegistration(Integer.parseInt(charSequence.toString()));
-                mPage.setData("internalInformation", internalInformation);*/
+                } catch (NumberFormatException exp) {
+                    exp.printStackTrace();
+                }
             }
 
 
@@ -250,7 +247,7 @@ public class InternalInfoFragment extends Fragment {
             mPage.getData().putParcelable("internalInformation", internalInformation);
         }
 
-        //listen for change on vivce chair gender
+        //listen for change on vice chair gender
         v_chair_gender_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {

@@ -48,7 +48,7 @@
                             android:textSize="16sp" />
 
                         <Spinner
-                            android:id="@+id/harvsetSeason"
+                            android:id="@+id/harvestSeason"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />

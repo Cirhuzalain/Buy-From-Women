@@ -46,7 +46,7 @@
                             android:textSize="16sp" />
 
                         <Spinner
-                            android:id="@+id/harvsetSeason"
+                            android:id="@+id/harvestSeason"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
@@ -73,28 +73,38 @@
                             android:layout_weight="1" />
                     </LinearLayout>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/input_lprovider"
+                        android:textSize="18sp" />
+
                     <CheckBox
                         android:id="@+id/input_loan_prov_bank"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/bank" />
+
                     <CheckBox
                         android:id="@+id/input_loan_prov_cooperative"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/cooperative" />
+
                     <CheckBox
                         android:id="@+id/input_loan_prov_sacco"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/sacco" />
+
                     <CheckBox
                         android:id="@+id/input_loan_prov_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/other" />
+                        android:text="@string/other_res_av" />
 
-<!--fin input_loan_prov_-->
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -138,7 +148,14 @@
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
-<!--debut input_loan_purpose-->
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/inpu_lp_purpose"
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/input_loan_purpose_labour"
@@ -170,8 +187,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/other_res_av" />
 
-                    <!--fin input_loan_purpose_-->
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -183,42 +198,57 @@
                             android:layout_weight="1"
                             android:text="@string/input_loan_disbursement_method"
                             android:textSize="16sp" />
-                    <RadioGroup
-                        android:id="@+id/input_loan_disbursement_method"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
 
-                        <RadioButton
-                            android:id="@+id/cash_provided_purchase_inputs"
-                            android:layout_width="wrap_content"
+                        <RadioGroup
+                            android:id="@+id/input_loan_disbursement_method"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/cash_provided_purchase_inputs" />
+                            android:layout_weight="1">
 
-                        <RadioButton
-                            android:id="@+id/input_prov_in_kind"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:text="@string/input_prov_in_kind" />
-                    </RadioGroup>
+                            <RadioButton
+                                android:id="@+id/cash_provided_purchase_inputs"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/cash_provided_purchase_inputs" />
+
+                            <RadioButton
+                                android:id="@+id/input_prov_in_kind"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/input_prov_in_kind" />
+                        </RadioGroup>
                     </LinearLayout>
 
-
-                    <android.support.design.widget.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5px"
+                        android:orientation="horizontal">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/aggrgation_post_harvset_loan"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:hint="@string/aggrgation_post_harvset_loan"
-                            android:inputType="text"
-                            android:maxLines="1" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_weight="3"
+                            android:text="@string/aggrgation_post_harvset_loan"
+                            android:textSize="16sp" />
 
-                    <!-- ddbut aggregation_post_harvest_loan_prov-->
+                        <Spinner
+                            android:id="@+id/aggrgation_post_harvset_loan"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/aggreg_harv_l_provider"
+                        android:textSize="18sp" />
+
                     <CheckBox
                         android:id="@+id/agg_post_harv_loan_prov_bank"
                         android:layout_width="match_parent"
@@ -242,8 +272,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/other_res_av" />
-
-                    <!--fin agg_post_harv_loan_prov_-->
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -287,7 +315,15 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-            <!-- debut agg_post_harv_loan_purpose-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/aggregation_post_harvest_loan_purpose"
+                        android:textSize="18sp" />
+
+
                     <CheckBox
                         android:id="@+id/agg_post_harv_loan_purpose_labour"
                         android:layout_width="match_parent"
@@ -328,8 +364,6 @@
 
 
                 </LinearLayout>
-
-
 
 
             </LinearLayout>

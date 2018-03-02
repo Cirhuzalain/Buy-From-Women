@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 
 public class BaselineFinanceInfo implements Parcelable {
-    private String harvsetSeason;
+    private String seasonName;
     private String input_loan;
 
     private boolean isInput_loan_prov_bank;
@@ -13,7 +13,7 @@ public class BaselineFinanceInfo implements Parcelable {
     private boolean isInput_loan_prov_sacco;
     private boolean isInput_loan_prov_other;
 
-    private int input_loan_amount;
+    private double input_loan_amount;
     private double input_loan_interest_rate;
     private int input_loan_duration;
 
@@ -33,7 +33,7 @@ public class BaselineFinanceInfo implements Parcelable {
     private boolean isAgg_post_harv_loan_prov_sacco;
     private boolean isAgg_post_harv_loan_prov_other;
 
-    private int aggrgation_post_harvset_amount;
+    private double aggrgation_post_harvset_amount;
     private double aggrgation_post_harvset_loan_interest;
     private int aggrgation_post_harvset_loan_duration;
 
@@ -44,15 +44,36 @@ public class BaselineFinanceInfo implements Parcelable {
 
     private String aggrgation_post_harvset_laon_disbursement_method;
 
+    private int baselineFinanceInfoId;
+    private int seasonId;
 
-   //constructeur vide et contructeur non vide
 
     public BaselineFinanceInfo() {
-
+        this.baselineFinanceInfoId = 0;
     }
 
-    public BaselineFinanceInfo(String harvsetSeason, String input_loan, boolean isInput_loan_prov_bank, boolean isInput_loan_prov_cooperative, boolean isInput_loan_prov_sacco, boolean isInput_loan_prov_other, int input_loan_amount, double input_loan_interest_rate, int input_loan_duration, boolean sInput_loan_purpose_labour, boolean sInput_loan_purpose_seed, boolean sInput_loan_purpose_input, boolean sInput_loan_purpose_machinery, boolean sInput_loan_purpose_other, boolean isInput_prov_in_kind, boolean isCash_provided_purchase_inputs, String aggrgation_post_harvset_loan, boolean isAgg_post_harv_loan_prov_bank, boolean isAgg_post_harv_loan_prov_cooperative, boolean isAgg_post_harv_loan_prov_sacco, boolean isAgg_post_harv_loan_prov_other, int aggrgation_post_harvset_amount, double aggrgation_post_harvset_loan_interest, int aggrgation_post_harvset_loan_duration, boolean isAgg_post_harv_loan_purpose_labour, boolean isAgg_post_harv_loan_purpose_input, boolean isAgg_post_harv_loan_purpose_machinery, boolean isAgg_post_harv_loan_purpose_other, String aggrgation_post_harvset_laon_disbursement_method) {
-        this.harvsetSeason = harvsetSeason;
+    public BaselineFinanceInfo(String seasonName, String input_loan, boolean isInput_loan_prov_bank,
+                               boolean isInput_loan_prov_cooperative, boolean isInput_loan_prov_sacco,
+                               boolean isInput_loan_prov_other, double input_loan_amount,
+                               double input_loan_interest_rate, int input_loan_duration,
+                               boolean sInput_loan_purpose_labour, boolean sInput_loan_purpose_seed,
+                               boolean sInput_loan_purpose_input, boolean sInput_loan_purpose_machinery,
+                               boolean sInput_loan_purpose_other, boolean isInput_prov_in_kind,
+                               boolean isCash_provided_purchase_inputs,
+                               String aggrgation_post_harvset_loan,
+                               boolean isAgg_post_harv_loan_prov_bank,
+                               boolean isAgg_post_harv_loan_prov_cooperative,
+                               boolean isAgg_post_harv_loan_prov_sacco,
+                               boolean isAgg_post_harv_loan_prov_other,
+                               double aggrgation_post_harvset_amount,
+                               double aggrgation_post_harvset_loan_interest,
+                               int aggrgation_post_harvset_loan_duration,
+                               boolean isAgg_post_harv_loan_purpose_labour,
+                               boolean isAgg_post_harv_loan_purpose_input,
+                               boolean isAgg_post_harv_loan_purpose_machinery,
+                               boolean isAgg_post_harv_loan_purpose_other,
+                               String aggrgation_post_harvset_laon_disbursement_method) {
+        this.seasonName = seasonName;
         this.input_loan = input_loan;
         this.isInput_loan_prov_bank = isInput_loan_prov_bank;
         this.isInput_loan_prov_cooperative = isInput_loan_prov_cooperative;
@@ -85,7 +106,7 @@ public class BaselineFinanceInfo implements Parcelable {
 
     public BaselineFinanceInfo(Parcel data) {
 
-        this.harvsetSeason = data.readString();
+        this.seasonName = data.readString();
         this.input_loan = data.readString();
 
         this.isInput_loan_prov_bank = data.readByte() != 0;
@@ -93,7 +114,7 @@ public class BaselineFinanceInfo implements Parcelable {
         this.isInput_loan_prov_sacco = data.readByte() != 0;
         this.isInput_loan_prov_other = data.readByte() != 0;
 
-        this.input_loan_amount = data.readInt();
+        this.input_loan_amount = data.readDouble();
         this.input_loan_interest_rate = data.readDouble();
         this.input_loan_duration = data.readInt();
 
@@ -113,7 +134,7 @@ public class BaselineFinanceInfo implements Parcelable {
         this.isAgg_post_harv_loan_prov_sacco = data.readByte() != 0;
         this.isAgg_post_harv_loan_prov_other = data.readByte() != 0;
 
-        this.aggrgation_post_harvset_amount = data.readInt();
+        this.aggrgation_post_harvset_amount = data.readDouble();
         this.aggrgation_post_harvset_loan_interest = data.readDouble();
         this.aggrgation_post_harvset_loan_duration = data.readInt();
 
@@ -123,6 +144,8 @@ public class BaselineFinanceInfo implements Parcelable {
         this.isAgg_post_harv_loan_purpose_other = data.readByte() != 0;
 
         this.aggrgation_post_harvset_laon_disbursement_method = data.readString();
+        this.baselineFinanceInfoId = data.readInt();
+        this.seasonId = data.readInt();
 
     }
 
@@ -134,7 +157,7 @@ public class BaselineFinanceInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(harvsetSeason);
+        parcel.writeString(seasonName);
         parcel.writeString(input_loan);
 
         parcel.writeByte((byte) (isInput_loan_prov_bank ? 1 : 0));
@@ -142,7 +165,7 @@ public class BaselineFinanceInfo implements Parcelable {
         parcel.writeByte((byte) (isInput_loan_prov_sacco ? 1 : 0));
         parcel.writeByte((byte) (isInput_loan_prov_other ? 1 : 0));
 
-        parcel.writeInt(input_loan_amount);
+        parcel.writeDouble(input_loan_amount);
         parcel.writeDouble(input_loan_interest_rate);
         parcel.writeInt(input_loan_duration);
 
@@ -162,7 +185,7 @@ public class BaselineFinanceInfo implements Parcelable {
         parcel.writeByte((byte) (isAgg_post_harv_loan_prov_sacco ? 1 : 0));
         parcel.writeByte((byte) (isAgg_post_harv_loan_prov_other ? 1 : 0));
 
-        parcel.writeInt(aggrgation_post_harvset_amount);
+        parcel.writeDouble(aggrgation_post_harvset_amount);
         parcel.writeDouble(aggrgation_post_harvset_loan_interest);
         parcel.writeInt(aggrgation_post_harvset_loan_duration);
 
@@ -172,16 +195,33 @@ public class BaselineFinanceInfo implements Parcelable {
         parcel.writeByte((byte) (isAgg_post_harv_loan_purpose_other ? 1 : 0));
 
         parcel.writeString(aggrgation_post_harvset_laon_disbursement_method);
-    }
-   //setters et getters
-
-
-    public String getHarvsetSeason() {
-        return harvsetSeason;
+        parcel.writeInt(baselineFinanceInfoId);
+        parcel.writeInt(seasonId);
     }
 
-    public void setHarvsetSeason(String harvsetSeason) {
-        this.harvsetSeason = harvsetSeason;
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getBaselineFinanceInfoId() {
+        return baselineFinanceInfoId;
+    }
+
+    public void setBaselineFinanceInfoId(int baselineFinanceInfoId) {
+        this.baselineFinanceInfoId = baselineFinanceInfoId;
+    }
+
+    public int getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(int seasonId) {
+        this.seasonId = seasonId;
     }
 
     public String getInput_loan() {
@@ -224,11 +264,11 @@ public class BaselineFinanceInfo implements Parcelable {
         isInput_loan_prov_other = input_loan_prov_other;
     }
 
-    public int getInput_loan_amount() {
+    public double getInput_loan_amount() {
         return input_loan_amount;
     }
 
-    public void setInput_loan_amount(int input_loan_amount) {
+    public void setInput_loan_amount(double input_loan_amount) {
         this.input_loan_amount = input_loan_amount;
     }
 
@@ -344,11 +384,11 @@ public class BaselineFinanceInfo implements Parcelable {
         isAgg_post_harv_loan_prov_other = agg_post_harv_loan_prov_other;
     }
 
-    public int getAggrgation_post_harvset_amount() {
+    public double getAggrgation_post_harvset_amount() {
         return aggrgation_post_harvset_amount;
     }
 
-    public void setAggrgation_post_harvset_amount(int aggrgation_post_harvset_amount) {
+    public void setAggrgation_post_harvset_amount(double aggrgation_post_harvset_amount) {
         this.aggrgation_post_harvset_amount = aggrgation_post_harvset_amount;
     }
 

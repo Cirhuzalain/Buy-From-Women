@@ -84,8 +84,8 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
-        String nameInfo = names.getText().toString();
-        String phoneInfo = phoneNumber.getText().toString();
+        String nameInfo = names.getText().toString().trim();
+        String phoneInfo = phoneNumber.getText().toString().trim();
 
         //Add Regex
         if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo)) {
@@ -145,7 +145,7 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                general.setName(charSequence.toString());
+                general.setName(charSequence.toString().trim());
                 mPage.setData("general", general);
             }
 
@@ -162,7 +162,7 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                general.setAddress(charSequence.toString());
+                general.setAddress(charSequence.toString().trim());
                 mPage.setData("general", general);
             }
 
@@ -180,7 +180,7 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                general.setPhoneNumber(charSequence.toString());
+                general.setPhoneNumber(charSequence.toString().trim());
                 mPage.setData("general", general);
             }
 

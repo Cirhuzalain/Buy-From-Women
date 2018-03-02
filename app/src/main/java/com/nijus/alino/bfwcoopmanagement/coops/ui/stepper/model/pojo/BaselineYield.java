@@ -5,36 +5,35 @@ import android.os.Parcelable;
 
 
 public class BaselineYield implements Parcelable {
-    private String harvestSeason;
+    private String seasonName;
     private boolean isMaize;
     private boolean isBean;
     private boolean isSoy;
     private boolean isOther;
-    private String otherText;
-
-   //constructeur vide et contructeur non vide
+    private int seasonId;
+    private int baselineYieldId;
 
 
     public BaselineYield() {
+        this.baselineYieldId = 0;
     }
 
-    public BaselineYield(String harvestSeason, boolean isMaize, boolean isBean, boolean isSoy, boolean isOther, String otherText) {
-        this.harvestSeason = harvestSeason;
+    public BaselineYield(String seasonName, boolean isMaize, boolean isBean, boolean isSoy, boolean isOther, String otherText) {
+        this.seasonName = seasonName;
         this.isMaize = isMaize;
         this.isBean = isBean;
         this.isSoy = isSoy;
         this.isOther = isOther;
-        this.otherText = otherText;
     }
 
     public BaselineYield(Parcel data) {
-        this.harvestSeason = data.readString();
+        this.seasonName = data.readString();
         this.isMaize = data.readByte() != 0;
-        this.isBean =data.readByte() != 0;
+        this.isBean = data.readByte() != 0;
         this.isSoy = data.readByte() != 0;
         this.isOther = data.readByte() != 0;
-        this.otherText = data.readString();
-
+        this.seasonId = data.readInt();
+        this.baselineYieldId = data.readInt();
     }
 
     @Override
@@ -45,23 +44,38 @@ public class BaselineYield implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(harvestSeason);
+        parcel.writeString(seasonName);
         parcel.writeByte((byte) (isMaize ? 1 : 0));
         parcel.writeByte((byte) (isBean ? 1 : 0));
         parcel.writeByte((byte) (isSoy ? 1 : 0));
         parcel.writeByte((byte) (isOther ? 1 : 0));
-        parcel.writeString(otherText);
+        parcel.writeInt(seasonId);
+        parcel.writeInt(baselineYieldId);
 
     }
-   //setters et getters
 
-
-    public String getHarvestSeason() {
-        return harvestSeason;
+    public String getSeasonName() {
+        return seasonName;
     }
 
-    public void setHarvestSeason(String harvestSeason) {
-        this.harvestSeason = harvestSeason;
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(int seasonId) {
+        this.seasonId = seasonId;
+    }
+
+    public int getBaselineYieldId() {
+        return baselineYieldId;
+    }
+
+    public void setBaselineYieldId(int baselineYieldId) {
+        this.baselineYieldId = baselineYieldId;
     }
 
     public boolean isMaize() {
@@ -94,14 +108,6 @@ public class BaselineYield implements Parcelable {
 
     public void setOther(boolean other) {
         isOther = other;
-    }
-
-    public String getOtherText() {
-        return otherText;
-    }
-
-    public void setOtherText(String otherText) {
-        this.otherText = otherText;
     }
 
     public static final Creator<BaselineYield> CREATOR = new Creator<BaselineYield>() {

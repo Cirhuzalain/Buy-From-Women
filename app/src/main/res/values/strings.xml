@@ -180,6 +180,17 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="rgcc_contract">
+        <item>yes</item>
+        <item>no</item>
+    </string-array>
+
+    <string-array name="coop_grade">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+    </string-array>
+
     <string-array name="fin_institution">
         <item>bank</item>
         <item>sacco</item>
@@ -282,7 +293,6 @@
     <string name="fr_key">fr</string>
     <string name="eng_key">en</string>
 
-    <!-- <PageVendorPage Title &ndash;&gt;-->
     <string name="PageVendorPage">Vendor</string>
     <string name="gen_title">General Information</string>
     <string name="forecastVendor">Forecast</string>
@@ -304,9 +314,6 @@
     <string name="action_search">Search</string>
     <string name="name_search">Farmer name</string>
 
-    <!--
-    pageVendorpage coops titles&ndash;&gt;
--->
     <string name="create_coop">Create Cooperative</string>
     <string name="create_vend">Create Vendor</string>
     <string name="data_valid_error_coop">Coop Name and Adress are required</string>
@@ -406,10 +413,10 @@
 
     <string name="rgcc">RGCC</string>
     <string name="prodev">Prodev</string>
-    <string name="sasura">Sasura</string>
+    <string name="sasura">Sarura</string>
     <string name="aif">AIF</string>
     <string name="eax">EAX</string>
-    <string name="commired_contract_qty">Commited contract quantity(MT)</string>
+    <string name="commired_contract_qty">Committed contract quantity(MT)</string>
     <string name="grade">Grade</string>
     <string name="min_floor_per_grade">Minimun floor per grade</string>
     <string name="maize">Maize</string>
@@ -480,4 +487,8 @@
     <string name="delete_loan">Delete Loan</string>
     <string name="del_farmer">Delete Farmer</string>
     <string name="del_confirm">Confirm</string>
+    <string name="input_lprovider">Input loan provider</string>
+    <string name="inpu_lp_purpose">Input loan purpose</string>
+    <string name="aggreg_harv_l_provider">Aggregation/Post harvest loan provider</string>
+    <string name="aggregation_post_harvest_loan_purpose">Aggregation/Post harvest loan purpose</string>
 </resources>

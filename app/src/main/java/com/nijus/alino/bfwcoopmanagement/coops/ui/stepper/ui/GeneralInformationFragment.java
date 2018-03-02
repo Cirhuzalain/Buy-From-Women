@@ -1,9 +1,7 @@
 package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -22,14 +20,15 @@ import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation;
+
 public class GeneralInformationFragment extends Fragment {
 
     public static final String ARG_KEY = "key";
     public final String LOG_TAG = GeneralInformationFragment.class.getSimpleName();
     private String mKey;
 
-    private com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation general =
-            new com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation();
+    private GeneralInformation general = new GeneralInformation();
 
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
@@ -37,7 +36,7 @@ public class GeneralInformationFragment extends Fragment {
     private AutoCompleteTextView name;
     private AutoCompleteTextView phone;
     private AutoCompleteTextView mail;
-    private AutoCompleteTextView adress;
+    private AutoCompleteTextView address;
     private AutoCompleteTextView landSize;
 
     public GeneralInformationFragment() {
@@ -77,16 +76,19 @@ public class GeneralInformationFragment extends Fragment {
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
-        String nameInfo = name.getText().toString();
-        String adressInfo = adress.getText().toString();
+        String nameInfo = name.getText().toString().trim();
+        String addressInfo = address.getText().toString().trim();
+        String phoneNumber = phone.getText().toString().trim();
+        String email = mail.getText().toString().trim();
 
 
-        //Add Regex
-        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(adressInfo)) {
+        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(addressInfo) && !TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(email)) {
             EventBus.getDefault().post(new DataValidEventR(true));
         } else {
-            name.setError("Name is Required");
-            adress.setError("Adress is required or not Valid");
+            name.setError("Name is Required >= 4 characters");
+            address.setError("Address is required or not Valid");
+            phone.setError("Phone is required");
+            mail.setError("Email is required");
             EventBus.getDefault().post(new DataValidEventR(false));
         }
     }
@@ -102,17 +104,19 @@ public class GeneralInformationFragment extends Fragment {
 
         name = rootView.findViewById(R.id.name_f);
         phone = rootView.findViewById(R.id.name_phone);
-        adress = rootView.findViewById(R.id.address);
-        mail= rootView.findViewById(R.id.email);
+        address = rootView.findViewById(R.id.address);
+        mail = rootView.findViewById(R.id.email);
         landSize = rootView.findViewById(R.id.land_size_under_cip);
+        landSize.setEnabled(false);
 
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                general.setName(charSequence.toString());
+                general.setName(charSequence.toString().trim());
                 mPage.setData("general", general);
             }
 
@@ -121,14 +125,51 @@ public class GeneralInformationFragment extends Fragment {
             }
         });
 
-        adress.addTextChangedListener(new TextWatcher() {
+        address.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                general.setAdress(charSequence.toString());
+                general.setAddress(charSequence.toString().trim());
+
+                mPage.setData("general", general);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                general.setPhone(charSequence.toString().trim());
+                mPage.setData("general", general);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                general.setMail(charSequence.toString().trim());
                 mPage.setData("general", general);
             }
 

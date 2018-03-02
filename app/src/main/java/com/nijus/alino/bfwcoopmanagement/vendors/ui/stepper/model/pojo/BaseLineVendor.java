@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * AvailableRessourcesFragment data
+ * AvailableResourcesFragment data
  */
 
 public class BaseLineVendor implements Parcelable {
