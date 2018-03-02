@@ -60,7 +60,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_loan);
 
-        getSupportLoaderManager().initLoader(0, null, this);
+        //getSupportLoaderManager().initLoader(0, null, this);
 
         //get Id
         Intent intent = this.getIntent();
@@ -83,7 +83,6 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         });
 
         gen_info_pic = findViewById(R.id.gen_info_pic);
-
 
         name_b_details = findViewById(R.id.name_b_details);
         start_date = findViewById(R.id.phone_b_details);
@@ -129,14 +128,12 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
         if (data != null && data.moveToFirst()) {
-
             int vendor_id = data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
             loan_id = data.getInt(data.getColumnIndex(BfwContract.Loan._ID));
             loan_id_from_server = data.getLong(data.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
             /**
-             * Get the real name of farmer
+             * Get the LOAN
              * **/
             String vendorSelect = BfwContract.Farmer.TABLE_NAME + "." +
                     BfwContract.Farmer._ID + " =  ? ";

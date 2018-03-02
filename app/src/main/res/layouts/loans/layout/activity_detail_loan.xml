@@ -44,9 +44,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/srim"/>
 
-
         </android.support.design.widget.CollapsingToolbarLayout>
-
 
     </android.support.design.widget.AppBarLayout>
 
@@ -61,4 +59,3 @@
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>
-

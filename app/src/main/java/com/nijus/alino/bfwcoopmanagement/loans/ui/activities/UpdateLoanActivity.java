@@ -61,7 +61,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_loan);
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
 
         getSupportLoaderManager().initLoader(0,null,this);
 
@@ -298,5 +298,16 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
         }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
