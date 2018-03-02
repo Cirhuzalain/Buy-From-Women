@@ -75,7 +75,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     private MenuInflater inflater;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ActionModeCallback ActionModeCallback;
     private ActionMode actionMode;
 
     @Override
@@ -203,7 +202,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
 
     private void enableActionMode(int position) {
         if (actionMode == null) {
-            actionMode = startSupportActionMode(ActionModeCallback);
+            actionMode = startSupportActionMode(actionModeCallback);
         }
         if (tabLayout.getSelectedTabPosition() == 2) {
             //agent
@@ -413,8 +412,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
             actionMode = null;
             // dispatch event to disable  swipe and clear adapter
             EventBus.getDefault().post(new EventFarmerResetItems());
-
-            //handle buyer, agent and farmer and vendor
         }
     }
 }
