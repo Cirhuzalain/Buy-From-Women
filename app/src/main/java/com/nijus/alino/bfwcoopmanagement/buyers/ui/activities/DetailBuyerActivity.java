@@ -18,12 +18,17 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class DetailBuyerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    Long mBuyerId;
+    private Long mBuyerId;
     private Uri mUri;
-    private String name;
+    private String name, phone, mail;
     private String mKey;
     public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -34,16 +39,31 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_buyer);
-        
-        getSupportLoaderManager().initLoader(0,null,this);
 
-        //get Coop Id
+        EventBus.getDefault().register(this);
+
         Intent intent = this.getIntent();
         if (intent.hasExtra("buyerId")) {
             mBuyerId = intent.getLongExtra("buyerId", 0);
-            mUri = BfwContract.Coops.buildCoopUri(mBuyerId);
+            mUri = BfwContract.Buyer.buildBuyerUri(mBuyerId);
         }
 
+        getSupportLoaderManager().initLoader(0,null,this);
+
+        FloatingActionButton fab = findViewById(R.id.fab_edit_buyer);
+        //ImageView imageView = findViewById(R.id.buyer_details);
+        fab.setImageResource(R.drawable.ic_edit_black_24dp);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getApplicationContext(),UpdateBuyerActivity.class);
+                intent1.putExtra("buyerId", mBuyerId);
+                startActivity(intent1);
+            }
+        });
+
+
+        //get Coop Id
         collapsingToolbarLayout = findViewById(R.id.name_bayer);
         toolbar = findViewById(R.id.toolbar_buyer);
 
@@ -55,35 +75,24 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
 
         //Log.d("DetailCoopActivity",mBuyerId+"");
 
+
+
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab_edit_buyer);
-        ImageView imageView = findViewById(R.id.buyer_details);
-        fab.setImageResource(R.drawable.ic_edit_black_24dp);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),UpdateBuyerActivity.class);
-                intent1.putExtra("buyerId", mBuyerId);
-                startActivity(intent1);
-            }
-        });
-
-        //AFFICHAGE DES DETAILS DU COOPERATIVE
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String coopSelection = BfwContract.Coops.TABLE_NAME + "." +
-                BfwContract.Coops._ID + " =  ? ";
+
+        String buyerSelection = BfwContract.Buyer.TABLE_NAME + "." +
+                BfwContract.Buyer._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
                     this,
-                    mUri,
+                    BfwContract.Buyer.CONTENT_URI,
                     null,
-                    coopSelection,
+                    buyerSelection,
                     new String[]{Long.toString(mBuyerId)},
                     null
             );
@@ -96,26 +105,33 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
 
         if (data != null && data.moveToFirst()) {
 
-            name = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME));
+            int vendor_id = data.getInt(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_SERVER_ID));
+            name = data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME));
+            phone = data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_PHONE));
+            mail = data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_EMAIL));
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
 
             //Affichages des donnees venant dans lka base des donnes
 
             TextView name_ca_details = findViewById(R.id.name_b_details);
-            name_ca_details.setText("Name Lastname Buyer");
+            name_ca_details.setText(name);
             TextView phone_ca_details = findViewById(R.id.phone_b_details);
-            phone_ca_details.setText("+2501286555");
+            phone_ca_details.setText(phone);
 
             TextView mail_ca_details = findViewById(R.id.mail_b_details);
-            mail_ca_details.setText("ici @ text");
-
+            mail_ca_details.setText(mail);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        getSupportLoaderManager().restartLoader(0, null, this);
     }
 }
 

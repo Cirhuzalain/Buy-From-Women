@@ -61,13 +61,15 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_farmer);
 
-        getSupportLoaderManager().initLoader(0, null, this);
+
 
         Intent intent = this.getIntent();
         if (intent.hasExtra("farmerId")) {
             mFarmerId = intent.getLongExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
+
+        getSupportLoaderManager().initLoader(0, null, this);
 
         collapsingToolbarLayout = findViewById(R.id.name_farmer);
         infoListView = findViewById(R.id.info_list);

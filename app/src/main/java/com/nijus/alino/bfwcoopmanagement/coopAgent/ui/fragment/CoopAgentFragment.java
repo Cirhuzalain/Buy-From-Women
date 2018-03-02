@@ -1,10 +1,10 @@
 package com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment;
-//CoopAgentFragment
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -20,49 +20,56 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.adapter.CoopAgentAdapter;
+import com.nijus.alino.bfwcoopmanagement.coopAgent.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.CreateCoopAgentActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.DisableAgentSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventAgentResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshAgentLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventAgentToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventAgentToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleAgentRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleAgentResponseEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.CoopAgentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_COLUMN_COUNT = "column-count";
+    private int mColumnCount = 1;
 
-    private String mParam1;
-    private String mParam2;
-
-    private CoopAgentAdapter navigationRecyclerViewAdapter;
+    private CoopAgentAdapter agentRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
+    private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton fab;
+    private RecyclerView recyclerView;
+    private CoordinatorLayout coordinatorLayout;
 
-    //private CoopAgentFragment.OnFragmentInteractionListener mListener;
-
-    public CoopAgentFragment() {
-        // Required empty public constructor
-    }
+    public CoopAgentFragment() {}
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * this fragment using the provided parameter.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * ARG_COLUMN_COUNT = "column-count";
      * @return A new instance of fragment CoopFragment.
      */
-    public static CoopAgentFragment newInstance(String param1, String param2) {
+    public static CoopAgentFragment newInstance(int columnCount) {
         CoopAgentFragment fragment = new CoopAgentFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,8 +78,7 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
 
@@ -83,33 +89,33 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         View view = inflater.inflate(R.layout.fragment_coop_agent, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_coop_Agent);
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.coopsagent_list);
+
+        recyclerView = view.findViewById(R.id.coopsagent_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        navigationRecyclerViewAdapter = new CoopAgentAdapter(getContext(), emptyView, new CoopAgentAdapter.CoopAgentAdapterOnClickHandler() {
-            @Override
-            public void onClick(Long farmerId, CoopAgentAdapter.ViewHolder vh) {
-                //((CoopAgentFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
-            }
 
+        agentRecyclerViewAdapter = new CoopAgentAdapter(getContext(), emptyView, new CoopAgentAdapter.CoopAgentAdapterOnClickHandler() {
+            @Override
+            public void onClick(Long agentId, CoopAgentAdapter.ViewHolder vh) {
+                ((CoopAgentFragment.OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(agentId, vh);
+            }
         }, new CoopAgentAdapter.CoopAgentAdapterOnLongClickHandler() {
             @Override
-            public boolean onLongClick(Long farmerId, CoopAgentAdapter.ViewHolder vh) {
-                //return ((CoopAgentFragment.OnListFragmentInteractionListener) getActivity()).onLong2FragmentInteraction(farmerId, vh);
-                return true;
+            public void onLongClick(long agentId, long position, CoopAgentAdapter.ViewHolder vh) {
+                ((CoopAgentFragment.OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(agentId,position, vh);
             }
-        });
+        },mLayoutManager);
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
 
-        recyclerView.setAdapter(navigationRecyclerViewAdapter);
+        recyclerView.setAdapter(agentRecyclerViewAdapter);
 
         //ADD LISTENER TO RECYCLEVIEW WHEN SWIPPING IT
 
         //fab coop fragment
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 
@@ -130,7 +136,7 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        navigationRecyclerViewAdapter.swapCursor(data);
+        agentRecyclerViewAdapter.swapCursor(data);
         mRefreshData.post(new Runnable() {
             @Override
             public void run() {
@@ -141,39 +147,96 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        navigationRecyclerViewAdapter.swapCursor(null);
+        agentRecyclerViewAdapter.swapCursor(null);
     }
 
     @Override
     public void onRefresh() {
         getLoaderManager().restartLoader(0, null, this);
-    }
 
-   /* @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CoopAgentFragment.OnFragmentInteractionListener) {
-            mListener = (CoopAgentFragment.OnFragmentInteractionListener) context;
+        if (Utils.isNetworkAvailable(getContext())) {
+            getActivity().startService(new Intent(getContext(), RefreshData.class));
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            Toast.makeText(getContext(), getResources().getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
         }
     }
-*/
-   /* @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
 
     @Override
     public void onClick(View view) {
 
         if (view.getId() == R.id.fab) {
-            //Toast.makeText(getContext(), "breee clic fab voir enregistrer", Toast.LENGTH_LONG).show();
-            //Intent intent  = new Intent(getActivity(), CreateCoopActivity.class);
             startActivity(new Intent(getActivity(), CreateCoopAgentActivity.class));
         }
+    }
+
+    @Subscribe
+    public void onToggleAgentRequestEvent(ToggleAgentRequestEvent agentRequestEvent) {
+
+        agentRecyclerViewAdapter.toggleSelection(agentRequestEvent.getPosition());
+        int count = agentRecyclerViewAdapter.getSelectedItemCount();
+
+        EventBus.getDefault().post(new ToggleAgentResponseEvent(count));
+
+    }
+
+    @Subscribe
+    public void onRequestAgentToDelete(RequestEventAgentToDelete buyerToDelete) {
+
+        EventBus.getDefault().post(new ResponseEventAgentToDelete(agentRecyclerViewAdapter.getSelectedItems()));
+    }
+
+    @Subscribe
+    public void onDisableAgentSwipeEvent(DisableAgentSwipeEvent disableAgentSwipeEven) {
+        mRefreshData.setEnabled(false);
+        fab.setVisibility(View.INVISIBLE);
+    }
+
+    @Subscribe
+    public void onEventAgentResetItems(EventAgentResetItems eventAgentResetItems) {
+
+        agentRecyclerViewAdapter.clearSelections();
+        mRefreshData.setEnabled(true);
+        fab.setVisibility(View.VISIBLE);
+
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                agentRecyclerViewAdapter.resetAnimationIndex();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        if (saveDataEvent.isSuccess())
+            getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe
+    public void onRefreshAgentLoader(RefreshAgentLoader bayerLoader) {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()) {
+            getLoaderManager().restartLoader(0, null, this);
+        } else {
+            Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -187,14 +250,11 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-   /* public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(long item, CoopAgentAdapter.ViewHolder vh);
-        boolean onLongFragmentInteraction(long item, CoopAgentAdapter.ViewHolder vh);
-    }
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(long item, CoopAgentAdapter.ViewHolder vh);
-        boolean onLong2FragmentInteraction(long item, CoopAgentAdapter.ViewHolder vh);
     }
-*/
 
+    public interface OnLongClickFragmentInteractionListener {
+        void onLongClickFragmentInteractionListener(long item, long position, CoopAgentAdapter.ViewHolder vh);
+    }
 }

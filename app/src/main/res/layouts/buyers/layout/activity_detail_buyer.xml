@@ -39,7 +39,10 @@
                 app:layout_collapseMode="pin"
                 app:layout_collapseParallaxMultiplier="1.0"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/srim"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

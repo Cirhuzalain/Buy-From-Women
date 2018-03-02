@@ -67,13 +67,12 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
-                    android:id="@+id/content_spiner_ca"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/spiner_coop_txt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -88,11 +87,13 @@
 
                 </LinearLayout>
                 <Button
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_button"
+                    android:layout_height="wrap_content"
                     android:id="@+id/create_coop_agent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_gravity="center"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
                     android:text="@string/title_activity_create_coop_agent" />
 
 

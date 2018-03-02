@@ -228,7 +228,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
 
             // Check if value's length entered is > 3 char .
             if (!isValidString(String.valueOf(product_name.getText()))) {
-                product_name.setError(getString(R.string.error_invalid_password));
+                product_name.setError(getString(R.string.error_invalid_product_name));
             }
 
             // Check for a valid qty

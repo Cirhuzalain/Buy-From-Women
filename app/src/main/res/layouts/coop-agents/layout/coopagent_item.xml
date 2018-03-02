@@ -89,6 +89,12 @@
                 android:text="cooopec"
                 android:textStyle="bold" />
         </LinearLayout>
+        <ImageView
+            android:id="@+id/agent_sync"
+            android:layout_width="@dimen/list_icon"
+            android:layout_height="@dimen/list_icon"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 </FrameLayout>

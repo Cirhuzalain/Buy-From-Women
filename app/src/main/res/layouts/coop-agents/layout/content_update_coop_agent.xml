@@ -66,6 +66,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="10dp"
                     android:id="@+id/content_spiner_ca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,9 +89,12 @@
                 </LinearLayout>
 
                 <Button
+                    android:layout_marginTop="10dp"
                     android:id="@+id/create_coop_agent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/gradient_button"
+                    android:textColor="@color/cardview_light_background"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="@string/title_activity_update_coop_agent" />

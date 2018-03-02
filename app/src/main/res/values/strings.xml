@@ -346,6 +346,7 @@
     <string name="msg_cancel">Cancel</string>
     <string name="there_s_no_farmer">There\'s no farmer</string>
     <string name="syncing_error">An error occur while syncing farmer data</string>
+    <string name="syncing_error_buyer">An error occur while syncing farmer data</string>
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
     <string name="update_loan">Update Loan</string>
@@ -375,6 +376,11 @@
 
     <string name="my_cart">My Cart</string>
     <string name="delete">DELETE</string>
+
+    <string name="add_buyer_msg">Buyer added successfully</string>
+    <string name="add_buyer_msg_sync">Buyer synchronised successfully</string>
+    <string name="add_agent_msg_sync">Buyer synchronised successfully</string>
+    <string name="add_buyer_wait_internet_msg">Buyer added successfully, you need to be connected to synchronise</string>
 
 
     <!--String related to forescast data-->
@@ -477,18 +483,22 @@
     <string name="others_finance_source">Others</string>
     <string name="farmers_expected_minimum_revenue_from_ftma_sale_in_rwf">Farmers expected minimum revenue from FTMA sale in RWF</string>
     <string name="flow_price">Minimum floor price per kg in RWF</string>
+
     <string name="loc_gps">Check your location here</string>
     <string name="man_gps">Manual</string>
     <string name="gps_automatic">Automatic</string>
     <string name="harvest_season_2016">Harvest Season 2016</string>
     <string name="others_fin">Others</string>
     <string name="harvest_season_2017">Harvest Season 2017</string>
-    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove</string>
-    <string name="delete_loan">Delete Loan</string>
     <string name="del_farmer">Delete Farmer</string>
-    <string name="del_confirm">Confirm</string>
     <string name="input_lprovider">Input loan provider</string>
     <string name="inpu_lp_purpose">Input loan purpose</string>
     <string name="aggreg_harv_l_provider">Aggregation/Post harvest loan provider</string>
     <string name="aggregation_post_harvest_loan_purpose">Aggregation/Post harvest loan purpose</string>
+
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove</string>
+    <string name="delete_loan">Delete Loan</string>
+    <string name="del_buyer">Delete Buyer</string>
+    <string name="del_agent">Delete Agent</string>
+    <string name="del_confirm">Confirm</string>
 </resources>
