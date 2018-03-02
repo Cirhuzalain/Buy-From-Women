@@ -189,7 +189,7 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
 
             }
             else {
-                Toast.makeText(getContext(),"Erreur des donnees",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Data Error",Toast.LENGTH_LONG).show();
             }
         }catch (Exception e){
             return;

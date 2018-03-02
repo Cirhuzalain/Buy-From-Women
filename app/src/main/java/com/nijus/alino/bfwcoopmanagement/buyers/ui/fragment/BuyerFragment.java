@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -18,32 +19,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.nijus.alino.bfwcoopmanagement.events.DisableBuyerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventBuyerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshBuyerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventBuyerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventBuyerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerResponseEvent;
+
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.adapter.BuyerAdapter;
+import com.nijus.alino.bfwcoopmanagement.buyers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.CreateBuyerActivity;
-import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.CreateCoopAgentActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_COLUMN_COUNT = "column-count";
+    private int mColumnCount = 1;
 
     private BuyerAdapter buyerRecyclerViewAdapter;
     private SwipeRefreshLayout mRefreshData;
+    private LinearLayoutManager mLayoutManager;
+    private FloatingActionButton fab;
+    private RecyclerView recyclerView;
+    private CoordinatorLayout coordinatorLayout;
 
-    public BuyerFragment() {
-        // Required empty public constructor
-    }
+     public BuyerFragment() {}
 
-    public static BuyerFragment newInstance(String param1, String param2) {
+    @SuppressWarnings("unused")
+    public static BuyerFragment newInstance(int columnCount) {
         BuyerFragment fragment = new BuyerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +67,7 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
 
@@ -64,32 +78,33 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
         View view = inflater.inflate(R.layout.fragment_buyer, container, false);
         View emptyView = view.findViewById(R.id.recyclerview_empty_bayer);
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.buyer_list);
+        recyclerView = view.findViewById(R.id.buyer_list);
+        mLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        coordinatorLayout = view.findViewById(R.id.coordinator_layout);
+
         buyerRecyclerViewAdapter = new BuyerAdapter(getContext(), emptyView, new BuyerAdapter.BuyerAdapterOnClickHandler() {
             @Override
-            public void onClick(Long farmerId, BuyerAdapter.ViewHolder vh) {
-                //((CoopAgentFragment.OnFragmentInteractionListener) getActivity()).onFragmentInteraction(farmerId, vh);
+            public void onClick(Long buyerId, BuyerAdapter.ViewHolder vh) {
+                ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(buyerId, vh);
             }
-
         }, new BuyerAdapter.BuyerAdapterOnLongClickHandler() {
             @Override
-            public boolean onLongClick(Long farmerId, BuyerAdapter.ViewHolder vh) {
-                //return ((CoopAgentFragment.OnListFragmentInteractionListener) getActivity()).onLong2FragmentInteraction(farmerId, vh);
-                return true;
+            public void onLongClick(long buyerId, long position, BuyerAdapter.ViewHolder vh) {
+                ((OnLongClickFragmentInteractionListener)getActivity()).onLongClickFragmentInteractionListener(buyerId,position,vh);
             }
-        });
+        },mLayoutManager);
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
 
         recyclerView.setAdapter(buyerRecyclerViewAdapter);
 
-        //fab coop fragment
-        FloatingActionButton fab = view.findViewById(R.id.fab);
+        //fab buyer fragment
+        fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
 
@@ -100,6 +115,68 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onActivityCreated(Bundle data) {
         super.onActivityCreated(data);
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Subscribe
+    public void onToggleBuyerRequestEvent(ToggleBuyerRequestEvent farmerRequestEvent) {
+
+        buyerRecyclerViewAdapter.toggleSelection(farmerRequestEvent.getPosition());
+        int count = buyerRecyclerViewAdapter.getSelectedItemCount();
+
+        EventBus.getDefault().post(new ToggleBuyerResponseEvent(count));
+
+    }
+
+    @Subscribe
+    public void onRequestBuyerToDelete(RequestEventBuyerToDelete buyerToDelete) {
+
+        EventBus.getDefault().post(new ResponseEventBuyerToDelete(buyerRecyclerViewAdapter.getSelectedItems()));
+
+    }
+
+    @Subscribe
+    public void onDisableBuyerSwipeEvent(DisableBuyerSwipeEvent disableBuyerSwipeEvent) {
+
+        mRefreshData.setEnabled(false);
+        fab.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Subscribe
+    public void onEventBuyerResetItems(EventBuyerResetItems eventBuyerResetItems) {
+
+        buyerRecyclerViewAdapter.clearSelections();
+        mRefreshData.setEnabled(true);
+        fab.setVisibility(View.VISIBLE);
+
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                buyerRecyclerViewAdapter.resetAnimationIndex();
+            }
+        });
+
+    }
+
+    @Subscribe
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        if (saveDataEvent.isSuccess())
+            getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe
+    public void onRefreshBuyerLoader(RefreshBuyerLoader bayerLoader) {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Subscribe
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()) {
+            getLoaderManager().restartLoader(0, null, this);
+        } else {
+            Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -127,6 +204,24 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onRefresh() {
         getLoaderManager().restartLoader(0, null, this);
+
+        if (Utils.isNetworkAvailable(getContext())) {
+            getActivity().startService(new Intent(getContext(), RefreshData.class));
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -147,14 +242,12 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-   /* public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(long item, LoanAdapter.ViewHolder vh);
-        boolean onLongFragmentInteraction(long item, LoanAdapter.ViewHolder vh);
-    }
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(long item, LoanAdapter.ViewHolder vh);
-        boolean onLong2FragmentInteraction(long item, LoanAdapter.ViewHolder vh);
-    }
-*/
 
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteraction(long item, BuyerAdapter.ViewHolder vh);
+    }
+
+    public interface OnLongClickFragmentInteractionListener {
+        void onLongClickFragmentInteractionListener(long item, long position, BuyerAdapter.ViewHolder vh);
+    }
 }

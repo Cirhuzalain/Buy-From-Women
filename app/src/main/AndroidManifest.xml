@@ -322,7 +322,39 @@
 
         <service android:name=".loans.sync.DeleteSyncLoanPaymentBkgrnd" />
 
+        <service android:name=".buyers.sync.AddBuyer" />
+        <service android:name=".buyers.sync.SyncBuyerBackground" />
+        <service android:name=".buyers.sync.UpdateBuyer" />
+        <service android:name=".buyers.sync.UpdateSyncBuyerBkgrnd" />
+        <service android:name=".buyers.sync.DeleteSyncBuyerBkgrnd" />
 
+        <service android:name=".coopAgent.sync.AddAgent" />
+        <service android:name=".coopAgent.sync.SyncAgentBackground" />
+        <service android:name=".coopAgent.sync.DeleteSyncAgentBkgrnd" />
+        <service android:name=".coopAgent.sync.UpdateAgent" />
+        <service android:name=".coopAgent.sync.UpdateSyncAgentBkgrnd" />
+
+        <service
+            android:name=".coopAgent.sync.UpdateSyncAgent"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".coopAgent.sync.SyncAgent"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".buyers.sync.SyncBuyer"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
         <service
             android:name=".loans.sync.SyncLoan"
             android:exported="false">
@@ -346,6 +378,14 @@
         </service>
         <service
             android:name=".loans.sync.SyncLoanPayment"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".buyers.sync.SyncBuyer"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

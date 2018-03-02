@@ -69,7 +69,6 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         holder.start_date.setText(date_string);
         holder.end_date.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_STATE)));
 
-
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_SYNC)) == 1;
         boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Loan.COLUMN_IS_UPDATE))==1;
         if (isUpdate && isSync) {

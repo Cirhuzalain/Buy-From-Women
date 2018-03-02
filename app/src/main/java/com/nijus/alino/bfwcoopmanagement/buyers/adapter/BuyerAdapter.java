@@ -1,10 +1,11 @@
 package com.nijus.alino.bfwcoopmanagement.buyers.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,35 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.DetailBuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> {
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
     final private BuyerAdapterOnClickHandler mClickHandler;
     final private BuyerAdapterOnLongClickHandler mLongClickHandler;
     private Cursor mCursor;
+    private LinearLayoutManager mLinearLayoutManager;
+    private SparseBooleanArray selectedItems;
+    private SparseBooleanArray animationItemsIndex;
+    private SparseBooleanArray itemsValues;
+    private boolean reverseAllAnimations = false;
 
-    public BuyerAdapter(Context mContext, View mEmptyView, BuyerAdapterOnClickHandler mClickHandler, BuyerAdapterOnLongClickHandler mLongClickHandler) {
+    public BuyerAdapter(Context mContext, View mEmptyView, BuyerAdapterOnClickHandler mClickHandler, BuyerAdapterOnLongClickHandler mLongClickHandler,
+                        LinearLayoutManager linearLayoutManager) {
         this.mContext = mContext;
         this.mEmptyView = mEmptyView;
         this.mClickHandler = mClickHandler;
         this.mLongClickHandler = mLongClickHandler;
+
+        mLinearLayoutManager = linearLayoutManager;
+        selectedItems = new SparseBooleanArray();
+        animationItemsIndex = new SparseBooleanArray();
+        itemsValues = new SparseBooleanArray();
     }
 
     @Override
@@ -45,10 +56,85 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        //holder.farmerImage.setImageResource(R.drawable.profile);
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME)));
         holder.farmerImage.setImageResource(R.mipmap.male);
-        //holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
+
+        boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_IS_SYNC)) == 1;
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_IS_UPDATE)) == 1;
+        if (isUpdate && isSync) {
+            holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
+        }
+
+        applyIconAnimation(holder, position);
+
+    }
+
+    private void applyIconAnimation(ViewHolder holder, int position) {
+        if (selectedItems.get(position, false)) {
+            holder.iconFront.setVisibility(View.GONE);
+            holder.resetIconYAxis(holder.iconBack);
+            holder.iconBack.setVisibility(View.VISIBLE);
+            holder.iconBack.setAlpha(1);
+            if (currentSelectedIndex == position) {
+                FlipAnimator.flipView(mContext, holder.iconBack, holder.iconFront, true);
+                resetCurrentIndex();
+            }
+        } else {
+            holder.iconBack.setVisibility(View.GONE);
+            holder.resetIconYAxis(holder.iconFront);
+            holder.iconFront.setVisibility(View.VISIBLE);
+            holder.iconFront.setAlpha(1);
+            if ((reverseAllAnimations && animationItemsIndex.get(position, false)) || currentSelectedIndex == position) {
+                FlipAnimator.flipView(mContext, holder.iconBack, holder.iconFront, false);
+                resetCurrentIndex();
+            }
+        }
+    }
+
+    public void resetAnimationIndex() {
+        reverseAllAnimations = false;
+        animationItemsIndex.clear();
+    }
+
+    public void clearSelections() {
+        reverseAllAnimations = true;
+        selectedItems.clear();
+        itemsValues.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Integer> getSelectedItems() {
+        ArrayList<Integer> items =
+                new ArrayList<>(itemsValues.size());
+        for (int i = 0; i < itemsValues.size(); i++) {
+            items.add(itemsValues.keyAt(i));
+        }
+        return items;
+    }
+
+    private void resetCurrentIndex() {
+        currentSelectedIndex = -1;
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndex = pos;
+
+        mCursor.moveToPosition(pos);
+
+        int id = mCursor.getInt(mCursor.getColumnIndex(BfwContract.Buyer._ID));
+
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+            animationItemsIndex.delete(pos);
+            itemsValues.delete(id);
+        } else {
+            selectedItems.put(pos, true);
+            animationItemsIndex.put(pos, true);
+            itemsValues.put(id, true);
+        }
+        notifyItemChanged(pos);
     }
 
     @Override
@@ -63,29 +149,36 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
     public interface BuyerAdapterOnClickHandler {
-        void onClick(Long farmerId, ViewHolder vh);
+        void onClick(Long buyerId, ViewHolder vh);
     }
 
     public interface BuyerAdapterOnLongClickHandler {
-        boolean onLongClick(Long farmerId, ViewHolder vh);
+        void onLongClick(long buyerId, long position, BuyerAdapter.ViewHolder vh);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public final View mView;
         public final ImageView farmerImage;
-        public final ImageView imagedone;
+        public final ImageView imagedone, imageView;
         public final TextView mUname;
         public RelativeLayout iconBack, iconFront, iconContainer;
         public LinearLayout view_foreground;
-        //lisste des coop agent deja selectionner
-        public List<Integer> listsSelectedItem = new ArrayList<>();
+
+        public String id_cursor_to_delete;
+        private int position = 0;
+        private boolean isVisible;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             farmerImage = view.findViewById(R.id.u_icon);
             imagedone = view.findViewById(R.id.image_done);
+            imageView = view.findViewById(R.id.buyer_sync);
             imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
             mUname = view.findViewById(R.id.b_name);
@@ -95,9 +188,10 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             iconContainer = view.findViewById(R.id.icon_container);
             view_foreground = view.findViewById(R.id.view_foreground);
 
+            isVisible = false;
+
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-
         }
 
         @Override
@@ -106,13 +200,9 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             int position = getAdapterPosition();
 
             mCursor.moveToPosition(position);
-            int buyerColumnIndex = mCursor.getColumnIndex(BfwContract.Coops._ID);
-            mClickHandler.onClick(mCursor.getLong(buyerColumnIndex), this);
+            Long buyerColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Buyer._ID));
 
-            //si click simple, appel de l'activity  details
-            Intent intent = new Intent(mContext, DetailBuyerActivity.class);
-            intent.putExtra("buyerId", buyerColumnIndex);
-            mContext.startActivity(intent);
+            mClickHandler.onClick(buyerColumnIndex, this);
         }
 
         private void resetIconYAxis(View view) {
@@ -123,36 +213,23 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
 
         @Override
         public boolean onLongClick(View view) {
-            if (!return_if_val_in_array(Integer.valueOf(this.getAdapterPosition()))) {
-                this.iconFront.setVisibility(View.GONE);
-                this.view_foreground.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                resetIconYAxis(this.iconBack);
-                this.iconBack.setVisibility(View.VISIBLE);
-                this.iconBack.setAlpha(1);
-                FlipAnimator.flipView(mContext.getApplicationContext(), this.iconBack, this.iconFront, true);
+            position = getAdapterPosition();
 
-                listsSelectedItem.add(Integer.valueOf(this.getAdapterPosition()));
+            mCursor.moveToPosition(position);
+            Long buyerColumnIndex = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Buyer._ID));
 
-            } else {
-                this.iconBack.setVisibility(View.GONE);
-                resetIconYAxis(this.iconFront);
-                this.view_foreground.setBackgroundColor(Color.argb(2, 0, 0, 0));
-                this.iconFront.setVisibility(View.VISIBLE);
-                this.iconFront.setAlpha(1);
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
-                FlipAnimator.flipView(mContext.getApplicationContext(), this.iconBack, this.iconFront, false);
-                listsSelectedItem.remove(Integer.valueOf(this.getAdapterPosition()));
-            }
+            mLongClickHandler.onLongClick(buyerColumnIndex, position, this);
             return true;
         }
 
-        boolean return_if_val_in_array(int val) {
-            for (int v : listsSelectedItem) {
-                if (val == v) {
-                    return true;
-                }
-            }
-            return false;
+        public boolean isVisible() {
+            return isVisible;
+        }
+
+        public void setVisible(boolean visible) {
+            isVisible = visible;
         }
     }
 }

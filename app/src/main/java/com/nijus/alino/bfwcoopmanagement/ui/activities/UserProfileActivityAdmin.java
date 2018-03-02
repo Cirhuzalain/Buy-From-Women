@@ -1,46 +1,55 @@
 package com.nijus.alino.bfwcoopmanagement.ui.activities;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
-import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.ViewPagerAdapter;
+import com.nijus.alino.bfwcoopmanagement.buyers.adapter.BuyerAdapter;
+import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.DetailBuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.fragment.BuyerFragment;
+import com.nijus.alino.bfwcoopmanagement.buyers.ui.fragment.DeleteBuyerDialog;
+import com.nijus.alino.bfwcoopmanagement.coopAgent.adapter.CoopAgentAdapter;
+import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.DetailCoopAgentActivity;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.CoopAgentFragment;
+import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.DeleteAgentDialog;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.DetailFarmerActivity;
+import com.nijus.alino.bfwcoopmanagement.events.DeleteAgentEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DeleteBuyerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DisableAgentSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DisableBuyerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventAgentResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.EventBuyerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshAgentLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshBuyerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventAgentToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventBuyerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventAgentToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventBuyerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleAgentRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleAgentResponseEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerResponseEvent;
+import com.nijus.alino.bfwcoopmanagement.farmers.adapter.ViewPagerAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.NavigationFragment;
-import com.nijus.alino.bfwcoopmanagement.vendors.adapter.VendorRecyclerViewAdapter;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.DetailVendorActivity;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
-import java.util.List;
 
-public class UserProfileActivityAdmin extends BaseActivity{
-
-    private MenuInflater inflater;
-    //This is our tablayout
-    private TabLayout tabLayout;
-    //This is our viewPager
-    private ViewPager viewPager;
+public class UserProfileActivityAdmin extends BaseActivity implements BuyerFragment.OnListFragmentInteractionListener,
+        BuyerFragment.OnLongClickFragmentInteractionListener, CoopAgentFragment.OnListFragmentInteractionListener, CoopAgentFragment.OnLongClickFragmentInteractionListener {
 
     //Fragments
     BuyerFragment buyerFragment;
@@ -48,9 +57,11 @@ public class UserProfileActivityAdmin extends BaseActivity{
     CoopFragment coopFragment;
     NavigationFragment farmer_fragment;
     CoopAgentFragment coopAgentFragment;
-
-    String[] tabTitle = {"vendor", "Coops", "Buyer"};
-    int[] unreadCount = {5, 6, 8};
+    private MenuInflater inflater;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ActionModeCallback ActionModeCallback;
+    private ActionMode actionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +93,7 @@ public class UserProfileActivityAdmin extends BaseActivity{
 
             }
         });
-
+        ActionModeCallback = new ActionModeCallback();
     }
 
 
@@ -119,19 +130,6 @@ public class UserProfileActivityAdmin extends BaseActivity{
 
 
     @Override
-    public void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
-
-    public void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY).trim();
-        }
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.navigation, menu);
@@ -158,16 +156,192 @@ public class UserProfileActivityAdmin extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private View prepareTabView(int pos) {
-        View view = getLayoutInflater().inflate(R.layout.custom_tab_u_p, null);
-        TextView tv_title = view.findViewById(R.id.tv_title);
-        TextView tv_count = view.findViewById(R.id.tv_count);
-        tv_title.setText(tabTitle[pos]);
-        if (unreadCount[pos] > 0) {
-            tv_count.setVisibility(View.VISIBLE);
-            tv_count.setText("" + unreadCount[pos]);
-        } else
-            tv_count.setVisibility(View.GONE);
-        return view;
+
+    @Override
+    public void onListFragmentInteraction(long item, BuyerAdapter.ViewHolder vh) {
+        Intent intent = new Intent(this, DetailBuyerActivity.class);
+        intent.putExtra("buyerId", item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongClickFragmentInteractionListener(long item, long position, BuyerAdapter.ViewHolder vh) {
+        enableActionMode((int) position);
+    }
+
+
+    @Override
+    public void onListFragmentInteraction(long item, CoopAgentAdapter.ViewHolder vh) {
+        Intent intent = new Intent(this, DetailCoopAgentActivity.class);
+        intent.putExtra("coopAgentId", item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongClickFragmentInteractionListener(long item, long position, CoopAgentAdapter.ViewHolder vh) {
+        enableActionMode((int) position);
+    }
+
+
+    @Subscribe
+    public void onToggleBuyerResponseEvent(ToggleBuyerResponseEvent buyerResponseEvent) {
+        int count = buyerResponseEvent.getCount();
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count) + " selected");
+            actionMode.invalidate();
+        }
+    }
+
+    @Subscribe
+    public void onDeleteBuyerEvent(DeleteBuyerEvent deleteBuyerEvent) {
+        if (deleteBuyerEvent.isSuccess()) {
+            Toast.makeText(this, deleteBuyerEvent.getMessage(), Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new RefreshBuyerLoader());
+        } else {
+            Toast.makeText(this, deleteBuyerEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe
+    public void onResponseEventBuyerToDelete(ResponseEventBuyerToDelete eventBuyerToDelete) {
+
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            ArrayList<Integer> buyerIds = eventBuyerToDelete.getBuyerIds();
+
+            DeleteBuyerDialog buyerDeleteDialog = new DeleteBuyerDialog();
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList("buyer_ids", buyerIds);
+            buyerDeleteDialog.setArguments(bundle);
+            buyerDeleteDialog.show(getSupportFragmentManager(), "dialogLoanTag");
+
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //subscribe Coop agent
+
+    @Subscribe
+    public void onToggleAgentResponseEvent(ToggleAgentResponseEvent agentResponseEvent) {
+        int count = agentResponseEvent.getCount();
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count) + " selected");
+            actionMode.invalidate();
+        }
+    }
+
+    @Subscribe
+    public void onDeleteAgentEvent(DeleteAgentEvent deleteAgentEvent) {
+        if (deleteAgentEvent.isSuccess()) {
+            Toast.makeText(this, deleteAgentEvent.getMessage(), Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new RefreshAgentLoader());
+        } else {
+            Toast.makeText(this, deleteAgentEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe
+    public void onResponseEventAgentToDelete(ResponseEventAgentToDelete eventAgentToDelete) {
+
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            ArrayList<Integer> agentIds = eventAgentToDelete.getAgentIds();
+
+            DeleteAgentDialog agentDeleteDialog = new DeleteAgentDialog();
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList("agent_ids", agentIds);
+            agentDeleteDialog.setArguments(bundle);
+            agentDeleteDialog.show(getSupportFragmentManager(), "dialogLoanTag");
+
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void toggleSelectionBuyer(int position) {
+        // dispatch event to toggle action
+        EventBus.getDefault().post(new ToggleBuyerRequestEvent(position));
+    }
+
+    private void toggleSelectionAgent(int position) {
+        // dispatch event to toggle action
+        EventBus.getDefault().post(new ToggleAgentRequestEvent(position));
+
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            actionMode = startSupportActionMode(ActionModeCallback);
+        }
+        if (tabLayout.getSelectedTabPosition() == 2) {
+            //agent
+            toggleSelectionAgent(position);
+        } else if (tabLayout.getSelectedTabPosition() == 3) {
+            //buyer
+            toggleSelectionBuyer(position);
+        }
+    }
+
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+           // viewPager.setCurrentItem(0);
+
+
+            // dispatch event to disable  swipe refresh
+            if (tabLayout.getSelectedTabPosition() == 2) {
+                //agent
+                EventBus.getDefault().post(new DisableAgentSwipeEvent());
+            } else if (tabLayout.getSelectedTabPosition() == 3) {
+                //buyer
+                EventBus.getDefault().post(new DisableBuyerSwipeEvent());
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    // dispatch event to request data to delete
+                    // Use Tab Position to call the correct event  tabLayout.getSelectedTabPosition()
+                    if (tabLayout.getSelectedTabPosition() == 2) {
+                        //agent
+                        EventBus.getDefault().post(new RequestEventAgentToDelete());
+                    } else if (tabLayout.getSelectedTabPosition() == 3) {
+                        //buyer
+                        EventBus.getDefault().post(new RequestEventBuyerToDelete());
+                    }
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            // dispatch event to disable  swipe and clear adapter
+            if (tabLayout.getSelectedTabPosition() == 2) {
+                //agent
+                EventBus.getDefault().post(new EventAgentResetItems());
+            } else if (tabLayout.getSelectedTabPosition() == 3) {
+                //buyer
+                EventBus.getDefault().post(new EventBuyerResetItems());
+            }
+        }
     }
 }

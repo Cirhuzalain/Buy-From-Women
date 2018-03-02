@@ -43,7 +43,7 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_farmer);
 
-        getSupportLoaderManager().initLoader(0, null, this);
+
 
         //get extra from user profile activity
         //get farmer Id
@@ -52,6 +52,8 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
             mFarmerId = intent.getLongExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
+
+        getSupportLoaderManager().initLoader(0, null, this);
 
         collapsingToolbarLayout = findViewById(R.id.name_farmer);
 
