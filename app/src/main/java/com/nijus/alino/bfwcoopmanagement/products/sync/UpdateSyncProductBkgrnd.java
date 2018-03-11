@@ -166,7 +166,7 @@ public class UpdateSyncProductBkgrnd extends IntentService {
                         }
 
                     } catch (IOException e) {
-                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_product), false));
                     }
                 }
             }
@@ -181,6 +181,6 @@ public class UpdateSyncProductBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Product Update Successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getString(com.nijus.alino.bfwcoopmanagement.R.string.prod_sync), true));
     }
 }

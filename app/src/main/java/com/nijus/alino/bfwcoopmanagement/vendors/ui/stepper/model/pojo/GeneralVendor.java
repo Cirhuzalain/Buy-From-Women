@@ -10,7 +10,6 @@ import android.os.Parcelable;
 public class GeneralVendor implements Parcelable {
 
     private String name;
-    private String coopsName;
     private String address;
     private String phoneNumber;
     private boolean gender;
@@ -19,17 +18,15 @@ public class GeneralVendor implements Parcelable {
 
     }
 
-    public GeneralVendor(String name, boolean gender, String coop, String phoneNumber, String address) {
+    public GeneralVendor(String name, boolean gender, String phoneNumber, String address) {
         this.name = name;
         this.gender = gender;
-        this.coopsName = coop;
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
     public GeneralVendor(Parcel data) {
         this.name = data.readString();
-        this.coopsName = data.readString();
         this.phoneNumber = data.readString();
         this.address = data.readString();
         this.gender = data.readByte() != 0;
@@ -43,7 +40,6 @@ public class GeneralVendor implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
-        parcel.writeString(coopsName);
         parcel.writeString(phoneNumber);
         parcel.writeString(address);
         parcel.writeByte((byte) (gender ? 1 : 0));
@@ -60,10 +56,6 @@ public class GeneralVendor implements Parcelable {
 
     public void setGender(boolean gender) {
         this.gender = gender;
-    }
-
-    public String getCoopsName() {
-        return coopsName;
     }
 
     public boolean isGender() {
@@ -86,9 +78,6 @@ public class GeneralVendor implements Parcelable {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setCoopsName(String coop) {
-        this.coopsName = coop;
-    }
 
     public static final Creator<GeneralVendor> CREATOR = new Creator<GeneralVendor>() {
         @Override

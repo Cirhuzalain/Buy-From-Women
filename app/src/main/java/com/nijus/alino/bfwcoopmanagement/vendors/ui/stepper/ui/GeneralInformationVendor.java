@@ -1,18 +1,15 @@
 package com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -21,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventB;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.PageVendorVendor;
@@ -30,7 +26,7 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.GeneralVe
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class GeneralInformationVendor extends Fragment /*implements AdapterView.OnItemSelectedListener*/ {
+public class GeneralInformationVendor extends Fragment {
 
     public static final String ARG_KEY = "key";
     public final String LOG_TAG = GeneralInformationVendor.class.getSimpleName();
@@ -42,11 +38,15 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
     private PageFragmentCallbacksVendor mCallbacks;
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
+    private AutoCompleteTextView addressTextView;
+
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
-    private Spinner spinner;
-    private LinearLayout content_spiner_coop;
+
+    /**
+     * Make LinearLyaut content_spiner_coop invisible**/
+    LinearLayout content_spiner_coop;
 
     public GeneralInformationVendor() {
         super();
@@ -108,21 +108,24 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
         textView.setText(getContext().getString(R.string.gen_title));
 
         names = rootView.findViewById(R.id.name_f);
+        //address = rootView.findViewById(R.id.address);
         phoneNumber = rootView.findViewById(R.id.name_phone);
+        addressTextView = rootView.findViewById(R.id.address);
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
-        spinner = rootView.findViewById(R.id.spinner_coops_infos);
-        mGenderGroup = rootView.findViewById(R.id.gender_group);
-        content_spiner_coop = rootView.findViewById(R.id.content_spiner_coop);
+
+        content_spiner_coop =  rootView.findViewById(R.id.content_spiner_coop);
         content_spiner_coop.setVisibility(View.GONE);
+        //spinner = rootView.findViewById(R.id.spinner_coops_infos);
+        mGenderGroup = rootView.findViewById(R.id.gender_group);
 
         //set default gender
         if (mGenderGroup.getCheckedRadioButtonId() == R.id.radio_male) {
             generalVendor.setGender(true);
-            mPageVendor.getData().putParcelable("generalVendor", generalVendor);
+            mPageVendor.getData().putParcelable("general", generalVendor);
         } else if (mGenderGroup.getCheckedRadioButtonId() == R.id.radio_female) {
             generalVendor.setGender(false);
-            mPageVendor.getData().putParcelable("generalVendor", generalVendor);
+            mPageVendor.getData().putParcelable("generalVendor",generalVendor);
         }
 
         //listen for change on gender
@@ -131,10 +134,10 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
                 if (i == R.id.radio_male) {
                     generalVendor.setGender(true);
-                    mPageVendor.getData().putParcelable("generalVendor", generalVendor);
+                    mPageVendor.getData().putParcelable("generalVendor",generalVendor);
                 } else if (i == R.id.radio_female) {
                     generalVendor.setGender(false);
-                    mPageVendor.getData().putParcelable("generalVendor", generalVendor);
+                    mPageVendor.getData().putParcelable("generalVendor",generalVendor);
                 }
             }
         });
@@ -147,12 +150,30 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                generalVendor.setName(charSequence.toString());
+                generalVendor.setName(charSequence.toString().trim());
                 mPageVendor.setData("generalVendor", generalVendor);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        addressTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                generalVendor.setAddress(charSequence.toString().trim());
+                mPageVendor.setData("generalVendor", generalVendor);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -164,7 +185,7 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                generalVendor.setPhoneNumber(charSequence.toString());
+                generalVendor.setPhoneNumber(charSequence.toString().trim());
                 mPageVendor.setData("generalVendor", generalVendor);
             }
 
@@ -173,41 +194,8 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
 
             }
         });
-
-        //populateSpinner();
-        //spinner.setOnItemSelectedListener(this);
         return rootView;
     }
-
-   /* public void populateSpinner() {
-        String[] fromColumns = {BfwContract.Coops.COLUMN_COOP_NAME};
-
-        // View IDs to map the columns (fetched above) into
-        int[] toViews = {
-                android.R.id.text1
-        };
-        Cursor cursor = getActivity().getContentResolver().query(
-                BfwContract.Coops.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-        if (cursor != null) {
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                    getContext(), // context
-                    android.R.layout.simple_spinner_item, // layout file
-                    cursor, // DB cursor
-                    fromColumns, // data to bind to the UI
-                    toViews, // views that'll represent the data from `fromColumns`
-                    0
-            );
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Create the list view and bind the adapter
-            spinner.setAdapter(adapter);
-        }
-    }*/
 
     @Override
     public void onAttach(Context context) {
@@ -221,15 +209,4 @@ public class GeneralInformationVendor extends Fragment /*implements AdapterView.
         mCallbacks = null;
     }
 
- /*   @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        Cursor cursor = (Cursor) spinner.getSelectedItem();
-        generalVendor.setCoopsName(cursor.getString(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
-        mPageVendor.setData("generalVendor", generalVendor);
-    }*/
-
-    /*@Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-    }*/
 }

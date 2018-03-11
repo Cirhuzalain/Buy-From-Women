@@ -2,7 +2,6 @@ package com.nijus.alino.bfwcoopmanagement.products.sync;
 
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +11,7 @@ import android.support.annotation.Nullable;
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +47,8 @@ public class DeleteSyncProductBkgrnd extends IntentService {
                 getSharedPreferences(getResources().getString(R.string.application_key), Context.MODE_PRIVATE);
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
+
+        EventBus.getDefault().post(new ProcessingFarmerEvent("Processing your request ..."));
 
         //get non sync farmer to the server (is_sync)
         int dataCount = 0;
@@ -102,7 +104,7 @@ public class DeleteSyncProductBkgrnd extends IntentService {
                         }
 
                     } catch (IOException e) {
-                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.delete_error_product), false));
                     }
                 }
             }
@@ -113,7 +115,8 @@ public class DeleteSyncProductBkgrnd extends IntentService {
         }
 
         //post event sync after
-        if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Product Update Successfully", true));
+        if (dataCount > 0) {
+            EventBus.getDefault().post(new SyncDataEvent(getString(com.nijus.alino.bfwcoopmanagement.R.string.prod_del_msg), true));
+        }
     }
 }

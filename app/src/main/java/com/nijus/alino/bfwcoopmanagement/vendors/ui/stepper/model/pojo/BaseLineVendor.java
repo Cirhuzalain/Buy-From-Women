@@ -9,21 +9,24 @@ import android.os.Parcelable;
 
 public class BaseLineVendor implements Parcelable {
 
-    private int totProdInKg;
-    private int totLostInKg;
-    private int totSoldInKg;
-    private int totVolumeSoldCoopInKg;
-    private int priceSoldToCoopPerKg;
-    private int totVolSoldInKg;
-    private int priceSoldInKg;
+
+    private Double totProdInKg;
+    private Double totLostInKg;
+    private Double totSoldInKg;
+    private Double totVolumeSoldCoopInKg;
+    private Double priceSoldToCoopPerKg;
+    private Double totVolSoldInKg;
+    private Double priceSoldInKg;
+    private int harvestSeason;
+    private int baselineId;
+    private String seasonName;
 
 
-    public BaseLineVendor(){
 
-    }
+    public BaseLineVendor(){ this.baselineId = 0;}
 
-    public BaseLineVendor(int totProdInKg, int totLostInKg, int totSoldInKg, int totVolumeSoldCoopInKg,
-                          int priceSoldToCoopPerKg, int totVolSoldInKg, int priceSoldInKg) {
+    public BaseLineVendor(Double totProdInKg, Double totLostInKg, Double totSoldInKg, Double totVolumeSoldCoopInKg,
+                          Double priceSoldToCoopPerKg, Double totVolSoldInKg, Double priceSoldInKg, int harvestSeason) {
         this.totProdInKg = totProdInKg;
         this.totLostInKg = totLostInKg;
         this.totSoldInKg = totSoldInKg;
@@ -31,18 +34,21 @@ public class BaseLineVendor implements Parcelable {
         this.priceSoldToCoopPerKg = priceSoldToCoopPerKg;
         this.totVolSoldInKg = totVolSoldInKg;
         this.priceSoldInKg = priceSoldInKg;
+        this.harvestSeason = harvestSeason;
     }
 
     public BaseLineVendor(Parcel data) {
-        this.totProdInKg = data.readInt();
-        this.totLostInKg = data.readInt();
-        this.totSoldInKg = data.readInt();
-        this.totVolumeSoldCoopInKg = data.readInt();
-        this.priceSoldToCoopPerKg = data.readInt();
-        this.totVolSoldInKg = data.readInt();
-        this.priceSoldInKg = data.readInt();
+        this.totProdInKg = data.readDouble();
+        this.totLostInKg = data.readDouble();
+        this.totSoldInKg = data.readDouble();
+        this.totVolumeSoldCoopInKg = data.readDouble();
+        this.priceSoldToCoopPerKg = data.readDouble();
+        this.totVolSoldInKg = data.readDouble();
+        this.priceSoldInKg = data.readDouble();
+        this.harvestSeason = data.readInt();
+        this.baselineId = data.readInt();
+        this.seasonName = data.readString();
     }
-
     @Override
     public int describeContents() {
         return 0;
@@ -50,72 +56,98 @@ public class BaseLineVendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(totProdInKg);
-        parcel.writeInt(totLostInKg);
-        parcel.writeInt(totSoldInKg);
-        parcel.writeInt(totVolumeSoldCoopInKg);
-        parcel.writeInt(priceSoldToCoopPerKg);
-        parcel.writeInt(totVolSoldInKg);
-        parcel.writeInt(priceSoldInKg);
+        parcel.writeDouble(totProdInKg);
+        parcel.writeDouble(totLostInKg);
+        parcel.writeDouble(totSoldInKg);
+        parcel.writeDouble(totVolumeSoldCoopInKg);
+        parcel.writeDouble(priceSoldToCoopPerKg);
+        parcel.writeDouble(totVolSoldInKg);
+        parcel.writeDouble(priceSoldInKg);
+        parcel.writeInt(harvestSeason);
+        parcel.writeInt(baselineId);
+        parcel.writeString(seasonName);
+    }
+    public String getSeasonName() {
+        return seasonName;
     }
 
-    public int getTotProdInKg() {
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getBaselineId() {
+        return baselineId;
+    }
+
+    public void setBaselineId(int baselineId) {
+        this.baselineId = baselineId;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
+    }
+
+    public Double getTotProdInKg() {
         return totProdInKg;
     }
 
-    public void setTotProdInKg(int totProdInKg) {
+    public void setTotProdInKg(Double totProdInKg) {
         this.totProdInKg = totProdInKg;
     }
 
-    public int getTotLostInKg() {
+    public Double getTotLostInKg() {
         return totLostInKg;
     }
 
-    public void setTotLostInKg(int totLostInKg) {
+    public void setTotLostInKg(Double totLostInKg) {
         this.totLostInKg = totLostInKg;
     }
 
-    public int getTotSoldInKg() {
+    public Double getTotSoldInKg() {
         return totSoldInKg;
     }
 
-    public void setTotSoldInKg(int totSoldInKg) {
+    public void setTotSoldInKg(Double totSoldInKg) {
         this.totSoldInKg = totSoldInKg;
     }
 
-    public int getTotVolumeSoldCoopInKg() {
+    public Double getTotVolumeSoldCoopInKg() {
         return totVolumeSoldCoopInKg;
     }
 
-    public void setTotVolumeSoldCoopInKg(int totVolumeSoldCoopInKg) {
+    public void setTotVolumeSoldCoopInKg(Double totVolumeSoldCoopInKg) {
         this.totVolumeSoldCoopInKg = totVolumeSoldCoopInKg;
     }
 
-    public int getPriceSoldToCoopPerKg() {
+    public Double getPriceSoldToCoopPerKg() {
         return priceSoldToCoopPerKg;
     }
 
-    public void setPriceSoldToCoopPerKg(int priceSoldToCoopPerKg) {
+    public void setPriceSoldToCoopPerKg(Double priceSoldToCoopPerKg) {
         this.priceSoldToCoopPerKg = priceSoldToCoopPerKg;
     }
 
-    public int getTotVolSoldInKg() {
+    public Double getTotVolSoldInKg() {
         return totVolSoldInKg;
     }
 
-    public void setTotVolSoldInKg(int totVolSoldInKg) {
+    public void setTotVolSoldInKg(Double totVolSoldInKg) {
         this.totVolSoldInKg = totVolSoldInKg;
     }
 
-    public int getPriceSoldInKg() {
+    public Double getPriceSoldInKg() {
         return priceSoldInKg;
     }
 
-    public void setPriceSoldInKg(int priceSoldInKg) {
+    public void setPriceSoldInKg(Double priceSoldInKg) {
         this.priceSoldInKg = priceSoldInKg;
     }
 
-    public static final Creator<BaseLineVendor> CREATOR = new Creator<BaseLineVendor>() {
+    public static final  Parcelable.Creator<BaseLineVendor> CREATOR = new  Parcelable.Creator<BaseLineVendor>() {
         @Override
         public BaseLineVendor createFromParcel(Parcel parcel) {
             return new BaseLineVendor(parcel);

@@ -3,10 +3,6 @@ package com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * ForecastVendor PageVendorVendor
- */
-
 public class Forecast implements Parcelable {
 
     private double arableLandPlot;

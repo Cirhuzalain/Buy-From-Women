@@ -124,8 +124,6 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
     @Override
     public void onRefresh() {
         getLoaderManager().restartLoader(0, null, this);
-        //getSupportLoaderManager().restartLoader(0,null,this);
-
     }
     public void back2(PojoLoanPayment p) {
         Bundle bundle = new Bundle();

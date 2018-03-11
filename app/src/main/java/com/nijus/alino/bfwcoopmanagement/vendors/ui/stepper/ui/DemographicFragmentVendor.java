@@ -32,7 +32,7 @@ public class DemographicFragmentVendor extends Fragment {
     private AutoCompleteTextView sLastName;
     private AutoCompleteTextView cellPhoneAlt;
     private AutoCompleteTextView cellCarrier;
-    private AutoCompleteTextView memberShipId;
+    //private AutoCompleteTextView memberShipId;
 
     public DemographicFragmentVendor() {
         super();
@@ -72,7 +72,7 @@ public class DemographicFragmentVendor extends Fragment {
         sLastName = rootView.findViewById(R.id.s_last_name);
         cellPhoneAlt = rootView.findViewById(R.id.cell_phone_alt);
         cellCarrier = rootView.findViewById(R.id.cell_carrier);
-        memberShipId = rootView.findViewById(R.id.m_id);
+        //memberShipId = rootView.findViewById(R.id.m_id);
 
         //set default household
         if (houseHold.getCheckedRadioButtonId() == R.id.household_y) {
@@ -182,24 +182,6 @@ public class DemographicFragmentVendor extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 demographicVendor.setCellCarrier(charSequence.toString());
-                mPageVendor.getData().putParcelable("demographicVendor", demographicVendor);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        memberShipId.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                demographicVendor.setMemberShipId(charSequence.toString());
                 mPageVendor.getData().putParcelable("demographicVendor", demographicVendor);
             }
 

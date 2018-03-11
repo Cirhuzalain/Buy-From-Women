@@ -144,7 +144,7 @@
                         android:hint="@string/membership_id"
                         android:inputType="text"
                         android:enabled="false"
-                        android:maxLines="1" />
+                        android:maxLines="2" />
 
                 </android.support.design.widget.TextInputLayout>
 

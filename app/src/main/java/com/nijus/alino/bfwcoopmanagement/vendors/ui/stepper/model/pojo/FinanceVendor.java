@@ -17,19 +17,23 @@ public class FinanceVendor implements Parcelable {
     private boolean isAggregation;
     private boolean isOtherLp;
 
-    private int totLoanAmount;
-    private int totOutstanding;
+    private double totLoanAmount;
+    private double totOutstanding;
     private double interestRate;
     private int durationInMonth;
     private String loanProvider;
+    private int harvestSeason;
+    private int financeId;
+    private String seasonName;
+
 
     public FinanceVendor() {
-
+        this.financeId = 0;
     }
 
     public FinanceVendor(boolean isOutstandingLoan, boolean hasMobileMoneyAccount, boolean isInput, boolean isAggregation,
-                         boolean isOtherLp, int totOutstanding, double interestRate, int durationInMonth,
-                         String loanProvider, int totLoanAmount) {
+                         boolean isOtherLp, double totOutstanding, double interestRate, int durationInMonth,
+                         String loanProvider, double totLoanAmount, int harvestSeason) {
         this.totLoanAmount = totLoanAmount;
         this.isOutstandingLoan = isOutstandingLoan;
         this.hasMobileMoneyAccount = hasMobileMoneyAccount;
@@ -40,19 +44,24 @@ public class FinanceVendor implements Parcelable {
         this.interestRate = interestRate;
         this.durationInMonth = durationInMonth;
         this.loanProvider = loanProvider;
+        this.harvestSeason = harvestSeason;
     }
 
     public FinanceVendor(Parcel data) {
-        this.totLoanAmount = data.readInt();
+
+        this.totLoanAmount = data.readDouble();
         this.isOutstandingLoan = data.readByte() != 0;
         this.hasMobileMoneyAccount = data.readByte() != 0;
         this.isInput = data.readByte() != 0;
         this.isAggregation = data.readByte() != 0;
         this.isOtherLp = data.readByte() != 0;
-        this.totOutstanding = data.readInt();
+        this.totOutstanding = data.readDouble();
         this.interestRate = data.readDouble();
         this.durationInMonth = data.readInt();
         this.loanProvider = data.readString();
+        this.harvestSeason = data.readInt();
+        this.financeId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -62,23 +71,50 @@ public class FinanceVendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(totLoanAmount);
+        parcel.writeDouble(totLoanAmount);
         parcel.writeByte((byte) (isOutstandingLoan ? 1 : 0));
         parcel.writeByte((byte) (hasMobileMoneyAccount ? 1 : 0));
         parcel.writeByte((byte) (isInput ? 1 : 0));
         parcel.writeByte((byte) (isAggregation ? 1 : 0));
         parcel.writeByte((byte) (isOtherLp ? 1 : 0));
-        parcel.writeInt(totOutstanding);
+        parcel.writeDouble(totOutstanding);
         parcel.writeDouble(interestRate);
         parcel.writeInt(durationInMonth);
         parcel.writeString(loanProvider);
+        parcel.writeInt(harvestSeason);
+        parcel.writeInt(financeId);
+        parcel.writeString(seasonName);
     }
 
-    public int getTotLoanAmount() {
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getFinanceId() {
+        return financeId;
+    }
+
+    public void setFinanceId(int financeId) {
+        this.financeId = financeId;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
+    }
+
+    public double getTotLoanAmount() {
         return totLoanAmount;
     }
 
-    public void setTotLoanAmount(int totLoanAmount) {
+    public void setTotLoanAmount(double totLoanAmount) {
         this.totLoanAmount = totLoanAmount;
     }
 
@@ -122,11 +158,11 @@ public class FinanceVendor implements Parcelable {
         isOtherLp = otherLp;
     }
 
-    public int getTotOutstanding() {
+    public double getTotOutstanding() {
         return totOutstanding;
     }
 
-    public void setTotOutstanding(int totOutstanding) {
+    public void setTotOutstanding(double totOutstanding) {
         this.totOutstanding = totOutstanding;
     }
 
@@ -154,7 +190,7 @@ public class FinanceVendor implements Parcelable {
         this.loanProvider = loanProvider;
     }
 
-    public static final Creator<FinanceVendor> CREATOR = new Creator<FinanceVendor>() {
+    public static final Parcelable.Creator<FinanceVendor> CREATOR = new Parcelable.Creator<FinanceVendor>() {
         @Override
         public FinanceVendor createFromParcel(Parcel parcel) {
             return new FinanceVendor(parcel);

@@ -68,7 +68,7 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
 
         int id_coop = mCursor.getInt(mCursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_COOP_ID));
 
-        Cursor cursor;
+        Cursor cursor = null;
         int dataCount;
         String namecoop = "";
 
@@ -85,8 +85,11 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
                 }
             }
         } catch (Exception e) {
-
+            cursor.close();
         }
+        cursor.close();
+
+
 
         holder.ca_cooperative.setText(namecoop);
 

@@ -73,10 +73,10 @@ public class AddAgent extends IntentService {
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    //start job service
-                   startService(new Intent(this, SyncAgentBackground.class));
                     //Post event after saving data
                     EventBus.getDefault().post(new SaveDataEvent("Agent added successfully",true));
+                    //start job service
+                   startService(new Intent(this, SyncAgentBackground.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

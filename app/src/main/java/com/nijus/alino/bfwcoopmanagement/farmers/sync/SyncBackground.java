@@ -152,7 +152,7 @@ public class SyncBackground extends IntentService {
                     Boolean isOtherSource = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER)) == 1;
 
                     String storageDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_STORAGE_DETAIL));
-                    String newResourcesDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO));
+                    String newResourcesDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_NEW_SOURCE_DETAIL));
                     String waterSourceDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS));
 
                     int coopUserId = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_COOP_USER_ID));

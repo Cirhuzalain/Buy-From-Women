@@ -12,12 +12,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshProductLoader;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.products.ui.fragment.ProductDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.products.ui.fragment.ProductListFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ProductActivity extends BaseActivity implements
         ProductListFragment.OnListFragmentInteractionListener, View.OnClickListener {
@@ -106,5 +115,28 @@ public class ProductActivity extends BaseActivity implements
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingFarmerEvent(ProcessingFarmerEvent processingFarmerEvent) {
+        Toast.makeText(this, processingFarmerEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(getApplicationContext(), saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new RefreshProductLoader());
+        } else {
+            Toast.makeText(getApplicationContext(), saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(getApplicationContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 
 }

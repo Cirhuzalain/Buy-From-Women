@@ -1,6 +1,5 @@
 package com.nijus.alino.bfwcoopmanagement.loans.ui.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,21 +23,23 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoanPayment;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.AddLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.AddPayment;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoanPayment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.PaymentBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
 
-import org.w3c.dom.Text;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 public class DetailLoanActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
-        View.OnClickListener{
+        View.OnClickListener {
     public static final String ARG_KEY = "key";
     Long mLoanId;
     private Uri mUri;
@@ -54,6 +55,9 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
     private Button schedule, payment, save;
 
     private long loan_id, loan_id_from_server;
+    private AlertDialog.Builder adb;
+    AlertDialog alertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,8 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_detail_loan);
 
         getSupportLoaderManager().initLoader(0, null, this);
+
+        EventBus.getDefault().register(this);
 
         //get Id
         Intent intent = this.getIntent();
@@ -132,9 +138,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             int vendor_id = data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
             loan_id = data.getInt(data.getColumnIndex(BfwContract.Loan._ID));
             loan_id_from_server = data.getLong(data.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
-            /**
-             * Get the LOAN
-             * **/
+
             String vendorSelect = BfwContract.Farmer.TABLE_NAME + "." +
                     BfwContract.Farmer._ID + " =  ? ";
 
@@ -204,15 +208,13 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
 
                         if (TextUtils.isEmpty(amount_pay.getText())) {
                             amount_pay.setError(getString(R.string.error_field_required));
-                        }
-                        else
-                        {
+                        } else {
                             PojoLoanPayment pojoLoanPayment = new PojoLoanPayment();
                             pojoLoanPayment.setAmount(Double.valueOf(amount_pay.getText().toString()));
                             Date start_date_date = new Date();
 
                             pojoLoanPayment.setPayment_date(start_date_date.getTime());
-                            pojoLoanPayment.setLoan_id((int)loan_id);
+                            pojoLoanPayment.setLoan_id((int) loan_id);
 
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("loan_payment", pojoLoanPayment);
@@ -220,23 +222,47 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
                             Intent intent = new Intent(getBaseContext(), AddPayment.class);
                             intent.putExtra("loan_payment_data", bundle);
                             getBaseContext().startService(intent);
+
                         }
 
-                        Toast.makeText(getApplicationContext(), "bree",Toast.LENGTH_LONG).show();
                     }
                 });
 
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb = new AlertDialog.Builder(this);
                 adb.setView(alertLayout);
-
-                adb.setPositiveButton("Cancel",null);
-                adb.show();
+                adb.setPositiveButton("Cancel", null);
+                alertDialog = adb.show();
                 break;
             }
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingFarmerEvent(ProcessingFarmerEvent processingFarmerEvent) {
+        Toast.makeText(this, processingFarmerEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+            alertDialog.dismiss();
+            getSupportLoaderManager().restartLoader(0, null, this);
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+            getSupportLoaderManager().restartLoader(0, null, this);
+        } else {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 }
 
 

@@ -1,38 +1,49 @@
 package com.nijus.alino.bfwcoopmanagement.vendors.ui.activities;
 
-import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.UpdateFarmer;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.VendorRecyclerViewAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.sync.RefreshDataVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
-import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
-import com.riyagayasen.easyaccordion.AccordionView;
 
-public class VendorActivity extends BaseActivity implements View.OnClickListener {
+import static com.nijus.alino.bfwcoopmanagement.data.BfwContract.Vendor.CONTENT_URI;
+
+public class VendorActivity extends BaseActivity implements View.OnClickListener,
+        VendorFragment.OnListFragmentInteractionListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
+    private VendorRecyclerViewAdapter vendorRecyclerViewAdapter;
+    private SwipeRefreshLayout mRefreshData;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.activity_open_translate_from_bottom, R.anim.activity_no_animation);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vendor);
+        /*setContentView(R.layout.activity_vendor);
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_vendor);
 
@@ -170,94 +181,41 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
 
         ImageView pic_spread_or_spray_details2 = findViewById(R.id.pic_spread_or_spray_details2);
         pic_spread_or_spray_details2.setImageResource(R.mipmap.icon_sm_error);
+=======*/
+        setContentView(R.layout.activity_main2);
 
+        getSupportLoaderManager().initLoader(0, null, this);
 
-        //2. ACCORDION BASELINE
-        final AccordionView baseline_accordion = findViewById(R.id.baseline_accordion);
-        baseline_accordion.setHeadingString("BASELINE FARMER");
+        View emptyView = findViewById(R.id.recyclerview_empty_farmer);
+        Context context = this;
+        RecyclerView recyclerView = findViewById(R.id.farmers_list);
+        mLayoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
-        //3. ACCORDION FIMANCE
-        final AccordionView finace_accordion = findViewById(R.id.finance_accordion);
-        finace_accordion.setHeadingString("FINANCE DATA");
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-
-        //4. ACCORDION FARMER LAND
-        final AccordionView farmer_land_accordion = findViewById(R.id.farmer_land_accordion);
-        farmer_land_accordion.setHeadingString("FARMER LAND DATA");
-
-        //5. ACCORDION FPRECAST
-        final AccordionView forecast_accordion = findViewById(R.id.forecast_accordion);
-        forecast_accordion.setHeadingString("FORECAST DATA");
-
-        //SET ANIMATION FOR ALL
-        access_info_accordion.setAnimated(true);
-        baseline_accordion.setAnimated(true);
-        finace_accordion.setAnimated(true);
-        farmer_land_accordion.setAnimated(true);
-        forecast_accordion.setAnimated(true);
-
-        //ADD LISTENER TO ACCORDIONS
-        access_info_accordion.setOnExpandCollapseListener(new AccordionExpansionCollapseListener() {
+        vendorRecyclerViewAdapter = new VendorRecyclerViewAdapter(this, emptyView, new VendorRecyclerViewAdapter.VendorAdapterOnClickHandler() {
             @Override
-            public void onExpanded(AccordionView view) {
-                access_info_accordion.setHeadingBackGround(R.color.bg_detail);
-                //access_info_accordion.setExpanded(true);
-                //Toast.makeText(getApplicationContext(),"ouvert",Toast.LENGTH_LONG).show();
+            public void onClick(Long farmerId, VendorRecyclerViewAdapter.ViewHolder vh) {
             }
-
+        }, new VendorRecyclerViewAdapter.VendorAdapterOnLongClickListener() {
             @Override
-            public void onCollapsed(AccordionView view) {
-                //Toast.makeText(getApplicationContext(),"fermer",Toast.LENGTH_LONG).show();
-                access_info_accordion.setHeadingBackGround(R.color.default_color);
-
+            public void onLongClick(long item, long position, VendorRecyclerViewAdapter.ViewHolder vh) {
 
             }
         });
 
-        finace_accordion.setOnExpandCollapseListener(new AccordionExpansionCollapseListener() {
-            @Override
-            public void onExpanded(AccordionView view) {
-                finace_accordion.setHeadingBackGround(R.color.bg_detail);
-            }
-            @Override
-            public void onCollapsed(AccordionView view) {
-                finace_accordion.setHeadingBackGround(R.color.default_color);
-            }
-        });
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        mRefreshData = findViewById(R.id.refresh_data_done);
+        mRefreshData.setOnRefreshListener(this);
 
-        baseline_accordion.setOnExpandCollapseListener(new AccordionExpansionCollapseListener() {
-            @Override
-            public void onExpanded(AccordionView view) {
-                baseline_accordion.setHeadingBackGround(R.color.bg_detail);
-            }
-            @Override
-            public void onCollapsed(AccordionView view) {
-                baseline_accordion.setHeadingBackGround(R.color.default_color);
-            }
-        });
+        recyclerView.setAdapter(vendorRecyclerViewAdapter);
 
-        farmer_land_accordion.setOnExpandCollapseListener(new AccordionExpansionCollapseListener() {
-            @Override
-            public void onExpanded(AccordionView view) {
-                farmer_land_accordion.setHeadingBackGround(R.color.bg_detail);
-            }
-            @Override
-            public void onCollapsed(AccordionView view) {
-                farmer_land_accordion.setHeadingBackGround(R.color.default_color);
-            }
-        });
-
-        forecast_accordion.setOnExpandCollapseListener(new AccordionExpansionCollapseListener() {
-            @Override
-            public void onExpanded(AccordionView view) {
-                forecast_accordion.setHeadingBackGround(R.color.bg_detail);
-            }
-            @Override
-            public void onCollapsed(AccordionView view) {
-                forecast_accordion.setHeadingBackGround(R.color.default_color);
-            }
-        });
-
+        FloatingActionButton fab = findViewById(R.id.fab_edit_vendor);
+        fab.setImageResource(R.drawable.ic_edit_black_24dp);
+        fab.setOnClickListener(this);
 
     }
 
@@ -265,6 +223,14 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         if (view.getId() == R.id.fab)
             startActivity(new Intent(this, CreateVendorActivity.class));
+    }
+
+    @Override
+    public void onListFragmentInteraction(long item, VendorRecyclerViewAdapter.ViewHolder vh) {
+
+        Intent intent = new Intent(this, DetailVendorActivity.class);
+        intent.putExtra("vendorId", item);
+        startActivity(intent);
     }
 
     @Override
@@ -289,6 +255,7 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawerLayout = super.getDrawerLayout();
@@ -296,19 +263,43 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            NavUtils.navigateUpFromSameTask(this);
+            super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
         }
     }
-
 
     @Override
-    public void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
-    public void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY).trim();
+    public void onRefresh() {
+        getSupportLoaderManager().restartLoader(0, null, this);
+
+        if (Utils.isNetworkAvailable(this)) {
+            this.startService(new Intent(this, RefreshDataVendor.class));
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, CONTENT_URI, null, null, null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        vendorRecyclerViewAdapter.swapCursor(data);
+        mRefreshData.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshData.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+        vendorRecyclerViewAdapter.swapCursor(null);
     }
 }

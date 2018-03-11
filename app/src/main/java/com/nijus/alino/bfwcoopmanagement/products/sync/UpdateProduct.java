@@ -92,7 +92,7 @@ public class UpdateProduct extends IntentService {
                 getContentResolver().update(BfwContract.ProductTemplate.CONTENT_URI, contentValues,productSelect,new String[]{Integer.toString(id_product)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent());
+                EventBus.getDefault().post(new SaveDataEvent("Product updated successfully",true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

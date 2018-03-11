@@ -134,6 +134,6 @@ public class UpdateSyncAgentBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Agent updated Successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_agent_msg_sync), true));
     }
 }

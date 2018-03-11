@@ -228,7 +228,7 @@
 
     <string name="create_coop">Create Cooperative</string>
     <string name="create_vend">Create Vendor</string>
-    <string name="data_valid_error_coop">Coop Name and Adress are required</string>
+    <string name="data_valid_error_coop">Coop Name and Address are required</string>
     <string name="internal_title">Internal Information</string>
     <string name="forecast_sales">Forecast Sales</string>
     <string name="baseline_yield">Baseline Yield</string>
@@ -256,12 +256,24 @@
     <string name="msg_ok">Ok</string>
     <string name="msg_cancel">Cancel</string>
     <string name="there_s_no_farmer">There\'s no farmer</string>
+    <string name="syncing_error_loan">An error occur while syncing loan data</string>
+    <string name="syncing_error_payment">An error occur while syncing Payment data</string>
     <string name="syncing_error">An error occur while syncing farmer data</string>
+
+    <string name="delete_error_product">An error occur while deleting product</string>
+    <string name="syncing_error_agent">An error occur while syncing agent data</string>
+    <string name="syncing_error_vendor">An error occur while syncing vendor data</string>
+    <string name="syncing_error_buyer">An error occur while syncing buyer data</string>
+    <string name="syncing_error_product">An error occur while syncing Product data</string>
+
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
     <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
     <string name="update_msg">Information updated successfully</string>
+
+    <string name="update_msg_vendor">Vendor updated successfully</string>
+    <string name="coops">Coops</string>
 
     <string name="there_s_no_cooperative_agent">There\'s no cooperative\'s agent</string>
     <string name="there_s_no_buyer">There\'s no buyer</string>
@@ -273,6 +285,9 @@
     <string name="there_s_no_payment">There\'s no payment</string>
     <string name="there_is_payment">Loan payment</string>
     <string name="cooperativ">Coops</string>
+    <string name="add_farmer_msg">Farmer added successfully</string>
+    <string name="add_vendor_msg">Vendor added successfully</string>
+
     <string name="view_sale">Sale</string>
     <string name="view_purchase">Purchase</string>
     <string name="title_activity_coop_profile">Cooperative</string>
@@ -280,8 +295,15 @@
 
     <string name="action_delete">Delete</string>
 
+    <string name="my_cart">My Cart</string>
+    <string name="delete">DELETE</string>
+
+    <string name="add_buyer_msg">Buyer added successfully</string>
+    <string name="add_vend_msg_sync">Vendor synchronised successfully</string>
     <string name="add_buyer_msg_sync">Buyer synchronised successfully</string>
-    <string name="add_agent_msg_sync">Buyer synchronised successfully</string>
+    <string name="add_farmer_msg_sync">Farmer synchronised successfully</string>
+    <string name="add_agent_msg_sync">Agent synchronised successfully</string>
+    <string name="add_buyer_wait_internet_msg">Buyer added successfully, you need to be connected to synchronise</string>
 
 
     <!--String related to forescast data-->
@@ -390,6 +412,7 @@
     <string name="others_fin">Others</string>
     <string name="harvest_season_2017">Harvest Season 2017</string>
     <string name="del_farmer">Delete Farmer</string>
+    <string name="del_vendor">Delete Vendor</string>
     <string name="input_lprovider">Input loan provider</string>
     <string name="inpu_lp_purpose">Input loan purpose</string>
     <string name="aggreg_harv_l_provider">Aggregation/Post harvest loan provider</string>
@@ -413,4 +436,7 @@
     <string name="product_error">Fill all the field</string>
     <string name="auth_error">Wrong credentials, please try again later</string>
     <string name="syncing_loan_error">An error occur while syncing loan data</string>
+    <string name="prod_sync">Product synchronised successfully</string>
+    <string name="prod_del_msg">Product deleted successfully</string>
+    <string name="lon_sync_res">Loan synchronised successfully</string>
 </resources>

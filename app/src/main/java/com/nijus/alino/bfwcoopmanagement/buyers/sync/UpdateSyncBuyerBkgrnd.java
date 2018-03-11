@@ -136,6 +136,6 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Buyer updated Successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_buyer_msg_sync), true));
     }
 }

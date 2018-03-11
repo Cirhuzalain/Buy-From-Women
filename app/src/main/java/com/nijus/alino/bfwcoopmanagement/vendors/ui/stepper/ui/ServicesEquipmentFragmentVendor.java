@@ -3,6 +3,8 @@ package com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +42,8 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
     private CheckBox eOther;
 
     private AutoCompleteTextView safeStorage_text;
-    private AutoCompleteTextView other_text;
-    private AutoCompleteTextView other_text2;
+    private AutoCompleteTextView newResources;
+    private AutoCompleteTextView otherwatersource;
 
 
     public ServicesEquipmentFragmentVendor() {
@@ -70,6 +72,7 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.service_equipment_layout, container, false);
 
@@ -131,12 +134,11 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
 
         eOther = rootView.findViewById(R.id.e_other_main);
         boolean isEOther = eOther.isActivated();
-        //serviceAccessVendor.setOrganicFertilizers(isEOther);
+        serviceAccessVendor.setOtherInfo(isEOther);
 
-        //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text= rootView.findViewById(R.id.new_resources);
-        other_text2= rootView.findViewById(R.id.other_water_source);
+        newResources = rootView.findViewById(R.id.new_resources);
+        otherwatersource = rootView.findViewById(R.id.other_water_source);
 
         mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
 
@@ -193,9 +195,25 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    //AJOUTER DETAIKL DU SAFE STRORAGE
                     safeStorage_text.setVisibility(View.VISIBLE);
                     serviceAccessVendor.setSafeStorage(true);
+                    safeStorage_text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccessVendor.setStorageDetails(charSequence.toString());
+                            mPageVendor.setData("serviceAccessVendor", serviceAccessVendor);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     serviceAccessVendor.setSafeStorage(false);
                     safeStorage_text.setText("");
@@ -208,13 +226,29 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    //AJOUTER DETAILS OF OTHERSN RESSOURCES AVAILBLE
-                    other_text.setVisibility(View.VISIBLE);
+                    newResources.setVisibility(View.VISIBLE);
                     serviceAccessVendor.setOtherResourceInfo(true);
+                    newResources.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccessVendor.setNewResourcesDetails(charSequence.toString());
+                            mPageVendor.setData("serviceAccessVendor", serviceAccessVendor);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     serviceAccessVendor.setOtherResourceInfo(false);
-                    other_text.setText("");
-                    other_text.setVisibility(View.GONE);
+                    newResources.setText("");
+                    newResources.setVisibility(View.GONE);
                 }
                 mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
             }
@@ -308,11 +342,28 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text2.setVisibility(View.VISIBLE);
+                    otherwatersource.setVisibility(View.VISIBLE);
                     serviceAccessVendor.setOtherInfo(true);
+                    otherwatersource.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccessVendor.setMainWaterSourceDetails(charSequence.toString());
+                            mPageVendor.setData("serviceAccessVendor", serviceAccessVendor);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
-                    other_text2.setText("");
-                    other_text2.setVisibility(View.GONE);
+                    otherwatersource.setText("");
+                    otherwatersource.setVisibility(View.GONE);
                     serviceAccessVendor.setOtherInfo(false);
                 }
                 mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
@@ -334,4 +385,5 @@ public class ServicesEquipmentFragmentVendor extends Fragment {
         super.onDetach();
         mCallbacks = null;
     }
+
 }

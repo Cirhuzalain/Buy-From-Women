@@ -72,7 +72,7 @@ public class AddProduct extends IntentService {
                 Uri uri = getContentResolver().insert(BfwContract.ProductTemplate.CONTENT_URI, contentValues);
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent());
+                EventBus.getDefault().post(new SaveDataEvent("Product added successfully",true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

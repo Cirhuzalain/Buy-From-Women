@@ -9,23 +9,13 @@ import android.os.Parcelable;
 
 public class ServiceAccessVendor implements Parcelable {
 
-    //Available Resources
-    /*private boolean isAgricultureExtension;
-    private boolean isClimateRelatedInformation;
-    private boolean isSeed;
-    private boolean isOrganicFertilizers;
-    private boolean isInorganicFertilizers;
-    private boolean isLabour;
-    private boolean isWaterPumps;*/
     private boolean isTractor;
     private boolean isHarvester;
-    //private boolean isSpreaderOrSprayer;
     private boolean isDryer;
     private boolean isTresher;
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
 
-    //Main Water source
     private boolean isDam;
     private boolean isWell;
     private boolean isBoreHole;
@@ -35,6 +25,12 @@ public class ServiceAccessVendor implements Parcelable {
     private boolean hasNoWaterSource;
     private boolean isOtherInfo;
 
+    private String storageDetails;
+    private String newResourcesDetails;
+    private String mainWaterSourceDetails;
+    private String seasonName;
+
+
     public ServiceAccessVendor() {
 
     }
@@ -42,7 +38,8 @@ public class ServiceAccessVendor implements Parcelable {
     public ServiceAccessVendor(boolean isTractor, boolean isHarvester,
                                boolean isDryer, boolean isTresher, boolean isSafeStorage, boolean isOtherResourceInfo,
                                boolean isDam, boolean isWell, boolean isBoreHole, boolean isPipeBorne, boolean isRiverStream,
-                               boolean isIrrigation, boolean hasNoWaterSource, boolean isOtherInfo) {
+                               boolean isIrrigation, boolean hasNoWaterSource, boolean isOtherInfo, String storageDetails,
+                               String newResourcesDetails, String mainWaterSourceDetails) {
 
         this.isTractor = isTractor;
         this.isHarvester = isHarvester;
@@ -58,6 +55,9 @@ public class ServiceAccessVendor implements Parcelable {
         this.isIrrigation = isIrrigation;
         this.hasNoWaterSource = hasNoWaterSource;
         this.isOtherInfo = isOtherInfo;
+        this.storageDetails = storageDetails;
+        this.newResourcesDetails = newResourcesDetails;
+        this.mainWaterSourceDetails = mainWaterSourceDetails;
     }
 
     public ServiceAccessVendor(Parcel source) {
@@ -76,6 +76,10 @@ public class ServiceAccessVendor implements Parcelable {
         this.isIrrigation = source.readByte() != 0;
         this.hasNoWaterSource = source.readByte() != 0;
         this.isOtherInfo = source.readByte() != 0;
+        this.storageDetails = source.readString();
+        this.mainWaterSourceDetails = source.readString();
+        this.newResourcesDetails = source.readString();
+        this.seasonName = source.readString();
     }
 
     @Override
@@ -100,8 +104,42 @@ public class ServiceAccessVendor implements Parcelable {
         parcel.writeByte((byte) (isIrrigation ? 1 : 0));
         parcel.writeByte((byte) (hasNoWaterSource ? 1 : 0));
         parcel.writeByte((byte) (isOtherInfo ? 1 : 0));
+        parcel.writeString(storageDetails);
+        parcel.writeString(mainWaterSourceDetails);
+        parcel.writeString(newResourcesDetails);
+        parcel.writeString(seasonName);
+    }
+    public String getSeasonName() {
+        return seasonName;
     }
 
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public String getStorageDetails() {
+        return storageDetails;
+    }
+
+    public void setStorageDetails(String storageDetails) {
+        this.storageDetails = storageDetails;
+    }
+
+    public String getNewResourcesDetails() {
+        return newResourcesDetails;
+    }
+
+    public void setNewResourcesDetails(String newResourcesDetails) {
+        this.newResourcesDetails = newResourcesDetails;
+    }
+
+    public String getMainWaterSourceDetails() {
+        return mainWaterSourceDetails;
+    }
+
+    public void setMainWaterSourceDetails(String mainWaterSourceDetails) {
+        this.mainWaterSourceDetails = mainWaterSourceDetails;
+    }
 
     public boolean isTractor() {
         return isTractor;
@@ -216,7 +254,8 @@ public class ServiceAccessVendor implements Parcelable {
         isOtherInfo = otherInfo;
     }
 
-    public static final Creator<ServiceAccessVendor> CREATOR = new Creator<ServiceAccessVendor>() {
+
+    public static final Parcelable.Creator<ServiceAccessVendor> CREATOR = new Parcelable.Creator<ServiceAccessVendor>() {
         @Override
         public ServiceAccessVendor createFromParcel(Parcel parcel) {
             return new ServiceAccessVendor(parcel);

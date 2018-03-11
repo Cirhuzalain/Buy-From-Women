@@ -1,12 +1,9 @@
 package com.nijus.alino.bfwcoopmanagement.loans.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,34 +17,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoanPayment;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.AddPayment;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.DeleteSyncLoanPaymentBkgrnd;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoanPayment;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.DetailLoanActivity;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.LoanActivity;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.PaymentBottomSheetDialogFragment;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.UpdateLoanPaymentDialog;
-import com.nijus.alino.bfwcoopmanagement.products.sync.DeleteSyncProductBkgrnd;
-import com.nijus.alino.bfwcoopmanagement.products.ui.fragment.ProductDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder> {
-    private Cursor mCursor;
     final private Context mContext;
     final private View mEmptyView;
     final private TextView mEmptyTextView;
+    private Cursor mCursor;
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
+    private AlertDialog.Builder adb_update, adb_del;
+    private AlertDialog alertDialog_update, alertDialog_del;
 
     public PaymentAdapter(Context mContext, View mEmptyView) {
         this.mContext = mContext;
@@ -65,29 +53,26 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        holder.txt_loan.setText((position+1)+"");
+        holder.txt_loan.setText((position + 1) + "");
         Double np = mCursor.getDouble(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_AMOUNT));
 
-        holder.nextPayemnt.setText("Amount payment "+mCursor.getDouble(mCursor.
-                getColumnIndex(BfwContract.LoanPayment.COLUMN_AMOUNT))+" RWF");
+        holder.nextPayemnt.setText("Amount payment " + mCursor.getDouble(mCursor.
+                getColumnIndex(BfwContract.LoanPayment.COLUMN_AMOUNT)) + " RWF");
         //holder.nextPayemnt.setText(np.toString() +  "-- "+ String.valueOf(np) + " -- "+ String.format("%.2f", np) );
 
         Long getDate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_PAYMENT_DATE));
         Date start_date = new Date(getDate);
         String date_string = DateFormat.getDateInstance().format(start_date);
 
-        holder.payment_date.setText("On "+ date_string);
+        holder.payment_date.setText("On " + date_string);
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_IS_SYNC)) == 1;
-        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_IS_UPDATE))==1;
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_IS_UPDATE)) == 1;
         if (isUpdate && isSync) {
             holder.isSync_icon.setImageResource(R.drawable.ic_cloud_done_black_24dp);
-        }
-        else  {
+        } else {
             holder.isSync_icon.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
         }
-
-
     }
 
     @Override
@@ -101,10 +86,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
         notifyDataSetChanged();
         try {
             //mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-            mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_payment: R.string.there_is_payment);
-        }
-        catch (Exception e)
-        {
+            mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_payment : R.string.there_is_payment);
+        } catch (Exception e) {
 
         }
     }
@@ -112,7 +95,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
         public final View mView;
         public final TextView nextPayemnt;
-        public final TextView txt_loan,payment_date;
+        public final TextView txt_loan, payment_date;
         public ImageView isSync_icon;
 
         public ViewHolder(View view) {
@@ -141,25 +124,22 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
             final long id_loanPayment_local = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanPayment._ID));
             final View alertLayout = View.inflate(mContext, R.layout.save_payment_details_dialog, null);
             final AutoCompleteTextView amount_pay = alertLayout.findViewById(R.id.amount_pay);
-            final TextView title =  alertLayout.findViewById(R.id.title);
+            final TextView title = alertLayout.findViewById(R.id.title);
             title.setText("UPDATE");
             amount_pay.setText(String.valueOf(amount_tot));
             final Button confirm = alertLayout.findViewById(R.id.save_pay);
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(mContext,"cancel",Toast.LENGTH_LONG).show();
                     if (TextUtils.isEmpty(amount_pay.getText())) {
                         amount_pay.setError(mContext.getString(R.string.error_field_required));
-                    }
-                    else
-                    {
+                    } else {
                         PojoLoanPayment pojoLoanPayment = new PojoLoanPayment();
                         pojoLoanPayment.setAmount(Double.valueOf(amount_pay.getText().toString()));
                         Date start_date_date = new Date();
 
                         pojoLoanPayment.setPayment_date(start_date_date.getTime());
-                        pojoLoanPayment.setLoan_id((int)id_loan);
+                        pojoLoanPayment.setLoan_id((int) id_loan);
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("loan_payment", pojoLoanPayment);
@@ -169,24 +149,21 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
                         intent.putExtra("loan_payment_id", id_loanPayment_local);
 
                         mContext.startService(intent);
+                        alertDialog_update.dismiss();
                     }
-                    Toast.makeText(mContext, "bree1",Toast.LENGTH_LONG).show();
-
-
                 }
             });
 
             confirm.setText("Update loan payment");
-            final AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
-            adb.setView(alertLayout);
-            adb.setPositiveButton("Cancel",null);
-            adb.show();
+            adb_update = new AlertDialog.Builder(mContext);
+            adb_update.setView(alertLayout);
+            adb_update.setPositiveButton("Cancel", null);
+            alertDialog_update = adb_update.show();
 
         }
 
         @Override
         public boolean onLongClick(View view) {
-            //Toast.makeText(mContext,"Long Clic on item",Toast.LENGTH_LONG).show();
             int position = getAdapterPosition();
             mCursor.moveToPosition(position);
 
@@ -195,11 +172,11 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
             final int id_loan_to_delete = mCursor.getInt(mCursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_SERVER_ID));
             final View alertLayout = View.inflate(mContext, R.layout.save_payment_details_dialog, null);
             final AutoCompleteTextView amount_pay = alertLayout.findViewById(R.id.amount_pay);
-            final TextView details =  alertLayout.findViewById(R.id.details);
-            final TextView title =  alertLayout.findViewById(R.id.title);
+            final TextView details = alertLayout.findViewById(R.id.details);
+            final TextView title = alertLayout.findViewById(R.id.title);
             title.setText("DELETE");
             title.setBackgroundResource(R.color.colorAccent);
-            details.setText("Are you sure you want to remove this "+amount_tot+" RWF payment?");
+            details.setText("Are you sure you want to remove this " + amount_tot + " RWF payment?");
             details.setGravity(View.TEXT_ALIGNMENT_CENTER);
             amount_pay.setText(String.valueOf(amount_tot));
             amount_pay.setVisibility(View.GONE);
@@ -211,32 +188,26 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     try {
-                        //id_to_delete = getArguments().getInt("id_product");
-                        Toast.makeText(mContext, ""+id_loan_to_delete, Toast.LENGTH_LONG).show();
-
                         if (Utils.isNetworkAvailable(mContext)) {
 
                             Intent intent = new Intent(mContext, DeleteSyncLoanPaymentBkgrnd.class);
                             intent.putExtra("loan_id", id_loan_to_delete);
                             //start job service
                             mContext.startService(intent);
+                            alertDialog_del.dismiss();
 
                         } else {
                             Toast.makeText(mContext, "ERROR, WAIT FOR THE INTERNET CONNECTION", Toast.LENGTH_LONG).show();
                         }
-                        //getContext().startService(intent);
-
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
-            AlertDialog.Builder adb = new AlertDialog.Builder(mContext);
-            adb.setView(alertLayout);
-            adb.setPositiveButton("Cancel",null);
-            adb.show();
+            adb_del = new AlertDialog.Builder(mContext);
+            adb_del.setView(alertLayout);
+            adb_del.setPositiveButton("Cancel", null);
+            alertDialog_del = adb_del.show();
             return true;
         }
-
     }
-
-
 }
