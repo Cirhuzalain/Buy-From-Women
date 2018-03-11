@@ -9,21 +9,17 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,10 +27,7 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.AddProduct;
 import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateProduct;
-
-import java.util.Calendar;
 
 public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {

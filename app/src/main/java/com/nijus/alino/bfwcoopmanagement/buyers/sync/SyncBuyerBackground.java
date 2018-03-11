@@ -119,7 +119,7 @@ public class SyncBuyerBackground extends IntentService {
                         }
 
                     } catch (IOException | JSONException exp) {
-                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_buyer), false));
                     }
                 }
             }

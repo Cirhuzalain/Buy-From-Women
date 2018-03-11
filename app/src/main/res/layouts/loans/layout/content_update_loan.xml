@@ -34,7 +34,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/farmer"
+                        android:text="@string/loan"
                         android:textSize="16sp" />
 
                     <Spinner
@@ -53,13 +53,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Select date"
-                        android:background="@drawable/gradient_normal_button"
                         android:id="@+id/date_selected"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:layout_marginTop="8dp"
-                        android:drawableLeft="@mipmap/calendar_white"
-                        android:textColor="@color/cardview_light_background"
+                        android:drawableLeft="@mipmap/calendar_one"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
@@ -95,20 +93,6 @@
                         android:layout_weight="1" />
 
                 </LinearLayout>
-
-                <!-- <android.support.design.widget.TextInputLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content">
-
-                     <AutoCompleteTextView
-                         android:id="@+id/purpose_loan"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:hint="@string/loan_purpose"
-                         android:inputType="text"
-                         android:maxLines="1" />
-
-                 </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"

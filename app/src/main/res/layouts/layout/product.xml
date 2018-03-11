@@ -22,7 +22,8 @@
             android:id="@+id/scrim"
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_image_height"
-            android:background="@drawable/srim"/>
+            />
+        <!--android:background="@drawable/srim"-->
 
         <TextView
             android:id="@+id/productName"

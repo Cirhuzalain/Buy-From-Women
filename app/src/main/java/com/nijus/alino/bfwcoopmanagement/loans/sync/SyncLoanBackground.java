@@ -13,8 +13,6 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.LoanActivity;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -22,7 +20,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -167,7 +164,7 @@ public class SyncLoanBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent(getString(com.nijus.alino.bfwcoopmanagement.R.string.lon_sync_res), true));
 
     }
 }

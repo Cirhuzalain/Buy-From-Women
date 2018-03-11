@@ -43,7 +43,6 @@ public class CreateBuyerActivity extends AppCompatActivity {
         create_buyer_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
                 /**
                  * Before to create Buyer, Check if all fields required are not empty
                  **/

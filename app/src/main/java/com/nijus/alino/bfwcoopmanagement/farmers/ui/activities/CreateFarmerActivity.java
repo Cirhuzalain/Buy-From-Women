@@ -28,7 +28,6 @@ public class CreateFarmerActivity extends AppCompatActivity implements CreateFar
         setContentView(R.layout.create_farmer_fragment);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

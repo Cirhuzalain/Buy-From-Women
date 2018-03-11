@@ -38,6 +38,7 @@ import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 /**
@@ -169,7 +170,7 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onToggleAgentRequestEvent(ToggleAgentRequestEvent agentRequestEvent) {
 
         agentRecyclerViewAdapter.toggleSelection(agentRequestEvent.getPosition());
@@ -179,21 +180,20 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onRequestAgentToDelete(RequestEventAgentToDelete buyerToDelete) {
 
         EventBus.getDefault().post(new ResponseEventAgentToDelete(agentRecyclerViewAdapter.getSelectedItems()));
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onDisableAgentSwipeEvent(DisableAgentSwipeEvent disableAgentSwipeEven) {
         mRefreshData.setEnabled(false);
         fab.setVisibility(View.INVISIBLE);
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onEventAgentResetItems(EventAgentResetItems eventAgentResetItems) {
-
         agentRecyclerViewAdapter.clearSelections();
         mRefreshData.setEnabled(true);
         fab.setVisibility(View.VISIBLE);
@@ -206,18 +206,18 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         });
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         if (saveDataEvent.isSuccess())
             getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onRefreshAgentLoader(RefreshAgentLoader bayerLoader) {
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
             getLoaderManager().restartLoader(0, null, this);

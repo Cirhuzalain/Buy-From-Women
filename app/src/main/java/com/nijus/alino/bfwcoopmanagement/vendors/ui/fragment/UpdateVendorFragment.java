@@ -25,18 +25,19 @@ import com.nijus.alino.bfwcoopmanagement.vendors.sync.UpdateVendorService;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.AbstractWizardModelVendorVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.ModelCallbacksVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.PageVendorVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.AccessToInformationVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.BaseLineVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.DemographicVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.FinanceVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.ForecastVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.GeneralVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.LandInformationVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.ServiceAccessVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui.PageFragmentCallbacksVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui.StepPagerStripVendor;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,8 +90,8 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
 
         //get farmer Id
         Intent intent = getActivity().getIntent();
-        if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+        if (intent.hasExtra("vendorId")) {
+            mFarmerId = intent.getLongExtra("vendorId", 0);
         }
 
     }
@@ -178,9 +179,7 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
     public void onClick(View view) {
         if (view.getId() == R.id.next_button_update) {
             if (pager.getCurrentItem() == mCurrentPageVendorSequence.size() - 1) {
-                //Update Farmer data
-                Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
-                //updateFarmer();
+                updateFarmer();
 
             } else {
                 if (pager.getCurrentItem() == 0) {
@@ -194,9 +193,7 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button_update) {
-            //Update farmer data
-            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
-            //updateFarmer();
+            updateFarmer();
         }
 
     }
@@ -207,55 +204,65 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
         for (PageVendorVendor pageVendor : mCurrentPageVendorSequence) {
             Bundle data = pageVendor.getData();
 
-            boolean isData = data.containsKey("general");
-            boolean isLandInfo = data.containsKey("land_info");
-            boolean isForecast = data.containsKey("forecast");
-            boolean isDemographic = data.containsKey("demographic");
-            boolean isBaseline = data.containsKey("baseline");
-            boolean isFinance = data.containsKey("finance");
-            boolean isService = data.containsKey("serviceAccess");
+            boolean isData = data.containsKey("generalVendor");
+            boolean isDemographic = data.containsKey("demographicVendor");
+            boolean isService = data.containsKey("serviceAccessVendor");
+
+            boolean isForecast = data.containsKey("forecastVendor");
+            boolean isBaseline = data.containsKey("baselineVendor");
+            boolean isFinance = data.containsKey("financeVendor");
+            boolean isAccessToInformation = data.containsKey("accessToInformationVendor");
+            boolean isLandInfo = data.containsKey("land_infoVendor");
 
             if (isData) {
                 GeneralVendor generalVendor = data.getParcelable("generalVendor");
                 if (generalVendor != null) {
                     if (generalVendor.getName() == null || generalVendor.getPhoneNumber() == null) {
-                        Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error_vendor), Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
                 saveBundle.putParcelable("generalVendor", generalVendor);
             }
+            if (isDemographic) {
+                DemographicVendor demographic = data.getParcelable("demographicVendor");
+                saveBundle.putParcelable("demographicVendor", demographic);
+            }
+            if (isService) {
+                ServiceAccessVendor serviceAccess = data.getParcelable("serviceAccessVendor");
+                saveBundle.putParcelable("serviceAccessVendor", serviceAccess);
+            }
 
             if (isLandInfo) {
-                HashMap map = (HashMap) data.getSerializable("land_info");
-                saveBundle.putSerializable("land_info", map);
+                HashMap<String, LandInformationVendor> landInfo = (HashMap<String, LandInformationVendor>) data.getSerializable("land_infoVendor");
+                saveBundle.putSerializable("land_infoVendor", landInfo);
             }
 
             if (isForecast) {
-                ForecastVendor forecastVendor = data.getParcelable("forecastVendor");
-                saveBundle.putParcelable("forecastVendor", forecastVendor);
-            }
-            if (isDemographic) {
-                DemographicVendor demographicVendor = data.getParcelable("demographicVendor");
-                saveBundle.putParcelable("demographicVendor", demographicVendor);
+                HashMap<String, ForecastVendor> forecast = (HashMap<String, ForecastVendor>) data.getSerializable("forecast");
+                saveBundle.putSerializable("forecastVendor", forecast);
+
             }
             if (isBaseline) {
-                BaseLineVendor baseLineVendor = data.getParcelable("baseline");
-                saveBundle.putParcelable("baseline", baseLineVendor);
+                HashMap<String, BaseLineVendor> baseline = (HashMap<String, BaseLineVendor>) data.getSerializable("baseline");
+                saveBundle.putSerializable("baselineVendor", baseline);
+
             }
             if (isFinance) {
-                FinanceVendor financeVendor = data.getParcelable("financeVendor");
-                saveBundle.putParcelable("financeVendor", financeVendor);
+                HashMap<String, FinanceVendor> finance = (HashMap<String, FinanceVendor>) data.getSerializable("finance");
+                saveBundle.putSerializable("financeVendor", finance);
             }
-            if (isService) {
-                ServiceAccessVendor serviceAccessVendor = data.getParcelable("serviceAccessVendor");
-                saveBundle.putParcelable("serviceAccessVendor", serviceAccessVendor);
+
+            if (isAccessToInformation) {
+                HashMap<String, AccessToInformationVendor> accessInfoMap = (HashMap<String, AccessToInformationVendor>) data.getSerializable("accessToInformation");
+                saveBundle.putSerializable("accessToInformationVendor", accessInfoMap);
             }
+
         }
         Intent intent = new Intent(getContext(), UpdateVendorService.class);
-        intent.putExtra("farmer_data", saveBundle);
-        intent.putExtra("farmerId", mFarmerId);
-        progressDialog.show(getFragmentManager(), "farmerTag");
+        intent.putExtra("vendor_data", saveBundle);
+        intent.putExtra("vendorId", mFarmerId);
+        progressDialog.show(getFragmentManager(), "vendorTag");
         getContext().startService(intent);
     }
 
@@ -266,11 +273,12 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+   /* @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         progressDialog.dismiss();
         Toast.makeText(getContext(), getResources().getString(R.string.update_msg), Toast.LENGTH_SHORT).show();
-    }
+        getActivity().finish();
+    }*/
 
     /**
      * Use this factory method to create a new instance of

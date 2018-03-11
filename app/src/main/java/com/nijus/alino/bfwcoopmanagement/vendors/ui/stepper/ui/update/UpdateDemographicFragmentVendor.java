@@ -70,9 +70,9 @@ public class UpdateDemographicFragmentVendor extends Fragment implements LoaderM
 
         Intent intent = getActivity().getIntent();
 
-        if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
+        if (intent.hasExtra("vendorId")) {
+            mFarmerId = intent.getLongExtra("vendorId", 0);
+            mUri = BfwContract.Vendor.buildVendorUri(mFarmerId);
         }
 
     }
@@ -85,8 +85,8 @@ public class UpdateDemographicFragmentVendor extends Fragment implements LoaderM
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
-                BfwContract.Farmer._ID + " =  ? ";
+        String farmerSelection = BfwContract.Vendor.TABLE_NAME + "." +
+                BfwContract.Vendor._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
@@ -104,13 +104,13 @@ public class UpdateDemographicFragmentVendor extends Fragment implements LoaderM
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            int houseHoldHead = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSEHOLD_HEAD));
-            int houseMember = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSE_MEMBER));
-            String sFName = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_FIRST_NAME));
-            String sLName = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_LAST_NAME));
-            String celPhone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_PHONE));
-            String celCarrier = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_CARRIER));
-            String mId = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_MEMBER_SHIP));
+            int houseHoldHead = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HOUSEHOLD_HEAD));
+            int houseMember = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HOUSE_MEMBER));
+            String sFName = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_FIRST_NAME));
+            String sLName = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_LAST_NAME));
+            String celPhone = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_CELL_PHONE));
+            String celCarrier = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_CELL_CARRIER));
+            String mId = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_MEMBER_SHIP));
 
             if (houseHoldHead == 1) {
                 radioY.setChecked(true);
@@ -122,25 +122,42 @@ public class UpdateDemographicFragmentVendor extends Fragment implements LoaderM
             String houseMemb = "" + houseMember + "";
             numHouseHoldMember.setText(houseMemb);
             demographicVendor.setHouseHoldMember(houseMember);
-            if (sFName != null) {
+
+            if (sFName == null || sFName.equals("null")) {
+                sFirstName.setText("");
+                demographicVendor.setSpouseFirstName(null);
+            } else {
                 sFirstName.setText(sFName);
                 demographicVendor.setSpouseFirstName(sFName);
             }
-            if (sLName != null) {
+
+            if (sLName == null || sLName.equals("null")) {
+                sLastName.setText("");
+                demographicVendor.setSpouseLastName(null);
+            } else {
                 sLastName.setText(sLName);
                 demographicVendor.setSpouseLastName(sLName);
             }
-            if (celPhone != null) {
+
+            if (celPhone == null || celPhone.equals("null")) {
+                cellPhoneAlt.setText("");
+                demographicVendor.setCellPhoneAlt(null);
+            } else {
                 cellPhoneAlt.setText(celPhone);
                 demographicVendor.setCellPhoneAlt(celPhone);
             }
-            if (celCarrier != null) {
+
+            if (celCarrier == null || celCarrier.equals("null")) {
+                cellCarrier.setText("");
+                demographicVendor.setCellCarrier(null);
+            } else {
                 cellCarrier.setText(celCarrier);
                 demographicVendor.setCellCarrier(celCarrier);
             }
-            if (mId != null) {
+            if (mId == null || mId.equals("null")) {
+                memberShipId.setText("");
+            } else {
                 memberShipId.setText(mId);
-                demographicVendor.setMemberShipId(mId);
             }
             mPageVendor.getData().putParcelable("demographicVendor", demographicVendor);
         }

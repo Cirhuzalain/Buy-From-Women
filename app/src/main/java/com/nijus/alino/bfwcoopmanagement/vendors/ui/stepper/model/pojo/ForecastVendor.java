@@ -10,36 +10,56 @@ import android.os.Parcelable;
 public class ForecastVendor implements Parcelable {
 
     private double arableLandPlot;
-    private double landFarmerSize;
     private double totProdKg;
     private double salesOutsidePpp;
     private double postHarvestLossInKg;
     private double totCoopLandSize;
     private double farmerPercentCoopLandSize;
+    private double currentPppContrib;
+    private double farmerContributionPpp;
+
+    private double farmerexpectedminppp;
+    private double minimumflowprice;
+
+    private int harvestSeason;
+    private int forecastId;
+    private String seasonName;
 
     public ForecastVendor() {
-
+        this.forecastId = 0;
     }
 
-    public ForecastVendor(double arableLandPlot, double landFarmerSize, double totProdKg, double salesOutsidePpp,
-                          double postHarvestLossInKg, double totCoopLandSize, double farmerPercentCoopLandSize) {
+    public ForecastVendor(double arableLandPlot, double totProdKg, double salesOutsidePpp,
+                          double postHarvestLossInKg, double totCoopLandSize, double farmerPercentCoopLandSize,
+                          int harvestSeason, double farmerexpectedminppp, double minimumflowprice, double currentPppContrib, double farmerContributionPpp) {
         this.arableLandPlot = arableLandPlot;
-        this.landFarmerSize = landFarmerSize;
         this.totProdKg = totProdKg;
         this.salesOutsidePpp = salesOutsidePpp;
         this.postHarvestLossInKg = postHarvestLossInKg;
         this.totCoopLandSize = totCoopLandSize;
         this.farmerPercentCoopLandSize = farmerPercentCoopLandSize;
+        this.harvestSeason = harvestSeason;
+        this.farmerexpectedminppp = farmerexpectedminppp;
+        this.minimumflowprice = minimumflowprice;
+        this.currentPppContrib = currentPppContrib;
+        this.farmerContributionPpp = farmerContributionPpp;
+
     }
 
     public ForecastVendor(Parcel data) {
         this.arableLandPlot = data.readDouble();
-        this.landFarmerSize = data.readDouble();
         this.totProdKg = data.readDouble();
         this.salesOutsidePpp = data.readDouble();
         this.postHarvestLossInKg = data.readDouble();
         this.totCoopLandSize = data.readDouble();
         this.farmerPercentCoopLandSize = data.readDouble();
+        this.farmerexpectedminppp = data.readDouble();
+        this.minimumflowprice = data.readDouble();
+        this.currentPppContrib = data.readDouble();
+        this.farmerContributionPpp = data.readDouble();
+        this.harvestSeason = data.readInt();
+        this.forecastId = data.readInt();
+        this.seasonName = data.readString();
     }
 
     @Override
@@ -50,12 +70,73 @@ public class ForecastVendor implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeDouble(arableLandPlot);
-        parcel.writeDouble(landFarmerSize);
         parcel.writeDouble(totProdKg);
         parcel.writeDouble(salesOutsidePpp);
         parcel.writeDouble(postHarvestLossInKg);
         parcel.writeDouble(totCoopLandSize);
         parcel.writeDouble(farmerPercentCoopLandSize);
+        parcel.writeDouble(farmerexpectedminppp);
+        parcel.writeDouble(minimumflowprice);
+        parcel.writeDouble(currentPppContrib);
+        parcel.writeDouble(farmerContributionPpp);
+        parcel.writeInt(harvestSeason);
+        parcel.writeInt(forecastId);
+        parcel.writeString(seasonName);
+    }
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getForecastId() {
+        return forecastId;
+    }
+
+    public void setForecastId(int forecastId) {
+        this.forecastId = forecastId;
+    }
+
+    public double getCurrentPppContrib() {
+        return currentPppContrib;
+    }
+
+    public void setCurrentPppContrib(double currentPppContrib) {
+        this.currentPppContrib = currentPppContrib;
+    }
+
+    public double getFarmerContributionPpp() {
+        return farmerContributionPpp;
+    }
+
+    public void setFarmerContributionPpp(double farmerContributionPpp) {
+        this.farmerContributionPpp = farmerContributionPpp;
+    }
+
+    public double getFarmerexpectedminppp() {
+        return farmerexpectedminppp;
+    }
+
+    public void setFarmerexpectedminppp(double farmerexpectedminppp) {
+        this.farmerexpectedminppp = farmerexpectedminppp;
+    }
+
+    public double getMinimumflowprice() {
+        return minimumflowprice;
+    }
+
+    public void setMinimumflowprice(double minimumflowprice) {
+        this.minimumflowprice = minimumflowprice;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
     }
 
     public double getArableLandPlot() {
@@ -64,14 +145,6 @@ public class ForecastVendor implements Parcelable {
 
     public void setArableLandPlot(double arableLandPlot) {
         this.arableLandPlot = arableLandPlot;
-    }
-
-    public double getLandFarmerSize() {
-        return landFarmerSize;
-    }
-
-    public void setLandFarmerSize(double landFarmerSize) {
-        this.landFarmerSize = landFarmerSize;
     }
 
     public double getTotProdKg() {
@@ -114,7 +187,7 @@ public class ForecastVendor implements Parcelable {
         this.farmerPercentCoopLandSize = farmerPercentCoopLandSize;
     }
 
-    public static final Creator<ForecastVendor> CREATOR = new Creator<ForecastVendor>() {
+    public static final Parcelable.Creator<ForecastVendor> CREATOR = new Parcelable.Creator<ForecastVendor>() {
         @Override
         public ForecastVendor createFromParcel(Parcel parcel) {
             return new ForecastVendor(parcel);

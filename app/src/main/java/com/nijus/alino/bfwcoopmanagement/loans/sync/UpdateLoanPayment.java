@@ -85,7 +85,7 @@ public class UpdateLoanPayment extends IntentService {
                 getContentResolver().update(BfwContract.LoanPayment.CONTENT_URI, contentValues,loanPaymentSelect,new String[]{Long.toString(id_loanPayment)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent());
+                EventBus.getDefault().post(new SaveDataEvent("Loan payment updated successfully",true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

@@ -3,18 +3,24 @@ package com.nijus.alino.bfwcoopmanagement.vendors.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.CreateVendorFragment;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.PageVendorVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.wizard.UpdateWizardModelVendorVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.wizard.VendorWizardModelVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui.PageFragmentCallbacksVendor;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class CreateVendorActivity extends AppCompatActivity implements CreateVendorFragment.OnFragmentInteractionListener,
         PageFragmentCallbacksVendor {
@@ -24,11 +30,9 @@ public class CreateVendorActivity extends AppCompatActivity implements CreateVen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setElevation(0.0f);
         setContentView(R.layout.create_vendors_fragment);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setElevation(0);
-        }
+        EventBus.getDefault().register(this);
 
     }
 
@@ -73,5 +77,27 @@ public class CreateVendorActivity extends AppCompatActivity implements CreateVen
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        if (saveDataEvent.isSuccess()){
+            Toast.makeText(getApplicationContext(),saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+            onSupportNavigateUp();
+        }else {
+            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+            //onSupportNavigateUp();
+        }
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
+        if (syncDataEvent.isSuccess()){
+            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+            onSupportNavigateUp();
+        }
+        else {
+            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 }

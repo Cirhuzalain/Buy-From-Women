@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.Page;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.BaseLine;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
 
 import java.util.HashMap;
@@ -437,9 +436,6 @@ public class FinanceFragment extends Fragment implements AdapterView.OnItemSelec
 
             }
         });
-
-
-
         loanProvider.setOnItemSelectedListener(this);
 
 

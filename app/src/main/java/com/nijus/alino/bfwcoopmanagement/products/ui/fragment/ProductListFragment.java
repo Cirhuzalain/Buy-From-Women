@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshProductLoader;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.adapter.PaymentAdapter;
@@ -210,6 +211,12 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     }
 
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void onRefreshProductLoader(RefreshProductLoader productLoader) {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         getLoaderManager().restartLoader(0, null, this);
@@ -225,6 +232,17 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
         }
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
 
     /**
@@ -238,6 +256,5 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        //void onListFragmentInteraction(DummyCont.DummyPurchase purchase);
     }
 }

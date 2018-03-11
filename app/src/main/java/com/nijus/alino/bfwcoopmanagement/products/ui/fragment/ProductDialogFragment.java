@@ -22,9 +22,16 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.LoanActivity;
 import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
 import com.nijus.alino.bfwcoopmanagement.products.sync.AddProduct;
 import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
         View.OnClickListener {

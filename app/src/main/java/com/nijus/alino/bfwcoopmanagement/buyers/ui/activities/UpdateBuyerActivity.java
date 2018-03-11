@@ -60,7 +60,6 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         update_buyer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
                 /**
                  * Before to update Buyer, Check if all fields required are not empty
                  **/
@@ -146,7 +145,6 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-
             buyer_id_from_server =  data.getInt(data.getColumnIndex(BfwContract.Buyer._ID));
             buyer_local_id = data.getInt(data.getColumnIndex(BfwContract.Buyer._ID));
 
@@ -154,7 +152,6 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
             phone.setText(""+data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_PHONE)));
             email.setText(""+data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_EMAIL)));
         }
-
     }
 
     @Override
@@ -175,24 +172,24 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()){
-            Toast.makeText(this,R.string.update_msg,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
         }
         else {
             Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
-            onSupportNavigateUp();
+            //onSupportNavigateUp();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         if (saveDataEvent.isSuccess()){
-            Toast.makeText(this,R.string.update_msg,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
         }
         else {
             Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
-            onSupportNavigateUp();
+            //onSupportNavigateUp();
         }
     }
 }

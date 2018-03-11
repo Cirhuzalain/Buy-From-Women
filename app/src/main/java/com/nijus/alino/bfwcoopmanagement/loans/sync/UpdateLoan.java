@@ -102,7 +102,7 @@ public class UpdateLoan extends IntentService {
                 getContentResolver().update(BfwContract.Loan.CONTENT_URI, contentValues,loanSelect,new String[]{Integer.toString(id_loan)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent());
+                EventBus.getDefault().post(new SaveDataEvent("Loan updated successfully",true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

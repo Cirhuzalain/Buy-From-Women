@@ -222,22 +222,22 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
-            Toast.makeText(this, R.string.update_msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            onSupportNavigateUp();
+            //onSupportNavigateUp();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         if (saveDataEvent.isSuccess()) {
-            Toast.makeText(this, R.string.update_msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            onSupportNavigateUp();
+            //onSupportNavigateUp();
         }
     }
 }

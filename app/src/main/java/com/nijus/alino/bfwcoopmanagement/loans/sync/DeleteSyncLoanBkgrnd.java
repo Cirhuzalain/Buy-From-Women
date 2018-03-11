@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +47,8 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
 
         SharedPreferences prefGoog = getApplicationContext().
                 getSharedPreferences(getResources().getString(R.string.application_key), Context.MODE_PRIVATE);
+        EventBus.getDefault().post(new ProcessingFarmerEvent("Processing your request ..."));
+
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
@@ -89,7 +92,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                                 null, selectionLoanLine, new String[]{Long.toString(id)},
                                 null);
                         if (cursor_delete_line != null) {
-                            dataCount = cursor_delete_line.getCount();
+                            //dataCount = cursor_delete_line.getCount();
 
                             while (cursor_delete_line.moveToNext()) {
                                 int loan_line_id_server = cursor_delete_line.getInt(cursor_delete_line.getColumnIndex(BfwContract.LoanLine.COLUMN_SERVER_ID));
@@ -123,7 +126,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                                     }
 
                                 } catch (IOException e) {
-                                    EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                                    EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_loan), false));
                                 }
 
                             }
@@ -141,7 +144,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                                 null, selectionLoanPayment, new String[]{Long.toString(id)},
                                 null);
                         if (cursor_delete_payment != null) {
-                            dataCount = cursor_delete_payment.getCount();
+                            //dataCount = cursor_delete_payment.getCount();
 
                             while (cursor_delete_payment.moveToNext()) {
                                 int loan_payment_id_server = cursor_delete_payment.getInt(cursor_delete_payment.getColumnIndex(BfwContract.LoanPayment.COLUMN_SERVER_ID));
@@ -175,7 +178,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                                     }
 
                                 } catch (IOException e) {
-                                    EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                                    EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_loan), false));
                                 }
                             }
                         }
@@ -210,7 +213,7 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
                                 }
                             }
                         } catch (IOException e) {
-                            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_loan), false));
                         }
                     }
                 }
@@ -223,6 +226,6 @@ public class DeleteSyncLoanBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Loan deleted successfully", true));
     }
 }

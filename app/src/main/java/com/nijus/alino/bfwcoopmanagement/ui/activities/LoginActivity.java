@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.BuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBar;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarDuration;
@@ -43,9 +42,7 @@ import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarGravity;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarTheme;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
 import com.nijus.alino.bfwcoopmanagement.products.ui.activities.ProductActivity;
-import com.nijus.alino.bfwcoopmanagement.sales.ui.activities.SaleOrderInfoActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -451,7 +448,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, null, null, null);
 
                                 if (cursor != null && !cursor.moveToFirst()) {
-                                    boolean isSuccess = prefetchVendor(client, access_token, BuildConfig.DEV_API_URL + "vendor.farmer", false);
+                                    boolean isSuccess = prefetchVendor(client, access_token, BuildConfig.DEV_API_URL + "vendor.farmer",false);
                                     if (!isSuccess) {
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
@@ -717,693 +714,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             } catch (IOException | ParseException | JSONException exp) {
                 return false;
-            }
-            return true;
-        }
-
-        private boolean prefetchVendor(OkHttpClient client, String token, String url, boolean isVendor) {
-            getContentResolver().delete(BfwContract.Vendor.CONTENT_URI, null, null);
-            Cursor cursor = null;
-            try {
-                Response farmerData = Utils.getServerData(client, token, url);
-                if (farmerData != null) {
-                    ResponseBody farmerInfo = farmerData.body();
-                    if (farmerInfo != null) {
-                        String farmersList = farmerInfo.string();
-
-                        JSONObject farmersJsonObject = new JSONObject(farmersList);
-                        JSONArray farmerArrayLists = null;
-                        if (!isVendor) {
-                            farmerArrayLists = farmersJsonObject.getJSONArray("results");
-                        } else {
-                            String filterServerResponse = farmersJsonObject.getString("response");
-                            JSONObject filterServerObject = new JSONObject(filterServerResponse);
-                            farmerArrayLists = filterServerObject.getJSONArray("results");
-                        }
-
-
-                        JSONObject farmerObjectInfo;
-
-                        JSONArray accessInfosArray;
-                        JSONArray farmerLandIdsArray;
-                        JSONArray forecastFarmerArray;
-                        JSONArray financeDataArray;
-                        JSONArray baseLinesArray;
-
-                        JSONObject accessInfoObject;
-                        JSONObject farmerLandObject;
-                        JSONObject forecastObject;
-                        JSONObject financeDataObject;
-                        JSONObject baseLinesObject;
-
-                        for (int t = 0; t < farmerArrayLists.length(); t++) {
-
-                            farmerObjectInfo = farmerArrayLists.getJSONObject(t);
-
-                            int vendorId = farmerObjectInfo.getInt("id");
-
-                            String name = null;
-                            String cellPhone = null;
-                            String address = null;
-                            String gender = null;
-                            String vendorEmail = null;
-                            Integer headOfHousehold = null;
-                            Integer numhouseholdmembers = null;
-                            String firstName = null;
-                            String lastName = null;
-                            String cellCarrier = null;
-                            String cellPhoneAlt = null;
-                            String membershipId = null;
-                            String storageDetails = null;
-                            String otherDetails = null;
-                            Integer safestorage = null;
-                            Integer tractors = null;
-                            Integer harvester = null;
-                            Integer dryer = null;
-                            Integer thresher = null;
-                            Integer other = null;
-                            String otherWaterSource = null;
-
-                            Integer mwsDam = null;
-                            Integer well = null;
-                            Integer boreFhole = null;
-                            Integer rs = null;
-                            Integer mwspb = null;
-                            Integer mwsIrrigation = null;
-                            Integer none = null;
-                            Integer mwsOther = null;
-                            Double totalLandPlotSize = null;
-
-                            if (farmerObjectInfo.has("name")) {
-                                name = farmerObjectInfo.getString("name");
-                            }
-                            if (farmerObjectInfo.has("email")) {
-                                vendorEmail = farmerObjectInfo.getString("email");
-                            }
-                            if (farmerObjectInfo.has("gender")) {
-                                gender = farmerObjectInfo.getString("gender");
-                            }
-                            if (farmerObjectInfo.has("address")) {
-                                address = farmerObjectInfo.getString("address");
-                            }
-                            if (farmerObjectInfo.has("phone")) {
-                                cellPhone = farmerObjectInfo.getString("phone");
-                            }
-                            if (!farmerObjectInfo.getString("num_household_members").equals("null")) {
-                                numhouseholdmembers = farmerObjectInfo.getInt("num_household_members");
-                            }
-                            if (farmerObjectInfo.has("cellphone_alt")) {
-                                cellPhoneAlt = farmerObjectInfo.getString("cellphone_alt");
-                            }
-
-                            if (farmerObjectInfo.has("cell_carrier")) {
-                                cellCarrier = farmerObjectInfo.getString("cell_carrier");
-                            }
-                            if (farmerObjectInfo.has("spouse_lastname")) {
-                                lastName = farmerObjectInfo.getString("spouse_lastname");
-                            }
-                            if (farmerObjectInfo.has("spouse_firstname")) {
-                                firstName = farmerObjectInfo.getString("spouse_firstname");
-                            }
-                            if (!farmerObjectInfo.getString("head_of_household").equals("null")) {
-                                Boolean headHousehold = farmerObjectInfo.getBoolean("head_of_household");
-                                if (headHousehold != null) {
-                                    headOfHousehold = headHousehold ? 1 : 0;
-                                }
-                            }
-                            if (farmerObjectInfo.has("membership_id")) {
-                                membershipId = farmerObjectInfo.getString("membership_id");
-                            }
-                            if (farmerObjectInfo.has("storage_details")) {
-                                storageDetails = farmerObjectInfo.getString("storage_details");
-                            }
-
-                            if (farmerObjectInfo.has("other_details")) {
-                                otherDetails = farmerObjectInfo.getString("other_details");
-                            }
-                            if (!farmerObjectInfo.getString("ar_safestorage").equals("null")) {
-                                Boolean arSafestorage = farmerObjectInfo.getBoolean("ar_safestorage");
-                                if (arSafestorage != null) {
-                                    safestorage = arSafestorage ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("ar_tractors").equals("null")) {
-                                Boolean arTractors = farmerObjectInfo.getBoolean("ar_tractors");
-                                if (arTractors != null) {
-                                    tractors = arTractors ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("ar_harverster").equals("null")) {
-                                Boolean arHarverster = farmerObjectInfo.getBoolean("ar_harverster");
-                                if (arHarverster != null) {
-                                    harvester = arHarverster ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("ar_dryer").equals("null")) {
-                                Boolean arDryer = farmerObjectInfo.getBoolean("ar_dryer");
-                                if (arDryer != null) {
-                                    dryer = arDryer ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("ar_thresher").equals("null")) {
-                                thresher = null;
-                                Boolean arThresher = farmerObjectInfo.getBoolean("ar_thresher");
-                                if (arThresher != null) {
-                                    thresher = arThresher ? 1 : 0;
-                                }
-                            }
-
-                            if (!farmerObjectInfo.getString("ar_other").equals("null")) {
-                                Boolean arOther = farmerObjectInfo.getBoolean("ar_other");
-                                if (arOther != null) {
-                                    other = arOther ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_dam").equals("null")) {
-                                Boolean dam = farmerObjectInfo.getBoolean("mws_dam");
-                                if (dam != null) {
-                                    mwsDam = dam ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_well").equals("null")) {
-                                Boolean msWell = farmerObjectInfo.getBoolean("mws_well");
-                                if (msWell != null) {
-                                    well = msWell ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_borehole").equals("null")) {
-                                Boolean mwsBorehole = farmerObjectInfo.getBoolean("mws_borehole");
-                                if (boreFhole != null) {
-                                    boreFhole = mwsBorehole ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_rs").equals("null")) {
-                                rs = null;
-                                Boolean mwsrs = farmerObjectInfo.getBoolean("mws_rs");
-                                if (mwsrs != null) {
-                                    rs = mwsrs ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_pb").equals("null")) {
-                                Boolean pb = farmerObjectInfo.getBoolean("mws_pb");
-                                if (pb != null) {
-                                    mwspb = pb ? 1 : 0;
-                                }
-                            }
-
-                            if (!farmerObjectInfo.getString("mws_irrigation").equals("null")) {
-                                Boolean irrigation = farmerObjectInfo.getBoolean("mws_irrigation");
-                                if (irrigation != null) {
-                                    mwsIrrigation = irrigation ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_none").equals("null")) {
-                                Boolean mwsnone = farmerObjectInfo.getBoolean("mws_none");
-                                if (mwsnone != null) {
-                                    none = mwsnone ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("mws_other").equals("null")) {
-                                Boolean mwother = farmerObjectInfo.getBoolean("mws_other");
-                                if (mwother != null) {
-                                    mwsOther = mwother ? 1 : 0;
-                                }
-                            }
-                            if (!farmerObjectInfo.getString("total_land_plot_size").equals("null")) {
-                                totalLandPlotSize = farmerObjectInfo.getDouble("total_land_plot_size");
-                            }
-                            if (farmerObjectInfo.has("other_water_source")) {
-                                otherWaterSource = farmerObjectInfo.getString("other_water_source");
-                            }
-
-                            ContentValues vendorValues = new ContentValues();
-
-                            vendorValues.put(BfwContract.Vendor.COLUMN_NAME, name);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_PHONE, cellPhone);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_GENDER, gender);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_EMAIL, vendorEmail);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_ADDRESS, address);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_HOUSEHOLD_HEAD, headOfHousehold);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_HOUSE_MEMBER, numhouseholdmembers);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_FIRST_NAME, firstName);
-
-                            vendorValues.put(BfwContract.Vendor.COLUMN_LAST_NAME, lastName);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_CELL_PHONE, cellPhoneAlt);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_CELL_CARRIER, cellCarrier);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_MEMBER_SHIP, membershipId);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_STORAGE_DETAIL, storageDetails);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_NEW_SOURCE_DETAIL, otherDetails);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_SAFE_STORAGE, safestorage);
-
-                            vendorValues.put(BfwContract.Vendor.COLUMN_TRACTORS, tractors);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_HARVESTER, harvester);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_DRYER, dryer);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_TRESHER, thresher);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_OTHER, other);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_DAM, mwsDam);
-
-                            vendorValues.put(BfwContract.Vendor.COLUMN_WELL, well);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_BOREHOLE, boreFhole);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_RIVER_STREAM, rs);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_PIPE_BORNE, mwspb);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_IRRIGATION, mwsIrrigation);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_NONE, none);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_OTHER, mwsOther);
-
-                            vendorValues.put(BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID, vendorId);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_IS_SYNC, 1);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_IS_UPDATE, 1);
-                            vendorValues.put(BfwContract.Vendor.COLUMN_TOTAL_PLOT_SIZE, totalLandPlotSize);
-
-                            Uri vendorUri = getContentResolver().insert(BfwContract.Vendor.CONTENT_URI, vendorValues);
-                            long localVendorId = ContentUris.parseId(vendorUri);
-
-                            accessInfosArray = farmerObjectInfo.getJSONArray("access_info_ids");
-
-                            for (int a = 0; a < accessInfosArray.length(); a++) {
-
-                                accessInfoObject = accessInfosArray.getJSONObject(a);
-
-                                int vendorInfoId = accessInfoObject.getInt("id");
-
-                                Integer aes = null;
-                                Integer cri = null;
-                                Integer seeds = null;
-                                Integer orgFert = null;
-                                Integer inorgFert = null;
-                                Integer labour = null;
-                                Integer iwp = null;
-                                Integer ss = null;
-                                Long infoSeasonId = null;
-
-                                if (!farmerObjectInfo.getString("ar_aes").equals("null")) {
-                                    Boolean arAes = farmerObjectInfo.getBoolean("ar_aes");
-                                    if (arAes != null) {
-                                        aes = arAes ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_cri").equals("null")) {
-                                    Boolean arCri = farmerObjectInfo.getBoolean("ar_cri");
-                                    if (arCri != null) {
-                                        cri = arCri ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_seeds").equals("null")) {
-                                    Boolean arSeeds = farmerObjectInfo.getBoolean("ar_seeds");
-                                    if (arSeeds != null) {
-                                        seeds = arSeeds ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_of").equals("null")) {
-                                    Boolean arof = farmerObjectInfo.getBoolean("ar_of");
-                                    if (arof != null) {
-                                        orgFert = arof ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_if").equals("null")) {
-                                    Boolean arif = farmerObjectInfo.getBoolean("ar_if");
-                                    if (arif != null) {
-                                        inorgFert = arif ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_labour").equals("null")) {
-                                    Boolean arlabour = farmerObjectInfo.getBoolean("ar_labour");
-                                    if (arlabour != null) {
-                                        labour = arlabour ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_iwp").equals("null")) {
-                                    Boolean ariwp = farmerObjectInfo.getBoolean("ar_iwp");
-                                    if (ariwp != null) {
-                                        iwp = ariwp ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("ar_ss").equals("null")) {
-                                    Boolean arss = farmerObjectInfo.getBoolean("ar_ss");
-                                    if (arss != null) {
-                                        ss = arss ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("harvest_id").equals("null")) {
-                                    infoSeasonId = farmerObjectInfo.getLong("harvest_id");
-                                }
-
-                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-
-                                int seasonId = 0;
-                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(infoSeasonId)}, null);
-                                if (cursor != null) {
-                                    while (cursor.moveToNext()) {
-                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-                                    }
-                                }
-
-                                ContentValues vendorInfoValues = new ContentValues();
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_AGRI_EXTENSION_SERV, aes);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_CLIMATE_RELATED_INFO, cri);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SEEDS, seeds);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_ORGANIC_FERTILIZER, orgFert);
-
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_INORGANIC_FERTILIZER, inorgFert);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_LABOUR, labour);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_WATER_PUMPS, iwp);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SPRAYERS, ss);
-
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_IS_SYNC, 1);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_IS_UPDATE, 1);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SEASON_ID, seasonId);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_VENDOR_ID, localVendorId);
-                                vendorInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SERVER_ID, vendorInfoId);
-
-                                getContentResolver().insert(BfwContract.VendorAccessInfo.CONTENT_URI, vendorInfoValues);
-                            }
-
-                            farmerLandIdsArray = farmerObjectInfo.getJSONArray("vendor_land_ids");
-
-                            for (int b = 0; b < farmerLandIdsArray.length(); b++) {
-
-                                farmerLandObject = farmerLandIdsArray.getJSONObject(b);
-                                int landServerId = farmerLandObject.getInt("id");
-
-                                Double plot_size = null;
-                                Double lat = null;
-                                Double lng = null;
-                                Long landSeasonId = null;
-
-                                if (!farmerLandObject.getString("plot_size").equals("null")) {
-                                    plot_size = farmerLandObject.getDouble("plot_size");
-                                }
-                                if (!farmerLandObject.getString("lat").equals("null")) {
-                                    lat = farmerObjectInfo.getDouble("lat");
-                                }
-                                if (!farmerLandObject.getString("lng").equals("null")) {
-                                    lng = farmerObjectInfo.getDouble("lng");
-                                }
-                                if (!farmerLandObject.getString("harvest_id").equals("null")) {
-                                    landSeasonId = farmerObjectInfo.getLong("harvest_id");
-                                }
-
-                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-
-                                int seasonId = 0;
-                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(landSeasonId)}, null);
-                                if (cursor != null) {
-                                    while (cursor.moveToNext()) {
-                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-                                    }
-                                }
-
-                                ContentValues farmerLandValues = new ContentValues();
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_PLOT_SIZE, plot_size);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_LAT_INFO, lat);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_LNG_INFO, lng);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_SERVER_ID, landServerId);
-
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_SEASON_ID, seasonId);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_IS_SYNC, 1);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_IS_SYNC, 1);
-                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_VENDOR_ID, localVendorId);
-
-                                getContentResolver().insert(BfwContract.VendorLand.CONTENT_URI, farmerLandValues);
-
-                            }
-
-                            forecastFarmerArray = farmerObjectInfo.getJSONArray("forecast_vendor_ids");
-                            for (int c = 0; c < forecastFarmerArray.length(); c++) {
-
-                                forecastObject = forecastFarmerArray.getJSONObject(c);
-
-                                int forecastServerId = forecastObject.getInt("id");
-
-                                Double totalArableLandPlots = null;
-                                Double expectedProductionInMt = null;
-                                Double forecastedyieldmt = null;
-                                Double forecastedharvestsalevalue = null;
-                                Double totalcooplandsize = null;
-                                Double farmerpercentageland = null;
-                                Double currentpppcommitment = null;
-                                Double farmercontributionppp = null;
-                                Double farmerexpectedminppp = null;
-                                Double minimumflowprice = null;
-                                Long forecastSeasonId = null;
-
-                                if (!forecastObject.getString("total_arable_land_plots").equals("null")) {
-                                    totalArableLandPlots = forecastObject.getDouble("total_arable_land_plots");
-                                }
-                                if (!forecastObject.getString("expected_production_in_mt").equals("null")) {
-                                    expectedProductionInMt = forecastObject.getDouble("expected_production_in_mt");
-                                }
-                                if (!forecastObject.getString("forecasted_yield_mt").equals("null")) {
-                                    forecastedyieldmt = forecastObject.getDouble("forecasted_yield_mt");
-                                }
-                                if (!forecastObject.getString("forecasted_harvest_sale_value").equals("null")) {
-                                    forecastedharvestsalevalue = forecastObject.getDouble("forecasted_harvest_sale_value");
-                                }
-                                if (!forecastObject.getString("total_coop_land_size").equals("null")) {
-                                    totalcooplandsize = forecastObject.getDouble("total_coop_land_size");
-                                }
-                                if (!forecastObject.getString("vendor_percentage_land").equals("null")) {
-                                    farmerpercentageland = forecastObject.getDouble("farmer_percentage_land");
-                                }
-                                if (!forecastObject.getString("current_ppp_commitment").equals("null")) {
-                                    currentpppcommitment = forecastObject.getDouble("current_ppp_commitment");
-                                }
-                                if (!forecastObject.getString("vendor_contribution_ppp").equals("null")) {
-                                    farmercontributionppp = forecastObject.getDouble("farmer_contribution_ppp");
-                                }
-                                if (!forecastObject.getString("vendor_expected_min_ppp").equals("null")) {
-                                    farmerexpectedminppp = forecastObject.getDouble("farmer_expected_min_ppp");
-                                }
-                                if (!forecastObject.getString("minimum_flow_price").equals("null")) {
-                                    minimumflowprice = forecastObject.getDouble("minimum_flow_price");
-                                }
-                                if (!forecastObject.getString("harvest_id").equals("null")) {
-                                    forecastSeasonId = forecastObject.getLong("harvest_id");
-                                }
-
-                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-
-                                int seasonId = 0;
-                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(forecastSeasonId)}, null);
-                                if (cursor != null) {
-                                    while (cursor.moveToNext()) {
-                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-                                    }
-                                }
-
-                                ContentValues forecastFarmerValues = new ContentValues();
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_ARABLE_LAND_PLOT, totalArableLandPlots);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PRODUCTION_MT, expectedProductionInMt);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_YIELD_MT, forecastedyieldmt);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
-
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PPP_COMMITMENT, currentpppcommitment);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_EXPECTED_MIN_PPP, farmerexpectedminppp);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_FLOW_PRICE, minimumflowprice);
-
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_SERVER_ID, forecastServerId);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_SEASON_ID, seasonId);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_VENDOR_ID, localVendorId);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_IS_SYNC, 1);
-                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_IS_UPDATE, 1);
-
-                                getContentResolver().insert(BfwContract.ForecastVendor.CONTENT_URI, forecastFarmerValues);
-
-                            }
-
-                            financeDataArray = farmerObjectInfo.getJSONArray("finance_data_ids");
-                            for (int d = 0; d < financeDataArray.length(); d++) {
-
-                                financeDataObject = financeDataArray.getJSONObject(d);
-                                int financeServerId = financeDataObject.getInt("id");
-
-                                Integer outstandingloan = null;
-                                Integer loanPurposeI = null;
-                                Integer loanPurposeA = null;
-                                Integer loanPurposeO = null;
-                                Integer mobileMoneyAccount = null;
-                                Double totalLoanAmount = null;
-                                Double totaloutstanding = null;
-                                Double interestrate = null;
-                                Integer duration = null;
-                                String loanProvider = null;
-                                Long financeSeasonId = null;
-
-                                if (!farmerObjectInfo.getString("outstanding_loan").equals("null")) {
-                                    Boolean outstandingLoan = farmerObjectInfo.getBoolean("outstanding_loan");
-                                    if (outstandingLoan != null) {
-                                        outstandingloan = outstandingLoan ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("loan_purpose_i").equals("null")) {
-                                    Boolean loanpurposei = farmerObjectInfo.getBoolean("loan_purpose_i");
-                                    if (loanpurposei != null) {
-                                        loanPurposeI = loanpurposei ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("loan_purpose_a").equals("null")) {
-                                    Boolean loanpurposea = farmerObjectInfo.getBoolean("loan_purpose_a");
-                                    if (loanpurposea != null) {
-                                        loanPurposeA = loanpurposea ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("loan_purpose_o").equals("null")) {
-                                    Boolean loanpurposeo = farmerObjectInfo.getBoolean("loan_purpose_o");
-                                    if (loanpurposeo != null) {
-                                        loanPurposeO = loanpurposeo ? 1 : 0;
-                                    }
-                                }
-                                if (!farmerObjectInfo.getString("mobile_money_account").equals("null")) {
-                                    Boolean mobilemoneyaccount = farmerObjectInfo.getBoolean("mobile_money_account");
-                                    if (mobilemoneyaccount != null) {
-                                        mobileMoneyAccount = mobilemoneyaccount ? 1 : 0;
-                                    }
-                                }
-
-                                if (!farmerObjectInfo.getString("total_loan_amount").equals("null")) {
-                                    totalLoanAmount = farmerObjectInfo.getDouble("total_loan_amount");
-                                }
-                                if (!farmerObjectInfo.getString("total_outstanding").equals("null")) {
-                                    totaloutstanding = farmerObjectInfo.getDouble("total_outstanding");
-                                }
-                                if (!farmerObjectInfo.getString("interest_rate").equals("null")) {
-                                    interestrate = farmerObjectInfo.getDouble("interest_rate");
-                                }
-                                if (!farmerObjectInfo.getString("duration").equals("null")) {
-                                    duration = farmerObjectInfo.getInt("duration");
-                                }
-                                if (farmerObjectInfo.has("loan_provide")) {
-                                    loanProvider = farmerObjectInfo.getString("loan_provider");
-                                }
-                                if (!farmerObjectInfo.getString("harvest_id").equals("null")) {
-                                    financeSeasonId = farmerObjectInfo.getLong("harvest_id");
-                                }
-
-                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-
-                                int seasonId = 0;
-                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(financeSeasonId)}, null);
-                                if (cursor != null) {
-                                    while (cursor.moveToNext()) {
-                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-                                    }
-                                }
-
-                                ContentValues financeValues = new ContentValues();
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_OUTSANDING_LOAN, outstandingloan);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_TOT_LOAN_AMOUNT, totalLoanAmount);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_TOT_OUTSTANDING, totaloutstanding);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_INTEREST_RATE, interestrate);
-
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_DURATION, duration);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOAN_PROVIDER, loanProvider);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_AGGREG, loanPurposeA);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_INPUT, loanPurposeI);
-
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_OTHER, loanPurposeO);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_MOBILE_MONEY_ACCOUNT, mobileMoneyAccount);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_SEASON_ID, seasonId);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_VENDOR_ID, localVendorId);
-
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_SERVER_ID, financeServerId);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_IS_SYNC, 1);
-                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_IS_UPDATE, 1);
-
-                                getContentResolver().insert(BfwContract.FinanceDataVendor.CONTENT_URI, financeValues);
-
-                            }
-
-                            baseLinesArray = farmerObjectInfo.getJSONArray("baseline_ids");
-                            for (int e = 0; e < baseLinesArray.length(); e++) {
-
-                                baseLinesObject = baseLinesArray.getJSONObject(e);
-
-                                int baselineServerId = baseLinesObject.getInt("id");
-
-                                Double seasonharvest = null;
-                                Double lostharvesttotal = null;
-                                Double soldharvesttotal = null;
-                                Double totalqtycoops = null;
-                                Double pricesoldcoops = null;
-                                Double totalqtymiddlemen = null;
-                                Double pricesoldmiddlemen = null;
-                                Long baselineSeasonId = null;
-
-                                if (!baseLinesObject.getString("seasona_harvest").equals("null")) {
-                                    seasonharvest = baseLinesObject.getDouble("seasona_harvest");
-                                }
-                                if (!baseLinesObject.getString("price_sold_middlemen").equals("null")) {
-                                    pricesoldmiddlemen = baseLinesObject.getDouble("price_sold_middlemen");
-                                }
-                                if (!baseLinesObject.getString("total_qty_middlemen").equals("null")) {
-                                    totalqtymiddlemen = baseLinesObject.getDouble("total_qty_middlemen");
-                                }
-                                if (!baseLinesObject.getString("price_sold_coops").equals("null")) {
-                                    pricesoldcoops = baseLinesObject.getDouble("price_sold_coops");
-                                }
-                                if (!baseLinesObject.getString("total_qty_coops").equals("null")) {
-                                    totalqtycoops = baseLinesObject.getDouble("total_qty_coops");
-                                }
-                                if (!baseLinesObject.getString("sold_harvest_total").equals("null")) {
-                                    soldharvesttotal = baseLinesObject.getDouble("sold_harvest_total");
-                                }
-                                if (!baseLinesObject.getString("lost_harvest_total").equals("null")) {
-                                    lostharvesttotal = baseLinesObject.getDouble("lost_harvest_total");
-                                }
-                                if (!baseLinesObject.getString("harvest_id").equals("null")) {
-                                    baselineSeasonId = baseLinesObject.getLong("harvest_id");
-                                }
-
-                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
-                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-
-                                int seasonId = 0;
-                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(baselineSeasonId)}, null);
-                                if (cursor != null) {
-                                    while (cursor.moveToNext()) {
-                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-                                    }
-                                }
-
-                                ContentValues baselineValues = new ContentValues();
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_PROD_B_KG, seasonharvest);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_LOST_KG, lostharvesttotal);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_SOLD_KG, soldharvesttotal);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_COOP, totalqtycoops);
-
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_COOP_PER_KG, pricesoldcoops);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_IN_KG, totalqtymiddlemen);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_KG, pricesoldmiddlemen);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_SEASON_ID, seasonId);
-
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_SERVER_ID, baselineServerId);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_IS_SYNC, 1);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_IS_UPDATE, 1);
-                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_VENDOR_ID, localVendorId);
-
-                                getContentResolver().insert(BfwContract.BaseLineVendor.CONTENT_URI, baselineValues);
-                            }
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            } catch (JSONException exp) {
-                return false;
-            } catch (IOException exp) {
-                return false;
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
             }
             return true;
         }
@@ -1863,7 +1173,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // get base line yield ids (baseline_yield_ids)
                             baseLinesYieldIds = coopObjectInfo.getJSONArray("baseline_yield_ids");
                             for (int l = 0; l < baseLinesYieldIds.length(); l++) {
-
                                 objectBaseLineYieldIds = baseLinesYieldIds.getJSONObject(l);
 
                                 Integer mpMaize = null;
@@ -2837,6 +2146,782 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
 
+        private boolean prefetchVendor(OkHttpClient client, String token, String url, boolean isAgent) {
+            getContentResolver().delete(BfwContract.Vendor.CONTENT_URI, null, null);
+            Cursor cursor = null;
+            try {
+                Response farmerData = Utils.getServerData(client, token, url);
+                if (farmerData != null) {
+                    ResponseBody farmerInfo = farmerData.body();
+                    if (farmerInfo != null) {
+                        String farmersList = farmerInfo.string();
+
+                        JSONObject farmersJsonObject = new JSONObject(farmersList);
+
+                        JSONArray farmerArrayLists;
+                        if (!isAgent) {
+                            farmerArrayLists = farmersJsonObject.getJSONArray("results");
+                        } else {
+                            String filterResponse = farmersJsonObject.getString("response");
+                            JSONObject filterServerObject = new JSONObject(filterResponse);
+                            farmerArrayLists = filterServerObject.getJSONArray("results");
+                        }
+                        JSONObject farmerObjectInfo;
+
+                        JSONArray accessInfosArray;
+                        JSONArray farmerLandIdsArray;
+                        JSONArray forecastFarmerArray;
+                        JSONArray financeDataArray;
+                        JSONArray baseLinesArray;
+
+                        JSONObject accessInfoObject;
+                        JSONObject farmerLandObject;
+                        JSONObject forecastObject;
+                        JSONObject financeDataObject;
+                        JSONObject baseLinesObject;
+
+                        for (int t = 0; t < farmerArrayLists.length(); t++) {
+
+                            farmerObjectInfo = farmerArrayLists.getJSONObject(t);
+
+                            int farmerId = farmerObjectInfo.getInt("id");
+
+                            String name = null;
+                            String cellPhone = null;
+                            String address = null;
+                            String gender = null;
+                            Integer headOfHousehold = null;
+                            Integer numhouseholdmembers = null;
+                            String firstName = null;
+                            String lastName = null;
+                            String cellCarrier = null;
+                            String cellPhoneAlt = null;
+                            String membershipId = null;
+                            String storageDetails = null;
+                            String otherDetails = null;
+                            Integer safestorage = null;
+                            Integer tractors = null;
+                            Integer harvester = null;
+                            Integer dryer = null;
+                            Integer thresher = null;
+                            Integer other = null;
+                            String otherWaterSource = null;
+
+                            Integer mwsDam = null;
+                            Integer well = null;
+                            Integer boreFhole = null;
+                            Integer rs = null;
+                            Integer mwspb = null;
+                            Integer mwsIrrigation = null;
+                            Integer none = null;
+                            Integer mwsOther = null;
+                            Double totalLandPlotSize = null;
+
+                            if (farmerObjectInfo.has("name")) {
+                                name = farmerObjectInfo.getString("name");
+                            }
+                            if (farmerObjectInfo.has("gender")) {
+                                gender = farmerObjectInfo.getString("gender");
+                            }
+                            if (farmerObjectInfo.has("address")) {
+                                address = farmerObjectInfo.getString("address");
+                            }
+                            if (farmerObjectInfo.has("phone")) {
+                                cellPhone = farmerObjectInfo.getString("phone");
+                            }
+                            if (!farmerObjectInfo.getString("num_household_members").equals("null")) {
+                                numhouseholdmembers = farmerObjectInfo.getInt("num_household_members");
+                            }
+                            if (farmerObjectInfo.has("cellphone_alt")) {
+                                cellPhoneAlt = farmerObjectInfo.getString("cellphone_alt");
+                            }
+
+                            if (farmerObjectInfo.has("cell_carrier")) {
+                                cellCarrier = farmerObjectInfo.getString("cell_carrier");
+                            }
+                            if (farmerObjectInfo.has("spouse_lastname")) {
+                                lastName = farmerObjectInfo.getString("spouse_lastname");
+                            }
+                            if (farmerObjectInfo.has("spouse_firstname")) {
+                                firstName = farmerObjectInfo.getString("spouse_firstname");
+                            }
+                            if (!farmerObjectInfo.getString("head_of_household").equals("null")) {
+                                Boolean headHousehold = farmerObjectInfo.getBoolean("head_of_household");
+                                if (headHousehold != null) {
+                                    headOfHousehold = headHousehold ? 1 : 0;
+                                }
+                            }
+                            if (farmerObjectInfo.has("membership_id")) {
+                                membershipId = farmerObjectInfo.getString("membership_id");
+                            }
+                            if (farmerObjectInfo.has("storage_details")) {
+                                storageDetails = farmerObjectInfo.getString("storage_details");
+                            }
+
+                            if (farmerObjectInfo.has("other_details")) {
+                                otherDetails = farmerObjectInfo.getString("other_details");
+                            }
+                            if (!farmerObjectInfo.getString("ar_safestorage").equals("null")) {
+                                Boolean arSafestorage = farmerObjectInfo.getBoolean("ar_safestorage");
+                                if (arSafestorage != null) {
+                                    safestorage = arSafestorage ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("ar_tractors").equals("null")) {
+                                Boolean arTractors = farmerObjectInfo.getBoolean("ar_tractors");
+                                if (arTractors != null) {
+                                    tractors = arTractors ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("ar_harverster").equals("null")) {
+                                Boolean arHarverster = farmerObjectInfo.getBoolean("ar_harverster");
+                                if (arHarverster != null) {
+                                    harvester = arHarverster ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("ar_dryer").equals("null")) {
+                                Boolean arDryer = farmerObjectInfo.getBoolean("ar_dryer");
+                                if (arDryer != null) {
+                                    dryer = arDryer ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("ar_thresher").equals("null")) {
+                                thresher = null;
+                                Boolean arThresher = farmerObjectInfo.getBoolean("ar_thresher");
+                                if (arThresher != null) {
+                                    thresher = arThresher ? 1 : 0;
+                                }
+                            }
+
+                            if (!farmerObjectInfo.getString("ar_other").equals("null")) {
+                                Boolean arOther = farmerObjectInfo.getBoolean("ar_other");
+                                if (arOther != null) {
+                                    other = arOther ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_dam").equals("null")) {
+                                Boolean dam = farmerObjectInfo.getBoolean("mws_dam");
+                                if (dam != null) {
+                                    mwsDam = dam ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_well").equals("null")) {
+                                Boolean msWell = farmerObjectInfo.getBoolean("mws_well");
+                                if (msWell != null) {
+                                    well = msWell ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_borehole").equals("null")) {
+                                Boolean mwsBorehole = farmerObjectInfo.getBoolean("mws_borehole");
+                                if (boreFhole != null) {
+                                    boreFhole = mwsBorehole ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_rs").equals("null")) {
+                                rs = null;
+                                Boolean mwsrs = farmerObjectInfo.getBoolean("mws_rs");
+                                if (mwsrs != null) {
+                                    rs = mwsrs ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_pb").equals("null")) {
+                                Boolean pb = farmerObjectInfo.getBoolean("mws_pb");
+                                if (pb != null) {
+                                    mwspb = pb ? 1 : 0;
+                                }
+                            }
+
+                            if (!farmerObjectInfo.getString("mws_irrigation").equals("null")) {
+                                Boolean irrigation = farmerObjectInfo.getBoolean("mws_irrigation");
+                                if (irrigation != null) {
+                                    mwsIrrigation = irrigation ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_none").equals("null")) {
+                                Boolean mwsnone = farmerObjectInfo.getBoolean("mws_none");
+                                if (mwsnone != null) {
+                                    none = mwsnone ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("mws_other").equals("null")) {
+                                Boolean mwother = farmerObjectInfo.getBoolean("mws_other");
+                                if (mwother != null) {
+                                    mwsOther = mwother ? 1 : 0;
+                                }
+                            }
+                            if (!farmerObjectInfo.getString("total_land_plot_size").equals("null")) {
+                                totalLandPlotSize = farmerObjectInfo.getDouble("total_land_plot_size");
+                            }
+                            // TODO Check well this field
+                            if (farmerObjectInfo.has("other_water_source")) {
+                                otherWaterSource = farmerObjectInfo.getString("other_water_source");
+                            }
+
+                            ContentValues farmerValues = new ContentValues();
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_NAME, name);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_PHONE, cellPhone);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_GENDER, gender);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_ADDRESS, address);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_HOUSEHOLD_HEAD, headOfHousehold);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_HOUSE_MEMBER, numhouseholdmembers);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_FIRST_NAME, firstName);
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_LAST_NAME, lastName);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_CELL_PHONE, cellPhoneAlt);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_CELL_CARRIER, cellCarrier);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_MEMBER_SHIP, membershipId);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_STORAGE_DETAIL, storageDetails);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_NEW_SOURCE_DETAIL, otherDetails);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_SAFE_STORAGE, safestorage);
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_TRACTORS, tractors);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_HARVESTER, harvester);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_DRYER, dryer);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_TRESHER, thresher);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_OTHER_INFO , other);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_DAM, mwsDam);
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_WELL, well);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_BOREHOLE, boreFhole);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_RIVER_STREAM, rs);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_PIPE_BORNE, mwspb);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_IRRIGATION, mwsIrrigation);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_NONE, none);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_OTHER, mwsOther);
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID, farmerId);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_IS_SYNC, 1);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_IS_UPDATE, 1);
+
+                            farmerValues.put(BfwContract.Vendor.COLUMN_TOTAL_PLOT_SIZE, totalLandPlotSize);
+
+                            Uri farmerUri = getContentResolver().insert(BfwContract.Vendor.CONTENT_URI, farmerValues);
+                            long localFarmerId = ContentUris.parseId(farmerUri);
+
+                            accessInfosArray = farmerObjectInfo.getJSONArray("access_info_ids");
+
+                            for (int a = 0; a < accessInfosArray.length(); a++) {
+
+                                accessInfoObject = accessInfosArray.getJSONObject(a);
+
+                                int farmerInfoId = accessInfoObject.getInt("id");
+
+                                Integer aes = null;
+                                Integer cri = null;
+                                Integer seeds = null;
+                                Integer orgFert = null;
+                                Integer inorgFert = null;
+                                Integer labour = null;
+                                Integer iwp = null;
+                                Integer ss = null;
+                                long infoSeasonId = 1;
+
+                                if (accessInfoObject.has("ar_aes")) {
+                                    if (!accessInfoObject.getString("ar_aes").equals("null")) {
+                                        Boolean arAes = accessInfoObject.getBoolean("ar_aes");
+                                        if (arAes != null) {
+                                            aes = arAes ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_cri")) {
+                                    if (!accessInfoObject.getString("ar_cri").equals("null")) {
+                                        Boolean arCri = accessInfoObject.getBoolean("ar_cri");
+                                        if (arCri != null) {
+                                            cri = arCri ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_seeds")) {
+                                    if (!accessInfoObject.getString("ar_seeds").equals("null")) {
+                                        Boolean arSeeds = accessInfoObject.getBoolean("ar_seeds");
+                                        if (arSeeds != null) {
+                                            seeds = arSeeds ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_of")) {
+                                    if (!accessInfoObject.getString("ar_of").equals("null")) {
+                                        Boolean arof = accessInfoObject.getBoolean("ar_of");
+                                        if (arof != null) {
+                                            orgFert = arof ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_if")) {
+                                    if (!accessInfoObject.getString("ar_if").equals("null")) {
+                                        Boolean arif = accessInfoObject.getBoolean("ar_if");
+                                        if (arif != null) {
+                                            inorgFert = arif ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_labour")) {
+                                    if (!accessInfoObject.getString("ar_labour").equals("null")) {
+                                        Boolean arlabour = accessInfoObject.getBoolean("ar_labour");
+                                        if (arlabour != null) {
+                                            labour = arlabour ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_iwp")) {
+                                    if (!accessInfoObject.getString("ar_iwp").equals("null")) {
+                                        Boolean ariwp = accessInfoObject.getBoolean("ar_iwp");
+                                        if (ariwp != null) {
+                                            iwp = ariwp ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (accessInfoObject.has("ar_ss")) {
+                                    if (!accessInfoObject.getString("ar_ss").equals("null")) {
+                                        Boolean arss = accessInfoObject.getBoolean("ar_ss");
+                                        if (arss != null) {
+                                            ss = arss ? 1 : 0;
+                                        }
+                                    }
+                                }
+
+                                if (accessInfoObject.has("harvest_id")) {
+                                    if (!accessInfoObject.getString("harvest_id").equals("null")) {
+                                        infoSeasonId = accessInfoObject.getLong("harvest_id");
+                                    }
+                                }
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+
+                                int seasonId = 1;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(infoSeasonId)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                                ContentValues farmerInfoValues = new ContentValues();
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_AGRI_EXTENSION_SERV, aes);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_CLIMATE_RELATED_INFO, cri);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SEEDS, seeds);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_ORGANIC_FERTILIZER, orgFert);
+
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_INORGANIC_FERTILIZER, inorgFert);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_LABOUR, labour);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_WATER_PUMPS, iwp);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SPRAYERS, ss);
+
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_IS_SYNC, 1);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_IS_UPDATE, 1);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SEASON_ID, seasonId);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_VENDOR_ID, localFarmerId);
+                                farmerInfoValues.put(BfwContract.VendorAccessInfo.COLUMN_SERVER_ID, farmerInfoId);
+
+                                getContentResolver().insert(BfwContract.VendorAccessInfo.CONTENT_URI, farmerInfoValues);
+                            }
+
+                            farmerLandIdsArray = farmerObjectInfo.getJSONArray("vendor_land_ids");
+
+                            for (int b = 0; b < farmerLandIdsArray.length(); b++) {
+
+                                farmerLandObject = farmerLandIdsArray.getJSONObject(b);
+                                int landServerId = farmerLandObject.getInt("id");
+
+                                Double plot_size = null;
+                                Double lat = null;
+                                Double lng = null;
+                                long landSeasonId = 1;
+
+                                if (farmerLandObject.has("plot_size")) {
+                                    if (!farmerLandObject.getString("plot_size").equals("null")) {
+                                        plot_size = farmerLandObject.getDouble("plot_size");
+                                    }
+                                }
+                                if (farmerLandObject.has("lat")) {
+                                    if (!farmerLandObject.getString("lat").equals("null")) {
+                                        lat = farmerLandObject.getDouble("lat");
+                                    }
+                                }
+                                if (farmerLandObject.has("lng")) {
+                                    if (!farmerLandObject.getString("lng").equals("null")) {
+                                        lng = farmerLandObject.getDouble("lng");
+                                    }
+                                }
+
+                                if (farmerLandObject.has("harvest_id")) {
+                                    if (!farmerLandObject.getString("harvest_id").equals("null")) {
+                                        landSeasonId = farmerLandObject.getLong("harvest_id");
+                                    }
+                                }
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+
+                                int seasonId = 1;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(landSeasonId)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                                ContentValues farmerLandValues = new ContentValues();
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_PLOT_SIZE, plot_size);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_LAT_INFO, lat);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_LNG_INFO, lng);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_SERVER_ID, landServerId);
+
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_SEASON_ID, seasonId);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_IS_SYNC, 1);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_IS_SYNC, 1);
+                                farmerLandValues.put(BfwContract.VendorLand.COLUMN_VENDOR_ID, localFarmerId);
+
+                                getContentResolver().insert(BfwContract.VendorLand.CONTENT_URI, farmerLandValues);
+
+                            }
+
+                            forecastFarmerArray = farmerObjectInfo.getJSONArray("forecast_vendor_ids");
+                            for (int c = 0; c < forecastFarmerArray.length(); c++) {
+
+                                forecastObject = forecastFarmerArray.getJSONObject(c);
+
+                                int forecastServerId = forecastObject.getInt("id");
+
+                                Double totalArableLandPlots = null;
+                                Double expectedProductionInMt = null;
+                                Double forecastedyieldmt = null;
+                                Double forecastedharvestsalevalue = null;
+                                Double totalcooplandsize = null;
+                                Double farmerpercentageland = null;
+                                Double currentpppcommitment = null;
+                                Double farmercontributionppp = null;
+                                Double farmerexpectedminppp = null;
+                                Double minimumflowprice = null;
+                                long forecastSeasonId = 1;
+
+                                if (forecastObject.has("total_arable_land_plots")) {
+                                    if (!forecastObject.getString("total_arable_land_plots").equals("null")) {
+                                        totalArableLandPlots = forecastObject.getDouble("total_arable_land_plots");
+                                    }
+                                }
+                                if (forecastObject.has("expected_production_in_mt")) {
+                                    if (!forecastObject.getString("expected_production_in_mt").equals("null")) {
+                                        expectedProductionInMt = forecastObject.getDouble("expected_production_in_mt");
+                                    }
+                                }
+
+                                if (forecastObject.has("forecasted_yield_mt")) {
+                                    if (!forecastObject.getString("forecasted_yield_mt").equals("null")) {
+                                        forecastedyieldmt = forecastObject.getDouble("forecasted_yield_mt");
+                                    }
+                                }
+                                if (forecastObject.has("forecasted_harvest_sale_value")) {
+                                    if (!forecastObject.getString("forecasted_harvest_sale_value").equals("null")) {
+                                        forecastedharvestsalevalue = forecastObject.getDouble("forecasted_harvest_sale_value");
+                                    }
+                                }
+                                if (forecastObject.has("total_coop_land_size")) {
+                                    if (!forecastObject.getString("total_coop_land_size").equals("null")) {
+                                        totalcooplandsize = forecastObject.getDouble("total_coop_land_size");
+                                    }
+                                }
+                                if (forecastObject.has("vendor_percentage_land")) {
+                                    if (!forecastObject.getString("vendor_percentage_land").equals("null")) {
+                                        farmerpercentageland = forecastObject.getDouble("vendor_percentage_land");
+                                    }
+                                }
+                                if (forecastObject.has("current_ppp_commitment")) {
+                                    if (!forecastObject.getString("current_ppp_commitment").equals("null")) {
+                                        currentpppcommitment = forecastObject.getDouble("current_ppp_commitment");
+                                    }
+                                }
+
+                                if (forecastObject.has("vendor_contribution_ppp")) {
+                                    if (!forecastObject.getString("vendor_contribution_ppp").equals("null")) {
+                                        farmercontributionppp = forecastObject.getDouble("vendor_contribution_ppp");
+                                    }
+                                }
+                                if (forecastObject.has("vendor_expected_min_ppp")) {
+                                    if (!forecastObject.getString("vendor_expected_min_ppp").equals("null")) {
+                                        farmerexpectedminppp = forecastObject.getDouble("vendor_expected_min_ppp");
+                                    }
+                                }
+                                if (forecastObject.has("minimum_flow_price")) {
+                                    if (!forecastObject.getString("minimum_flow_price").equals("null")) {
+                                        minimumflowprice = forecastObject.getDouble("minimum_flow_price");
+                                    }
+                                }
+
+                                if (forecastObject.has("harvest_id")) {
+                                    if (!forecastObject.getString("harvest_id").equals("null")) {
+                                        forecastSeasonId = forecastObject.getLong("harvest_id");
+                                    }
+                                }
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+
+                                int seasonId = 1;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(forecastSeasonId)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                                ContentValues forecastFarmerValues = new ContentValues();
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_ARABLE_LAND_PLOT, totalArableLandPlots);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PRODUCTION_MT, expectedProductionInMt);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_YIELD_MT, forecastedyieldmt);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_HARVEST_SALE_VALUE, forecastedharvestsalevalue);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_COOP_LAND_SIZE, totalcooplandsize);
+
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PERCENT_FARMER_LAND_SIZE, farmerpercentageland);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_PPP_COMMITMENT, currentpppcommitment);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_CONTRIBUTION_PPP, farmercontributionppp);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_EXPECTED_MIN_PPP, farmerexpectedminppp);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_FLOW_PRICE, minimumflowprice);
+
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_SERVER_ID, forecastServerId);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_SEASON_ID, seasonId);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_VENDOR_ID, localFarmerId);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_IS_SYNC, 1);
+                                forecastFarmerValues.put(BfwContract.ForecastVendor.COLUMN_IS_UPDATE, 1);
+
+                                getContentResolver().insert(BfwContract.ForecastVendor.CONTENT_URI, forecastFarmerValues);
+
+                            }
+
+                            financeDataArray = farmerObjectInfo.getJSONArray("finance_data_ids");
+                            for (int d = 0; d < financeDataArray.length(); d++) {
+
+                                financeDataObject = financeDataArray.getJSONObject(d);
+                                int financeServerId = financeDataObject.getInt("id");
+
+                                Integer outstandingloan = null;
+                                Integer loanPurposeI = null;
+                                Integer loanPurposeA = null;
+                                Integer loanPurposeO = null;
+                                Integer mobileMoneyAccount = null;
+                                Double totalLoanAmount = null;
+                                Double totaloutstanding = null;
+                                Double interestrate = null;
+                                Integer duration = null;
+                                String loanProvider = null;
+                                long financeSeasonId = 1;
+
+                                if (financeDataObject.has("outstanding_loan")) {
+                                    if (!financeDataObject.getString("outstanding_loan").equals("null")) {
+                                        Boolean outstandingLoan = financeDataObject.getBoolean("outstanding_loan");
+                                        if (outstandingLoan != null) {
+                                            outstandingloan = outstandingLoan ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (financeDataObject.has("loan_purpose_i")) {
+                                    if (!financeDataObject.getString("loan_purpose_i").equals("null")) {
+                                        Boolean loanpurposei = financeDataObject.getBoolean("loan_purpose_i");
+                                        if (loanpurposei != null) {
+                                            loanPurposeI = loanpurposei ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (financeDataObject.has("loan_purpose_a")) {
+                                    if (!financeDataObject.getString("loan_purpose_a").equals("null")) {
+                                        Boolean loanpurposea = financeDataObject.getBoolean("loan_purpose_a");
+                                        if (loanpurposea != null) {
+                                            loanPurposeA = loanpurposea ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (financeDataObject.has("loan_purpose_o")) {
+                                    if (!financeDataObject.getString("loan_purpose_o").equals("null")) {
+                                        Boolean loanpurposeo = financeDataObject.getBoolean("loan_purpose_o");
+                                        if (loanpurposeo != null) {
+                                            loanPurposeO = loanpurposeo ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (financeDataObject.has("mobile_money_account")) {
+                                    if (!financeDataObject.getString("mobile_money_account").equals("null")) {
+                                        Boolean mobilemoneyaccount = financeDataObject.getBoolean("mobile_money_account");
+                                        if (mobilemoneyaccount != null) {
+                                            mobileMoneyAccount = mobilemoneyaccount ? 1 : 0;
+                                        }
+                                    }
+                                }
+                                if (financeDataObject.has("total_loan_amount")) {
+                                    if (!financeDataObject.getString("total_loan_amount").equals("null")) {
+                                        totalLoanAmount = financeDataObject.getDouble("total_loan_amount");
+                                    }
+                                }
+                                if (financeDataObject.has("total_outstanding")) {
+                                    if (!financeDataObject.getString("total_outstanding").equals("null")) {
+                                        totaloutstanding = financeDataObject.getDouble("total_outstanding");
+                                    }
+                                }
+                                if (financeDataObject.has("interest_rate")) {
+                                    if (!financeDataObject.getString("interest_rate").equals("null")) {
+                                        interestrate = financeDataObject.getDouble("interest_rate");
+                                    }
+                                }
+                                if (financeDataObject.has("duration")) {
+                                    if (!financeDataObject.getString("duration").equals("null")) {
+                                        duration = financeDataObject.getInt("duration");
+                                    }
+                                }
+                                if (financeDataObject.has("loan_provider")) {
+                                    if (financeDataObject.has("loan_provider")) {
+                                        loanProvider = financeDataObject.getString("loan_provider");
+                                    }
+                                }
+
+                                if (financeDataObject.has("harvest_id")) {
+                                    if (!financeDataObject.getString("harvest_id").equals("null")) {
+                                        financeSeasonId = financeDataObject.getLong("harvest_id");
+                                    }
+                                }
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+
+                                int seasonId = 1;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(financeSeasonId)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                                ContentValues financeValues = new ContentValues();
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_OUTSANDING_LOAN, outstandingloan);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_TOT_LOAN_AMOUNT, totalLoanAmount);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_TOT_OUTSTANDING, totaloutstanding);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_INTEREST_RATE, interestrate);
+
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_DURATION, duration);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOAN_PROVIDER, loanProvider);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_AGGREG, loanPurposeA);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_INPUT, loanPurposeI);
+
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_OTHER, loanPurposeO);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_MOBILE_MONEY_ACCOUNT, mobileMoneyAccount);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_SEASON_ID, seasonId);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_VENDOR_ID, localFarmerId);
+
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_SERVER_ID, financeServerId);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_IS_SYNC, 1);
+                                financeValues.put(BfwContract.FinanceDataVendor.COLUMN_IS_UPDATE, 1);
+
+                                getContentResolver().insert(BfwContract.FinanceDataVendor.CONTENT_URI, financeValues);
+
+                            }
+
+                            baseLinesArray = farmerObjectInfo.getJSONArray("baseline_ids");
+                            for (int e = 0; e < baseLinesArray.length(); e++) {
+
+                                baseLinesObject = baseLinesArray.getJSONObject(e);
+
+                                int baselineServerId = baseLinesObject.getInt("id");
+
+                                Double seasonharvest = null;
+                                Double lostharvesttotal = null;
+                                Double soldharvesttotal = null;
+                                Double totalqtycoops = null;
+                                Double pricesoldcoops = null;
+                                Double totalqtymiddlemen = null;
+                                Double pricesoldmiddlemen = null;
+                                long baselineSeasonId = 1;
+
+                                if (baseLinesObject.has("seasona_harvest")) {
+                                    if (!baseLinesObject.getString("seasona_harvest").equals("null")) {
+                                        seasonharvest = baseLinesObject.getDouble("seasona_harvest");
+                                    }
+                                }
+                                if (baseLinesObject.has("price_sold_middlemen")) {
+                                    if (!baseLinesObject.getString("price_sold_middlemen").equals("null")) {
+                                        pricesoldmiddlemen = baseLinesObject.getDouble("price_sold_middlemen");
+                                    }
+                                }
+                                if (baseLinesObject.has("total_qty_middlemen")) {
+                                    if (!baseLinesObject.getString("total_qty_middlemen").equals("null")) {
+                                        totalqtymiddlemen = baseLinesObject.getDouble("total_qty_middlemen");
+                                    }
+                                }
+                                if (baseLinesObject.has("price_sold_coops")) {
+                                    if (!baseLinesObject.getString("price_sold_coops").equals("null")) {
+                                        pricesoldcoops = baseLinesObject.getDouble("price_sold_coops");
+                                    }
+                                }
+                                if (baseLinesObject.has("total_qty_coops")) {
+                                    if (!baseLinesObject.getString("total_qty_coops").equals("null")) {
+                                        totalqtycoops = baseLinesObject.getDouble("total_qty_coops");
+                                    }
+                                }
+                                if (baseLinesObject.has("sold_harvest_total")) {
+                                    if (!baseLinesObject.getString("sold_harvest_total").equals("null")) {
+                                        soldharvesttotal = baseLinesObject.getDouble("sold_harvest_total");
+                                    }
+                                }
+                                if (baseLinesObject.has("lost_harvest_total")) {
+                                    if (!baseLinesObject.getString("lost_harvest_total").equals("null")) {
+                                        lostharvesttotal = baseLinesObject.getDouble("lost_harvest_total");
+                                    }
+                                }
+
+                                if (baseLinesObject.has("harvest_id")) {
+                                    if (!baseLinesObject.getString("harvest_id").equals("null")) {
+                                        baselineSeasonId = baseLinesObject.getLong("harvest_id");
+                                    }
+                                }
+
+                                String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
+                                        BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
+
+                                int seasonId = 1;
+                                cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(baselineSeasonId)}, null);
+                                if (cursor != null) {
+                                    while (cursor.moveToNext()) {
+                                        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+                                    }
+                                }
+
+                                ContentValues baselineValues = new ContentValues();
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_PROD_B_KG, seasonharvest);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_LOST_KG, lostharvesttotal);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_SOLD_KG, soldharvesttotal);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_COOP, totalqtycoops);
+
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_COOP_PER_KG, pricesoldcoops);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_IN_KG, totalqtymiddlemen);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_KG, pricesoldmiddlemen);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_SEASON_ID, seasonId);
+
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_SERVER_ID, baselineServerId);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_IS_SYNC, 1);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_IS_UPDATE, 1);
+                                baselineValues.put(BfwContract.BaseLineVendor.COLUMN_VENDOR_ID, localFarmerId);
+
+                                getContentResolver().insert(BfwContract.BaseLineVendor.CONTENT_URI, baselineValues);
+                            }
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } catch (JSONException exp) {
+                return false;
+            } catch (IOException exp) {
+                return false;
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            return true;
+        }
+
+
         private boolean prefetchFarmer(OkHttpClient client, String token, String url, JSONObject userInfo, boolean isAgent) {
             getContentResolver().delete(BfwContract.Farmer.CONTENT_URI, null, null);
             Cursor cursor = null;
@@ -3087,7 +3172,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             farmerValues.put(BfwContract.Farmer.COLUMN_HARVESTER, harvester);
                             farmerValues.put(BfwContract.Farmer.COLUMN_DRYER, dryer);
                             farmerValues.put(BfwContract.Farmer.COLUMN_TRESHER, thresher);
-                            farmerValues.put(BfwContract.Farmer.COLUMN_OTHER, other);
+                            farmerValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO , other);
                             farmerValues.put(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
                             farmerValues.put(BfwContract.Farmer.COLUMN_DAM, mwsDam);
 

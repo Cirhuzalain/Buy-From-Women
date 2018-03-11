@@ -65,9 +65,9 @@ public class AddBuyer extends IntentService {
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    EventBus.getDefault().post(new SaveDataEvent("Buyer added successfully", true));
                     //start job service
                     startService(new Intent(this, SyncBuyerBackground.class));
-                    EventBus.getDefault().post(new SaveDataEvent("Buyer added successfully", true));
                 }else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

@@ -1,9 +1,7 @@
 package com.nijus.alino.bfwcoopmanagement.products.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +106,7 @@ public class ProductAdapter extends BaseAdapter {
         try {
             mEmptyView.setVisibility(getCount() == 0 ? View.VISIBLE : View.INVISIBLE);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
