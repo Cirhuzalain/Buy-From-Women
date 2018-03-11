@@ -3,11 +3,9 @@ package com.nijus.alino.bfwcoopmanagement.products.sync;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -15,8 +13,6 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-import com.nijus.alino.bfwcoopmanagement.farmers.sync.SyncBackground;
-import com.nijus.alino.bfwcoopmanagement.farmers.sync.SyncFarmer;
 import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 

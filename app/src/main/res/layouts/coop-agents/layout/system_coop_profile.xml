@@ -533,8 +533,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="left"
                             android:layout_weight="4"
-                            android:gravity="right"
-                            android:text="24" />
+                            android:gravity="right" />
 
                     </LinearLayout>
                     <LinearLayout

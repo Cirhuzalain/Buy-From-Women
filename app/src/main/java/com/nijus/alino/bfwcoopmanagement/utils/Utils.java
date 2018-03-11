@@ -41,6 +41,8 @@ public class Utils {
             return client.newCall(requestUser).execute();
         } catch (IOException exp) {
             return null;
+        } catch (Exception exp){
+            return null;
         }
     }
 

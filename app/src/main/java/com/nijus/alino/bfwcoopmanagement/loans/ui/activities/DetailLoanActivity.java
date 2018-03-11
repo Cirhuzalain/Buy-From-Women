@@ -60,7 +60,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_loan);
 
-        //getSupportLoaderManager().initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         //get Id
         Intent intent = this.getIntent();
@@ -231,13 +231,6 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
                 adb.setView(alertLayout);
 
                 adb.setPositiveButton("Cancel",null);
-
-                /*adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });*/
                 adb.show();
                 break;
             }

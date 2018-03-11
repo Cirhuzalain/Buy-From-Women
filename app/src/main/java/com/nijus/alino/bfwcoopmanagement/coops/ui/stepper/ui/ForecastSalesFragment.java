@@ -20,10 +20,8 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.ForecastSales;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.Finance;
 
 import java.util.HashMap;
 
@@ -140,6 +138,8 @@ public class ForecastSalesFragment extends Fragment {
 
         cursor = (Cursor) harvestSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        forecastSales.setSeasonId(seasonId);
 
         forecastSalesSeason.put(seasonName, forecastSales);
 

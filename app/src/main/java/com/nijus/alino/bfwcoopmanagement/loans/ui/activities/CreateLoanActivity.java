@@ -36,8 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateLoanActivity extends AppCompatActivity implements View.OnClickListener/*,
-        LoaderManager.LoaderCallbacks<Cursor>*/ {
+public class CreateLoanActivity extends AppCompatActivity implements View.OnClickListener {
     private Button save_loan;
     private EditText ed_date_value;
     private Button date;
@@ -65,7 +64,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
         save_loan.setOnClickListener(this);
         date.setOnClickListener(this);
 
-        //PUPULATE ALL SPINNERS
         populateSpinnerFarmer();
 
         ArrayAdapter<CharSequence> adapter_microfin = ArrayAdapter.createFromResource(this,
@@ -162,7 +160,7 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
                 Intent intent = new Intent(this, AddLoan.class);
                 intent.putExtra("loan_data", bundle);
                 this.startService(intent);
-
+                finish();
             }
 
         } else if (view == date) {

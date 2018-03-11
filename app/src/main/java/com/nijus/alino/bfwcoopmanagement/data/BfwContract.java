@@ -507,7 +507,7 @@ public class BfwContract {
         public static final String COLUMN_IS_SYNC = "is_sync";
         public static final String COLUMN_IS_UPDATE = "is_update";
 
-        public static Uri buildFinanceDataFarmerUri(long id) {
+        public static Uri buildFinanceDataVendorUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 

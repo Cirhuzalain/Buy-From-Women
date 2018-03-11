@@ -13,6 +13,7 @@ import android.widget.GridView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
 import com.nijus.alino.bfwcoopmanagement.pojo.Product;
+import com.nijus.alino.bfwcoopmanagement.sales.adapter.SaleOrderAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,16 +30,16 @@ public class PurchaseOrderListFragment extends Fragment implements AdapterView.O
     private String mParam2;
 
     private Product[] productArrayList = {
+            new Product("MAIZEII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
+            new Product("MAIZEI", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
-            new Product("MAIZEIII", "250000 RWF", "150000 KG"),
+            new Product("MAIZEII", "250000 RWF", "150000 KG"),
             new Product("MAIZEIII", "250000 RWF", "150000 KG")
     };
 
@@ -82,7 +83,7 @@ public class PurchaseOrderListFragment extends Fragment implements AdapterView.O
 
         GridView gridView = root.findViewById(R.id.productGridview);
 
-        ProductAdapter adapter = new ProductAdapter(getContext(), productArrayList, true);
+        SaleOrderAdapter adapter = new SaleOrderAdapter(getContext(), productArrayList, true);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
         return root;
@@ -91,11 +92,8 @@ public class PurchaseOrderListFragment extends Fragment implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Product product = productArrayList[i];
-        // appel du botomm sheet to modify purchase
         BottomSheetDialogFragment bottomSheetDialogFragment = new PurchasesBottomSheetDialogFragment();
         bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
-        /*UpdatePurchaseOrderDialogFragment dialogFragment = new UpdatePurchaseOrderDialogFragment();
-        dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");*/
     }
 
     @Override

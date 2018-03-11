@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".coops.ui.activities.DetailCoopActivity"
-        tools:showIn="@layout/activity_details_coop">
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".coops.ui.activities.DetailCoopActivity"
+    tools:showIn="@layout/activity_details_coop">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10px">
+        android:layout_margin="10px"
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -84,6 +84,7 @@
                         android:layout_marginLeft="10px"
                         android:gravity="left"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/mail_c_details"
                         android:layout_width="match_parent"
@@ -94,13 +95,9 @@
                         android:textStyle="bold" />
 
 
-
-
-
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
-
 
 
         <android.support.v7.widget.CardView
@@ -144,13 +141,11 @@
                     android:layout_margin="1px"
                     android:orientation="vertical">
 
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -170,8 +165,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -190,8 +185,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -211,9 +206,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="2dp"
                         android:layout_marginLeft="10px"
                         android:layout_weight="2"
-                        android:layout_margin="2dp"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
 
@@ -248,11 +243,12 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -271,8 +267,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -292,9 +288,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="2dp"
                         android:layout_marginLeft="10px"
                         android:layout_weight="2"
-                        android:layout_margin="2dp"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
 
@@ -308,8 +304,6 @@
                             android:text="@string/v_chair_cell" />
 
                     </LinearLayout>
-
-
 
 
                     <LinearLayout
@@ -332,11 +326,12 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -355,8 +350,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
                         android:layout_margin="2dp"
+                        android:layout_marginLeft="10px"
                         android:layout_weight="2"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
@@ -376,9 +371,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="2dp"
                         android:layout_marginLeft="10px"
                         android:layout_weight="2"
-                        android:layout_margin="2dp"
                         android:background="@color/cardview_shadow_end_color"
                         android:orientation="horizontal">
 
@@ -422,27 +417,6 @@
                             android:text="1990" />
 
                     </LinearLayout>
-
-                    <!--<LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
-                        android:layout_weight="2"
-                        android:layout_margin="2dp"
-                        android:background="@color/cardview_shadow_end_color"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/membership_f_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_weight="1"
-                            android:gravity="left"
-                            android:text="@string/membership_id"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>-->
 
                 </LinearLayout>
             </LinearLayout>
@@ -506,10 +480,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="4"
-                            android:gravity="right"
-                            android:text="24" />
+                            android:gravity="right" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -537,6 +511,7 @@
                             android:text="24" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -564,6 +539,7 @@
                             android:text="24" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -620,365 +596,342 @@
 
                     </LinearLayout>
 
-
-                    <!--<LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10px"
-                        android:layout_weight="2"
-                        android:layout_margin="2dp"
-                        android:background="@color/cardview_shadow_end_color"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/membership_f_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_weight="1"
-                            android:gravity="left"
-                            android:text="@string/membership_id"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>-->
-
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/b"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-
-                <!-- other side B-->
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/b"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp">
 
-                        <android.support.v7.widget.CardView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="2dp">
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="left"
+                                    android:gravity="left"
+                                    android:text="@string/available_resources"
+                                    android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                                    android:textColor="@color/activated"
+                                    android:textSize="15dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1px"
                                 android:orientation="vertical">
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
                                     android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_gravity="left"
+                                        android:layout_weight="1"
                                         android:gravity="left"
-                                        android:text="@string/available_resources"
-                                        android:textAppearance="?android:attr/textAppearanceSmallInverse"
-                                        android:textColor="@color/activated"
-                                        android:textSize="15dp"
+                                        android:text="@string/office_space"
                                         android:textStyle="bold" />
 
+                                    <ImageView
+                                        android:id="@+id/pic_office_space_details"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_margin="1px"
-                                    android:orientation="vertical">
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/moisture_meter"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_moisture_meter_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/office_space"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_office_space_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/weighting_scales"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_weighting_scales_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/moisture_meter"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_moisture_meter_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/qlt_inputs"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_qlt_inputs_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/weighting_scales"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_weighting_scales_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/tractors"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_tractors_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/qlt_inputs"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_qlt_inputs_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/harv"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_harvs_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/tractors"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_tractors_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/dryer"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_dryer_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/harv"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_harvs_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/thresher"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_thresher_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/dryer"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_dryer_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/safe_storage_facilities"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_safe_storage_facilities_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
+                                </LinearLayout>
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/thresher"
-                                            android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="2dp"
+                                    android:layout_weight="2"
+                                    android:background="@color/cardview_shadow_end_color"
+                                    android:orientation="horizontal">
 
-                                        <ImageView
-                                            android:id="@+id/pic_thresher_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-
-                                    <LinearLayout
+                                    <TextView
                                         android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:text="@string/other"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/pic_other_details"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/safe_storage_facilities"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:id="@+id/pic_safe_storage_facilities_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="2dp"
-                                        android:layout_weight="2"
-                                        android:background="@color/cardview_shadow_end_color"
-                                        android:orientation="horizontal">
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left"
-                                            android:layout_weight="1"
-                                            android:gravity="left"
-                                            android:text="@string/other"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:id="@+id/pic_other_details"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="match_parent"
-                                            android:layout_margin="5dp"
-                                            android:layout_weight="1"
-                                            android:gravity="right|center_vertical|center_horizontal|center" />
-                                    </LinearLayout>
+                                        android:layout_margin="5dp"
+                                        android:layout_weight="1"
+                                        android:gravity="right|center_vertical|center_horizontal|center" />
                                 </LinearLayout>
                             </LinearLayout>
-                        </android.support.v7.widget.CardView>
-
-
-                    </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
                 </LinearLayout>
-
-
             </LinearLayout>
+        </LinearLayout>
 
 
-        <include layout="@layout/accordion_access_info_details_c"/>
-        <include layout="@layout/accordion_forecast_s_details_c"/>
-        <include layout="@layout/accordion_baseline_y_details_c"/>
-        <include layout="@layout/accordion_baseline_sales_details_c"/>
-        <include layout="@layout/accordion_baseline_fin_details_c"/>
-        <include layout="@layout/accordion_expected_y_details_c"/>
+        <include layout="@layout/accordion_access_info_details_c" />
+
+        <include layout="@layout/accordion_forecast_s_details_c" />
+
+        <include layout="@layout/accordion_baseline_y_details_c" />
+
+        <include layout="@layout/accordion_baseline_sales_details_c" />
+
+        <include layout="@layout/accordion_baseline_fin_details_c" />
+
+        <include layout="@layout/accordion_expected_y_details_c" />
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView >
+</android.support.v4.widget.NestedScrollView>

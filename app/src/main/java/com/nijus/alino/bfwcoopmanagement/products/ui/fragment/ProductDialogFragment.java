@@ -1,8 +1,10 @@
 package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +37,7 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
     private Spinner harvsetSeason;
     private Spinner grade;
     private Button create_product;
+    private Button order_product;
     private ProgressDialog progressDialog = new ProgressDialog();
 
 
@@ -51,7 +54,22 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
         create_product = viewContainer.findViewById(R.id.create_product);
+        order_product = viewContainer.findViewById(R.id.order_product);
         create_product.setOnClickListener(this);
+        order_product.setOnClickListener(this);
+
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+        if (groupName.equals("Buyer")) {
+            order_product.setVisibility(View.VISIBLE);
+            create_product.setVisibility(View.GONE);
+        } else {
+            order_product.setVisibility(View.GONE);
+            create_product.setVisibility(View.VISIBLE);
+        }
 
         product_name = viewContainer.findViewById(R.id.product_name);
         quantity = viewContainer.findViewById(R.id.quantity);
@@ -184,14 +202,12 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
                 intent.putExtra("product_data", bundle);
 
                 getContext().startService(intent);
-                //Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
                 dismiss();
 
+            } else {
+                Toast.makeText(getContext(), "Data Error", Toast.LENGTH_LONG).show();
             }
-            else {
-                Toast.makeText(getContext(),"Data Error",Toast.LENGTH_LONG).show();
-            }
-        }catch (Exception e){
+        } catch (Exception e) {
             return;
         }
     }

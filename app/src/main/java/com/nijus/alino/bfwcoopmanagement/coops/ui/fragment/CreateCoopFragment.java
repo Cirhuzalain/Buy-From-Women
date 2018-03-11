@@ -39,6 +39,7 @@ import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -183,9 +184,7 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     public void onClick(View view) {
         if (view.getId() == R.id.next_button) {
             if (pager.getCurrentItem() == mCurrentPageSequence.size() - 1) {
-                Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
-                //saveNewCoop();
-
+                saveNewCoop();
             } else {
                 if (pager.getCurrentItem() == 0) {
                     EventBus.getDefault().post(new DataValidEventB());
@@ -198,28 +197,26 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             pager.setCurrentItem(pager.getCurrentItem() - 1);
             updateBottomBar();
         } else if (view.getId() == R.id.save_button) {
-            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
-            //saveNewCoop();
+            saveNewCoop();
         }
 
     }
 
     public void saveNewCoop() {
         //Get each page data
-        //check if first page is filled if not hide progress dialog and show error message
         for (Page page : mCurrentPageSequence) {
             Bundle data = page.getData();
 
             boolean isData = data.containsKey("general");
-            boolean isInternal = data.containsKey("internal");
-            boolean isAvailbaleRes = data.containsKey("available_res");
-            boolean isAccessInfo = data.containsKey("access_info");
-            boolean isForecastSales = data.containsKey("forecast_sales");
-            boolean isBaselineYield = data.containsKey("baseline_yield");
-            boolean isBaselineSales = data.containsKey("baseline_sales");
-            boolean isBaselineFin = data.containsKey("baseline_fin");
+            boolean isInternal = data.containsKey("internalInformation");
+            boolean isAvailableRes = data.containsKey("availableResources");
 
-            // get data
+
+            boolean isAccessInfo = data.containsKey("accessToInformation");
+            boolean isForecastSales = data.containsKey("forecast_sales");
+            boolean isBaselineYield = data.containsKey("baselines_yield");
+            boolean isBaselineSales = data.containsKey("baseline_sales");
+            boolean isBaselineFin = data.containsKey("baseline_finance_info");
 
             if (isData) {
                 GeneralInformation general = data.getParcelable("general");
@@ -233,33 +230,34 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             }
 
             if (isInternal) {
-                InternalInformation internalInformation = data.getParcelable("internal");
-                saveBundle.putParcelable("internal", internalInformation);
+                InternalInformation internalInformation = data.getParcelable("internalInformation");
+                saveBundle.putParcelable("internalInformation", internalInformation);
             }
-            if (isAvailbaleRes) {
-                AvailableResources availableRessources = data.getParcelable("available_res");
-                saveBundle.putParcelable("available_res", availableRessources);
-            }
-            if (isAccessInfo) {
-                AccessToInformation accessToInformation = data.getParcelable("access_info");
-                saveBundle.putParcelable("access_info", accessToInformation);
-            }
-            if (isForecastSales) {
-                ForecastSales forecastSales = data.getParcelable("forecast_sales");
-                saveBundle.putParcelable("forecast_sales", forecastSales);
-            }
-            if (isBaselineYield) {
-                BaselineYield baselineYield = data.getParcelable("baseline_yield");
-                saveBundle.putParcelable("baseline_yield", baselineYield);
-            }
-            if (isBaselineSales) {
-                BaselineSales baselineSales = data.getParcelable("baseline_sales");
-                saveBundle.putParcelable("baseline_sales", baselineSales);
+            if (isAvailableRes) {
+                AvailableResources availableResources = data.getParcelable("availableResources");
+                saveBundle.putParcelable("availableResources", availableResources);
             }
 
+
+            if (isAccessInfo) {
+                HashMap<String, AccessToInformation> accessToInformation = (HashMap<String, AccessToInformation>) data.getSerializable("accessToInformation");
+                saveBundle.putSerializable("accessToInformation", accessToInformation);
+            }
+            if (isForecastSales) {
+                HashMap<String, ForecastSales> forecastSales = (HashMap<String, ForecastSales>) data.getSerializable("forecast_sales");
+                saveBundle.putSerializable("forecast_sales", forecastSales);
+            }
+            if (isBaselineYield) {
+                HashMap<String, BaselineYield> baselineYield = (HashMap<String, BaselineYield>) data.getSerializable("baselines_yield");
+                saveBundle.putSerializable("baselines_yield", baselineYield);
+            }
+            if (isBaselineSales) {
+                HashMap<String, BaselineSales> baselineSales = (HashMap<String, BaselineSales>) data.getSerializable("baseline_sales");
+                saveBundle.putSerializable("baseline_sales", baselineSales);
+            }
             if (isBaselineFin) {
-                BaselineFinanceInfo baselineFinanceInfo = data.getParcelable("baseline_fin");
-                saveBundle.putParcelable("baseline_fin", baselineFinanceInfo);
+                HashMap<String, BaselineFinanceInfo> baselineFinanceInfo = (HashMap<String, BaselineFinanceInfo>) data.getSerializable("baseline_finance_info");
+                saveBundle.putSerializable("baseline_finance_info", baselineFinanceInfo);
             }
         }
         Intent intent = new Intent(getContext(), AddCoop.class);

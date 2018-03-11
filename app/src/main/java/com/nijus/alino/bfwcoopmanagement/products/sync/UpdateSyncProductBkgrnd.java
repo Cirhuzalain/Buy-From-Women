@@ -128,16 +128,16 @@ public class UpdateSyncProductBkgrnd extends IntentService {
                     //Construct body
                     String bodyContent = "{}";
 
-                        bodyContent = "{" +
-                                "\"name\": \"" + nameProduct + "\", " +
-                                "\"harvest_grade\": \"" + grade + "\"," +
-                                "\"harvest_season\": " + local_season_id + "," +
-                                "\"vendor_qty\": " + productQty + ", " +
-                                "\"standard_price\": " + productPrice + ", " +
-                                "\"farmer_id\": " + local_farmer_id + " " +
-                                "}";
+                    bodyContent = "{" +
+                            "\"name\": \"" + nameProduct + "\", " +
+                            "\"harvest_grade\": \"" + grade + "\"," +
+                            "\"harvest_season\": " + local_season_id + "," +
+                            "\"vendor_qty\": " + productQty + ", " +
+                            "\"standard_price\": " + productPrice + ", " +
+                            "\"farmer_id\": " + local_farmer_id + " " +
+                            "}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "product.template" + "/"+productServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "product.template" + "/" + productServerId;
 
                     RequestBody bodyProduct = RequestBody.create(JSON, bodyContent);
 
@@ -181,6 +181,6 @@ public class UpdateSyncProductBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Product Update Successfully", true));
     }
 }

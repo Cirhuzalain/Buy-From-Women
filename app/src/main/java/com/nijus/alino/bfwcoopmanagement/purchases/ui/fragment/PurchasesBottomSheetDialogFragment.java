@@ -2,13 +2,16 @@ package com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,10 +29,9 @@ import java.util.Locale;
 public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
     private LinearLayout mProductContainer;
     private Button addProductItem,ok;
-    private Spinner customer;
+    private Spinner vendor;
     private Spinner harvestSeason;
     private Spinner coops;
-    private Spinner paymentTerm;
     private DatePicker date;
 
     private EditText ed_date_value;
@@ -78,11 +81,9 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
         addProductItem = viewContainer.findViewById(R.id.add_so_order);
         addProductItem.setOnClickListener(this);
 
-        customer = viewContainer.findViewById(R.id.customer_spinner);
+        vendor = viewContainer.findViewById(R.id.vendor_spinner);
         harvestSeason = viewContainer.findViewById(R.id.so_harv_season);
         coops = viewContainer.findViewById(R.id.so_coop_info);
-        paymentTerm = viewContainer.findViewById(R.id.so_payment_term);
-        //date = viewContainer.findViewById(R.id.so_datePicker);
 
         date_btn = viewContainer.findViewById(R.id.date_selected);
         date_btn.setOnClickListener(this);
@@ -93,6 +94,11 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
         unitPrice = viewContainer.findViewById(R.id.product_price_so);
         ok = viewContainer.findViewById(R.id.ok);
         ok.setOnClickListener(this);
+
+        populateCustomer();
+        populateCoops();
+        populateSeason();
+        populateProduct();
     }
     @Override
     public void onClick(View view) {
@@ -100,7 +106,6 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
             LinearLayout linearLayout = new LinearLayout(getContext());
             linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            //add product datastructure
             Spinner spinner = new Spinner(getContext());
 
             EditText quantity = new EditText(getContext());
@@ -118,6 +123,8 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
             linearLayout.addView(spinner);
             linearLayout.addView(quantity);
             linearLayout.addView(unitPrice);
+
+            populateProductSpinner(spinner);
 
             mProductContainer.addView(linearLayout, 1);
         }
@@ -142,7 +149,157 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
             dialog.show();
         }
         if (view == ok){
-            Toast.makeText(getContext(), "Coming soon !!! (3/8/18)", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void populateCustomer() {
+        String[] fromColumns = {BfwContract.Vendor.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.Vendor.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            vendor.setAdapter(adapter);
+        }
+    }
+
+    public void populateCoops() {
+        String[] fromColumns = {BfwContract.Coops.COLUMN_COOP_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.Coops.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            coops.setAdapter(adapter);
+        }
+    }
+
+    public void populateSeason() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvestSeason.setAdapter(adapter);
+        }
+    }
+
+    public void populateProduct() {
+        String[] fromColumns = {BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.ProductTemplate.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            productName.setAdapter(adapter);
+        }
+    }
+
+    public void populateProductSpinner(Spinner spinner) {
+        String[] fromColumns = {BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.ProductTemplate.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            spinner.setAdapter(adapter);
         }
     }
 }

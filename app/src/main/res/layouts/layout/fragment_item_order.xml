@@ -1,70 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Make the background of our selector a non-transparent color -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/touch_selector"
-    android:paddingLeft="@dimen/list_item_extra_padding"
-    android:paddingRight="@dimen/list_item_extra_padding">
+    android:layout_margin="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
-        android:paddingRight="@dimen/abc_list_item_padding_horizontal_material">
+        android:layout_margin="16dp"
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/prod_icon"
-            android:layout_width="@dimen/list_icon"
-            android:layout_height="@dimen/list_icon"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/abc_list_item_padding_horizontal_material"
-            android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material" />
+            android:id="@+id/productImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/productName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:orientation="vertical">
+            android:text="MAIZE III"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/prod_harv_so"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2017A"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-            <TextView
-                android:id="@+id/prod_customer_so"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RGCC"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/secondary_text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/productQty"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:orientation="vertical">
+            android:text="150000 KG"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/prod_quantity_so"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1500 Kg"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-            <TextView
-                android:id="@+id/prod_price_so"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="758000 Frw"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/secondary_text" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/productPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="150000 Frw"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </LinearLayout>
-</FrameLayout>
+
+</android.support.v7.widget.CardView>

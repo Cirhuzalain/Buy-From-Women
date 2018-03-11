@@ -42,6 +42,8 @@ import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarDuration;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarGravity;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarTheme;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
+import com.nijus.alino.bfwcoopmanagement.products.ui.activities.ProductActivity;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.activities.SaleOrderInfoActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 
@@ -365,23 +367,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         .readTimeout(240, TimeUnit.SECONDS)
                         .build();
                 Cursor cursor = null;
-                String API = BuildConfig.DEV_API_URL + "auth/get_tokens";
-
-                String bodyContent = "{\"db\": \"" + BuildConfig.DEV_DB_NAME + "\"," +
-                        "\"username\":\"" + mEmail + "\"," +
-                        "\"password\": \"" + mPassword + "\"}";
-
                 String login = "";
                 String groupName = "";
 
-                RequestBody body = RequestBody.create(JSON, bodyContent);
-
-                Request request = new Request.Builder()
-                        .url(API)
-                        .header("Content-Type", "text/html")
-                        .method("POST", body)
-                        .build();
                 try {
+                    String API = BuildConfig.DEV_API_URL + "auth/get_tokens";
+
+                    String bodyContent = "{\"db\": \"" + BuildConfig.DEV_DB_NAME + "\"," +
+                            "\"username\":\"" + mEmail + "\"," +
+                            "\"password\": \"" + mPassword + "\"}";
+
+                    RequestBody body = RequestBody.create(JSON, bodyContent);
+
+                    Request request = new Request.Builder()
+                            .url(API)
+                            .header("Content-Type", "text/html")
+                            .method("POST", body)
+                            .build();
+
                     Response response = client.newCall(request).execute();
                     ResponseBody info = response.body();
                     if (info != null) {
@@ -601,9 +604,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
-
                                 //Prefetch sale,purchase,product
-
                                 //Prefetch loan
                             }
 
@@ -640,8 +641,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             }
                             editor.putInt(getResources().getString(R.string.user_server_id), userId);
                             editor.apply();
+                            return getLoginMessage("", groupName, true);
                         } else {
-                            getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                            getLoginMessage(getResources().getString(R.string.auth_error), "", false);
                         }
                     } else {
                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
@@ -657,7 +659,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         cursor.close();
                     }
                 }
-                return getLoginMessage("", groupName, true);
+                return getLoginMessage(getResources().getString(R.string.auth_error), groupName, false);
             } else {
                 return getLoginMessage((getResources().getString(R.string.connectivity_error)), "", false);
 
@@ -1163,16 +1165,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 if (!forecastObject.getString("total_coop_land_size").equals("null")) {
                                     totalcooplandsize = forecastObject.getDouble("total_coop_land_size");
                                 }
-                                if (!forecastObject.getString("farmer_percentage_land").equals("null")) {
+                                if (!forecastObject.getString("vendor_percentage_land").equals("null")) {
                                     farmerpercentageland = forecastObject.getDouble("farmer_percentage_land");
                                 }
                                 if (!forecastObject.getString("current_ppp_commitment").equals("null")) {
                                     currentpppcommitment = forecastObject.getDouble("current_ppp_commitment");
                                 }
-                                if (!forecastObject.getString("farmer_contribution_ppp").equals("null")) {
+                                if (!forecastObject.getString("vendor_contribution_ppp").equals("null")) {
                                     farmercontributionppp = forecastObject.getDouble("farmer_contribution_ppp");
                                 }
-                                if (!forecastObject.getString("farmer_expected_min_ppp").equals("null")) {
+                                if (!forecastObject.getString("vendor_expected_min_ppp").equals("null")) {
                                     farmerexpectedminppp = forecastObject.getDouble("farmer_expected_min_ppp");
                                 }
                                 if (!forecastObject.getString("minimum_flow_price").equals("null")) {
@@ -3654,12 +3656,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     startActivity(new Intent(getApplicationContext(), UserProfileActivityAdmin.class));
                 } else if (groupName.equals("Vendor")) {
                     // pass id to open as intent
-                    startActivity(new Intent(getApplicationContext(), VendorActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ProductActivity.class));
                 } else if (groupName.equals("Agent")) {
                     startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
                 } else if (groupName.equals("Buyer")) {
                     // pass id of buyer to edit
-                    startActivity(new Intent(getApplicationContext(), BuyerActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ProductActivity.class));
                 }
 
             } else {

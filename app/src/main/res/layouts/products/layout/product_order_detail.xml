@@ -129,7 +129,16 @@
                 android:layout_height="match_parent"
                 android:textColor="@color/cardview_light_background"
                 android:background="@drawable/gradient_button"
-                android:text="Add product"/>
+                android:text="@string/sv_farmer"/>
+
+            <Button
+                android:id="@+id/order_product"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/cardview_light_background"
+                android:background="@drawable/gradient_button"
+                android:text="@string/order_product"/>
 
         </LinearLayout>
     </LinearLayout>

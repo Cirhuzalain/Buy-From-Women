@@ -10,11 +10,6 @@
         <item name="android:listDivider">@android:color/darker_gray</item>
     </style>
 
-    <style name="route_title" parent="android:Widget.TextView">
-        <item name="android:textSize">14sp</item>
-        <item name="android:color">#fff</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -25,12 +20,5 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="TextAppearance.Design.CollapsingToolbar.Expanded.Shadow">
-        <item name="android:shadowDy">0</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowRadius">8</item>
-        <item name="android:shadowColor">@color/colorPrimaryDark</item>
-    </style>
 
 </resources>

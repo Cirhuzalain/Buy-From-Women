@@ -135,17 +135,13 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     @Subscribe
     public void onRequestFarmerToDelete(RequestEventFarmerToDelete farmerToDelete) {
-
         EventBus.getDefault().post(new ResponseEventFarmerToDelete(navigationRecyclerViewAdapter.getSelectedItems()));
-
     }
 
     @Subscribe
     public void onDisableFarmerSwipeEvent(DisableFarmerSwipeEvent disableFarmerSwipeEvent) {
-
         mRefreshData.setEnabled(false);
         fab.setVisibility(View.INVISIBLE);
-
     }
 
     @Subscribe
@@ -175,11 +171,11 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
+            Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             getLoaderManager().restartLoader(0, null, this);
         } else {
             Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override

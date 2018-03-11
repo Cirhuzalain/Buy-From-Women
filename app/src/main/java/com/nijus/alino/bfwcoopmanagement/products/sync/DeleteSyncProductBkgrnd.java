@@ -61,7 +61,6 @@ public class DeleteSyncProductBkgrnd extends IntentService {
         String selectionProduct_id = BfwContract.ProductTemplate.TABLE_NAME + "." +
                 BfwContract.ProductTemplate._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null,
                     selectionProduct, new String[]{Long.toString(id_product)}, null);
@@ -115,6 +114,6 @@ public class DeleteSyncProductBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Product Update Successfully", true));
     }
 }

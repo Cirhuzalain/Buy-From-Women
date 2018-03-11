@@ -66,14 +66,9 @@ public class SyncLoanBackground extends IntentService {
         String selectionLoan = BfwContract.Loan.TABLE_NAME + "." +
                 BfwContract.Loan.COLUMN_IS_SYNC + " =  0 ";
 
-
-        String selectionFarmer = BfwContract.Farmer.TABLE_NAME + "." +
-                BfwContract.Farmer._ID + " =  ? ";
-
         String selectionLoan_id = BfwContract.Loan.TABLE_NAME + "." +
                 BfwContract.Loan._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, selectionLoan, null, null);
             if (cursor != null) {
@@ -94,6 +89,8 @@ public class SyncLoanBackground extends IntentService {
                     Double duration = cursor.getDouble(cursor.getColumnIndex(BfwContract.Loan.COLUMN_DURATION));
                     String purpose = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE));
                     String financial_institution = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION));
+
+                    financial_institution = "bank";
 
                     //Get farmer id from server
                     String selectFarmerId = BfwContract.Farmer.TABLE_NAME + "." +
@@ -116,17 +113,17 @@ public class SyncLoanBackground extends IntentService {
                             .build();
 
                     //Construct body
-                    String bodyContent = "{}";
+                    String bodyContent;
 
-                        bodyContent = "{" +
-                                "\"purpose\": \"" + purpose + "\", " +
-                                "\"financial_institution\": \"" + financial_institution + "\"," +
-                                "\"amount\": " + amount + "," +
-                                "\"duration\": " + duration + ", " +
-                                "\"interest_rate\": " + interest_rate + ", " +
-                                "\"start_date\": \"" + date_string + "\", " +
-                                "\"partner_id\": " + farmer_id + " " +
-                                "}";
+                    bodyContent = "{" +
+                            "\"purpose\": \"" + purpose + "\", " +
+                            "\"financial_institution\": \"" + financial_institution + "\"," +
+                            "\"amount\": " + amount + "," +
+                            "\"duration\": " + duration + ", " +
+                            "\"interest_rate\": " + interest_rate + ", " +
+                            "\"start_date\": \"" + date_string + "\", " +
+                            "\"partner_id\": " + farmer_id + "" +
+                            "}";
 
                     String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan";
 
@@ -158,7 +155,7 @@ public class SyncLoanBackground extends IntentService {
                         }
 
                     } catch (IOException | JSONException exp) {
-                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_loan_error), false));
                     }
                 }
             }

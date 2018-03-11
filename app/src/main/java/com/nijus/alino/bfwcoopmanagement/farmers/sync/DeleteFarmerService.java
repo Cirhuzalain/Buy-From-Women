@@ -77,7 +77,7 @@ public class DeleteFarmerService extends IntentService {
 
                         if (farmerDataCursor != null && farmerDataCursor.moveToFirst()) {
 
-                            EventBus.getDefault().post(new ProcessingFarmerEvent("Processing your request ..."));
+                            EventBus.getDefault().post(new ProcessingFarmerEvent(getString(R.string.farm_msg)));
 
                             isSync = farmerDataCursor.getInt(farmerDataCursor.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC));
 
@@ -88,13 +88,13 @@ public class DeleteFarmerService extends IntentService {
                                 boolean isLocalSuccess = deleteFarmerLocal(farmerId);
                                 if (!isServerSuccess || !isLocalSuccess) {
                                     // dispatch error message
-                                    EventBus.getDefault().post(new DeleteFarmerEvent("An Error occur while delete farmer data", false));
+                                    EventBus.getDefault().post(new DeleteFarmerEvent(getString(R.string.farm_erro_msg), false));
                                 }
                             } else {
                                 boolean isLocalSuccess = deleteFarmerLocal(farmerId);
                                 if (!isLocalSuccess) {
                                     // dispatch error message
-                                    EventBus.getDefault().post(new DeleteFarmerEvent("An Error occur while delete farmer data", false));
+                                    EventBus.getDefault().post(new DeleteFarmerEvent(getString(R.string.farm_erro_msg), false));
                                 }
                             }
                         }
@@ -105,13 +105,13 @@ public class DeleteFarmerService extends IntentService {
                     }
                 }
                 // dispatch action to restart loader after data get delete
-                EventBus.getDefault().post(new DeleteFarmerEvent("Farmer Remove Successfully", true));
+                EventBus.getDefault().post(new DeleteFarmerEvent(getString(R.string.farm_del_success), true));
             } else {
-                EventBus.getDefault().post(new DeleteFarmerEvent("Farmer Id not available", false));
+                EventBus.getDefault().post(new DeleteFarmerEvent(getString(R.string.farm_id_not_av), false));
             }
         } else {
             // dispatch action to restart loader after data get delete
-            EventBus.getDefault().post(new DeleteFarmerEvent("No Data available", false));
+            EventBus.getDefault().post(new DeleteFarmerEvent(getString(R.string.farm_no_data_av), false));
         }
     }
 

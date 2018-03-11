@@ -18,7 +18,7 @@ public class BaselineYield implements Parcelable {
         this.baselineYieldId = 0;
     }
 
-    public BaselineYield(String seasonName, boolean isMaize, boolean isBean, boolean isSoy, boolean isOther, String otherText) {
+    public BaselineYield(String seasonName, boolean isMaize, boolean isBean, boolean isSoy, boolean isOther) {
         this.seasonName = seasonName;
         this.isMaize = isMaize;
         this.isBean = isBean;

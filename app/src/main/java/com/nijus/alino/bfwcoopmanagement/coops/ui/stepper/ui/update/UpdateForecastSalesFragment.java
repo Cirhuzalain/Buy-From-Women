@@ -110,7 +110,7 @@ public class UpdateForecastSalesFragment extends Fragment {
         other_text = rootView.findViewById(R.id.other_text);
         commired_contract_qty = rootView.findViewById(R.id.commired_contract_qty);
         grade = rootView.findViewById(R.id.grade);
-        min_floor_per_grade = rootView.findViewById(R.id.min_floor_per_grade);
+        //min_floor_per_grade = rootView.findViewById(R.id.min_floor_per_grade);
 
         commired_contract_qty.addTextChangedListener(new TextWatcher() {
             @Override

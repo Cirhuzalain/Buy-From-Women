@@ -18,7 +18,7 @@ import com.nijus.alino.bfwcoopmanagement.products.sync.DeleteSyncProductBkgrnd;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 public class DeleteProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
-    private  int id_to_delete;
+    private int id_to_delete;
     private String name_product;
     private TextView mesg_textView;
     private Button confirm;
@@ -32,20 +32,16 @@ public class DeleteProductDialogFragment extends DialogFragment implements Dialo
 
         mesg_textView = viewContainer.findViewById(R.id.msg);
 
-        //GET values for product to delete from girdview
-        //Get product server id
         id_to_delete = getArguments().getInt("id_product");
-        //get name of product
         name_product = getArguments().getString("name_product");
 
-        String print_msg = mesg_textView.getText()+" "+name_product+"?";
+        String print_msg = mesg_textView.getText() + " " + name_product + "?";
         mesg_textView.setText(print_msg);
 
         confirm = viewContainer.findViewById(R.id.confirm);
         confirm.setOnClickListener(this);
 
         builder.setView(viewContainer)
-                //.setPositiveButton(R.string.msg_ok, this)
                 .setNegativeButton(R.string.msg_cancel, this);
 
         return builder.create();
@@ -60,21 +56,16 @@ public class DeleteProductDialogFragment extends DialogFragment implements Dialo
     @Override
     public void onClick(View view) {
         try {
-            //id_to_delete = getArguments().getInt("id_product");
-            Toast.makeText(getContext(), ""+id_to_delete, Toast.LENGTH_LONG).show();
-
             if (Utils.isNetworkAvailable(getContext())) {
-
                 Intent intent = new Intent(getContext(), DeleteSyncProductBkgrnd.class);
                 intent.putExtra("product_id", id_to_delete);
                 //start job service
                 getContext().startService(intent);
                 dismiss();
             } else {
-                Toast.makeText(getContext(), "ERROR, WAIT FOR THE INTERNET CONNECTION", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
             }
-            //getContext().startService(intent);
-
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 }

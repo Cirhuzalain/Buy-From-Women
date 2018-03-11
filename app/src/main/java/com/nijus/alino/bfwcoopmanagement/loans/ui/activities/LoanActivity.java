@@ -148,12 +148,17 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // filter for agent and vendor
+        /*SharedPreferences prefs = getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");*/
         return new CursorLoader(this, BfwContract.Loan.CONTENT_URI, null, null, null,
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         loanRecyclerViewAdapter.swapCursor(data);
         mRefreshData.post(new Runnable() {
             @Override

@@ -14,6 +14,7 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
 import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont.DummyItem;
+import com.nijus.alino.bfwcoopmanagement.sales.adapter.SaleOrderAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -71,7 +72,7 @@ public class SaleOrderFragment extends Fragment implements AdapterView.OnItemCli
         View root = inflater.inflate(R.layout.activity_sale_order_info, container, false);
         GridView gridView = root.findViewById(R.id.saleGridview);
 
-        ProductAdapter adapter = new ProductAdapter(getContext(), productArrayList, false);
+        SaleOrderAdapter adapter = new SaleOrderAdapter(getContext(), productArrayList, false);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
         return root;
@@ -80,11 +81,8 @@ public class SaleOrderFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Product product = productArrayList[i];
-        //appel du bootom sheet pur modification
         BottomSheetDialogFragment bottomSheetDialogFragment = new SalesBottomSheetDialogFragment();
         bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
-        /*UpdateSaleOrderDialogFragment dialogFragment = new UpdateSaleOrderDialogFragment();
-        dialogFragment.show(getFragmentManager(), "updateSaleTag");*/
     }
 
     @Override

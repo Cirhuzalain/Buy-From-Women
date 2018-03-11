@@ -147,8 +147,8 @@ public class VendorActivity extends BaseActivity implements View.OnClickListener
         final AccordionView access_info_accordion = findViewById(R.id.access_info_accordion);
         access_info_accordion.setHeadingString("ACCESS TO INFORMATION");
 
-        ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
-        pic_agri_extension_details2.setImageResource(R.mipmap.icon_sm_error);
+        //ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
+        //pic_agri_extension_details2.setImageResource(R.mipmap.icon_sm_error);
 
         ImageView pic_clim_rel_details2 = findViewById(R.id.pic_clim_rel_details2);
         pic_clim_rel_details2.setImageResource(R.mipmap.icon_sm_error);

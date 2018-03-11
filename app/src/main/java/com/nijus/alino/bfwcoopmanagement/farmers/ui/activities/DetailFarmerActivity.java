@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
@@ -640,8 +639,6 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
                 @Override
                 public void onCollapsed(AccordionView view) {
                     access_info_accordion.setHeadingBackGround(R.color.default_color);
-
-
                 }
             });
 
@@ -692,8 +689,6 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
                     forecast_accordion.setHeadingBackGround(R.color.default_color);
                 }
             });
-
-
         }
     }
 

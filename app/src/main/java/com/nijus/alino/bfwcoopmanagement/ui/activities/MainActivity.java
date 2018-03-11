@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.BuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
+import com.nijus.alino.bfwcoopmanagement.products.ui.activities.ProductActivity;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.activities.SaleOrderInfoActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 
@@ -85,11 +87,11 @@ public class MainActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             } else if (groupName.equals("Buyer")) {
-                Intent intent = new Intent(this, BuyerActivity.class);
+                Intent intent = new Intent(this, ProductActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             } else if (groupName.equals("Vendor")) {
-                Intent intent = new Intent(this, VendorActivity.class);
+                Intent intent = new Intent(this, SaleOrderInfoActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

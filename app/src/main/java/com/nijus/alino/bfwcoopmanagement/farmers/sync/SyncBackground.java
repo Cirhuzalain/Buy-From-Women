@@ -12,12 +12,14 @@ import android.support.annotation.Nullable;
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingCoopEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -116,7 +118,7 @@ public class SyncBackground extends IntentService {
                 dataCount = cursor.getCount();
 
                 while (cursor.moveToNext()) {
-                    //get bank info
+
                     id = cursor.getLong(cursor.getColumnIndex(BfwContract.Farmer._ID));
 
                     farmerServerId = 0;
@@ -165,6 +167,7 @@ public class SyncBackground extends IntentService {
 
                         }
                     }
+                    EventBus.getDefault().post(new ProcessingCoopEvent("Processing your request ..."));
 
                     String bodyInfo = "{" +
                             "\"name\" : \"" + name + "\"," +
@@ -352,9 +355,7 @@ public class SyncBackground extends IntentService {
                                                     new String[]{Long.toString(infoId)});
                                         }
                                     }
-
                                 }
-
                             }
                         }
 
@@ -669,14 +670,22 @@ public class SyncBackground extends IntentService {
                                         String forecastsList = responseBodyLand.string();
                                         JSONObject farmersJsonObject = new JSONObject(forecastsList);
 
-
                                         String filterServerResponse = farmersJsonObject.getString("response");
                                         JSONObject filterServerObject = new JSONObject(filterServerResponse);
-                                        JSONArray forecastArrayLists = filterServerObject.getJSONArray("results");
+
+                                        String resultsResponse = filterServerObject.getString("results");
+                                        Object json = new JSONTokener(resultsResponse).nextValue();
+
+                                        boolean isResponse = false;
+
+                                        if(json instanceof JSONArray){
+                                            isResponse = true;
+                                        }
+
                                         JSONObject forecastObject;
                                         int availableSeasonId = 0;
-
-                                        if (forecastArrayLists.length() > 0) {
+                                        if (isResponse) {
+                                            JSONArray forecastArrayLists = filterServerObject.getJSONArray("results");
                                             for (int f = 0; f < forecastArrayLists.length(); f++) {
 
                                                 forecastObject = forecastArrayLists.getJSONObject(f);
@@ -911,6 +920,6 @@ public class SyncBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Farmer Added Successfully", true));
     }
 }

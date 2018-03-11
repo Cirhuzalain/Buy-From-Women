@@ -185,6 +185,6 @@ public class SyncProductBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Product Update Successfully", true));
     }
 }

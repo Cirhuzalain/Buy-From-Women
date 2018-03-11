@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 
 public class ForecastSales implements Parcelable {
+
     private String seasonName;
     private String minFloorPerGrade;
     private String grade;

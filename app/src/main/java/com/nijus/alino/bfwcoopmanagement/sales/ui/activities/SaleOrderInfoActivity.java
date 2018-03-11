@@ -1,7 +1,9 @@
 package com.nijus.alino.bfwcoopmanagement.sales.ui.activities;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +25,7 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 
 public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFragment.OnListFragmentInteractionListener,
-        View.OnClickListener{
+        View.OnClickListener {
     private SwipeRefreshLayout mRefreshData;
 
     @Override
@@ -71,7 +73,19 @@ public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFrag
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            NavUtils.navigateUpFromSameTask(this);
+
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
+                    Context.MODE_PRIVATE);
+
+            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+            if (groupName.equals("Vendor")) {
+                super.onBackPressed();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                startActivity(intent);
+            } else {
+                NavUtils.navigateUpFromSameTask(this);
+            }
         }
     }
 

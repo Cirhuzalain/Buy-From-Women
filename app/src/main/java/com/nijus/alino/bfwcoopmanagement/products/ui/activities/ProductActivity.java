@@ -1,7 +1,9 @@
 package com.nijus.alino.bfwcoopmanagement.products.ui.activities;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -28,6 +30,14 @@ public class ProductActivity extends BaseActivity implements
         FloatingActionButton fab = findViewById(R.id.fab_product_orders);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+        if (groupName.equals("Buyer")) {
+            fab.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -45,7 +55,19 @@ public class ProductActivity extends BaseActivity implements
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            NavUtils.navigateUpFromSameTask(this);
+
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
+                    Context.MODE_PRIVATE);
+
+            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+            if (groupName.equals("Buyer")) {
+                super.onBackPressed();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                startActivity(intent);
+            } else {
+                NavUtils.navigateUpFromSameTask(this);
+            }
         }
     }
 

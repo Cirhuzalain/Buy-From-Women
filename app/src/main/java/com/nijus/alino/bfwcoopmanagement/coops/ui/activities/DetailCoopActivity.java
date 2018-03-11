@@ -11,22 +11,36 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.AccessToInformationAdapter;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.BaselineFinanceInfoAdapter;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.BaselineSalesAdapter;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.BaselineYieldAdapter;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.ExpectedYieldAdapter;
+import com.nijus.alino.bfwcoopmanagement.coops.adapter.ForecastSalesAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineFinanceInfo;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineSales;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineYield;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.ExpectedYield;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.ForecastSales;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.PageFragmentCallbacks;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
+import java.util.ArrayList;
+
 
 public class DetailCoopActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
     Long mCoopId;
     private Uri mUri;
     private int coopId;
@@ -40,13 +54,21 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
     private Toolbar toolbar;
     private ImageView coop_image_details;
 
+    private ListView accessToInfoListView;
+    private ListView forecastSalesListView;
+    private ListView baseLineYieldListView;
+
+    private ListView baseLineSalesListView;
+    private ListView baseLineFinanceInfoListView;
+    private ListView expectedYieldListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_coop);
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         //get Coop Id
         Intent intent = this.getIntent();
@@ -58,22 +80,29 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
         collapsingToolbarLayout = findViewById(R.id.name_coop);
         toolbar = findViewById(R.id.toolbar_coop);
 
+        expectedYieldListView = findViewById(R.id.expected_yield_list);
+        baseLineFinanceInfoListView = findViewById(R.id.baseline_finance_info_list);
+        baseLineSalesListView = findViewById(R.id.baseline_sales_list);
+
+        accessToInfoListView = findViewById(R.id.access_info_list);
+        forecastSalesListView = findViewById(R.id.forecast_sales_list);
+        baseLineYieldListView = findViewById(R.id.baseline_yield_list);
+
         coop_image_details = findViewById(R.id.coop_image_details);
         coop_image_details.setImageResource(R.mipmap.coop_bg);
 
-
         setSupportActionBar(toolbar);
-
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_coop);
         ImageView imageView = findViewById(R.id.coop_image_details);
         imageView.setImageResource(R.mipmap.coop_bg);
+        fab.setVisibility(View.GONE);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent1 = new Intent(getApplicationContext(),UpdateCoop.class);
+                Intent intent1 = new Intent(getApplicationContext(), UpdateCoop.class);
                 intent1.putExtra("coopId", mCoopId);
                 startActivity(intent1);
             }
@@ -106,258 +135,590 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
         if (data != null && data.moveToFirst()) {
 
             name = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME));
+            String phone = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_PHONE));
+            String address = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_ADDRESS));
+            String email = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_EMAIL));
+
+            String chairName = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_CHAIR_NAME));
+            String chairGender = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_CHAIR_GENDER));
+            String chairPhone = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_CHAIR_CELL));
+
+            String viceChairName = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_VICECHAIR_NAME));
+            String viceChairGender = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_VICECHAIR_GENDER));
+            String viceChairPhone = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_VICECHAIR_CELL));
+
+            String secName = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_SECRETARY_NAME));
+            String secGender = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_SECRETARY_GENDER));
+            String secPhone = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_SECRETARY_CELL));
+
+            String rcaRegistration = data.getString(data.getColumnIndex(BfwContract.Coops.COLUMN_RCA_REGISTRATION));
+
+            String landInfo = data.getDouble(data.getColumnIndex(BfwContract.Coops.COLUMN_LAND_SIZE_CIP)) + "";
+            String maleCoop = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_MALE_COOP)) + "";
+            String femaleCoop = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_FEMALE_COOP)) + "";
+            String totMembers = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_MEMBER)) + "";
+
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
 
-            //Affichages des donnees venant dans lka base des donnes
-
-
             TextView name_c_details = findViewById(R.id.name_c_details);
-            name_c_details.setText("ici le text");
+            name_c_details.setText(name);
             TextView phone_c_details = findViewById(R.id.phone_c_details);
-            phone_c_details.setText("ici le text");
+            phone_c_details.setText(phone);
             TextView address_c_details = findViewById(R.id.address_c_details);
-            address_c_details.setText("ici le text");
+            address_c_details.setText(address);
             TextView mail_c_details = findViewById(R.id.mail_c_details);
-            mail_c_details.setText("ici le text");
+            mail_c_details.setText(email);
 
-            TextView internal_f_details = findViewById(R.id.internal_f_details);
-            internal_f_details.setText("ici le text");
             TextView chair_name_c_details = findViewById(R.id.chair_name_c_details);
-            chair_name_c_details.setText("ici le text");
+            if (chairName != null && !chairName.equals("null")) {
+                chair_name_c_details.setText(chairName);
+            } else {
+                chair_name_c_details.setText("");
+            }
+
             TextView chair_gender_c_details = findViewById(R.id.chair_gender_c_details);
-            chair_gender_c_details.setText("ici le text");
+            if (chairGender != null && !chairGender.equals("null")) {
+                chair_gender_c_details.setText(chairGender);
+            } else {
+                chair_gender_c_details.setText("");
+            }
+
             TextView chair_cel_c_details = findViewById(R.id.chair_cel_c_details);
-            chair_cel_c_details.setText("ici le text");
+            if (chairPhone != null && !chairPhone.equals("null")) {
+                chair_cel_c_details.setText(chairPhone);
+            } else {
+                chair_cel_c_details.setText("");
+            }
+
+
             TextView v_chair_name_c_details = findViewById(R.id.v_chair_name_c_details);
-            v_chair_name_c_details.setText("ici le text");
+            if (viceChairName != null && !viceChairName.equals("null")) {
+                v_chair_name_c_details.setText(viceChairName);
+            } else {
+                v_chair_name_c_details.setText("");
+            }
+
             TextView v_chair_gender_c_details = findViewById(R.id.v_chair_gender_c_details);
-            v_chair_gender_c_details.setText("ici le text");
+            if (viceChairGender != null && !viceChairGender.equals("null")) {
+                v_chair_gender_c_details.setText(viceChairGender);
+            } else {
+                v_chair_gender_c_details.setText("");
+            }
+
             TextView v_chair_cel_c_details = findViewById(R.id.v_chair_cel_c_details);
-            v_chair_cel_c_details.setText("ici le text");
+            if (viceChairPhone != null && !viceChairPhone.equals("null")) {
+                v_chair_cel_c_details.setText(viceChairPhone);
+            } else {
+                v_chair_cel_c_details.setText("");
+            }
+
+
             TextView sec_name_c_details = findViewById(R.id.sec_name_c_details);
-            sec_name_c_details.setText("ici le text");
+            if (secName != null && !secName.equals("null")) {
+                sec_name_c_details.setText(secName);
+            } else {
+                sec_name_c_details.setText("");
+            }
+
             TextView sec_gender_c_details = findViewById(R.id.sec_gender_c_details);
-            sec_gender_c_details.setText("ici le text");
+            if (secGender != null && !secGender.equals("null")) {
+                sec_gender_c_details.setText(secGender);
+            } else {
+                sec_gender_c_details.setText("");
+            }
+
             TextView sec_cel_c_details = findViewById(R.id.sec_cel_c_details);
-            sec_cel_c_details.setText("ici le text");
+            if (secPhone != null && !secPhone.equals("null")) {
+                sec_cel_c_details.setText(secPhone);
+            } else {
+                sec_cel_c_details.setText("");
+            }
+
             TextView year_rca_registration = findViewById(R.id.year_rca_registration);
-            year_rca_registration.setText("ici le text");
-           /* TextView membership_f_details = findViewById(R.id.membership_f_details);
-            membership_f_details.setText("ici le text");*/
-            TextView tot_land_c_details = findViewById(R.id.tot_land_c_details);
-            tot_land_c_details.setText("ici le text");
+            if (rcaRegistration != null && !rcaRegistration.equals("null")) {
+                year_rca_registration.setText(rcaRegistration);
+            } else {
+                year_rca_registration.setText("");
+            }
+
+
             TextView measured_total_land_size = findViewById(R.id.measured_total_land_size);
-            measured_total_land_size.setText("ici le text");
+            measured_total_land_size.setText(landInfo);
             TextView male_in_coop = findViewById(R.id.male_in_coop);
-            male_in_coop.setText("ici le text");
+            male_in_coop.setText(maleCoop);
             TextView female_in_coop = findViewById(R.id.female_in_coop);
-            female_in_coop.setText("ici le text");
+            female_in_coop.setText(femaleCoop);
             TextView total_members = findViewById(R.id.total_members);
-            total_members.setText("ici le text");
-           /* TextView membership_f_details = findViewById(R.id.membership_f_details);
-            membership_f_details.setText("ici le text");*/
+            total_members.setText(totMembers);
 
-           //LES IMAGES ICI
-            ImageView gen_info_pic =findViewById(R.id.gen_info_pic);
+            ImageView gen_info_pic = findViewById(R.id.gen_info_pic);
             gen_info_pic.setImageResource(R.drawable.profile);
-            ImageView internal_pic_c_details =findViewById(R.id.internal_pic_c_details);
-            internal_pic_c_details.setImageResource(R.drawable.profile);
-            ImageView pic_office_space_details =findViewById(R.id.pic_office_space_details);
-            pic_office_space_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_moisture_meter_details =findViewById(R.id.pic_moisture_meter_details);
-            pic_moisture_meter_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_weighting_scales_details =findViewById(R.id.pic_weighting_scales_details);
-            pic_weighting_scales_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_qlt_inputs_details =findViewById(R.id.pic_qlt_inputs_details);
-            pic_qlt_inputs_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_tractors_details =findViewById(R.id.pic_tractors_details);
-            pic_tractors_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_harvs_details =findViewById(R.id.pic_harvs_details);
-            pic_harvs_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_dryer_details =findViewById(R.id.pic_dryer_details);
-            pic_dryer_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_thresher_details =findViewById(R.id.pic_thresher_details);
-            pic_thresher_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_safe_storage_facilities_details =findViewById(R.id.pic_safe_storage_facilities_details);
-            pic_safe_storage_facilities_details.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_other_details =findViewById(R.id.pic_other_details);
-            pic_other_details.setImageResource(R.mipmap.icon_sm_error);
 
-            //ACCORDION DETAILS FOR COOPS
+            ImageView internal_pic_c_details = findViewById(R.id.internal_pic_c_details);
+            internal_pic_c_details.setImageResource(R.drawable.profile);
+
+
+            Integer officeSpace = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_OFFICE_SPACE));
+            Integer moistureMeter = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_MOISTURE_METER));
+            Integer weightningScales = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_WEIGHTNING_SCALES));
+            Integer qualityInputs = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_QUALITY_INPUT));
+            Integer tractors = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_TRACTORS));
+            Integer harvester = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_HARVESTER));
+            Integer dryer = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_DRYER));
+            Integer thresher = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_THRESHER));
+            Integer safeStorageFacilities = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_SAFE_STORAGE));
+            Integer other = data.getInt(data.getColumnIndex(BfwContract.Coops.COLUMN_OTHER));
+
+
+            ImageView pic_office_space_details = findViewById(R.id.pic_office_space_details);
+            pic_office_space_details.setImageResource((officeSpace == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+
+            ImageView pic_moisture_meter_details = findViewById(R.id.pic_moisture_meter_details);
+            pic_moisture_meter_details.setImageResource((moistureMeter == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_weighting_scales_details = findViewById(R.id.pic_weighting_scales_details);
+            pic_weighting_scales_details.setImageResource((weightningScales == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_qlt_inputs_details = findViewById(R.id.pic_qlt_inputs_details);
+            pic_qlt_inputs_details.setImageResource((qualityInputs == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_tractors_details = findViewById(R.id.pic_tractors_details);
+            pic_tractors_details.setImageResource((tractors == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_harvs_details = findViewById(R.id.pic_harvs_details);
+            pic_harvs_details.setImageResource((harvester == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_dryer_details = findViewById(R.id.pic_dryer_details);
+            pic_dryer_details.setImageResource((dryer == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_thresher_details = findViewById(R.id.pic_thresher_details);
+            pic_thresher_details.setImageResource((thresher == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_safe_storage_facilities_details = findViewById(R.id.pic_safe_storage_facilities_details);
+            pic_safe_storage_facilities_details.setImageResource((safeStorageFacilities == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+            ImageView pic_other_details = findViewById(R.id.pic_other_details);
+            pic_other_details.setImageResource((other == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+
+
+            // create URI
+            Uri infoUri = BfwContract.CoopInfo.buildCoopInfoUri(mCoopId);
+            Uri forecastSalesUri = BfwContract.SalesCoop.buildSalesCoopInfoUri(mCoopId);
+            Uri baselineYieldUri = BfwContract.YieldCoop.buildYieldCoopUri(mCoopId);
+            Uri baselineSalesUri = BfwContract.BaselineSalesCoop.buildBaselineSalesCoppUri(mCoopId);
+            Uri baselineFinanceInfoUri = BfwContract.FinanceInfoCoop.buildBaselineFinanceInfoCoopUri(mCoopId);
+            Uri expectedYieldUri = BfwContract.ExpectedYieldCoop.buildExpectedYieldCoopUri(mCoopId);
+
+
+            // Construct info list
+            Cursor coopDataCursor = null, seasonCursor = null;
+
+            String coopSelection = BfwContract.Coops.TABLE_NAME + "." +
+                    BfwContract.Coops._ID + " =  ? ";
+            String seasonSelection = BfwContract.HarvestSeason.TABLE_NAME
+                    + "." + BfwContract.HarvestSeason._ID
+                    + " = ?";
+            String seasonName = "";
+
+            ArrayList<AccessToInformation> accessToInformations = new ArrayList<>();
+            ArrayList<ForecastSales> forecastSales = new ArrayList<>();
+            ArrayList<BaselineYield> baselineYields = new ArrayList<>();
+            ArrayList<BaselineSales> baselineSales = new ArrayList<>();
+            ArrayList<BaselineFinanceInfo> baselineFinanceInfos = new ArrayList<>();
+            ArrayList<ExpectedYield> expectedYields = new ArrayList<>();
+
+            try {
+
+
+                //Access to information
+                coopDataCursor = getContentResolver().query(infoUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+                    int isAgricultureExtension;
+                    int isClimateRelatedInformation;
+                    int isSeed;
+                    int isOrganicFertilizers;
+                    int isInorganicFertilizers;
+                    int isLabour;
+                    int isWaterPumps;
+                    int isSpreaderOrSprayer;
+                    int seasonId;
+
+                    while (coopDataCursor.moveToNext()) {
+
+                        isAgricultureExtension = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_AGRI_EXTENSION));
+                        isClimateRelatedInformation = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_CLIMATE_INFO));
+                        isSeed = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_SEEDS));
+                        isOrganicFertilizers = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_ORGANIC_FERT));
+                        isInorganicFertilizers = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_INORGANIC_FERT));
+                        isLabour = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_LABOUR));
+                        isWaterPumps = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_WATER_PUMPS));
+                        isSpreaderOrSprayer = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_SPREADER));
+
+                        seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_SEASON_ID));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+                        AccessToInformation accessToInformation = new AccessToInformation();
+                        accessToInformation.setHarvsetSeason(seasonName);
+                        accessToInformation.setAgricultureExtension(isAgricultureExtension == 1);
+                        accessToInformation.setClimateRelatedInformation(isClimateRelatedInformation == 1);
+                        accessToInformation.setSeed(isSeed == 1);
+                        accessToInformation.setOrganicFertilizers(isOrganicFertilizers == 1);
+                        accessToInformation.setInorganicFertilizers(isInorganicFertilizers == 1);
+                        accessToInformation.setLabour(isLabour == 1);
+                        accessToInformation.setWaterPumps(isWaterPumps == 1);
+                        accessToInformation.setSpreaderOrSprayer(isSpreaderOrSprayer == 1);
+
+                        accessToInformations.add(accessToInformation);
+
+                    }
+                }
+
+
+                //forecast sales
+                coopDataCursor = getContentResolver().query(forecastSalesUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+
+                    String minFloorPerGrade;
+                    String grade;
+
+                    int commitedContractQty;
+
+                    int rgcc;
+                    int prodev;
+                    int sarura;
+                    int aif;
+                    int eax;
+                    int none;
+                    int otherForecastInfo;
+                    int seasonId;
+
+                    while (coopDataCursor.moveToNext()) {
+
+                        rgcc = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_RGCC));
+                        prodev = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_PRODEV));
+                        sarura = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_SAKURA));
+                        aif = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_AIF));
+                        eax = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_EAX));
+                        none = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_NONE));
+                        otherForecastInfo = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_OTHER));
+
+                        commitedContractQty = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_CONTRACT_VOLUME));
+                        minFloorPerGrade = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_FLOOR_GRADE));
+                        grade = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.SalesCoop.COLUMN_COOP_GRADE));
+
+                        seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.CoopInfo.COLUMN_SEASON_ID));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        ForecastSales forecastSalesInfo = new ForecastSales();
+                        forecastSalesInfo.setSeasonName(seasonName);
+                        forecastSalesInfo.setRgcc(rgcc == 1);
+                        forecastSalesInfo.setRgcc(prodev == 1);
+                        forecastSalesInfo.setSarura(sarura == 1);
+                        forecastSalesInfo.setAif(aif == 1);
+                        forecastSalesInfo.setEax(eax == 1);
+                        forecastSalesInfo.setNone(none == 1);
+                        forecastSalesInfo.setOther(otherForecastInfo == 1);
+                        forecastSalesInfo.setCommitedContractQty(commitedContractQty);
+                        forecastSalesInfo.setMinFloorPerGrade(minFloorPerGrade);
+                        forecastSalesInfo.setGrade(grade);
+
+                        forecastSales.add(forecastSalesInfo);
+                    }
+
+                }
+
+                //baseline yield
+                coopDataCursor = getContentResolver().query(baselineYieldUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+
+                    int seasonId;
+                    int isMaize;
+                    int isBean;
+                    int isSoy;
+                    int isOther;
+
+                    while (coopDataCursor.moveToNext()) {
+
+                        isBean = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.YieldCoop.COLUMN_BEAN));
+                        isMaize = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.YieldCoop.COLUMN_MAIZE));
+                        isSoy = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.YieldCoop.COLUMN_SOY));
+                        isOther = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.YieldCoop.COLUMN_OTHER));
+
+                        seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.YieldCoop.COLUMN_SEASON_ID));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        BaselineYield baselineYield = new BaselineYield();
+
+                        baselineYield.setSeasonName(seasonName);
+                        baselineYield.setMaize(isMaize == 1);
+                        baselineYield.setBean(isBean == 1);
+                        baselineYield.setSoy(isSoy == 1);
+                        baselineYield.setOther(isOther == 1);
+
+                        baselineYields.add(baselineYield);
+
+                    }
+
+                }
+
+                //baseline sales
+                coopDataCursor = getContentResolver().query(baselineSalesUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+
+                    int seasonId;
+                    String rgccContractUnderFtma;
+
+                    int qtyAgregatedFromMember;
+                    int cycleHarvsetAtPricePerKg;
+                    int qtyPurchaseFromNonMember;
+                    int nonMemberAtPricePerKg;
+
+                    double qtyOfRgccContract;
+                    double qtySoldToRgcc;
+                    double pricePerKgSoldToRgcc;
+                    double qtySoldOutOfRgcc;
+                    double pricePerKkSoldOutFtma;
+
+                    int isFormalBuyer;
+                    int isInformalBuyer;
+                    int isOther;
+
+                    while (coopDataCursor.moveToNext()) {
+
+                        seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_SEASON_ID));
+                        rgccContractUnderFtma = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_BUYER_CONTRACT));
+
+                        qtyAgregatedFromMember = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_CYCLE_HARVEST));
+                        cycleHarvsetAtPricePerKg = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_CYCLE_HARVEST_PRICE));
+                        qtyPurchaseFromNonMember = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_NON_MEMBER_PURCHASE));
+                        nonMemberAtPricePerKg = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_NON_MEMBER_PURCHASE_COST));
+
+                        qtyOfRgccContract = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_CONTRACT_VOLUME));
+                        qtySoldToRgcc = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_QUANTITY_SOLD_RGCC));
+                        pricePerKgSoldToRgcc = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_PRICE_SOLD_RGCC));
+                        qtySoldOutOfRgcc = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_QUANTITY_SOLD_OUTSIDE_RGCC));
+                        pricePerKkSoldOutFtma = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_PRICE_SOLD_OUTSIDE_RGCC));
+
+                        isFormalBuyer = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_RGCC_BUYER_FORMAL));
+                        isInformalBuyer = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_RGCC_INFORMAL));
+                        isOther = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.BaselineSalesCoop.COLUMN_BUYER_OTHER));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        BaselineSales baselineSalesInfo = new BaselineSales();
+                        baselineSalesInfo.setRgccContractUnderFtma(rgccContractUnderFtma);
+                        baselineSalesInfo.setQtyAgregatedFromMember(qtyAgregatedFromMember);
+                        baselineSalesInfo.setCycleHarvsetAtPricePerKg(cycleHarvsetAtPricePerKg);
+                        baselineSalesInfo.setQtyPurchaseFromNonMember(qtyPurchaseFromNonMember);
+                        baselineSalesInfo.setNonMemberAtPricePerKg(nonMemberAtPricePerKg);
+                        baselineSalesInfo.setPricePerKkSoldOutFtma(pricePerKkSoldOutFtma);
+                        baselineSalesInfo.setQtyOfRgccContract(qtyOfRgccContract);
+                        baselineSalesInfo.setQtySoldToRgcc(qtySoldToRgcc);
+                        baselineSalesInfo.setPricePerKgSoldToRgcc(pricePerKgSoldToRgcc);
+                        baselineSalesInfo.setQtySoldOutOfRgcc(qtySoldOutOfRgcc);
+
+                        baselineSalesInfo.setFormalBuyer(isFormalBuyer == 1);
+                        baselineSalesInfo.setInformalBuyer(isInformalBuyer == 1);
+                        baselineSalesInfo.setOther(isOther == 1);
+                        baselineSalesInfo.setSeasonName(seasonName);
+
+                        baselineSales.add(baselineSalesInfo);
+                    }
+
+                }
+
+                //expected yield
+                coopDataCursor = getContentResolver().query(expectedYieldUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+
+                    while (coopDataCursor.moveToNext()) {
+                        int seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.ExpectedYieldCoop.COLUMN_SEASON_ID));
+                        double expectedCoopProductionInMt = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.ExpectedYieldCoop.COLUMN_COOP_PRODUCTION));
+                        double totalCoopLandSize = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.ExpectedYieldCoop.COLUMN_COOP_LAND_SIZE));
+                        double expectedTotalProduction = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.ExpectedYieldCoop.COLUMN_PRODUCTION_MT));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        ExpectedYield expectedYield = new ExpectedYield();
+                        expectedYield.setHarvestSeason(seasonName);
+                        expectedYield.setExpectedCoopProductionInMt(expectedCoopProductionInMt);
+                        expectedYield.setTotalCoopLandSize(totalCoopLandSize);
+                        expectedYield.setExpectedTotalProduction(expectedTotalProduction);
+
+                        expectedYields.add(expectedYield);
+                    }
+                }
+
+                //baseline finance info
+                coopDataCursor = getContentResolver().query(baselineFinanceInfoUri, null, coopSelection, new String[]{Long.toString(mCoopId)}, null);
+                if (coopDataCursor != null) {
+
+                    while (coopDataCursor.moveToNext()) {
+
+                        String input_loan = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN));
+
+                        int isInput_loan_prov_bank = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_BANK));
+                        int isInput_loan_prov_cooperative = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_COOPERATIVE));
+                        int isInput_loan_prov_sacco = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_SACCO));
+                        int isInput_loan_prov_other = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PROVIDER_OTHER));
+
+                        double input_loan_amount = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN_AMOUNT));
+                        double input_loan_interest_rate = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_CYCLE_INTEREST_RATE));
+                        int input_loan_duration = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN_DURATION));
+
+                        int sInput_loan_purpose_labour = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_LABOUR));
+                        int sInput_loan_purpose_seed = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_SEEDS));
+                        int sInput_loan_purpose_input = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_INPUT));
+                        int sInput_loan_purpose_machinery = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_MACHINERY));
+                        int sInput_loan_purpose_other = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_INPUT_LOAN_PURPOSE_OTHER));
+
+                        int isCash_provided_purchase_inputs = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_DISBURSEMENT_METHOD));
+
+                        String aggrgation_post_harvset_loan = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN));
+
+                        int isAgg_post_harv_loan_prov_bank = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PROVIDER_BANK));
+                        int isAgg_post_harv_loan_prov_cooperative = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PROVIDER_COOPERATIVE));
+                        int isAgg_post_harv_loan_prov_sacco = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PROVIDER_SACCO));
+                        int isAgg_post_harv_loan_prov_other = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PROVIDER_OTHER));
+
+                        double aggrgation_post_harvset_amount = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_AMOUNT));
+                        double aggrgation_post_harvset_loan_interest = coopDataCursor.getDouble(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_INTEREST_RATE));
+                        int aggrgation_post_harvset_loan_duration = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_DURATION));
+
+                        int isAgg_post_harv_loan_purpose_labour = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PURPOSE_LABOUR));
+                        int isAgg_post_harv_loan_purpose_input = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PURPOSE_INPUT));
+                        int isAgg_post_harv_loan_purpose_machinery = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PURPOSE_MACHINERY));
+                        int isAgg_post_harv_loan_purpose_other = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_POST_HARVEST_LOAN_PURPOSE_OTHER));
+
+                        String aggrgation_post_harvset_laon_disbursement_method = coopDataCursor.getString(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_CYCLE_LOAN_DISB_METHOD));
+                        int seasonId = coopDataCursor.getInt(coopDataCursor.getColumnIndex(BfwContract.FinanceInfoCoop.COLUMN_SEASON_ID));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        BaselineFinanceInfo baselineFinanceInfo = new BaselineFinanceInfo();
+                        baselineFinanceInfo.setSeasonName(seasonName);
+                        baselineFinanceInfo.setInput_loan(input_loan);
+                        baselineFinanceInfo.setInput_loan_prov_bank(isInput_loan_prov_bank == 1);
+                        baselineFinanceInfo.setInput_loan_prov_cooperative(isInput_loan_prov_cooperative == 1);
+                        baselineFinanceInfo.setInput_loan_prov_sacco(isInput_loan_prov_sacco == 1);
+                        baselineFinanceInfo.setInput_loan_prov_other(isInput_loan_prov_other == 1);
+
+                        baselineFinanceInfo.setInput_loan_amount(input_loan_amount);
+                        baselineFinanceInfo.setInput_loan_interest_rate(input_loan_interest_rate);
+                        baselineFinanceInfo.setInput_loan_duration(input_loan_duration);
+
+                        baselineFinanceInfo.setsInput_loan_purpose_labour(sInput_loan_purpose_labour == 1);
+                        baselineFinanceInfo.setsInput_loan_purpose_seed(sInput_loan_purpose_seed == 1);
+                        baselineFinanceInfo.setsInput_loan_purpose_input(sInput_loan_purpose_input == 1);
+                        baselineFinanceInfo.setsInput_loan_purpose_machinery(sInput_loan_purpose_machinery == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_purpose_other(sInput_loan_purpose_other == 1);
+
+                        baselineFinanceInfo.setCash_provided_purchase_inputs(isCash_provided_purchase_inputs == 1);
+
+                        baselineFinanceInfo.setAggrgation_post_harvset_loan(aggrgation_post_harvset_loan);
+                        baselineFinanceInfo.setAgg_post_harv_loan_prov_bank(isAgg_post_harv_loan_prov_bank == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_prov_cooperative(isAgg_post_harv_loan_prov_cooperative == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_prov_sacco(isAgg_post_harv_loan_prov_sacco == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_prov_other(isAgg_post_harv_loan_prov_other == 1);
+
+                        baselineFinanceInfo.setAggrgation_post_harvset_amount(aggrgation_post_harvset_amount);
+                        baselineFinanceInfo.setAggrgation_post_harvset_loan_interest(aggrgation_post_harvset_loan_interest);
+                        baselineFinanceInfo.setAggrgation_post_harvset_loan_duration(aggrgation_post_harvset_loan_duration);
+
+                        baselineFinanceInfo.setAgg_post_harv_loan_purpose_labour(isAgg_post_harv_loan_purpose_labour == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_purpose_input(isAgg_post_harv_loan_purpose_input == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_purpose_machinery(isAgg_post_harv_loan_purpose_machinery == 1);
+                        baselineFinanceInfo.setAgg_post_harv_loan_purpose_other(isAgg_post_harv_loan_purpose_other == 1);
+
+                        baselineFinanceInfo.setAggrgation_post_harvset_laon_disbursement_method(aggrgation_post_harvset_laon_disbursement_method);
+
+                        baselineFinanceInfos.add(baselineFinanceInfo);
+                    }
+                }
+
+            } finally {
+                if (coopDataCursor != null) {
+                    coopDataCursor.close();
+                }
+                if (seasonCursor != null) {
+                    seasonCursor.close();
+                }
+            }
+            // Pass list to adapters
+            AccessToInformationAdapter accessToInformationAdapter = new AccessToInformationAdapter(getApplicationContext(), accessToInformations);
+            ForecastSalesAdapter forecastSalesAdapter = new ForecastSalesAdapter(getApplicationContext(), forecastSales);
+            BaselineYieldAdapter baselineYieldAdapter = new BaselineYieldAdapter(getApplicationContext(), baselineYields);
+            BaselineSalesAdapter baselineSalesAdapter = new BaselineSalesAdapter(getApplicationContext(), baselineSales);
+            BaselineFinanceInfoAdapter baselineFinanceInfoAdapter = new BaselineFinanceInfoAdapter(getApplicationContext(), baselineFinanceInfos);
+            ExpectedYieldAdapter expectedYieldAdapter = new ExpectedYieldAdapter(getApplicationContext(), expectedYields);
+
+            accessToInfoListView.setAdapter(accessToInformationAdapter);
+            forecastSalesListView.setAdapter(forecastSalesAdapter);
+            baseLineYieldListView.setAdapter(baselineYieldAdapter);
+            baseLineSalesListView.setAdapter(baselineSalesAdapter);
+            baseLineFinanceInfoListView.setAdapter(baselineFinanceInfoAdapter);
+            expectedYieldListView.setAdapter(expectedYieldAdapter);
+
+
             //1. ACCESS TO INFORMATION
             final AccordionView access_info_accordion = findViewById(R.id.access_info_accordion_c);
             access_info_accordion.setHeadingString("ACCESS TO INFORMATION");
 
-            //les images access to info
-            ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
-            pic_agri_extension_details2.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_clim_rel_details2 = findViewById(R.id.pic_clim_rel_details2);
-            pic_clim_rel_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_seed_details2 = findViewById(R.id.pic_seed_details2);
-            pic_seed_details2.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_org_fert_details2 = findViewById(R.id.pic_org_fert_details2);
-            pic_org_fert_details2.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_inorg_fert_details2 = findViewById(R.id.pic_inorg_fert_details2);
-            pic_inorg_fert_details2.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_labour_details2 = findViewById(R.id.pic_labour_details2);
-            pic_labour_details2.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_irr_w_p_details2 = findViewById(R.id.pic_irr_w_p_details2);
-            pic_irr_w_p_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_spread_or_spray_details2 = findViewById(R.id.pic_spread_or_spray_details2);
-            pic_spread_or_spray_details2.setImageResource(R.mipmap.icon_sm_error);
 
             //2. FORECAST SALES
             final AccordionView forecast_sales = findViewById(R.id.forecast_s_accordion);
             forecast_sales.setHeadingString("FORECAST SALES");
 
-            //les images du forescast
-            ImageView pic_rgcc_details2 = findViewById(R.id.pic_rgcc_details2);
-            pic_rgcc_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_prodev_details2 = findViewById(R.id.pic_prodev_details2);
-            pic_prodev_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_sasura_details2 = findViewById(R.id.pic_sasura_details2);
-            pic_sasura_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_aif_details2 = findViewById(R.id.pic_aif_details2);
-            pic_aif_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_eax_details2 = findViewById(R.id.pic_eax_details2);
-            pic_eax_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_none_details2 = findViewById(R.id.pic_none_details2);
-            pic_none_details2.setImageResource(R.mipmap.icon_sm_ok);
-            ImageView pic_other_details2 = findViewById(R.id.pic_other_details2);
-            pic_other_details2.setImageResource(R.mipmap.icon_sm_ok);
-
-            //LES TEXT DU FIORECAST SALES
-            TextView harverst_s_forecast_sales = findViewById(R.id.harverst_s_forecast_sales);
-            harverst_s_forecast_sales.setText("text ici");
-
-            TextView commired_contract_qty_details2 = findViewById(R.id.commired_contract_qty_details2);
-            commired_contract_qty_details2.setText("text ici");
-            TextView grade_details2 = findViewById(R.id.grade_details2);
-            grade_details2.setText("text ici");
-            TextView min_floor_per_grade_details2 = findViewById(R.id.min_floor_per_grade_details2);
-            min_floor_per_grade_details2.setText("text ici");
-
             //3. BASELINE YIELDS
             final AccordionView baseline_y = findViewById(R.id.baseline_y_accordion);
             baseline_y.setHeadingString("BASELINE YIELD");
-            ImageView pic_maize_details3 = findViewById(R.id.pic_maize_details3);
-            pic_maize_details3.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_bean_details3 = findViewById(R.id.pic_bean_details3);
-            pic_bean_details3.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_soy_details3 = findViewById(R.id.pic_soy_details3);
-            pic_soy_details3.setImageResource(R.mipmap.icon_sm_error);
-            ImageView pic_other_details3 = findViewById(R.id.pic_other_details3);
-            pic_other_details3.setImageResource(R.mipmap.icon_sm_error);
 
             //4. BASELINE SALES
             final AccordionView baseline_s = findViewById(R.id.baseline_s_accordion);
             baseline_s.setHeadingString("BASELINE SALES");
 
 
-
-            TextView qty_agregated_from_members = findViewById(R.id.qty_agregated_from_members);
-            qty_agregated_from_members.setText("504");
-            TextView cycle_h_at_price_per_kg = findViewById(R.id.cycle_h_at_price_per_kg);
-            cycle_h_at_price_per_kg.setText("504");
-            TextView qty_purchaced_from_non_members = findViewById(R.id.qty_purchaced_from_non_members);
-            qty_purchaced_from_non_members.setText("504");
-            TextView non_member_purchase_at_price_per_kg = findViewById(R.id.non_member_purchase_at_price_per_kg);
-            non_member_purchase_at_price_per_kg.setText("504");
-            TextView rgcc_contact_under_ftma = findViewById(R.id.rgcc_contact_under_ftma);
-            rgcc_contact_under_ftma.setText("504");
-            TextView qty_of_rgcc_contact = findViewById(R.id.qty_of_rgcc_contact);
-            qty_of_rgcc_contact.setText("504");
-            TextView price_per_kg_sold_to_rgcc = findViewById(R.id.price_per_kg_sold_to_rgcc);
-            price_per_kg_sold_to_rgcc.setText("504");
-            TextView qty_slod_outside_rgcc = findViewById(R.id.qty_slod_outside_rgcc);
-            qty_slod_outside_rgcc.setText("504");
-
-            ImageView formal_buyer = findViewById(R.id.formal_buyer);
-            formal_buyer.setImageResource(R.mipmap.icon_sm_error);
-            ImageView informal_buyer = findViewById(R.id.informal_buyer);
-            informal_buyer.setImageResource(R.mipmap.icon_sm_error);
-            ImageView other_formal_buyer = findViewById(R.id.other_formal_buyer);
-            other_formal_buyer.setImageResource(R.mipmap.icon_sm_error);
-
-            TextView price_per_kg_sold_outside_ftma = findViewById(R.id.price_per_kg_sold_outside_ftma);
-            price_per_kg_sold_outside_ftma.setText("504");
-
-
             //5. BASELINE FINANCE
             final AccordionView baseline_fin = findViewById(R.id.baseline_fin_accordion);
             baseline_fin.setHeadingString("BASELINE FINANCE INFO");
 
-
-
-            TextView input_loan_amount = findViewById(R.id.input_loan_amount);
-            input_loan_amount.setText("45.5");
-            TextView input_loan_interest_rate = findViewById(R.id.input_loan_interest_rate);
-            input_loan_interest_rate.setText("45.5");
-            TextView input_loan_duration = findViewById(R.id.input_loan_duration);
-            input_loan_duration.setText("45.5");
-
-            TextView input_loan_disbursement_method = findViewById(R.id.input_loan_disbursement_method);
-            input_loan_disbursement_method.setText("45.5");
-            TextView aggrgation_post_harvset_loan = findViewById(R.id.aggrgation_post_harvset_loan);
-            aggrgation_post_harvset_loan.setText("45.5");
-
-            TextView aggrgation_post_harvset_loan_amount = findViewById(R.id.aggrgation_post_harvset_loan_amount);
-            aggrgation_post_harvset_loan_amount.setText("45.5");
-            TextView agg_post_harvset_loan_interest = findViewById(R.id.agg_post_harvset_loan_interest);
-            agg_post_harvset_loan_interest.setText("45.5");
-            TextView agg_post_harvset_loan_duration = findViewById(R.id.agg_post_harvset_loan_duration);
-            agg_post_harvset_loan_duration.setText("45.5");
-
-            TextView agg_post_har_laon_disbrsmnt_met = findViewById(R.id.agg_post_har_laon_disbrsmnt_met);
-            agg_post_har_laon_disbrsmnt_met.setText("45.5");
-
-
-            ImageView bank_input_loan = findViewById(R.id.bank_input_loan);
-            bank_input_loan.setImageResource(R.mipmap.icon_sm_error);
-            ImageView coop_input_loan = findViewById(R.id.coop_input_loan);
-            coop_input_loan.setImageResource(R.mipmap.icon_sm_error);
-            ImageView sacco_input_loan = findViewById(R.id.sacco_input_loan);
-            sacco_input_loan.setImageResource(R.mipmap.icon_sm_error);
-            ImageView other_input_loan = findViewById(R.id.other_input_loan);
-            other_input_loan.setImageResource(R.mipmap.icon_sm_error);
-            ImageView labour_input_loan_purpose = findViewById(R.id.labour_input_loan_purpose);
-            labour_input_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView seed_input_loan_purpose = findViewById(R.id.seed_input_loan_purpose);
-            seed_input_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView input_input_loan_purpose = findViewById(R.id.input_input_loan_purpose);
-            input_input_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView machinery_input_loan_purpose = findViewById(R.id.machinery_input_loan_purpose);
-            machinery_input_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView other_input_loan_purpose = findViewById(R.id.other_input_loan_purpose);
-            other_input_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView bank_aggregation_prov = findViewById(R.id.bank_aggregation_prov);
-            bank_aggregation_prov.setImageResource(R.mipmap.icon_sm_error);
-            ImageView coop_aggregation_prov = findViewById(R.id.coop_aggregation_prov);
-            coop_aggregation_prov.setImageResource(R.mipmap.icon_sm_error);
-            ImageView sacco_aggregation_prov = findViewById(R.id.sacco_aggregation_prov);
-            sacco_aggregation_prov.setImageResource(R.mipmap.icon_sm_error);
-            ImageView other_aggregation_prov = findViewById(R.id.other_aggregation_prov);
-            other_aggregation_prov.setImageResource(R.mipmap.icon_sm_error);
-            ImageView labour_agg_harv_loan_purpose = findViewById(R.id.labour_agg_harv_loan_purpose);
-            labour_agg_harv_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView input_agg_harv_loan_purpose = findViewById(R.id.input_agg_harv_loan_purpose);
-            input_agg_harv_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView machinery_agg_harv_loan_purpose = findViewById(R.id.machinery_agg_harv_loan_purpose);
-            machinery_agg_harv_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-            ImageView other_agg_harv_loan_purpose = findViewById(R.id.other_agg_harv_loan_purpose);
-            other_agg_harv_loan_purpose.setImageResource(R.mipmap.icon_sm_error);
-
             //6 expected yield
             final AccordionView expected_yiel = findViewById(R.id.expected_y_accordion);
             expected_yiel.setHeadingString("EXPECTED YIELD");
-
-            TextView total_expected_coop_production = findViewById(R.id.total_expected_coop_production);
-            total_expected_coop_production.setText("78.5");
-            TextView total_coop_land_size_in_ha = findViewById(R.id.total_coop_land_size_in_ha);
-            total_coop_land_size_in_ha.setText("78.5");
-            TextView expected_total_production_in_kg = findViewById(R.id.expected_total_production_in_kg);
-            expected_total_production_in_kg.setText("78.5");
 
 
             //ADD LISTENER TO ACCORDIONS
@@ -366,6 +727,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     access_info_accordion.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     access_info_accordion.setHeadingBackGround(R.color.default_color);
@@ -377,6 +739,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     forecast_sales.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     forecast_sales.setHeadingBackGround(R.color.default_color);
@@ -388,6 +751,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     baseline_y.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     baseline_y.setHeadingBackGround(R.color.default_color);
@@ -399,6 +763,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     baseline_s.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     baseline_s.setHeadingBackGround(R.color.default_color);
@@ -409,6 +774,7 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     baseline_fin.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     baseline_fin.setHeadingBackGround(R.color.default_color);
@@ -420,40 +786,17 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 public void onExpanded(AccordionView view) {
                     expected_yiel.setHeadingBackGround(R.color.bg_detail);
                 }
+
                 @Override
                 public void onCollapsed(AccordionView view) {
                     expected_yiel.setHeadingBackGround(R.color.default_color);
                 }
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }
 

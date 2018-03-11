@@ -25,10 +25,10 @@ public class ProductAdapter extends BaseAdapter {
 
     public ProductAdapter(Context context, Product[] product, boolean isProduct) {
         this.mContext = context;
-        //this.mProduct = product;
         this.mIsProduct = isProduct;
     }
-    public ProductAdapter(Context context,View mEmptyView, boolean isProduct) {
+
+    public ProductAdapter(Context context, View mEmptyView, boolean isProduct) {
         this.mContext = context;
         this.mIsProduct = isProduct;
         this.mEmptyView = mEmptyView;
@@ -38,21 +38,20 @@ public class ProductAdapter extends BaseAdapter {
     public int getCount() {
         if (mCursor == null) return 0;
         return mCursor.getCount();
-        //return mProduct.length;
     }
 
     @Override
     public Object getItem(int i) {
         return null;
     }
-    public String getName(int i)
-    {
+
+    public String getName(int i) {
         mCursor.moveToPosition(i);
         String n = mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
         return n;
     }
-    public int getServerProductId(int i)
-    {
+
+    public int getServerProductId(int i) {
         mCursor.moveToPosition(i);
         int id = mCursor.getInt(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_SERVER_ID));
         return id;
@@ -88,45 +87,35 @@ public class ProductAdapter extends BaseAdapter {
         final View scrim = view.findViewById(R.id.scrim);
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_SYNC)) == 1;
-        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_UPDATE))==1;
+        boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_UPDATE)) == 1;
         if (isUpdate && isSync) {
             scrim.setBackgroundResource(R.drawable.srim_success);
-        }/*else if(isUpdate)
-        {
-            scrim.setBackgroundResource(R.drawable.srim_error);
-        }*/
-        else  {
+        } else {
             scrim.setBackgroundResource(R.drawable.srim_error);
         }
         Double qty = Double.valueOf(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY)));
         productName.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME))
                 .toUpperCase());
-        productPrice.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE))+" RWF");
-        productQty.setText(String.valueOf(qty)+" KG");
+        productPrice.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)) + " RWF");
+        productQty.setText(String.valueOf(qty) + " KG");
 
         return view;
     }
+
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
         try {
             mEmptyView.setVisibility(getCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-            //mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_payment: R.string.there_is_payment);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }
-    public CardView selectedCardView (int i){
+
+    public CardView selectedCardView(int i) {
         mCursor.moveToPosition(i);
 
         notifyDataSetChanged();
-
-        //View v = getView();
-        /*cardView.setCardBackgroundColor(R.drawable.gradient_button);
-        cardView.setVisibility(View.GONE);*/
-        //cardView.setSelected(true);
         return cardView;
     }
 

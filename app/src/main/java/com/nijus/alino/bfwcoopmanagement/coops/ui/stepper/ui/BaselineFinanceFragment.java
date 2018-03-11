@@ -1140,6 +1140,8 @@ public class BaselineFinanceFragment extends Fragment {
 
         cursor = (Cursor) harvestSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        baslineFinanceInfo.setSeasonId(seasonId);
 
         baselineFinanceInfoSeason.put(seasonName, baslineFinanceInfo);
         mPage.getData().putSerializable("baseline_finance_info", baselineFinanceInfoSeason);

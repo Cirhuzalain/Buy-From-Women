@@ -128,6 +128,11 @@ public class FinanceFragment extends Fragment implements AdapterView.OnItemSelec
         boolean isOther = other.isChecked();
         finance.setOtherLp(isOther);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.loan_provider, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        loanProvider.setAdapter(adapter);
+
         String selectedLoanProvider = loanProvider.getSelectedItem().toString();
         finance.setLoanProvider(selectedLoanProvider);
 
@@ -433,10 +438,7 @@ public class FinanceFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.loan_provider, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        loanProvider.setAdapter(adapter);
+
 
         loanProvider.setOnItemSelectedListener(this);
 

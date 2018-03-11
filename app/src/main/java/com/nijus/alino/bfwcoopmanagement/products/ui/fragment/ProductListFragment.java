@@ -2,6 +2,7 @@ package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
 import com.nijus.alino.bfwcoopmanagement.products.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -82,16 +84,28 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getLoaderManager().initLoader(0,null,this);
+        getLoaderManager().initLoader(0, null, this);
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.activity_product_order, container, false);
 
         GridView gridView = root.findViewById(R.id.productGridview);
         View emptyView = root.findViewById(R.id.girdview_empty);
 
-        productRecyclerViewAdapter = new ProductAdapter(getContext(),emptyView, true);
+        productRecyclerViewAdapter = new ProductAdapter(getContext(), emptyView, true);
         gridView.setAdapter(productRecyclerViewAdapter);
 
         gridView.setOnItemClickListener(this);
@@ -105,25 +119,32 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        int id  = productRecyclerViewAdapter.getServerProductId(i);
+        int id = productRecyclerViewAdapter.getServerProductId(i);
         Bundle bundle = new Bundle();
-        bundle.putInt("id_product",id ); // set Fragmentclass Arguments
+        bundle.putInt("id_product", id); // set Fragment class Arguments
         UpdateProductDialogFragment dialogFragment = new UpdateProductDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
 
     }
+
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        int id  = productRecyclerViewAdapter.getServerProductId(i);
-        String name = productRecyclerViewAdapter.getName(i);
-        Bundle bundle = new Bundle();
-        bundle.putInt("id_product",id ); // set Fragmentclass Arguments
-        bundle.putString("name_product",name ); // set Fragmentclass Arguments
-        DeleteProductDialogFragment dialogFragment = new DeleteProductDialogFragment();
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
 
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+        if (!groupName.equals("Buyer")) {
+            int id = productRecyclerViewAdapter.getServerProductId(i);
+            String name = productRecyclerViewAdapter.getName(i);
+            Bundle bundle = new Bundle();
+            bundle.putInt("id_product", id);
+            bundle.putString("name_product", name);
+            DeleteProductDialogFragment dialogFragment = new DeleteProductDialogFragment();
+            dialogFragment.setArguments(bundle);
+            dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");
+        }
         return true;
     }
 
@@ -147,6 +168,10 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // filter for agent and vendor
+        /*SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");*/
         return new CursorLoader(
                 getContext(),
                 BfwContract.ProductTemplate.CONTENT_URI,
@@ -193,6 +218,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
+            Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             getLoaderManager().restartLoader(0, null, this);
         } else {
             Toast.makeText(getContext(), syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();

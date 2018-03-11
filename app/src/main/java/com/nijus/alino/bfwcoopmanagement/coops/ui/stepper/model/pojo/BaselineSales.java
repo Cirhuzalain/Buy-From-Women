@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 
 public class BaselineSales implements Parcelable {
+
     private String seasonName;
     private String rgccContractUnderFtma;
 

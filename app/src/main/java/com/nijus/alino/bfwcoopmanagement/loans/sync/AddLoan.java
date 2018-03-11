@@ -46,8 +46,6 @@ public class AddLoan extends IntentService {
             PojoLoan pojoLoan = productData.getParcelable("loan");
 
             int farmer_id = 0;
-            /*int coop_id = 0;
-            int vendor_id = 0;*/
             Long start_date = null;
             Double amount = 0.0;
             Double interest_rate = 0.0;
@@ -58,8 +56,6 @@ public class AddLoan extends IntentService {
 
             if (pojoLoan != null) {
                 farmer_id = pojoLoan.getFarmer_id();
-                /*coop_id = pojoLoan.getCoop_id();
-                vendor_id = pojoLoan.getVendor_id();*/
                 start_date = pojoLoan.getStart_date();
                 amount = pojoLoan.getAmount();
                 interest_rate = pojoLoan.getInterest_rate();

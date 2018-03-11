@@ -101,29 +101,39 @@ public class BaseActivity extends AppCompatActivity implements
             prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
                     Context.MODE_PRIVATE);
             String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
             if (groupName.equals("Admin")) {
                 // remove buyer, vendor, navigation, coop agent activity
                 Menu menu = mNavigationView.getMenu();
                 menu.removeItem(R.id.profile_buyer);
                 menu.removeItem(R.id.profile_vendor);
                 menu.removeItem(R.id.profile_farmer);
+                menu.removeItem(R.id.sales);
+                menu.removeItem(R.id.purchases);
                 menu.removeItem(R.id.profile_coop);
             } else if (groupName.equals("Agent")) {
                 // remove userProfile, vendor, buyer
                 Menu menu = mNavigationView.getMenu();
                 menu.removeItem(R.id.user_profile);
+                menu.removeItem(R.id.profile_coop);
+                menu.removeItem(R.id.sales);
+                menu.removeItem(R.id.purchases);
                 menu.removeItem(R.id.profile_vendor);
                 menu.removeItem(R.id.profile_buyer);
             } else if (groupName.equals("Vendor")) {
                 // remove buyer, navigation, coop agent, user profile activity
                 Menu menu = mNavigationView.getMenu();
                 menu.removeItem(R.id.profile_buyer);
+                menu.removeItem(R.id.profile_vendor);
                 menu.removeItem(R.id.user_profile);
                 menu.removeItem(R.id.profile_farmer);
+                menu.removeItem(R.id.sales);
+                menu.removeItem(R.id.purchases);
                 menu.removeItem(R.id.profile_coop);
             } else if (groupName.equals("Buyer")) {
                 // remove user profile,navigation, coop agent, vendor, sale,purchase, loan
                 Menu menu = mNavigationView.getMenu();
+                menu.removeItem(R.id.profile_buyer);
                 menu.removeItem(R.id.user_profile);
                 menu.removeItem(R.id.profile_vendor);
                 menu.removeItem(R.id.profile_farmer);
@@ -132,7 +142,6 @@ public class BaseActivity extends AppCompatActivity implements
                 menu.removeItem(R.id.purchases);
                 menu.removeItem(R.id.loan);
             }
-
             toggle.syncState();
         }
     }
@@ -142,7 +151,6 @@ public class BaseActivity extends AppCompatActivity implements
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         //item.removeItem(R.id.action_logout);
-
         if (id == R.id.user_profile) {
             startActivity(new Intent(this, UserProfileActivityAdmin.class));
         } else if (id == R.id.profile_buyer) {

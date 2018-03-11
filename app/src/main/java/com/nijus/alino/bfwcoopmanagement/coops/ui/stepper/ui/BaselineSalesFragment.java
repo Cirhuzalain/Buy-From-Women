@@ -133,6 +133,8 @@ public class BaselineSalesFragment extends Fragment {
 
         cursor = (Cursor) harvestSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        baselineSales.setSeasonId(seasonId);
 
         baselineSalesSeason.put(seasonName, baselineSales);
         mPage.getData().putSerializable("baseline_sales", baselineSalesSeason);

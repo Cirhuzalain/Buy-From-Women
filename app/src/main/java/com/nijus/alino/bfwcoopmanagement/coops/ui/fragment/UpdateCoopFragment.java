@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CreateCoopStepper;
-import com.nijus.alino.bfwcoopmanagement.coops.sync.UpdateCoopService;
+import com.nijus.alino.bfwcoopmanagement.coops.sync.SyncCoopInfo;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.AbstractWizardModel;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.ModelCallbacks;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
@@ -262,7 +262,7 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
                 saveBundle.putParcelable("baseline_fin", baselineFinanceInfo);
             }
         }
-        Intent intent = new Intent(getContext(), UpdateCoopService.class);
+        Intent intent = new Intent(getContext(), SyncCoopInfo.class);
         intent.putExtra("coop_data", saveBundle);
         intent.putExtra("coopId", mFarmerId);
         progressDialog.show(getFragmentManager(), "coopTag");

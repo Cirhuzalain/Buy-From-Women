@@ -2,8 +2,10 @@ package com.nijus.alino.bfwcoopmanagement.products.ui.fragment;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,12 +43,12 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     private Spinner vendor;
     private Spinner harvsetSeason;
     private Spinner grade;
-    private int id_product,product_server_id;
+    private int id_product, product_server_id;
     private Button create_product;
+    private Button order_product;
 
     AutoCompleteTextView product_name;
     AutoCompleteTextView quantity;
-    //AutoCompleteTextView cost;
     AutoCompleteTextView sale_price;
 
     @Override
@@ -54,7 +56,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        getLoaderManager().initLoader(0,null,this);
+        getLoaderManager().initLoader(0, null, this);
 
         // Get the layout inflater
         View viewContainer = getActivity().getLayoutInflater().inflate(R.layout.product_order_detail, null);
@@ -65,14 +67,28 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
         create_product = viewContainer.findViewById(R.id.create_product);
+        order_product = viewContainer.findViewById(R.id.order_product);
+        order_product.setVisibility(View.GONE);
         create_product.setOnClickListener(this);
+        order_product.setOnClickListener(this);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+
+        if(groupName.equals("Buyer")){
+            order_product.setVisibility(View.VISIBLE);
+            create_product.setVisibility(View.GONE);
+        } else {
+            order_product.setVisibility(View.GONE);
+            create_product.setVisibility(View.VISIBLE);
+        }
 
         product_name = viewContainer.findViewById(R.id.product_name);
         quantity = viewContainer.findViewById(R.id.quantity);
         sale_price = viewContainer.findViewById(R.id.sale_price);
 
         builder.setView(viewContainer)
-                //.setPositiveButton(R.string.msg_ok, this)
                 .setNegativeButton(R.string.msg_cancel, this);
 
         populateSpinnerHarvestSeason();
@@ -91,6 +107,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     public void onClick(DialogInterface dialogInterface, int i) {
 
     }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         id_product = getArguments().getInt("id_product");
@@ -113,14 +130,15 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
             product_server_id = data.getInt(data.getColumnIndex(BfwContract.ProductTemplate._ID));
 
             product_name.setText(data.getString(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME)));
-            sale_price.setText(""+data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)));
-            quantity.setText(""+data.getDouble(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY)));
+            sale_price.setText("" + data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)));
+            quantity.setText("" + data.getDouble(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY)));
 
-            setSpinnerItemByIdHarvSeason(harvsetSeason,data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_SEASON)));
-            setSpinnerItemByIdFarmer(vendor,data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_FARMER_ID)));
-            setSpinnerItemGrade(grade,data.getString(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE)));
+            setSpinnerItemByIdHarvSeason(harvsetSeason, data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_SEASON)));
+            setSpinnerItemByIdFarmer(vendor, data.getInt(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_FARMER_ID)));
+            setSpinnerItemGrade(grade, data.getString(data.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE)));
         }
     }
+
     public void setSpinnerItemGrade(Spinner spinner, String grade) {
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
@@ -131,6 +149,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
             }
         }
     }
+
     public void setSpinnerItemByIdFarmer(Spinner spinner, int _id) {
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
@@ -141,6 +160,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
             }
         }
     }
+
     public void setSpinnerItemByIdHarvSeason(Spinner spinner, int _id) {
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
@@ -221,62 +241,66 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
 
     @Override
     public void onClick(View view) {
-        try {
+        if (view.getId() == R.id.order_product) {
+            Toast.makeText(getContext(), "Thanks !!!", Toast.LENGTH_SHORT).show();
+            dismiss();
+        } else {
+            try {
 
-            int farmer_spiner_id, harvest_s_spinner_id;
-            String grade_spinner_name;
+                int farmer_spiner_id, harvest_s_spinner_id;
+                String grade_spinner_name;
 
-            // Check if value's length entered is > 3 char .
-            if (!isValidString(String.valueOf(product_name.getText()))) {
-                product_name.setError(getString(R.string.error_invalid_product_name));
+                // Check if value's length entered is > 3 char .
+                if (!isValidString(String.valueOf(product_name.getText()))) {
+                    product_name.setError(getString(R.string.error_invalid_product_name));
+                }
+
+                // Check for a valid qty
+                if (TextUtils.isEmpty(quantity.getText())) {
+                    quantity.setError(getString(R.string.error_field_required));
+                }
+                if (TextUtils.isEmpty(sale_price.getText())) {
+                    sale_price.setError(getString(R.string.error_field_required));
+                }
+
+                if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
+                        && !TextUtils.isEmpty(sale_price.getText())) {
+
+                    Cursor cursor = (Cursor) vendor.getSelectedItem();
+                    farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    grade_spinner_name = (String) grade.getSelectedItem();
+
+                    PojoProduct pojoProduct = new PojoProduct();
+                    pojoProduct.setName(String.valueOf(product_name.getText()));
+                    pojoProduct.setFarmer(farmer_spiner_id);
+                    pojoProduct.setGrade(grade_spinner_name);
+                    pojoProduct.setHarvest_season(harvest_s_spinner_id);
+                    pojoProduct.setPrice(Integer.valueOf(sale_price.getText().toString()));
+                    pojoProduct.setQuantity(Double.valueOf(quantity.getText().toString()));
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("product", pojoProduct);
+
+                    Intent intent = new Intent(getContext(), UpdateProduct.class);
+                    intent.putExtra("product_data", bundle);
+                    intent.putExtra("product_id", product_server_id);
+
+                    getContext().startService(intent);
+                    dismiss();
+
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.product_error), Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // Check for a valid qty
-            if (TextUtils.isEmpty(quantity.getText())) {
-                quantity.setError(getString(R.string.error_field_required));
-            }
-            if (TextUtils.isEmpty(sale_price.getText())) {
-                sale_price.setError(getString(R.string.error_field_required));
-            }
-
-            if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
-                    && !TextUtils.isEmpty(sale_price.getText())) {
-
-                Cursor cursor = (Cursor) vendor.getSelectedItem();
-                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
-
-                cursor = (Cursor) harvsetSeason.getSelectedItem();
-                harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-
-                grade_spinner_name = (String) grade.getSelectedItem();
-
-                PojoProduct pojoProduct = new PojoProduct();
-                pojoProduct.setName(String.valueOf(product_name.getText()));
-                pojoProduct.setFarmer(farmer_spiner_id);
-                pojoProduct.setGrade(grade_spinner_name);
-                pojoProduct.setHarvest_season(harvest_s_spinner_id);
-                pojoProduct.setPrice(Integer.valueOf(sale_price.getText().toString()));
-                pojoProduct.setQuantity(Double.valueOf(quantity.getText().toString()));
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("product", pojoProduct);
-
-                Intent intent = new Intent(getContext(), UpdateProduct.class);
-                intent.putExtra("product_data", bundle);
-                intent.putExtra("product_id", product_server_id);
-
-                getContext().startService(intent);
-                //Toast.makeText(getContext(),"Success "+product_server_id,Toast.LENGTH_LONG).show();
-                dismiss();
-
-            }
-            else {
-                Toast.makeText(getContext(),"Erreur des donnees",Toast.LENGTH_LONG).show();
-            }
-        }catch (Exception e){
-            return;
         }
     }
+
     private boolean isValidString(String word) {
         return word.length() >= 3;
     }

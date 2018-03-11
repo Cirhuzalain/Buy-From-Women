@@ -384,7 +384,7 @@
         <service android:name=".farmers.sync.RefreshData" />
         <service android:name=".farmers.sync.UpdateFarmerService" />
         <service android:name=".farmers.sync.UpdateSyncFarmer" />
-        <service android:name=".coops.sync.UpdateCoopService" />
+        <service android:name=".coops.sync.SyncCoopInfo" />
         <service android:name=".farmers.sync.DeleteFarmerService" />
 
         <service android:name=".buyers.sync.AddBuyer" />
@@ -398,6 +398,18 @@
         <service android:name=".coopAgent.sync.DeleteSyncAgentBkgrnd" />
         <service android:name=".coopAgent.sync.UpdateAgent" />
         <service android:name=".coopAgent.sync.UpdateSyncAgentBkgrnd" />
+
+        <service android:name=".coops.sync.AddCoop" />
+        <service android:name=".coops.sync.SyncCoopInfo" />
+        <service android:name=".coops.sync.DeleteCoopService" />
+
+        <service
+            android:name=".coops.sync.SyncCoop"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".coopAgent.sync.UpdateSyncAgent"

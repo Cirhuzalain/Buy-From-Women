@@ -260,9 +260,9 @@ public class BfwProvider extends ContentProvider {
 
         yieldByCoop.setTables(
                 BfwContract.Coops.TABLE_NAME +
-                        " INNER JOIN " + BfwContract.ExpectedYieldCoop.TABLE_NAME +
-                        " ON " + BfwContract.ExpectedYieldCoop.TABLE_NAME +
-                        "." + BfwContract.ExpectedYieldCoop.COLUMN_COOP_ID +
+                        " INNER JOIN " + BfwContract.YieldCoop.TABLE_NAME +
+                        " ON " + BfwContract.YieldCoop.TABLE_NAME +
+                        "." + BfwContract.YieldCoop.COLUMN_COOP_ID +
                         " = " + BfwContract.Coops.TABLE_NAME +
                         "." + BfwContract.Coops._ID
         );
@@ -745,7 +745,7 @@ public class BfwProvider extends ContentProvider {
             case FINANCE_DATA_VENDOR:
                 id = db.insert(BfwContract.FinanceDataVendor.TABLE_NAME, null, contentValues);
                 if (id > 0) {
-                    returnUri = BfwContract.FinanceDataVendor.buildFinanceDataFarmerUri(id);
+                    returnUri = BfwContract.FinanceDataVendor.buildFinanceDataVendorUri(id);
                 } else {
                     throw new UnsupportedOperationException("Uri not supported table vendor land info " + uri);
                 }

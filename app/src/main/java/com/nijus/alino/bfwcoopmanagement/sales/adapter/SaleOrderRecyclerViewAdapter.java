@@ -60,25 +60,17 @@ public class SaleOrderRecyclerViewAdapter extends RecyclerView.Adapter<SaleOrder
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final ImageView mSalesIcon;
-        public final TextView mHarvSeason;
-        public final TextView mCustomer;
-        public final TextView mQuantity;
-        public final TextView mPrice;
         public DummyCont.DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mHarvSeason = view.findViewById(R.id.prod_harv_so);
-            mCustomer = view.findViewById(R.id.prod_customer_so);
-            mQuantity = view.findViewById(R.id.prod_quantity_so);
-            mPrice = view.findViewById(R.id.prod_price_so);
             mSalesIcon = view.findViewById(R.id.prod_icon);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mHarvSeason.getText() + "'";
+            return super.toString() + " ";
         }
     }
 }

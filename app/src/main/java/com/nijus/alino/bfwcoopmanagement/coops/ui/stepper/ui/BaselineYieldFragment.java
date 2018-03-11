@@ -97,6 +97,9 @@ public class BaselineYieldFragment extends Fragment {
 
         cursor = (Cursor) harvestSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        baselineYield.setSeasonId(seasonId);
+
 
         baselineYieldSeason.put(seasonName, baselineYield);
 

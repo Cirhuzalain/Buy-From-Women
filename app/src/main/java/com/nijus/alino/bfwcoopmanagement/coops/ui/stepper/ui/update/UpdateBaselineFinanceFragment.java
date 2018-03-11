@@ -173,7 +173,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             }
         });
 
-        aggrgation_post_harvset_loan = rootView.findViewById(R.id.aggrgation_post_harvset_loan);
+        //aggrgation_post_harvset_loan = rootView.findViewById(R.id.aggrgation_post_harvset_loan);
         agg_post_harv_loan_prov_bank = rootView.findViewById(R.id.agg_post_harv_loan_prov_bank);
         agg_post_harv_loan_prov_cooperative = rootView.findViewById(R.id.agg_post_harv_loan_prov_cooperative) ;
         agg_post_harv_loan_prov_sacco = rootView.findViewById(R.id.agg_post_harv_loan_prov_sacco);
