@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.DeleteCoopDialog;
@@ -45,6 +46,7 @@ import com.nijus.alino.bfwcoopmanagement.events.ProcessingVendorEvent;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshVendorLoader;
 import com.nijus.alino.bfwcoopmanagement.events.RequestEventVendorToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.ResponseEventVendorToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleRequestCoopEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleVendorRequestEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleVendorResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
