@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +29,9 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
     public static final String ARG_KEY = "key";
     private String mKey;
-    private PageVendorVendor mPageVendor;
+    private PageVendorVendor mPage;
     private PageFragmentCallbacksVendor mCallbacks;
-    private ServiceAccessVendor serviceAccessVendor = new ServiceAccessVendor();
+    private ServiceAccessVendor serviceAccess = new ServiceAccessVendor();
 
     private Uri mUri;
     private long mFarmerId;
@@ -52,9 +54,8 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
 
     private AutoCompleteTextView safeStorage_text;
-    private AutoCompleteTextView other_text;
-    private AutoCompleteTextView other_text2;
-
+    private AutoCompleteTextView newResources;
+    private AutoCompleteTextView otherwatersource;
 
     public UpdateServiceFragmentVendor() {
         super();
@@ -75,15 +76,14 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
         Bundle args = getArguments();
         mKey = args.getString(ARG_KEY);
-        mPageVendor = mCallbacks.onGetPage(mKey);
+        mPage = mCallbacks.onGetPage(mKey);
 
         Intent intent = getActivity().getIntent();
 
-        if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
+        if (intent.hasExtra("vendorId")) {
+            mFarmerId = intent.getLongExtra("vendorId", 0);
+            mUri = BfwContract.Vendor.buildVendorUri(mFarmerId);
         }
-
     }
 
     @Override
@@ -94,8 +94,8 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
-                BfwContract.Farmer._ID + " =  ? ";
+        String farmerSelection = BfwContract.Vendor.TABLE_NAME + "." +
+                BfwContract.Vendor._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
@@ -113,131 +113,152 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            /*int aggriExt = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_AGRI_EXTENSION_SERV));
-            int cInfo = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_CLIMATE_RELATED_INFO));
-            int seedInf = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SEEDS));
-            int organicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_ORGANIC_FERTILIZER));
-            int inorganicFert = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_INORGANIC_FERTILIZER));
-            int isLabour = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_LABOUR));
-            int isWp = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_PUMPS));*/
-            int isTract = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRACTORS));
-            int harv = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HARVESTER));
-            //int cSprayer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SPRAYERS));
-            int cDryer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DRYER));
-            int cTresher = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRESHER));
-            int safeStor = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SAFE_STORAGE));
-            int otherInfo = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO));
-            int cDam = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DAM));
-            int cwell = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WELL));
-            int cborehole = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_BOREHOLE));
-            int cpipeBorne = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PIPE_BORNE));
-            int criverStream = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_RIVER_STREAM));
-            int cirrig = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_IRRIGATION));
-            int cnoWater = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_NONE));
-            int cother = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER));
+            int isTract = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_TRACTORS));
+            int harv = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HARVESTER));
+            int cDryer = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_DRYER));
+            int cTresher = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_TRESHER));
+            int safeStor = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_SAFE_STORAGE));
+            int otherInfo = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_OTHER_INFO));
+            int cDam = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_DAM));
+            int cwell = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_WELL));
+            int cborehole = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_BOREHOLE));
+            int cpipeBorne = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_PIPE_BORNE));
+            int criverStream = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_RIVER_STREAM));
+            int cirrig = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_IRRIGATION));
+            int cnoWater = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_NONE));
+            int cother = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_OTHER));
+
+            String storageDetail = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_STORAGE_DETAIL));
+            String otherResources = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_NEW_SOURCE_DETAIL));
+            String otherWater = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS));
+
+            if (storageDetail == null || storageDetail.equals("null")) {
+                safeStorage_text.setText("");
+                serviceAccess.setStorageDetails(null);
+            } else {
+                safeStorage_text.setText(storageDetail);
+                serviceAccess.setStorageDetails(storageDetail);
+            }
+
+            if (otherResources == null || otherResources.equals("null")) {
+                newResources.setText("");
+                serviceAccess.setNewResourcesDetails(null);
+            } else {
+                newResources.setText(otherResources);
+                serviceAccess.setNewResourcesDetails(otherResources);
+            }
+
+            if (otherWater == null || otherWater.equals("null")) {
+                otherwatersource.setText("");
+                serviceAccess.setMainWaterSourceDetails(null);
+            } else {
+                otherwatersource.setText(otherWater);
+                serviceAccess.setMainWaterSourceDetails(otherWater);
+            }
 
 
             if (isTract == 1) {
                 tractors.setChecked(true);
-                serviceAccessVendor.setTractor(false);
+                serviceAccess.setTractor(false);
             } else {
-                serviceAccessVendor.setTractor(false);
+                serviceAccess.setTractor(false);
             }
 
             if (harv == 1) {
                 harvester.setChecked(true);
-                serviceAccessVendor.setHarvester(true);
+                serviceAccess.setHarvester(true);
             } else {
-                serviceAccessVendor.setHarvester(false);
+                serviceAccess.setHarvester(false);
             }
 
             if (cDryer == 1) {
                 dryer.setChecked(true);
-                serviceAccessVendor.setDryer(true);
+                serviceAccess.setDryer(true);
             } else {
-                serviceAccessVendor.setDryer(false);
+                serviceAccess.setDryer(false);
             }
 
             if (cTresher == 1) {
                 tresher.setChecked(true);
-                serviceAccessVendor.setTresher(true);
+                serviceAccess.setTresher(true);
             } else {
-                serviceAccessVendor.setTresher(false);
+                serviceAccess.setTresher(false);
             }
 
             if (safeStor == 1) {
                 safeStorage.setChecked(true);
-                serviceAccessVendor.setSafeStorage(true);
+                serviceAccess.setSafeStorage(true);
             } else {
-                serviceAccessVendor.setSafeStorage(false);
+                serviceAccess.setSafeStorage(false);
             }
 
             if (otherInfo == 1) {
                 otherResourcesAvailable.setChecked(true);
-                serviceAccessVendor.setSafeStorage(true);
+                serviceAccess.setSafeStorage(true);
             } else {
-                serviceAccessVendor.setSafeStorage(false);
+                serviceAccess.setSafeStorage(false);
             }
 
             if (cDam == 1) {
                 dam.setChecked(true);
-                serviceAccessVendor.setDam(true);
+                serviceAccess.setDam(true);
             } else {
-                serviceAccessVendor.setDam(false);
+                serviceAccess.setDam(false);
             }
 
             if (cborehole == 1) {
                 boreHole.setChecked(true);
-                serviceAccessVendor.setBoreHole(true);
+                serviceAccess.setBoreHole(true);
             } else {
-                serviceAccessVendor.setBoreHole(false);
+                serviceAccess.setBoreHole(false);
             }
 
             if (cwell == 1) {
                 well.setChecked(true);
-                serviceAccessVendor.setWell(true);
+                serviceAccess.setWell(true);
             } else {
-                serviceAccessVendor.setWell(false);
+                serviceAccess.setWell(false);
             }
 
             if (cpipeBorne == 1) {
                 pipeBorne.setChecked(true);
-                serviceAccessVendor.setPipeBorne(true);
+                serviceAccess.setPipeBorne(true);
             } else {
-                serviceAccessVendor.setWell(false);
+                serviceAccess.setWell(false);
             }
 
             if (criverStream == 1) {
                 river.setChecked(true);
-                serviceAccessVendor.setRiverStream(true);
+                serviceAccess.setRiverStream(true);
             } else {
-                serviceAccessVendor.setRiverStream(false);
+                serviceAccess.setRiverStream(false);
             }
 
             if (cirrig == 1) {
                 eIrrigation.setChecked(true);
-                serviceAccessVendor.setIrrigation(true);
+                serviceAccess.setIrrigation(true);
             } else {
-                serviceAccessVendor.setIrrigation(false);
+                serviceAccess.setIrrigation(false);
             }
 
             if (cnoWater == 1) {
                 eNone.setChecked(true);
-                serviceAccessVendor.setHasNoWaterSource(true);
+                serviceAccess.setHasNoWaterSource(true);
             } else {
-                serviceAccessVendor.setHasNoWaterSource(false);
+                serviceAccess.setHasNoWaterSource(false);
             }
 
             if (cother == 1) {
                 eOther.setChecked(true);
-                serviceAccessVendor.setOtherInfo(true);
+                serviceAccess.setOtherInfo(true);
             } else {
-                serviceAccessVendor.setOtherInfo(false);
+                serviceAccess.setOtherInfo(false);
             }
 
-            mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+            mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
         }
     }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -255,75 +276,75 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
 
         tractors = rootView.findViewById(R.id.tractors);
         boolean isTractors = tractors.isActivated();
-        serviceAccessVendor.setTractor(isTractors);
+        serviceAccess.setTractor(isTractors);
 
         harvester = rootView.findViewById(R.id.harvester);
         boolean isHarvester = harvester.isActivated();
-        serviceAccessVendor.setHarvester(isHarvester);
+        serviceAccess.setHarvester(isHarvester);
 
         dryer = rootView.findViewById(R.id.dryer);
         boolean isDryer = dryer.isActivated();
-        serviceAccessVendor.setDryer(isDryer);
+        serviceAccess.setDryer(isDryer);
 
         tresher = rootView.findViewById(R.id.thresher);
         boolean isTresher = tresher.isActivated();
-        serviceAccessVendor.setTresher(isTresher);
+        serviceAccess.setTresher(isTresher);
 
         safeStorage = rootView.findViewById(R.id.safe_storage);
         boolean isSafeStorage = safeStorage.isActivated();
-        serviceAccessVendor.setSafeStorage(isSafeStorage);
+        serviceAccess.setSafeStorage(isSafeStorage);
 
         otherResourcesAvailable = rootView.findViewById(R.id.e_other_av_res);
         boolean isOtherResourceAv = otherResourcesAvailable.isActivated();
-        serviceAccessVendor.setOtherResourceInfo(isOtherResourceAv);
+        serviceAccess.setOtherResourceInfo(isOtherResourceAv);
 
         dam = rootView.findViewById(R.id.e_dam);
         boolean isDam = dam.isActivated();
-        serviceAccessVendor.setDam(isDam);
+        serviceAccess.setDam(isDam);
 
         well = rootView.findViewById(R.id.e_well);
         boolean isWell = well.isActivated();
-        serviceAccessVendor.setWell(isWell);
+        serviceAccess.setWell(isWell);
 
         boreHole = rootView.findViewById(R.id.e_borehole);
         boolean isBoreHole = boreHole.isActivated();
-        serviceAccessVendor.setBoreHole(isBoreHole);
+        serviceAccess.setBoreHole(isBoreHole);
 
         pipeBorne = rootView.findViewById(R.id.e_pipe_borne);
         boolean isPipeBorne = pipeBorne.isActivated();
-        serviceAccessVendor.setPipeBorne(isPipeBorne);
+        serviceAccess.setPipeBorne(isPipeBorne);
 
         river = rootView.findViewById(R.id.e_river);
         boolean isRiver = river.isActivated();
-        serviceAccessVendor.setDryer(isRiver);
+        serviceAccess.setDryer(isRiver);
 
         eIrrigation = rootView.findViewById(R.id.e_irrigation);
         boolean isEIrrigation = eIrrigation.isActivated();
-        serviceAccessVendor.setIrrigation(isEIrrigation);
+        serviceAccess.setIrrigation(isEIrrigation);
 
         eNone = rootView.findViewById(R.id.e_none);
         boolean isENone = eNone.isActivated();
-        serviceAccessVendor.setHasNoWaterSource(isENone);
+        serviceAccess.setHasNoWaterSource(isENone);
 
         eOther = rootView.findViewById(R.id.e_other_main);
         boolean isEOther = eOther.isActivated();
+        serviceAccess.setOtherInfo(isEOther);
 
-        //FIND AUTOCOMPLETE
         safeStorage_text = rootView.findViewById(R.id.safe_storage_text);
-        other_text = rootView.findViewById(R.id.new_resources);
-        other_text2 = rootView.findViewById(R.id.other_water_source);
+        newResources = rootView.findViewById(R.id.new_resources);
+        otherwatersource = rootView.findViewById(R.id.other_water_source);
 
-        mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+        mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
 
         tractors.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setTractor(true);
+                    serviceAccess.setTractor(true);
                 } else {
-                    serviceAccessVendor.setTractor(false);
+                    serviceAccess.setTractor(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -331,11 +352,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setHarvester(true);
+                    serviceAccess.setHarvester(true);
                 } else {
-                    serviceAccessVendor.setHarvester(false);
+                    serviceAccess.setHarvester(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -343,11 +364,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setDryer(true);
+                    serviceAccess.setDryer(true);
                 } else {
-                    serviceAccessVendor.setDryer(false);
+                    serviceAccess.setDryer(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -355,11 +376,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setTresher(true);
+                    serviceAccess.setTresher(true);
                 } else {
-                    serviceAccessVendor.setTresher(false);
+                    serviceAccess.setTresher(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -368,27 +389,61 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     safeStorage_text.setVisibility(View.VISIBLE);
-                    serviceAccessVendor.setSafeStorage(true);
+                    serviceAccess.setSafeStorage(true);
+                    safeStorage_text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setStorageDetails(charSequence.toString());
+                            mPage.setData("serviceAccessVendor", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
                     safeStorage_text.setText("");
                     safeStorage_text.setVisibility(View.GONE);
-                    serviceAccessVendor.setSafeStorage(false);
+                    serviceAccess.setSafeStorage(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
         otherResourcesAvailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text.setVisibility(View.VISIBLE);
-                    serviceAccessVendor.setOtherResourceInfo(true);
+                    newResources.setVisibility(View.VISIBLE);
+                    serviceAccess.setOtherResourceInfo(true);
+                    newResources.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setNewResourcesDetails(charSequence.toString());
+                            mPage.setData("serviceAccessVendor", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
-                    serviceAccessVendor.setOtherResourceInfo(false);
-                    other_text.setText("");
-                    other_text.setVisibility(View.GONE);
+                    serviceAccess.setOtherResourceInfo(false);
+                    newResources.setText("");
+                    newResources.setVisibility(View.GONE);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -396,11 +451,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setDam(true);
+                    serviceAccess.setDam(true);
                 } else {
-                    serviceAccessVendor.setDam(false);
+                    serviceAccess.setDam(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -408,11 +463,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setWell(true);
+                    serviceAccess.setWell(true);
                 } else {
-                    serviceAccessVendor.setWell(true);
+                    serviceAccess.setWell(true);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -420,11 +475,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setBoreHole(true);
+                    serviceAccess.setBoreHole(true);
                 } else {
-                    serviceAccessVendor.setBoreHole(false);
+                    serviceAccess.setBoreHole(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -432,11 +487,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setPipeBorne(true);
+                    serviceAccess.setPipeBorne(true);
                 } else {
-                    serviceAccessVendor.setPipeBorne(false);
+                    serviceAccess.setPipeBorne(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -444,11 +499,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setRiverStream(true);
+                    serviceAccess.setRiverStream(true);
                 } else {
-                    serviceAccessVendor.setRiverStream(false);
+                    serviceAccess.setRiverStream(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -456,11 +511,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setIrrigation(true);
+                    serviceAccess.setIrrigation(true);
                 } else {
-                    serviceAccessVendor.setIrrigation(false);
+                    serviceAccess.setIrrigation(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -468,11 +523,11 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    serviceAccessVendor.setHasNoWaterSource(true);
+                    serviceAccess.setHasNoWaterSource(true);
                 } else {
-                    serviceAccessVendor.setHasNoWaterSource(false);
+                    serviceAccess.setHasNoWaterSource(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 
@@ -480,14 +535,31 @@ public class UpdateServiceFragmentVendor extends Fragment implements LoaderManag
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    other_text2.setVisibility(View.VISIBLE);
-                    serviceAccessVendor.setOtherInfo(true);
+                    otherwatersource.setVisibility(View.VISIBLE);
+                    serviceAccess.setOtherInfo(true);
+                    otherwatersource.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            serviceAccess.setMainWaterSourceDetails(charSequence.toString());
+                            mPage.setData("serviceAccessVendor", serviceAccess);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
                 } else {
-                    other_text2.setVisibility(View.GONE);
-                    other_text2.setText("");
-                    serviceAccessVendor.setOtherInfo(false);
+                    otherwatersource.setVisibility(View.GONE);
+                    otherwatersource.setText("");
+                    serviceAccess.setOtherInfo(false);
                 }
-                mPageVendor.getData().putParcelable("serviceAccessVendor", serviceAccessVendor);
+                mPage.getData().putParcelable("serviceAccessVendor", serviceAccess);
             }
         });
 

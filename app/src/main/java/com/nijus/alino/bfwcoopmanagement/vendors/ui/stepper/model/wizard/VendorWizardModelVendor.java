@@ -22,12 +22,12 @@ public class VendorWizardModelVendor extends AbstractWizardModelVendorVendor {
     @Override
     protected PageListVendorVendor onNewRootPageList() {
         return new PageListVendorVendor(new GeneralPageVendorVendorVendor(this, "gen_info"),
-                new ForecastPageVendorVendorVendor(this, "forecast"),
+                new ServicesEquipmentPageVendorVendor(this, "access_service"),
                 new DemographicPageVendorVendorVendor(this, "demographic"),
+                new ForecastPageVendorVendorVendor(this, "forecast"),
                 new BaseLinePageVendorVendorVendor(this, "base_line"),
                 new FinancePageVendorVendorVendor(this, "finance"),
-                new ServicesEquipmentPageVendorVendor(this, "access_service"),
                 new AccessToInformationPageVendorVendorVendor(this, "access_information"),
-                new LandPageVendorVendorVendor(this, "farmer_land"));
+                new LandPageVendorVendorVendor(this, "vendor_land"));
     }
 }

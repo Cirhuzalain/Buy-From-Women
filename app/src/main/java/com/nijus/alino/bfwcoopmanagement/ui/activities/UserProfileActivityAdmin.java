@@ -16,14 +16,27 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.activities.DetailCoopActivity;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DeleteVendorEvent;
 import com.nijus.alino.bfwcoopmanagement.events.DisableFarmerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.DisableVendorSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventAgentResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.EventBuyerResetItems;
 import com.nijus.alino.bfwcoopmanagement.events.EventFarmerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.EventVendorResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingAgentEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingBuyerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingVendorEvent;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshVendorLoader;
 import com.nijus.alino.bfwcoopmanagement.events.RequestEventFarmerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventVendorToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.ResponseEventFarmerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventVendorToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerRequestEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerResponseEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleVendorRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleVendorResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.ViewPagerAdapter;
 import com.nijus.alino.bfwcoopmanagement.buyers.adapter.BuyerAdapter;
@@ -52,7 +65,10 @@ import com.nijus.alino.bfwcoopmanagement.events.ToggleAgentResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerRequestEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.NavigationFragment;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.DeleteVendorDialog;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.VendorRecyclerViewAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.DetailVendorActivity;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.fragment.VendorFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -63,7 +79,8 @@ import java.util.ArrayList;
 
 public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener,
         NavigationFragment.OnLongClickFragmentInteractionListener, BuyerFragment.OnListFragmentInteractionListener,
-        BuyerFragment.OnLongClickFragmentInteractionListener, CoopAgentFragment.OnListFragmentInteractionListener, CoopAgentFragment.OnLongClickFragmentInteractionListener {
+        BuyerFragment.OnLongClickFragmentInteractionListener, CoopAgentFragment.OnListFragmentInteractionListener, CoopAgentFragment.OnLongClickFragmentInteractionListener,
+        VendorFragment.OnListFragmentInteractionListener, VendorFragment.OnLongClickFragmentInteractionListener{
 
     BuyerFragment buyerFragment;
     VendorFragment vendorFragment;
@@ -141,6 +158,19 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
+
+    @Override
+    public void onListFragmentInteraction(long item, VendorRecyclerViewAdapter.ViewHolder vh) {
+        Intent intent = new Intent(this, DetailVendorActivity.class);
+        intent.putExtra("vendorId", item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongClickFragmentInteractionListener(long item, long position, VendorRecyclerViewAdapter.ViewHolder vh) {
+        enableActionMode((int) position);
+    }
+
     @Override
     public void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh) {
         Intent intent = new Intent(this, DetailFarmerActivity.class);
@@ -153,7 +183,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         enableActionMode((int) position);
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onToggleFarmerResponseEvent(ToggleFarmerResponseEvent farmerResponseEvent) {
         int count = farmerResponseEvent.getCount();
         if (count == 0) {
@@ -179,7 +209,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         Toast.makeText(this, processingFarmerEvent.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onResponseEventFarmerToDelete(ResponseEventFarmerToDelete eventFarmerToDelete) {
         if (Utils.isNetworkAvailable(getApplicationContext())) {
             ArrayList<Integer> farmerIds = eventFarmerToDelete.getFarmerIds();
@@ -204,15 +234,20 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         if (actionMode == null) {
             actionMode = startSupportActionMode(actionModeCallback);
         }
-        if (tabLayout.getSelectedTabPosition() == 2) {
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            //farmer
+            toggleSelection(position);
+        }
+        else if (tabLayout.getSelectedTabPosition() == 2) {
             //agent
             toggleSelectionAgent(position);
         } else if (tabLayout.getSelectedTabPosition() == 3) {
             //buyer
             toggleSelectionBuyer(position);
-        } else if (tabLayout.getSelectedTabPosition() == 0) {
-            //farmer
-            toggleSelection(position);
+        }
+        else if (tabLayout.getSelectedTabPosition() == 4) {
+            //vendor
+            toggleSelectionVendor(position);
         }
     }
 
@@ -273,7 +308,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     }
 
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onToggleBuyerResponseEvent(ToggleBuyerResponseEvent buyerResponseEvent) {
         int count = buyerResponseEvent.getCount();
         if (count == 0) {
@@ -284,7 +319,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onDeleteBuyerEvent(DeleteBuyerEvent deleteBuyerEvent) {
         if (deleteBuyerEvent.isSuccess()) {
             Toast.makeText(this, deleteBuyerEvent.getMessage(), Toast.LENGTH_LONG).show();
@@ -294,7 +329,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onResponseEventBuyerToDelete(ResponseEventBuyerToDelete eventBuyerToDelete) {
 
         if (Utils.isNetworkAvailable(getApplicationContext())) {
@@ -311,7 +346,13 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingBuyerEvent(ProcessingBuyerEvent processingBuyerEvent) {
+        Toast.makeText(this, processingBuyerEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    //subscibe Agent
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onToggleAgentResponseEvent(ToggleAgentResponseEvent agentResponseEvent) {
         int count = agentResponseEvent.getCount();
         if (count == 0) {
@@ -322,7 +363,13 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingAgentEvent(ProcessingAgentEvent processingAgentEvent) {
+        Toast.makeText(this, processingAgentEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onDeleteAgentEvent(DeleteAgentEvent deleteAgentEvent) {
         if (deleteAgentEvent.isSuccess()) {
             Toast.makeText(this, deleteAgentEvent.getMessage(), Toast.LENGTH_LONG).show();
@@ -332,7 +379,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-    @Subscribe
+    @Subscribe (threadMode = ThreadMode.MAIN)
     public void onResponseEventAgentToDelete(ResponseEventAgentToDelete eventAgentToDelete) {
 
         if (Utils.isNetworkAvailable(getApplicationContext())) {
@@ -350,6 +397,53 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     }
 
 
+
+    //subscibe vendor
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void onToggleVendorResponseEvent(ToggleVendorResponseEvent vendorResponseEvent) {
+        int count = vendorResponseEvent.getCount();
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count) + " selected");
+            actionMode.invalidate();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingVendorEvent(ProcessingVendorEvent processingVendorEvent) {
+        Toast.makeText(this, processingVendorEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void onDeleteVendorEvent(DeleteVendorEvent deleteVendorEvent) {
+        if (deleteVendorEvent.isSuccess()) {
+            Toast.makeText(this, deleteVendorEvent.getMessage(), Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new RefreshVendorLoader());
+        } else {
+            Toast.makeText(this, deleteVendorEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void onResponseEventVendorToDelete(ResponseEventVendorToDelete eventVendorToDelete) {
+
+        if (Utils.isNetworkAvailable(getApplicationContext())) {
+            ArrayList<Integer> agentIds = eventVendorToDelete.getVendorIds();
+
+            DeleteVendorDialog agentDeleteDialog = new DeleteVendorDialog();
+            Bundle bundle = new Bundle();
+            bundle.putIntegerArrayList("vendor_ids", agentIds);
+            agentDeleteDialog.setArguments(bundle);
+            agentDeleteDialog.show(getSupportFragmentManager(), "dialogLoanTag");
+
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.connectivity_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     private void toggleSelectionBuyer(int position) {
         // dispatch event to toggle action
         EventBus.getDefault().post(new ToggleBuyerRequestEvent(position));
@@ -358,24 +452,33 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     private void toggleSelectionAgent(int position) {
         // dispatch event to toggle action
         EventBus.getDefault().post(new ToggleAgentRequestEvent(position));
-
     }
+    private void toggleSelectionVendor(int position) {
+        // dispatch event to toggle action
+        EventBus.getDefault().post(new ToggleVendorRequestEvent(position));
+    }
+
 
     private class ActionModeCallback implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             // dispatch event to disable  swipe refresh
-            if (tabLayout.getSelectedTabPosition() == 2) {
+             if (tabLayout.getSelectedTabPosition() == 0) {
+                //farmer
+                EventBus.getDefault().post(new DisableFarmerSwipeEvent());
+            }
+            else if (tabLayout.getSelectedTabPosition() == 2) {
                 //agent
                 EventBus.getDefault().post(new DisableAgentSwipeEvent());
             } else if (tabLayout.getSelectedTabPosition() == 3) {
                 //buyer
                 EventBus.getDefault().post(new DisableBuyerSwipeEvent());
-            } else if (tabLayout.getSelectedTabPosition() == 0) {
-                //farmer
-                EventBus.getDefault().post(new DisableFarmerSwipeEvent());
             }
+             else if (tabLayout.getSelectedTabPosition() == 4) {
+                 //farmer
+                 EventBus.getDefault().post(new DisableVendorSwipeEvent());
+             }
             return true;
         }
 
@@ -390,15 +493,19 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
                 case R.id.action_delete:
                     // dispatch event to request data to delete
                     // Use Tab Position to call the correct event  tabLayout.getSelectedTabPosition()
-
+                    if (tabLayout.getSelectedTabPosition() == 0) {
+                        //farmer
+                        EventBus.getDefault().post(new RequestEventFarmerToDelete());
+                    }
                     if (tabLayout.getSelectedTabPosition() == 2) {
                         //agent
                         EventBus.getDefault().post(new RequestEventAgentToDelete());
                     } else if (tabLayout.getSelectedTabPosition() == 3) {
                         //buyer
                         EventBus.getDefault().post(new RequestEventBuyerToDelete());
-                    } else if (tabLayout.getSelectedTabPosition() == 0) {
-                        EventBus.getDefault().post(new RequestEventFarmerToDelete());
+                    } else if (tabLayout.getSelectedTabPosition() == 4) {
+                        //vendor
+                        EventBus.getDefault().post(new RequestEventVendorToDelete());
                     }
                     mode.finish();
                     return true;
@@ -411,7 +518,20 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             // dispatch event to disable  swipe and clear adapter
-            EventBus.getDefault().post(new EventFarmerResetItems());
+            if (tabLayout.getSelectedTabPosition() == 0) {
+                EventBus.getDefault().post(new EventFarmerResetItems());
+
+            } else if (tabLayout.getSelectedTabPosition() == 2) {
+                //Agent
+                EventBus.getDefault().post(new EventAgentResetItems());
+
+            } else if (tabLayout.getSelectedTabPosition() == 3) {
+                //buyer
+                EventBus.getDefault().post(new EventBuyerResetItems());
+            }
+            else if (tabLayout.getSelectedTabPosition() == 4) {
+                EventBus.getDefault().post(new EventVendorResetItems());
+            }
         }
     }
 }

@@ -1,29 +1,37 @@
 package com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.PageVendorVendor;
 import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.AccessToInformationVendor;
 
-public class AccessToInformationFragmentVendor extends Fragment implements AdapterView.OnItemSelectedListener {
+import java.util.HashMap;
+
+public class AccessToInformationFragmentVendor extends Fragment {
 
     public static final String ARG_KEY = "key";
     private String mKey;
     private PageVendorVendor mPageVendor;
     private PageFragmentCallbacksVendor mCallbacks;
-    private AccessToInformationVendor accessToInformationVendor = new AccessToInformationVendor();
+    private AccessToInformationVendor accessInfo = new AccessToInformationVendor();
+
+    private Cursor cursor;
+    private String seasonName;
+    private int seasonId;
+    private HashMap<String, AccessToInformationVendor> seasonAccessToInfo = new HashMap<>();
 
     private CheckBox agriculturalExtension;
     private CheckBox climateInfo;
@@ -32,8 +40,8 @@ public class AccessToInformationFragmentVendor extends Fragment implements Adapt
     private CheckBox inorganicFertilizers;
     private CheckBox labour;
     private CheckBox irrigation;
+    private CheckBox spreaders;
     private Spinner harvsetSeason;
-
 
     public AccessToInformationFragmentVendor() {
         super();
@@ -69,130 +77,333 @@ public class AccessToInformationFragmentVendor extends Fragment implements Adapt
 
         harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
 
+        populateSpinner();
+
 
         agriculturalExtension = rootView.findViewById(R.id.agricultural_ext);
         boolean isAgriExt = agriculturalExtension.isActivated();
-        accessToInformationVendor.setAgricultureExtension(isAgriExt);
+
+        accessInfo.setAgricultureExtension(isAgriExt);
 
         climateInfo = rootView.findViewById(R.id.climate_info);
         boolean isClimateInfo = climateInfo.isActivated();
-        accessToInformationVendor.setClimateRelatedInformation(isClimateInfo);
+        accessInfo.setClimateRelatedInformation(isClimateInfo);
 
         seeds = rootView.findViewById(R.id.seeds);
         boolean isSeeds = seeds.isActivated();
-        accessToInformationVendor.setSeed(isSeeds);
+        accessInfo.setSeed(isSeeds);
 
         organicFertilizers = rootView.findViewById(R.id.organic_fertilizers);
         boolean isFertilizer = organicFertilizers.isActivated();
-        accessToInformationVendor.setOrganicFertilizers(isFertilizer);
+        accessInfo.setOrganicFertilizers(isFertilizer);
 
         inorganicFertilizers = rootView.findViewById(R.id.inorganic_fertilizers);
         boolean isInorganicFertilizer = inorganicFertilizers.isActivated();
-        accessToInformationVendor.setInorganicFertilizers(isInorganicFertilizer);
+        accessInfo.setInorganicFertilizers(isInorganicFertilizer);
 
         labour = rootView.findViewById(R.id.labour);
         boolean isLabour = labour.isActivated();
-        accessToInformationVendor.setLabour(isLabour);
+        accessInfo.setLabour(isLabour);
 
         irrigation = rootView.findViewById(R.id.irrigation);
         boolean isIrrigation = irrigation.isActivated();
-        accessToInformationVendor.setWaterPumps(isIrrigation);
+        accessInfo.setWaterPumps(isIrrigation);
+
+        spreaders = rootView.findViewById(R.id.spreader);
+        boolean isSpreader = spreaders.isActivated();
+        accessInfo.setSpreaderOrSprayer(isSpreader);
+
+        cursor = (Cursor) harvsetSeason.getSelectedItem();
+        seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+        seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+        accessInfo.setHarvestSeason(seasonId);
+
+        seasonAccessToInfo.put(seasonName, accessInfo);
 
 
-
-        mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+        mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
 
         agriculturalExtension.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setAgricultureExtension(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setAgricultureExtension(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setAgricultureExtension(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setAgricultureExtension(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setAgricultureExtension(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setAgricultureExtension(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
         climateInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setClimateRelatedInformation(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setClimateRelatedInformation(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setClimateRelatedInformation(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setClimateRelatedInformation(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setClimateRelatedInformation(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setClimateRelatedInformation(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
         seeds.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setSeed(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSeed(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setSeed(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setSeed(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSeed(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setSeed(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
         organicFertilizers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setOrganicFertilizers(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setOrganicFertilizers(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setOrganicFertilizers(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setOrganicFertilizers(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setOrganicFertilizers(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setOrganicFertilizers(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
         inorganicFertilizers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setInorganicFertilizers(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setInorganicFertilizers(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setInorganicFertilizers(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setInorganicFertilizers(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setInorganicFertilizers(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setInorganicFertilizers(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
+
             }
         });
 
         labour.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setLabour(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setLabour(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setLabour(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setLabour(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setLabour(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setHarvestSeason(seasonId);
+                        information.setLabour(false);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
         irrigation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
                 if (b) {
-                    accessToInformationVendor.setWaterPumps(true);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setWaterPumps(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setWaterPumps(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 } else {
-                    accessToInformationVendor.setWaterPumps(false);
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setWaterPumps(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setWaterPumps(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
                 }
-                mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.harverstSeason, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        harvsetSeason.setAdapter(adapter);
+        spreaders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                cursor = (Cursor) harvsetSeason.getSelectedItem();
+                seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
 
-        harvsetSeason.setOnItemSelectedListener(this);
+                if (b) {
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSpreaderOrSprayer(true);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setSpreaderOrSprayer(true);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
+                } else {
+                    if (seasonAccessToInfo.containsKey(seasonName)) {
+                        seasonAccessToInfo.get(seasonName).setSpreaderOrSprayer(false);
+                    } else {
+                        AccessToInformationVendor information = new AccessToInformationVendor();
+                        information.setSpreaderOrSprayer(false);
+                        information.setHarvestSeason(seasonId);
+                        seasonAccessToInfo.put(seasonName, information);
+                    }
+                }
+                mPageVendor.getData().putSerializable("accessToInformationVendor", seasonAccessToInfo);
+            }
+        });
+
         return rootView;
+    }
+
+    public void populateSpinner() {
+        String[] fromColumns = {BfwContract.HarvestSeason.COLUMN_NAME};
+
+        // View IDs to map the columns (fetched above) into
+        int[] toViews = {
+                android.R.id.text1
+        };
+        Cursor cursor = getActivity().getContentResolver().query(
+                BfwContract.HarvestSeason.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null) {
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                    getContext(), // context
+                    android.R.layout.simple_spinner_item, // layout file
+                    cursor, // DB cursor
+                    fromColumns, // data to bind to the UI
+                    toViews, // views that'll represent the data from `fromColumns`
+                    0
+            );
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Create the list view and bind the adapter
+            harvsetSeason.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -206,16 +417,5 @@ public class AccessToInformationFragmentVendor extends Fragment implements Adapt
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        accessToInformationVendor.setHarvsetSeason(adapterView.getItemAtPosition(i).toString());
-        mPageVendor.getData().putParcelable("accessToInformationVendor", accessToInformationVendor);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }

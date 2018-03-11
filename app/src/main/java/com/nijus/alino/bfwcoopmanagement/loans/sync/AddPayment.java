@@ -62,12 +62,11 @@ public class AddPayment extends IntentService {
                 Uri uri = getContentResolver().insert(BfwContract.LoanPayment.CONTENT_URI, contentValues);
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent());
+                EventBus.getDefault().post(new SaveDataEvent("Payment added successfully",true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service
                     Intent intent1 = new Intent(this, SyncLoanPaymentBackground.class);
-                    //intent1.putExtra("id_loan_payment",id_loan);
                     startService(intent1);
                 } else {
                     //schedule a job if not network is available
@@ -78,7 +77,6 @@ public class AddPayment extends IntentService {
                             .setTag(UUID.randomUUID().toString())
                             .setConstraints(Constraint.ON_ANY_NETWORK)
                             .build();
-
                     dispatcher.mustSchedule(job);
                 }
             }

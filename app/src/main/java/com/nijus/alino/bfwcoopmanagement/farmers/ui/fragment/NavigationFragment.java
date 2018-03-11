@@ -223,7 +223,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
             return new CursorLoader(getActivity(), BfwContract.Farmer.CONTENT_URI, null, null, null,
                     null);
         }
-
     }
 
     @Override
@@ -247,7 +246,6 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         if (view.getId() == R.id.fab) {
             startActivity(new Intent(getActivity(), CreateFarmerActivity.class));
         }
-
     }
 
     /**

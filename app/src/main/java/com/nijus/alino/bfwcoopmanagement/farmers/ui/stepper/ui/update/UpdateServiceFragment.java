@@ -152,10 +152,10 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
 
             if (otherWater == null || otherWater.equals("null")) {
                 otherwatersource.setText("");
-                serviceAccess.setNewResourcesDetails(null);
+                serviceAccess.setMainWaterSourceDetails(null);
             } else {
                 otherwatersource.setText(otherWater);
-                serviceAccess.setNewResourcesDetails(otherWater);
+                serviceAccess.setMainWaterSourceDetails(otherWater);
             }
 
 

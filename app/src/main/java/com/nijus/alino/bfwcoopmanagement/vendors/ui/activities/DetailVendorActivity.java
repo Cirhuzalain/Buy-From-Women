@@ -13,30 +13,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pages.PageVendorVendor;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.GeneralVendor;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui.PageFragmentCallbacksVendor;
+import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.AccessToInformationVendorAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.BaselineVendorAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.FinanceDataVendorAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.ForecastDataVendorAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.adapter.LandVendorDataAdapter;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.AccessToInformationVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.BaseLineVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.FinanceVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.ForecastVendor;
+import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.LandInformationVendor;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 
 public class DetailVendorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    Long mFarmerId;
+    private Long mVendorId;
     private Uri mUri;
-    private int coopId;
     private String name;
-    private PageVendorVendor mPageVendor;
-    private String mKey;
-    private PageFragmentCallbacksVendor mCallbacks;
     public static final String ARG_KEY = "key";
-    private GeneralVendor generalVendor;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-    private ImageView coop_image;
+    private ListView infoListView;
+    private ListView baselineListView;
+    private ListView financeDataListView;
+    private ListView landDataListView;
+    private TextView coop_f_details;
+    private ListView forecastListView;
+
 
 
     @Override
@@ -44,27 +61,24 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_farmer);
 
-        getSupportLoaderManager().initLoader(0, null, this);
-
-        //get extra from user profile activity
-        //get farmer Id
         Intent intent = this.getIntent();
-        if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
+        if (intent.hasExtra("vendorId")) {
+            mVendorId = intent.getLongExtra("vendorId", 0);
+            mUri = BfwContract.Vendor.buildVendorUri(mVendorId);
         }
 
+        getSupportLoaderManager().initLoader(0, null, this);
+
         collapsingToolbarLayout = findViewById(R.id.name_farmer);
-        //collapsingToolbarLayout.setBackgroundResource(R.mipmap.vendor);
+        infoListView = findViewById(R.id.info_list);
+        baselineListView = findViewById(R.id.baseline_list);
+        financeDataListView = findViewById(R.id.finance_data_list);
+        landDataListView = findViewById(R.id.land_data_list);
+        forecastListView = findViewById(R.id.forecast_data_list);
 
-
-        //collapsingToolbarLayout.setScrollBarSize(10);
-        //collapsingToolbarLayout.setScrollBarStyle(R.style.route_title);
         toolbar = findViewById(R.id.toolbar);
 
-
         setSupportActionBar(toolbar);
-
 
         FloatingActionButton fab = findViewById(R.id.fab_coop);
         ImageView imageView = findViewById(R.id.coop_image);
@@ -74,10 +88,8 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(getApplicationContext(), UpdateVendor.class);
-                intent1.putExtra("farmerId", mFarmerId);
+                intent1.putExtra("vendorId", mVendorId);
                 startActivity(intent1);
-                //Snackbar.make(view, mFarmerId+" Edit Coop Profile coming soon", Snackbar.LENGTH_LONG)
-                //.setAction("Action", null).show();
             }
         });
 
@@ -87,16 +99,16 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
-                BfwContract.Farmer._ID + " =  ? ";
+        String vendorSelection = BfwContract.Vendor.TABLE_NAME + "." +
+                BfwContract.Vendor._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
                     this,
                     mUri,
                     null,
-                    farmerSelection,
-                    new String[]{Long.toString(mFarmerId)},
+                    vendorSelection,
+                    new String[]{Long.toString(mVendorId)},
                     null
             );
         }
@@ -104,41 +116,87 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
+        getSupportLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
 
-            name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
-            String phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
-            String gender = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_GENDER));
-            int house_h_h = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSEHOLD_HEAD));
-            int house_h_member = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HOUSE_MEMBER));
-            String first_name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_FIRST_NAME));
-            String last_name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_LAST_NAME));
-            String cell_phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_PHONE));
-            String cell_carrer = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_CARRIER));
-            String membership = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_MEMBER_SHIP));
+            name = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_NAME));
+            String phone = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE));
+            String gender = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_GENDER));
+            String address = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_ADDRESS));
 
-            //available ressouces
-            int tractor = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRACTORS));
-            int harverster = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_HARVESTER));
-            int dryer = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DRYER));
-            int thresher = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_TRESHER));
-            int safe_storage = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_SAFE_STORAGE));
-            int other_info = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO));
+            double vendorLandSize = 0.0;
+            String coopName = "";
+            Cursor farmerCursor = null;
+            Cursor landVendorCursor = null;
+
+            String landVendorInfo = BfwContract.VendorLand.TABLE_NAME + "." +
+                    BfwContract.VendorLand._ID + " = ? ";
+
+            String vendorSelection = BfwContract.Vendor.TABLE_NAME + "." +
+                    BfwContract.Vendor._ID + " =  ? ";
+
+            try {
+
+                landVendorCursor = getContentResolver().query(BfwContract.VendorLand.buildVendorLandUri(mVendorId), null, vendorSelection, new String[]{Long.toString(mVendorId)}, null);
+
+                if (landVendorCursor != null) {
+                    while (landVendorCursor.moveToNext()) {
+                        vendorLandSize += landVendorCursor.getDouble(landVendorCursor.getColumnIndex(BfwContract.VendorLand.COLUMN_PLOT_SIZE));
+                    }
+                }
+
+            } finally {
+                if (farmerCursor != null) {
+                    farmerCursor.close();
+                }
+
+                if (landVendorCursor != null) {
+                    landVendorCursor.close();
+                }
+            }
+
+            int house_h_h = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HOUSEHOLD_HEAD));
+            int house_h_member = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HOUSE_MEMBER));
+            String first_name = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_FIRST_NAME));
+            String last_name = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_LAST_NAME));
+            String cell_phone = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_CELL_PHONE));
+            String cell_carrer = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_CELL_CARRIER));
+            String membership = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_MEMBER_SHIP));
+
+            //available resources
+            int tractor = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_TRACTORS));
+            int harvester = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_HARVESTER));
+            int dryer = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_DRYER));
+            int thresher = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_TRESHER));
+            int safe_storage = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_SAFE_STORAGE));
+            int other_info = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_OTHER_INFO));
 
             //main water source
-            int dam = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_DAM));
-            int well = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_WELL));
-            int borehole = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_BOREHOLE));
-            int river_stream = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_RIVER_STREAM));
-            int pipe_borne = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_PIPE_BORNE));
-            int irrigation = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_IRRIGATION));
-            int none = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_NONE));
-            int others = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER));
-
-
-            coopId = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_COOP_USER_ID));
-            //Toast.makeText(this,"rep7 = "+name, Toast.LENGTH_LONG).show();
+            int dam = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_DAM));
+            int well = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_WELL));
+            int borehole = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_BOREHOLE));
+            int river_stream = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_RIVER_STREAM));
+            int pipe_borne = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_PIPE_BORNE));
+            int irrigation = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_IRRIGATION));
+            int none = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_NONE));
+            int others = data.getInt(data.getColumnIndex(BfwContract.Vendor.COLUMN_OTHER));
 
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
@@ -152,56 +210,77 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
             TextView phone_f_details = findViewById(R.id.phone_f_details);
             phone_f_details.setText(phone);
 
+           /* TextView adress_f_details = findViewById(R.id.phone_f_details);
+            adress_f_details.setText(phone);
+*/
             TextView sex_f_details = findViewById(R.id.sex_f_details);
             sex_f_details.setText(gender);
 
-            //recup static data
-
             TextView address_f_details = findViewById(R.id.address_f_details);
-            address_f_details.setText("NYABUGOGO KIGALI");
+            if (address == null || address.equals("null")) {
+                address_f_details.setText("");
+            } else {
+                address_f_details.setText(address);
+            }
 
-            //IGNORER LA COOPERATIVE DU VENDOR
             TextView coop_f_details = findViewById(R.id.coop_f_details);
-            //coop_f_details.setText("COOPCUMA");
             coop_f_details.setVisibility(View.GONE);
 
-
             TextView tot_land_f_details = findViewById(R.id.tot_land_f_details);
+
+            String landFarmInfo = vendorLandSize + " ha ";
+            tot_land_f_details.setText(landFarmInfo);
 
             //demographic area
             ImageView demo_pic_f_details = findViewById(R.id.demo_pic_f_details);
             demo_pic_f_details.setImageResource(R.drawable.profile);
 
-            TextView house_hold_f_details = findViewById(R.id.house_hold_f_details);
-            //house_hold_f_details.setText(house_h_h);
-
             ImageView pic_house_hold = findViewById(R.id.pic_house_hold);
             pic_house_hold.setImageResource((house_h_h == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
 
             TextView household_member_f_details = findViewById(R.id.household_member_f_details1);
-            household_member_f_details.setText(house_h_member + "");
+            String houseHoldMember = house_h_member + "";
+            household_member_f_details.setText(houseHoldMember);
 
             TextView spouse_f_name_f_details = findViewById(R.id.spouse_f_name_f_details1);
-            spouse_f_name_f_details.setText(first_name);
+            if (first_name == null || first_name.equals("null")) {
+                spouse_f_name_f_details.setText("");
+            } else {
+                spouse_f_name_f_details.setText(first_name);
+            }
 
             TextView spouse_last_name_f_details = findViewById(R.id.spouse_last_name_f_details1);
-            spouse_last_name_f_details.setText(last_name);
+            if (last_name == null || last_name.equals("null")) {
+                spouse_last_name_f_details.setText("");
+            } else {
+                spouse_last_name_f_details.setText(last_name);
+            }
+
 
             TextView cell_phone_alt_f_details = findViewById(R.id.cell_phone_alt_f_details1);
-            cell_phone_alt_f_details.setText(cell_phone);
+            if (cell_phone == null || cell_phone.equals("null")) {
+                cell_phone_alt_f_details.setText("");
+            } else {
+                cell_phone_alt_f_details.setText(cell_phone);
+            }
 
             TextView cell_carrier_f_details = findViewById(R.id.cell_carrier_f_details1);
-            cell_carrier_f_details.setText(cell_carrer);
+            if (cell_carrer == null || cell_carrer.equals("null")) {
+                cell_carrier_f_details.setText("");
+            } else {
+                cell_carrier_f_details.setText(cell_carrer);
+            }
+
 
             TextView membership_f_details = findViewById(R.id.membership_f_details1);
             membership_f_details.setText(membership);
 
-            //Availabkeressoucres
+            //Available resources
             ImageView pic_tractor_details = findViewById(R.id.pic_tractor_details);
             pic_tractor_details.setImageResource((tractor == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
 
             ImageView pic_harv_details = findViewById(R.id.pic_harv_details);
-            pic_harv_details.setImageResource((harverster == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
+            pic_harv_details.setImageResource((harvester == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
 
             ImageView pic_dryer_details = findViewById(R.id.pic_dryer_details);
             pic_dryer_details.setImageResource((dryer == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
@@ -240,44 +319,294 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
             ImageView pic_other2_details = findViewById(R.id.pic_other2_details);
             pic_other2_details.setImageResource((others == 1) ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
 
-            //ACCORDION DETAILS FOR FARMERS
             //1. ACCESS TO INFORMATION
             final AccordionView access_info_accordion = findViewById(R.id.access_info_accordion);
             access_info_accordion.setHeadingString("ACCESS TO INFORMATION");
 
-            ImageView pic_agri_extension_details2 = findViewById(R.id.pic_agri_extension_details2);
-
-            ImageView pic_clim_rel_details2 = findViewById(R.id.pic_clim_rel_details2);
-
-            ImageView pic_seed_details2 = findViewById(R.id.pic_seed_details2);
-
-            ImageView pic_org_fert_details2 = findViewById(R.id.pic_org_fert_details2);
-
-            ImageView pic_inorg_fert_details2 = findViewById(R.id.pic_inorg_fert_details2);
-
-            ImageView pic_labour_details2 = findViewById(R.id.pic_labour_details2);
-
-            ImageView pic_irr_w_p_details2 = findViewById(R.id.pic_irr_w_p_details2);
-
-
             //2. ACCORDION BASELINE
             final AccordionView baseline_accordion = findViewById(R.id.baseline_accordion);
-            baseline_accordion.setHeadingString("BASELINE FARMER");
+            baseline_accordion.setHeadingString("BASELINE VENDOR");
+
 
             //3. ACCORDION FIMANCE
             final AccordionView finace_accordion = findViewById(R.id.finance_accordion);
             finace_accordion.setHeadingString("FINANCE DATA");
 
 
-            //4. ACCORDION FARMER LAND
+            //4. ACCORDION VENDOR LAND
             final AccordionView farmer_land_accordion = findViewById(R.id.farmer_land_accordion);
             farmer_land_accordion.setHeadingString("VENDOR LAND DATA");
 
-            //5. ACCORDION FPRECAST
+            //5. ACCORDION FORECAST
             final AccordionView forecast_accordion = findViewById(R.id.forecast_accordion);
             forecast_accordion.setHeadingString("FORECAST DATA");
 
-            //SET ANIMATION FOR ALL
+            // create URI
+            Uri infoUri = BfwContract.VendorAccessInfo.buildVendorAccessInfoUri(mVendorId);
+            Uri baselineUri = BfwContract.BaseLineVendor.buildBaselineVendorUri(mVendorId);
+            Uri financeUri = BfwContract.FinanceDataVendor.buildFinanceDataVendorUri(mVendorId);
+            Uri landUri = BfwContract.VendorLand.buildVendorLandUri(mVendorId);
+            Uri forecastUri = BfwContract.ForecastVendor.buildForecastVendorUri(mVendorId);
+
+            String vendorSelectionLand = BfwContract.Vendor.TABLE_NAME + "." +
+                    BfwContract.Vendor._ID + " =  ? ";
+            String seasonSelection = BfwContract.HarvestSeason.TABLE_NAME
+                    + "." + BfwContract.HarvestSeason._ID
+                    + " = ?";
+
+            // Construct info list
+            Cursor vendorDataCursor = null, seasonCursor = null;
+            ArrayList<AccessToInformationVendor> accessToInformations = new ArrayList<>();
+            ArrayList<BaseLineVendor> baseLines = new ArrayList<>();
+            ArrayList<FinanceVendor> finances = new ArrayList<>();
+            ArrayList<LandInformationVendor> landInformations = new ArrayList<>();
+            ArrayList<ForecastVendor> forecasts = new ArrayList<>();
+
+            try {
+                vendorDataCursor = getContentResolver().query(infoUri, null, vendorSelectionLand, new String[]{Long.toString(mVendorId)}, null);
+
+                //Access to information
+                if (vendorDataCursor != null) {
+                    int isAgricultureExtension;
+                    int isClimateRelatedInformation;
+                    int isSeed;
+                    int isOrganicFertilizers;
+                    int isInorganicFertilizers;
+                    int isLabour;
+                    int isWaterPumps;
+                    int isSpreaderOrSprayer;
+                    int seasonId;
+
+                    String seasonName = "";
+
+                    while (vendorDataCursor.moveToNext()) {
+
+                        isAgricultureExtension = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_AGRI_EXTENSION_SERV));
+                        isClimateRelatedInformation = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_CLIMATE_RELATED_INFO));
+                        isSeed = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_SEEDS));
+                        isOrganicFertilizers = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_ORGANIC_FERTILIZER));
+                        isInorganicFertilizers = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_INORGANIC_FERTILIZER));
+                        isLabour = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_LABOUR));
+                        isWaterPumps = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_WATER_PUMPS));
+                        isSpreaderOrSprayer = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_SPRAYERS));
+
+                        seasonId = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorAccessInfo.COLUMN_SEASON_ID));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null) {
+                            seasonCursor.moveToFirst();
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+                        AccessToInformationVendor accessToInformation = new AccessToInformationVendor(isAgricultureExtension == 1, isClimateRelatedInformation == 1,
+                                isSeed == 1, isOrganicFertilizers == 1, isInorganicFertilizers == 1,
+                                isLabour == 1, isWaterPumps == 1, isSpreaderOrSprayer == 1, seasonId);
+                        accessToInformation.setSeasonName(seasonName);
+
+                        accessToInformations.add(accessToInformation);
+                    }
+
+                }
+
+                //Baseline
+                vendorDataCursor = getContentResolver().query(baselineUri, null, vendorSelection, new String[]{Long.toString(mVendorId)}, null);
+                if (vendorDataCursor != null) {
+                    double totProd;
+                    double totLost;
+                    double totSolKg;
+                    double totVSoldCoop;
+                    double priceSoldCoop;
+                    double totVolSKg;
+                    double priceSold;
+
+                    int seasonId;
+
+                    String seasonName = "";
+
+                    while (vendorDataCursor.moveToNext()) {
+
+                        seasonId = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_SEASON_ID));
+
+                        totProd = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_TOT_PROD_B_KG));
+                        totLost = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_TOT_LOST_KG));
+                        totSolKg = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_TOT_SOLD_KG));
+                        totVSoldCoop = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_COOP));
+                        priceSoldCoop = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_COOP_PER_KG));
+                        totVolSKg = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_TOT_VOL_SOLD_IN_KG));
+                        priceSold = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.BaseLineVendor.COLUMN_PRICE_SOLD_KG));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null) {
+                            seasonCursor.moveToFirst();
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        BaseLineVendor baseLine = new BaseLineVendor(totProd, totLost, totSolKg, totVSoldCoop, priceSoldCoop, totVolSKg, priceSold, seasonId);
+                        baseLine.setSeasonName(seasonName);
+                        baseLines.add(baseLine);
+
+                    }
+                }
+
+                //Finance data vendor
+                vendorDataCursor = getContentResolver().query(financeUri, null, vendorSelection, new String[]{Long.toString(mVendorId)}, null);
+
+                if (vendorDataCursor != null) {
+
+                    int lOutstandingLoan;
+                    double lTotLoanAmount;
+                    double lTotOutstanding;
+                    double lInterestRate;
+                    int lDuration;
+                    String lProvider;
+                    int isMMAccount;
+                    int lInput;
+                    int lAggregation;
+                    int lOther;
+                    int seasonId;
+                    String seasonName = "";
+
+                    while (vendorDataCursor.moveToNext()) {
+
+                        seasonId = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_SEASON_ID));
+                        lOutstandingLoan = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_OUTSANDING_LOAN));
+                        lTotLoanAmount = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_TOT_LOAN_AMOUNT));
+                        lTotOutstanding = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_TOT_OUTSTANDING));
+                        lInterestRate = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_INTEREST_RATE));
+                        lDuration = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_DURATION));
+                        lProvider = vendorDataCursor.getString(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_LOAN_PROVIDER));
+                        isMMAccount = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_MOBILE_MONEY_ACCOUNT));
+                        lInput = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_INPUT));
+                        lAggregation = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_AGGREG));
+                        lOther = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.FinanceDataVendor.COLUMN_LOANPROVIDER_OTHER));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null) {
+                            seasonCursor.moveToFirst();
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+                        FinanceVendor finance = new FinanceVendor(lOutstandingLoan == 1, isMMAccount == 1, lInput == 1,
+                                lAggregation == 1, lOther == 1, lTotOutstanding, lInterestRate, lDuration, lProvider, lTotLoanAmount, seasonId);
+                        finance.setSeasonName(seasonName);
+                        finances.add(finance);
+                    }
+
+                }
+
+                //Land information
+                vendorDataCursor = getContentResolver().query(landUri, null, vendorSelection, new String[]{Long.toString(mVendorId)}, null);
+
+                if (vendorDataCursor != null) {
+
+                    double landSize;
+                    double lat;
+                    double lng;
+                    int seasonId;
+
+                    String seasonName = "";
+
+                    while (vendorDataCursor.moveToNext()) {
+
+                        seasonId = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.VendorLand.COLUMN_SEASON_ID));
+                        lat = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.VendorLand.COLUMN_LAT_INFO));
+                        lng = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.VendorLand.COLUMN_LNG_INFO));
+                        landSize = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.VendorLand.COLUMN_PLOT_SIZE));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null) {
+                            seasonCursor.moveToFirst();
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+                        LandInformationVendor landInformation = new LandInformationVendor(landSize, lat, lng, seasonId);
+                        landInformation.setSeasonName(seasonName);
+                        landInformations.add(landInformation);
+                    }
+
+                }
+
+                //Forecast Vendor
+                vendorDataCursor = getContentResolver().query(forecastUri, null, vendorSelection, new String[]{Long.toString(mVendorId)}, null);
+
+                if (vendorDataCursor != null) {
+
+                    double arableVendorLand;
+                    double totProdKg;
+                    double salesOutsidePpp;
+                    double postHarvestLossInKg;
+                    double totCoopLandSize;
+                    double farmerPercentCoopLandSize;
+
+                    double currentPppContrib;
+                    double farmerContributionPpp;
+
+                    double farmerexpectedmin;
+                    double minimumprice;
+
+                    int seasonId;
+                    String seasonName = "";
+
+                    while (vendorDataCursor.moveToNext()) {
+
+                        seasonId = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_SEASON_ID));
+                        arableVendorLand = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_ARABLE_LAND_PLOT));
+                        totProdKg = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_PRODUCTION_MT));
+                        salesOutsidePpp = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_YIELD_MT));
+                        postHarvestLossInKg = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_HARVEST_SALE_VALUE));
+                        totCoopLandSize = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_COOP_LAND_SIZE));
+                        farmerPercentCoopLandSize = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_PERCENT_FARMER_LAND_SIZE));
+                        currentPppContrib = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_PPP_COMMITMENT));
+                        farmerContributionPpp = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_CONTRIBUTION_PPP));
+
+
+                        farmerexpectedmin = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_EXPECTED_MIN_PPP));
+                        minimumprice = vendorDataCursor.getDouble(vendorDataCursor.getColumnIndex(BfwContract.ForecastVendor.COLUMN_FLOW_PRICE));
+
+                        seasonCursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, seasonSelection,
+                                new String[]{Integer.toString(seasonId)}, null);
+
+                        if (seasonCursor != null && seasonCursor.moveToFirst()) {
+                            seasonName = seasonCursor.getString(seasonCursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
+                        }
+
+                        ForecastVendor forecast = new ForecastVendor(arableVendorLand, totProdKg, salesOutsidePpp, postHarvestLossInKg, totCoopLandSize,
+                                farmerPercentCoopLandSize, seasonId, farmerexpectedmin, minimumprice, currentPppContrib, farmerContributionPpp);
+
+                        forecast.setSeasonName(seasonName);
+                        forecasts.add(forecast);
+                    }
+
+                }
+
+            } finally {
+                if (vendorDataCursor != null) {
+                    vendorDataCursor.close();
+                }
+                if (seasonCursor != null) {
+                    seasonCursor.close();
+                }
+            }
+            // Pass list to adapters
+            AccessToInformationVendorAdapter accessToInformationVendorAdapter = new AccessToInformationVendorAdapter(getApplicationContext(), accessToInformations);
+            BaselineVendorAdapter baselineVendorAdapter = new BaselineVendorAdapter(getApplicationContext(), baseLines);
+            FinanceDataVendorAdapter financeDataVendorAdapter = new FinanceDataVendorAdapter(getApplicationContext(), finances);
+            LandVendorDataAdapter landVendorDataAdapter = new LandVendorDataAdapter(getApplicationContext(), landInformations);
+            ForecastDataVendorAdapter forecastDataVendorAdapter = new ForecastDataVendorAdapter(getApplicationContext(), forecasts);
+
+            infoListView.setAdapter(accessToInformationVendorAdapter);
+            baselineListView.setAdapter(baselineVendorAdapter);
+            financeDataListView.setAdapter(financeDataVendorAdapter);
+            landDataListView.setAdapter(landVendorDataAdapter);
+            forecastListView.setAdapter(forecastDataVendorAdapter);
+
+
+            //SET ANIMATION FOR each accordion
             access_info_accordion.setAnimated(true);
             baseline_accordion.setAnimated(true);
             finace_accordion.setAnimated(true);
@@ -289,13 +618,10 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
                 @Override
                 public void onExpanded(AccordionView view) {
                     access_info_accordion.setHeadingBackGround(R.color.bg_detail);
-                    //access_info_accordion.setExpanded(true);
-                    //Toast.makeText(getApplicationContext(),"ouvert",Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onCollapsed(AccordionView view) {
-                    //Toast.makeText(getApplicationContext(),"fermer",Toast.LENGTH_LONG).show();
                     access_info_accordion.setHeadingBackGround(R.color.default_color);
 
 
@@ -349,8 +675,6 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
                     forecast_accordion.setHeadingBackGround(R.color.default_color);
                 }
             });
-
-
         }
     }
 

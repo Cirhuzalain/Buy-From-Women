@@ -10,19 +10,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -49,13 +46,13 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
     private PageFragmentCallbacksVendor mCallbacks;
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
+    private AutoCompleteTextView address;
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
     //private Spinner spinner;
     private Uri mUri;
     private long mFarmerId;
-    private int coopId;
     private LinearLayout content_spiner_coop;
 
 
@@ -82,11 +79,10 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
 
         Intent intent = getActivity().getIntent();
 
-        if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
-            mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
+        if (intent.hasExtra("vendorId")) {
+            mFarmerId = intent.getLongExtra("vendorId", 0);
+            mUri = BfwContract.Vendor.buildVendorUri(mFarmerId);
         }
-
     }
 
     @Override
@@ -98,8 +94,8 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
-                BfwContract.Farmer._ID + " =  ? ";
+        String farmerSelection = BfwContract.Vendor.TABLE_NAME + "." +
+                BfwContract.Vendor._ID + " =  ? ";
 
         if (mUri != null) {
             return new CursorLoader(
@@ -118,11 +114,11 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
 
-            String name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
-            String phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
-            String gender = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_GENDER));
+            String name = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_NAME));
+            String phone = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE));
+            String gender = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_GENDER));
+            String address_s = data.getString(data.getColumnIndex(BfwContract.Vendor.COLUMN_ADDRESS));
 
-            coopId = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_COOP_USER_ID));
             if (gender.equals("male")) {
                 male.setChecked(true);
             } else {
@@ -130,13 +126,18 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
             }
             names.setText(name);
             phoneNumber.setText(phone);
+
+            if (address == null || address.equals("null")) {
+                address.setText("");
+            } else {
+                address.setText(address_s);
+            }
             generalVendor.setName(name);
             generalVendor.setPhoneNumber(phone);
+            generalVendor.setAddress(address_s);
             mPageVendor.setData("generalVendor", generalVendor);
 
             setDefaultGender();
-
-            //setSpinnerItemById(spinner, coopId);
         }
     }
 
@@ -184,6 +185,7 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
 
         names = rootView.findViewById(R.id.name_f);
         phoneNumber = rootView.findViewById(R.id.name_phone);
+        address = rootView.findViewById(R.id.address);
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
         //spinner = rootView.findViewById(R.id.spinner_coops_infos);
@@ -244,8 +246,23 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
             }
         });
 
-        //populateSpinner();
-        //spinner.setOnItemSelectedListener(this);
+        address.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                generalVendor.setAddress(charSequence.toString());
+                mPageVendor.setData("generalVendor", generalVendor);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         return rootView;
     }
 
@@ -259,37 +276,6 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
         }
     }
 
-/*    public void populateSpinner() {
-        String[] fromColumns = {BfwContract.Coops.COLUMN_COOP_NAME};
-
-        // View IDs to map the columns (fetched above) into
-        int[] toViews = {
-                android.R.id.text1
-        };
-        Cursor cursor = getActivity().getContentResolver().query(
-                BfwContract.Coops.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-        if (cursor != null) {
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                    getContext(), // context
-                    android.R.layout.simple_spinner_item, // layout file
-                    cursor, // DB cursor
-                    fromColumns, // data to bind to the UI
-                    toViews, // views that'll represent the data from `fromColumns`
-                    0
-            );
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            // Create the list view and bind the adapter
-            spinner.setAdapter(adapter);
-        }
-    }*/
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -301,29 +287,4 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
         super.onDetach();
         mCallbacks = null;
     }
-
-  /*  @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        Cursor cursor = (Cursor) spinner.getSelectedItem();
-        generalVendor.setCoopsName(cursor.getString(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
-        mPageVendor.setData("generalVendor", generalVendor);
-    }
-
-    public void setSpinnerItemById(Spinner spinner, int _id) {
-        int spinnerCount = spinner.getCount();
-        for (int i = 0; i < spinnerCount; i++) {
-            Cursor value = (Cursor) spinner.getItemAtPosition(i);
-            long id = value.getLong(value.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));
-            if (id == _id) {
-                spinner.setSelection(i);
-                generalVendor.setCoopsName(value.getString(value.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
-                mPageVendor.setData("generalVendor", generalVendor);
-            }
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-    }*/
 }

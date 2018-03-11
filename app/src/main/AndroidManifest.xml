@@ -345,6 +345,22 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".vendors.sync.UpdateSyncVendorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".vendors.sync.SyncVendor"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
         <service
             android:name=".products.sync.SyncProduct"
             android:exported="false">
@@ -387,6 +403,14 @@
         <service android:name=".coops.sync.UpdateCoopService" />
         <service android:name=".farmers.sync.DeleteFarmerService" />
 
+        <service android:name=".vendors.sync.AddVendor" />
+        <service android:name=".vendors.sync.SyncBackgroundVendor" />
+        <service android:name=".vendors.sync.RefreshDataVendor" />
+        <service android:name=".vendors.sync.UpdateVendorService" />
+        <service android:name=".vendors.sync.UpdateSyncVendor" />
+        <service android:name=".vendors.sync.DeleteVendorService" />
+        <service android:name=".vendors.sync.DeleteTokenServiceVendor" />
+
         <service android:name=".buyers.sync.AddBuyer" />
         <service android:name=".buyers.sync.SyncBuyerBackground" />
         <service android:name=".buyers.sync.UpdateBuyer" />
@@ -413,13 +437,7 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
-        <service
-            android:name=".buyers.sync.SyncBuyer"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
+
         <service
             android:name=".loans.sync.SyncLoan"
             android:exported="false">

@@ -61,8 +61,6 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_farmer);
 
-
-
         Intent intent = this.getIntent();
         if (intent.hasExtra("farmerId")) {
             mFarmerId = intent.getLongExtra("farmerId", 0);
@@ -235,7 +233,6 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
             } else {
                 address_f_details.setText(address);
             }
-
 
             TextView coop_f_details = findViewById(R.id.coop_f_details);
             coop_f_details.setText(coopName);

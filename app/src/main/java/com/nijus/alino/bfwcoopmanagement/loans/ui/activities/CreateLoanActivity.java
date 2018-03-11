@@ -23,9 +23,8 @@ import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.AddLoan;
-import com.nijus.alino.bfwcoopmanagement.products.sync.AddProduct;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -194,18 +193,36 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        //getSupportLoaderManager().restartLoader(0, null, this);
-        startActivity(new Intent(getApplicationContext(), LoanActivity.class));
+        if (saveDataEvent.isSuccess()) {
+            startActivity(new Intent(getApplicationContext(), LoanActivity.class));
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
             startActivity(new Intent(getApplicationContext(), LoanActivity.class));
-            //getSupportLoaderManager().restartLoader(0, null, this);
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+
         } else {
             Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 }

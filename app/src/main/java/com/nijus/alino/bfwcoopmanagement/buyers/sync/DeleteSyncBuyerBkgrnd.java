@@ -12,6 +12,8 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteBuyerEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingAgentEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingBuyerEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -73,6 +75,8 @@ public class DeleteSyncBuyerBkgrnd extends IntentService {
                     dataCount = cursor.getCount();
 
                     while (cursor.moveToNext()) {
+                        EventBus.getDefault().post(new ProcessingBuyerEvent("Processing your request ..."));
+
                         id = cursor.getLong(cursor.getColumnIndex(BfwContract.Buyer._ID));
                         buyerServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_SERVER_ID));
 

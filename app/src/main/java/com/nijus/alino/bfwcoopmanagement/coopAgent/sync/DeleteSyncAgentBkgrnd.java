@@ -12,6 +12,9 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteAgentEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingAgentEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
@@ -72,6 +75,9 @@ public class DeleteSyncAgentBkgrnd extends IntentService {
                     dataCount = cursor.getCount();
 
                     while (cursor.moveToNext()) {
+
+                        EventBus.getDefault().post(new ProcessingAgentEvent("Processing your request ..."));
+
                         id = cursor.getLong(cursor.getColumnIndex(BfwContract.CoopAgent._ID));
                         agentServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_AGENT_SERVER_ID));
 

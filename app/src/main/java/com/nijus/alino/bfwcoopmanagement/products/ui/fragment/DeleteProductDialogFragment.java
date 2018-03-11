@@ -60,9 +60,6 @@ public class DeleteProductDialogFragment extends DialogFragment implements Dialo
     @Override
     public void onClick(View view) {
         try {
-            //id_to_delete = getArguments().getInt("id_product");
-            Toast.makeText(getContext(), ""+id_to_delete, Toast.LENGTH_LONG).show();
-
             if (Utils.isNetworkAvailable(getContext())) {
 
                 Intent intent = new Intent(getContext(), DeleteSyncProductBkgrnd.class);

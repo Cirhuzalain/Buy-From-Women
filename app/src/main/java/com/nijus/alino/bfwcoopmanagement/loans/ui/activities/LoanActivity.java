@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.adapter.LoanAdapter;
@@ -33,7 +34,6 @@ import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 
 public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         SwipeRefreshLayout.OnRefreshListener, Button.OnClickListener {
@@ -174,6 +174,11 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onProcessingFarmerEvent(ProcessingFarmerEvent processingFarmerEvent) {
+        Toast.makeText(this, processingFarmerEvent.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         getSupportLoaderManager().restartLoader(0, null, this);
     }
@@ -181,6 +186,7 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             getSupportLoaderManager().restartLoader(0, null, this);
         } else {
             Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
@@ -243,5 +249,6 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
             });
         }
     }
+
 
 }

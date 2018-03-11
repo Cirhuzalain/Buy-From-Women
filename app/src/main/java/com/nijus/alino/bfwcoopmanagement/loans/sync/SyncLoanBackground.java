@@ -158,7 +158,7 @@ public class SyncLoanBackground extends IntentService {
                         }
 
                     } catch (IOException | JSONException exp) {
-                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
+                        EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_loan), false));
                     }
                 }
             }
@@ -170,7 +170,7 @@ public class SyncLoanBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent("Loan synchronised successfully", true));
 
     }
 }

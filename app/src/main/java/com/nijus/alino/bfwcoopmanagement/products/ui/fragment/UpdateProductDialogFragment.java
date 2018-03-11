@@ -65,6 +65,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
         create_product = viewContainer.findViewById(R.id.create_product);
+        create_product.setText("Update product");
         create_product.setOnClickListener(this);
 
         product_name = viewContainer.findViewById(R.id.product_name);

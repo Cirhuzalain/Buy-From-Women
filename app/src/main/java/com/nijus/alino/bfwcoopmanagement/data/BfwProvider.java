@@ -745,7 +745,7 @@ public class BfwProvider extends ContentProvider {
             case FINANCE_DATA_VENDOR:
                 id = db.insert(BfwContract.FinanceDataVendor.TABLE_NAME, null, contentValues);
                 if (id > 0) {
-                    returnUri = BfwContract.FinanceDataVendor.buildFinanceDataFarmerUri(id);
+                    returnUri = BfwContract.FinanceDataVendor.buildFinanceDataVendorUri(id);
                 } else {
                     throw new UnsupportedOperationException("Uri not supported table vendor land info " + uri);
                 }

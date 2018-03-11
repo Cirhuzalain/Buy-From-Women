@@ -14,15 +14,14 @@ public class AccessToInformationVendor implements Parcelable {
     private boolean isWaterPumps;
     private boolean isSpreaderOrSprayer;
 
-    private String harvsetSeason;
+    private int accessInfoId;
+    private int harvestSeason;
+    private String seasonName;
 
-
-    public AccessToInformationVendor() {
-
-    }
-    public AccessToInformationVendor(String harvsetSeason, boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
+    public AccessToInformationVendor() {this.accessInfoId = 0;}
+    public AccessToInformationVendor(boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
                                      boolean isOrganicFertilizers, boolean isInorganicFertilizers, boolean isLabour,
-                                     boolean isWaterPumps, boolean isSpreaderOrSprayer){
+                                     boolean isWaterPumps, boolean isSpreaderOrSprayer, int harvestSeason) {
         this.isAgricultureExtension = isAgricultureExtension;
         this.isClimateRelatedInformation = isClimateRelatedInformation;
         this.isSeed = isSeed;
@@ -31,12 +30,10 @@ public class AccessToInformationVendor implements Parcelable {
         this.isLabour = isLabour;
         this.isWaterPumps = isWaterPumps;
         this.isSpreaderOrSprayer = isSpreaderOrSprayer;
-
-        this.harvsetSeason = harvsetSeason;
+        this.harvestSeason = harvestSeason;
     }
 
     public AccessToInformationVendor(Parcel source) {
-        //this.landSize = data.readDouble();
         this.isAgricultureExtension = source.readByte() != 0;
         this.isClimateRelatedInformation = source.readByte() != 0;
         this.isSeed = source.readByte() != 0;
@@ -45,9 +42,9 @@ public class AccessToInformationVendor implements Parcelable {
         this.isLabour = source.readByte() != 0;
         this.isWaterPumps = source.readByte() != 0;
         this.isSpreaderOrSprayer = source.readByte() != 0;
-
-        this.harvsetSeason = source.readString();
-
+        this.accessInfoId = source.readInt();
+        this.harvestSeason = source.readInt();
+        this.seasonName = source.readString();
     }
 
     @Override
@@ -57,24 +54,43 @@ public class AccessToInformationVendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        //parcel.writeDouble(landSize);
-        parcel.writeString(harvsetSeason);
+
         parcel.writeByte((byte) (isAgricultureExtension ? 1 : 0));
         parcel.writeByte((byte) (isClimateRelatedInformation ? 1 : 0));
         parcel.writeByte((byte) (isSeed ? 1 : 0));
         parcel.writeByte((byte) (isOrganicFertilizers ? 1 : 0));
         parcel.writeByte((byte) (isInorganicFertilizers ? 1 : 0));
         parcel.writeByte((byte) (isLabour ? 1 : 0));
+        parcel.writeByte((byte) (isWaterPumps ? 1 : 0));
         parcel.writeByte((byte) (isSpreaderOrSprayer ? 1 : 0));
+        parcel.writeInt(accessInfoId);
+        parcel.writeInt(harvestSeason);
+        parcel.writeString(seasonName);
 
     }
 
-    public String getHarvsetSeason() {
-        return harvsetSeason;
+    public String getSeasonName() {
+        return seasonName;
     }
 
-    public void setHarvsetSeason(String harvsetSeason) {
-        this.harvsetSeason = harvsetSeason;
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getAccessInfoId() {
+        return accessInfoId;
+    }
+
+    public void setAccessInfoId(int accessInfoId) {
+        this.accessInfoId = accessInfoId;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
     }
 
 
@@ -142,6 +158,7 @@ public class AccessToInformationVendor implements Parcelable {
     public void setSpreaderOrSprayer(boolean spreaderOrSprayer) {
         isSpreaderOrSprayer = spreaderOrSprayer;
     }
+
 
     public static final Creator<AccessToInformationVendor> CREATOR = new Creator<AccessToInformationVendor>() {
         @Override

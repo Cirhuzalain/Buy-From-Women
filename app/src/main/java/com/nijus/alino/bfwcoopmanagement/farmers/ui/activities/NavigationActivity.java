@@ -48,8 +48,8 @@ public class NavigationActivity extends BaseActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        getSupportLoaderManager().initLoader(0, null, this);
 
+        getSupportLoaderManager().initLoader(0, null, this);
 
         View emptyView = findViewById(R.id.recyclerview_empty_farmer);
         Context context = this;

@@ -339,7 +339,7 @@ public class AddFarmer extends IntentService {
             }
 
             //Post event after saving data
-            EventBus.getDefault().post(new SaveDataEvent("", true));
+            EventBus.getDefault().post(new SaveDataEvent("Farmer added successfully", true));
 
             //sync if network available
             if (Utils.isNetworkAvailable(getApplicationContext())) {

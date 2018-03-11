@@ -91,10 +91,7 @@ public class ProductAdapter extends BaseAdapter {
         boolean isUpdate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_IS_UPDATE))==1;
         if (isUpdate && isSync) {
             scrim.setBackgroundResource(R.drawable.srim_success);
-        }/*else if(isUpdate)
-        {
-            scrim.setBackgroundResource(R.drawable.srim_error);
-        }*/
+        }
         else  {
             scrim.setBackgroundResource(R.drawable.srim_error);
         }
@@ -111,7 +108,6 @@ public class ProductAdapter extends BaseAdapter {
         notifyDataSetChanged();
         try {
             mEmptyView.setVisibility(getCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-            //mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_payment: R.string.there_is_payment);
         }
         catch (Exception e)
         {
@@ -122,11 +118,6 @@ public class ProductAdapter extends BaseAdapter {
         mCursor.moveToPosition(i);
 
         notifyDataSetChanged();
-
-        //View v = getView();
-        /*cardView.setCardBackgroundColor(R.drawable.gradient_button);
-        cardView.setVisibility(View.GONE);*/
-        //cardView.setSelected(true);
         return cardView;
     }
 

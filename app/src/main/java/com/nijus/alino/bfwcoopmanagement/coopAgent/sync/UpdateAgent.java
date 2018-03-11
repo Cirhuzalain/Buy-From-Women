@@ -89,10 +89,10 @@ public class UpdateAgent extends IntentService {
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
+                    //Post event after saving data
+                    EventBus.getDefault().post(new SaveDataEvent("Agent updated successfully",true));
                     //start job service
                    startService(new Intent(this, UpdateSyncAgentBkgrnd.class));
-                    //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent added successfully",true));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -103,7 +103,7 @@ public class UpdateAgent extends IntentService {
                             .build();
                     dispatcher.mustSchedule(job);
                     //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent added successfully and will be synchronized later",true));
+                    EventBus.getDefault().post(new SaveDataEvent("Agent updated successfully and will be synchronized later",true));
                 }
             }
 

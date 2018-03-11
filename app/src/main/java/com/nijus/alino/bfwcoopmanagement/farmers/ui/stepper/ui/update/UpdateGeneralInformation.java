@@ -206,6 +206,24 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
             }
         });
 
+        addressView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                general.setAddress(charSequence.toString());
+                mPage.setData("general", general);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         populateSpinner();
         spinner.setOnItemSelectedListener(this);
         return rootView;

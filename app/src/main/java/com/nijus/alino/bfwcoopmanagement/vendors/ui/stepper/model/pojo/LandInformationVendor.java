@@ -10,19 +10,31 @@ import android.os.Parcelable;
 public class LandInformationVendor implements Parcelable {
 
     private double landSize;
+    private double lat;
+    private double lng;
+    private int harvestSeason;
+    private int landId;
+    private String seasonName;
 
     public LandInformationVendor() {
-
+        this.landId = 0;
     }
 
-    public LandInformationVendor(double landSize) {
+    public LandInformationVendor(double landSize, double lat, double lng, int harvestSeason) {
         this.landSize = landSize;
+        this.lat = lat;
+        this.lng = lng;
+        this.harvestSeason = harvestSeason;
     }
 
     public LandInformationVendor(Parcel data) {
         this.landSize = data.readDouble();
+        this.lat = data.readDouble();
+        this.lng = data.readDouble();
+        this.harvestSeason = data.readInt();
+        this.landId = data.readInt();
+        this.seasonName = data.readString();
     }
-
     @Override
     public int describeContents() {
         return 0;
@@ -30,7 +42,53 @@ public class LandInformationVendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+
         parcel.writeDouble(landSize);
+        parcel.writeDouble(lat);
+        parcel.writeDouble(lng);
+        parcel.writeInt(harvestSeason);
+        parcel.writeInt(landId);
+        parcel.writeString(seasonName);
+    }
+
+    public String getSeasonName() {
+        return seasonName;
+    }
+
+    public void setSeasonName(String seasonName) {
+        this.seasonName = seasonName;
+    }
+
+    public int getLandId() {
+        return landId;
+    }
+
+    public void setLandId(int landId) {
+        this.landId = landId;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public int getHarvestSeason() {
+        return harvestSeason;
+    }
+
+    public void setHarvestSeason(int harvestSeason) {
+        this.harvestSeason = harvestSeason;
     }
 
     public double getLandSize() {
@@ -41,7 +99,8 @@ public class LandInformationVendor implements Parcelable {
         this.landSize = landSize;
     }
 
-    public static final Creator<LandInformationVendor> CREATOR = new Creator<LandInformationVendor>() {
+
+    public static final Parcelable.Creator<LandInformationVendor> CREATOR = new Parcelable.Creator<LandInformationVendor>() {
         @Override
         public LandInformationVendor createFromParcel(Parcel parcel) {
             return new LandInformationVendor(parcel);
