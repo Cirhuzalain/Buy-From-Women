@@ -1,5 +1,6 @@
 package com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +16,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -34,11 +39,15 @@ import com.nijus.alino.bfwcoopmanagement.events.ToggleFarmerResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.CreateFarmerActivity;
+import com.nijus.alino.bfwcoopmanagement.pojo.Farmer;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -87,6 +96,8 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         mRecyclerView = view.findViewById(R.id.farmers_list);
         mLayoutManager = new LinearLayoutManager(context);
 
+        setHasOptionsMenu(true);
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
@@ -96,7 +107,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(getContext(), emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
-            public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
+            public void onClick(int farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
                 ((OnListFragmentInteractionListener) getActivity()).onListFragmentInteraction(farmerId, vh);
             }
         }, new NavigationRecyclerViewAdapter.FarmerAdapterOnLongClickListener() {
@@ -114,6 +125,41 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_search, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                query = query.trim();
+                if (query.length() > 0)
+                    navigationRecyclerViewAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                query = query.trim();
+                if (query.length() > 0)
+                    navigationRecyclerViewAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -223,7 +269,23 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        navigationRecyclerViewAdapter.swapCursor(data);
+        List<Farmer> farmerList = new ArrayList<>();
+        if (data != null) {
+
+            String name;
+            String phone;
+            boolean isSync;
+            int farmerId;
+            while (data.moveToNext()) {
+                farmerId = data.getInt(data.getColumnIndex(BfwContract.Farmer._ID));
+                name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
+                phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE));
+                isSync = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC)) == 1;
+                farmerList.add(new Farmer(phone, name, isSync, farmerId));
+            }
+        }
+        navigationRecyclerViewAdapter.swapCursor(farmerList);
+
         mRefreshData.post(new Runnable() {
             @Override
             public void run() {
@@ -255,7 +317,7 @@ public class NavigationFragment extends Fragment implements LoaderManager.Loader
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh);
+        void onListFragmentInteraction(int item, NavigationRecyclerViewAdapter.ViewHolder vh);
     }
 
     public interface OnLongClickFragmentInteractionListener {

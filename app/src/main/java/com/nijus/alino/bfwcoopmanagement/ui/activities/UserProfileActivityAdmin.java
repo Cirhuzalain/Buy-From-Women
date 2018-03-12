@@ -3,12 +3,15 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -91,11 +94,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener,
         NavigationFragment.OnLongClickFragmentInteractionListener, BuyerFragment.OnListFragmentInteractionListener,
         CoopFragment.OnCoopFragmentLongClick, BuyerFragment.OnLongClickFragmentInteractionListener, CoopAgentFragment.OnListFragmentInteractionListener,
-        CoopAgentFragment.OnLongClickFragmentInteractionListener, VendorFragment.OnListFragmentInteractionListener, VendorFragment.OnLongClickFragmentInteractionListener {
+        CoopAgentFragment.OnLongClickFragmentInteractionListener, VendorFragment.OnListFragmentInteractionListener,
+        VendorFragment.OnLongClickFragmentInteractionListener {
 
     BuyerFragment buyerFragment;
     VendorFragment vendorFragment;
@@ -108,6 +113,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ActionMode actionMode;
+    private String groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +193,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     }
 
     @Override
-    public void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh) {
+    public void onListFragmentInteraction(int item, NavigationRecyclerViewAdapter.ViewHolder vh) {
         Intent intent = new Intent(this, DetailFarmerActivity.class);
         intent.putExtra("farmerId", item);
         startActivity(intent);
@@ -233,7 +239,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
 
             SharedPreferences prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
                     Context.MODE_PRIVATE);
-            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+            groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
 
             if (groupName.equals("Agent")) {
                 Intent intent = new Intent(this, NavigationActivity.class);

@@ -61,7 +61,14 @@ public class CoopAdapter extends RecyclerView.Adapter<CoopAdapter.ViewHolder> {
         holder.imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME)));
-        holder.mCoopAddress.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_ADDRESS)));
+
+        String address = mCursor.getString(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_ADDRESS));
+        if (address == null || address.equals("null")) {
+            holder.mCoopAddress.setText("");
+        } else {
+            holder.mCoopAddress.setText(address);
+        }
+
 
         String maleNumber = "" + mCursor.getInt(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_MALE_COOP)) + "";
         String femaleNumber = "" + mCursor.getInt(mCursor.getColumnIndex(BfwContract.Coops.COLUMN_FEMALE_COOP)) + "";

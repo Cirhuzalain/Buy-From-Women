@@ -4,6 +4,7 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -13,12 +14,19 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.events.LanguageChange;
 import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -60,9 +68,44 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 // simple string representation.
                 preference.setSummary(stringValue);
             }
+            EventBus.getDefault().post(new LanguageChange(stringValue));
             return true;
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onLanguageChange(LanguageChange languageChange) {
+        String stringValue = languageChange.getLangName();
+        if (stringValue.equals(getString(R.string.kin_key))) {
+            setLocale("rw");
+        } else if (stringValue.equals(getString(R.string.eng_key))) {
+            setLocale("en");
+        }
+    }
+
+    public void setLocale(String lang) {
+
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+
+    }
+
 
     /**
      * Helper method to determine if the device has an extra-large screen. For

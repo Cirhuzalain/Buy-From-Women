@@ -359,9 +359,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (Utils.isNetworkAvailable(getApplicationContext())) {
 
                 OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(240, TimeUnit.SECONDS)
-                        .writeTimeout(240, TimeUnit.SECONDS)
-                        .readTimeout(240, TimeUnit.SECONDS)
+                        .connectTimeout(1200, TimeUnit.SECONDS)
+                        .writeTimeout(1200, TimeUnit.SECONDS)
+                        .readTimeout(1200, TimeUnit.SECONDS)
                         .build();
                 Cursor cursor = null;
                 String login = "";
@@ -448,7 +448,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, null, null, null);
 
                                 if (cursor != null && !cursor.moveToFirst()) {
-                                    boolean isSuccess = prefetchVendor(client, access_token, BuildConfig.DEV_API_URL + "vendor.farmer",false);
+                                    boolean isSuccess = prefetchVendor(client, access_token, BuildConfig.DEV_API_URL + "vendor.farmer", false);
                                     if (!isSuccess) {
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
@@ -2379,7 +2379,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             farmerValues.put(BfwContract.Vendor.COLUMN_HARVESTER, harvester);
                             farmerValues.put(BfwContract.Vendor.COLUMN_DRYER, dryer);
                             farmerValues.put(BfwContract.Vendor.COLUMN_TRESHER, thresher);
-                            farmerValues.put(BfwContract.Vendor.COLUMN_OTHER_INFO , other);
+                            farmerValues.put(BfwContract.Vendor.COLUMN_OTHER_INFO, other);
                             farmerValues.put(BfwContract.Vendor.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
                             farmerValues.put(BfwContract.Vendor.COLUMN_DAM, mwsDam);
 
@@ -3172,7 +3172,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             farmerValues.put(BfwContract.Farmer.COLUMN_HARVESTER, harvester);
                             farmerValues.put(BfwContract.Farmer.COLUMN_DRYER, dryer);
                             farmerValues.put(BfwContract.Farmer.COLUMN_TRESHER, thresher);
-                            farmerValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO , other);
+                            farmerValues.put(BfwContract.Farmer.COLUMN_OTHER_INFO, other);
                             farmerValues.put(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS, otherWaterSource);
                             farmerValues.put(BfwContract.Farmer.COLUMN_DAM, mwsDam);
 
@@ -3312,6 +3312,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 farmerInfoValues.put(BfwContract.FarmerAccessInfo.COLUMN_SERVER_ID, farmerInfoId);
 
                                 getContentResolver().insert(BfwContract.FarmerAccessInfo.CONTENT_URI, farmerInfoValues);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
                             }
 
                             farmerLandIdsArray = farmerObjectInfo.getJSONArray("farmer_land_ids");
@@ -3371,6 +3374,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 farmerLandValues.put(BfwContract.LandPlot.COLUMN_FARMER_ID, localFarmerId);
 
                                 getContentResolver().insert(BfwContract.LandPlot.CONTENT_URI, farmerLandValues);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
 
                             }
 
@@ -3483,6 +3489,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 forecastFarmerValues.put(BfwContract.ForecastFarmer.COLUMN_IS_UPDATE, 1);
 
                                 getContentResolver().insert(BfwContract.ForecastFarmer.CONTENT_URI, forecastFarmerValues);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
 
                             }
 
@@ -3608,6 +3617,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 financeValues.put(BfwContract.FinanceDataFarmer.COLUMN_IS_UPDATE, 1);
 
                                 getContentResolver().insert(BfwContract.FinanceDataFarmer.CONTENT_URI, financeValues);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
 
                             }
 
@@ -3697,6 +3709,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 baselineValues.put(BfwContract.BaselineFarmer.COLUMN_FARMER_ID, localFarmerId);
 
                                 getContentResolver().insert(BfwContract.BaselineFarmer.CONTENT_URI, baselineValues);
+                                if (cursor != null) {
+                                    cursor.close();
+                                }
+                            }
+                            if (cursor != null) {
+                                cursor.close();
                             }
                         }
                     }

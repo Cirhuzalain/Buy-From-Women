@@ -439,4 +439,5 @@
     <string name="prod_sync">Product synchronised successfully</string>
     <string name="prod_del_msg">Product deleted successfully</string>
     <string name="lon_sync_res">Loan synchronised successfully</string>
+    <string name="search_farmer">Search Farmer</string>
 </resources>

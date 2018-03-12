@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public class DetailFarmerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private Long mFarmerId;
+    private int mFarmerId;
     private Uri mUri;
     private String name;
     public static final String ARG_KEY = "key";
@@ -62,7 +62,7 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
 
         Intent intent = this.getIntent();
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
 

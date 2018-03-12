@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pref_lang_values">
-        <item>@string/kin_value</item>
         <item>@string/en_value</item>
-        <item>@string/fr_value</item>
+        <item>@string/kin_value</item>
     </string-array>
     <string-array name="pref_lang_key">
-        <item>@string/kin_key</item>
         <item>@string/eng_key</item>
-        <item>@string/fr_value</item>
+        <item>@string/kin_key</item>
     </string-array>
 </resources>

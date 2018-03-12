@@ -1,5 +1,6 @@
 package com.nijus.alino.bfwcoopmanagement.farmers.ui.activities;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,14 +18,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteFarmerEvent;
-import com.nijus.alino.bfwcoopmanagement.events.ProcessingCoopEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshFarmerLoader;
 import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
@@ -32,6 +34,7 @@ import com.nijus.alino.bfwcoopmanagement.farmers.adapter.RecyclerItemTouchHelper
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.DeleteFarmerDialog;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.NavigationFragment;
+import com.nijus.alino.bfwcoopmanagement.pojo.Farmer;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
@@ -42,6 +45,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.nijus.alino.bfwcoopmanagement.data.BfwContract.Farmer.CONTENT_URI;
 
@@ -80,7 +84,7 @@ public class NavigationActivity extends BaseActivity implements
 
         navigationRecyclerViewAdapter = new NavigationRecyclerViewAdapter(this, emptyView, new NavigationRecyclerViewAdapter.FarmerAdapterOnClickHandler() {
             @Override
-            public void onClick(Long farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
+            public void onClick(int farmerId, NavigationRecyclerViewAdapter.ViewHolder vh) {
                 onListFragmentInteraction(farmerId, vh);
             }
         }, new NavigationRecyclerViewAdapter.FarmerAdapterOnLongClickListener() {
@@ -150,7 +154,7 @@ public class NavigationActivity extends BaseActivity implements
     }
 
     @Override
-    public void onListFragmentInteraction(long item, NavigationRecyclerViewAdapter.ViewHolder vh) {
+    public void onListFragmentInteraction(int item, NavigationRecyclerViewAdapter.ViewHolder vh) {
 
         Intent intent = new Intent(this, DetailFarmerActivity.class);
         intent.putExtra("farmerId", item);
@@ -160,7 +164,35 @@ public class NavigationActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                query = query.trim();
+                if (query.length() > 0)
+                    navigationRecyclerViewAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                query = query.trim();
+                if (query.length() > 0)
+                    navigationRecyclerViewAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -213,7 +245,22 @@ public class NavigationActivity extends BaseActivity implements
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        navigationRecyclerViewAdapter.swapCursor(data);
+        List<Farmer> farmerList = new ArrayList<>();
+        if (data != null) {
+
+            String name;
+            String phone;
+            boolean isSync;
+            int farmerId;
+            while (data.moveToNext()) {
+                farmerId = data.getInt(data.getColumnIndex(BfwContract.Farmer._ID));
+                name = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_NAME));
+                phone = data.getString(data.getColumnIndex(BfwContract.Farmer.COLUMN_CELL_PHONE));
+                isSync = data.getInt(data.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC)) == 1;
+                farmerList.add(new Farmer(phone, name, isSync, farmerId));
+            }
+        }
+        navigationRecyclerViewAdapter.swapCursor(farmerList);
         mRefreshData.post(new Runnable() {
             @Override
             public void run() {

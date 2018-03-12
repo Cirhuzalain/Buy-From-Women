@@ -60,7 +60,13 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
         holder.vendorImage.setImageResource(R.mipmap.male);
 
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_NAME)));
-        holder.mUphone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE)));
+
+        String phone = mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE));
+        if (phone == null || phone.equals("null")) {
+            holder.mUphone.setText("");
+        } else {
+            holder.mUphone.setText(phone);
+        }
 
         holder.imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 

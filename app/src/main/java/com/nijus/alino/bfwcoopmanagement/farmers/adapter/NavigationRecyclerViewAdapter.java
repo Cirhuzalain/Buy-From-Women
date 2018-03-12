@@ -1,13 +1,14 @@
 package com.nijus.alino.bfwcoopmanagement.farmers.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -15,13 +16,13 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
-import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.pojo.Farmer;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<NavigationRecyclerViewAdapter.ViewHolder> {
+public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<NavigationRecyclerViewAdapter.ViewHolder> implements Filterable {
 
-    private Cursor mCursor;
     final private Context mContext;
     final private View mEmptyView;
     final private FarmerAdapterOnClickHandler mClickHandler;
@@ -30,6 +31,10 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
     private SparseBooleanArray itemsValues;
+
+    private List<Farmer> farmerList;
+    private List<Farmer> farmerFilterList;
+
     private boolean reverseAllAnimations = false;
     private static int currentSelectedIndex = -1;
 
@@ -38,6 +43,10 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         mEmptyView = view;
         mClickHandler = vh;
         mOnLongClickListener = vLong;
+
+        farmerFilterList = new ArrayList<>();
+        farmerList = new ArrayList<>();
+
         selectedItems = new SparseBooleanArray();
         animationItemsIndex = new SparseBooleanArray();
         itemsValues = new SparseBooleanArray();
@@ -53,16 +62,23 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        mCursor.moveToPosition(position);
+        final Farmer farmer = farmerFilterList.get(position);
 
         holder.farmerImage.setImageResource(R.mipmap.male);
 
-        holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_NAME)));
-        holder.mUphone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_PHONE)));
+        String phone = farmer.getPhone();
+        String name = farmer.getName();
+        boolean isSync = farmer.isSync();
+        if (phone == null || phone.equals("null")) {
+            holder.mUphone.setText("");
+        } else {
+            holder.mUphone.setText(phone);
+        }
 
+        holder.mUname.setText(name);
         holder.imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
-        boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Farmer.COLUMN_IS_SYNC)) == 1;
+
         if (isSync) {
             holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
         } else {
@@ -70,6 +86,40 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         }
 
         applyIconAnimation(holder, position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    farmerFilterList = farmerList;
+                } else {
+                    List<Farmer> filteredList = new ArrayList<>();
+                    for (Farmer row : farmerList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getPhone().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+                    farmerFilterList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = farmerFilterList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                farmerFilterList = (ArrayList<Farmer>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     private void applyIconAnimation(ViewHolder holder, int position) {
@@ -122,9 +172,9 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
     public void toggleSelection(int pos) {
         currentSelectedIndex = pos;
 
-        mCursor.moveToPosition(pos);
+        final Farmer farmer = farmerFilterList.get(pos);
 
-        int id = mCursor.getInt(mCursor.getColumnIndex(BfwContract.Farmer._ID));
+        int id = farmer.getFarmerId();
 
         if (selectedItems.get(pos, false)) {
             selectedItems.delete(pos);
@@ -140,18 +190,19 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
     @Override
     public int getItemCount() {
-        if (mCursor == null) return 0;
-        return mCursor.getCount();
+        if (farmerFilterList == null) return 0;
+        return farmerFilterList.size();
     }
 
-    public void swapCursor(Cursor newCursor) {
-        mCursor = newCursor;
+    public void swapCursor(List<Farmer> farmerList1) {
+        farmerList = farmerList1;
+        farmerFilterList = farmerList1;
         notifyDataSetChanged();
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     public interface FarmerAdapterOnClickHandler {
-        void onClick(Long farmerId, ViewHolder vh);
+        void onClick(int farmerId, ViewHolder vh);
     }
 
     public interface FarmerAdapterOnLongClickListener {
@@ -196,9 +247,9 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         public void onClick(View view) {
             int position = getAdapterPosition();
 
-            mCursor.moveToPosition(position);
-            int farmerColumnIndex = mCursor.getColumnIndex(BfwContract.Farmer._ID);
-            mClickHandler.onClick(mCursor.getLong(farmerColumnIndex), this);
+            final Farmer farmer = farmerFilterList.get(position);
+
+            mClickHandler.onClick(farmer.getFarmerId(), this);
         }
 
         @Override
@@ -206,12 +257,11 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
 
             position = getAdapterPosition();
 
-            mCursor.moveToPosition(position);
-            int farmerColumnIndex = mCursor.getColumnIndex(BfwContract.Farmer._ID);
+            final Farmer farmer = farmerFilterList.get(position);
 
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
-            mOnLongClickListener.onLongClick(mCursor.getLong(farmerColumnIndex), position, this);
+            mOnLongClickListener.onLongClick(farmer.getFarmerId(), position, this);
             return true;
         }
 

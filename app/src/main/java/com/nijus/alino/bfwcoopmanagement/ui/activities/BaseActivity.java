@@ -3,6 +3,8 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,11 +43,13 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
 /**
  * Base Activity for all activities using navigation drawer
  */
 public class BaseActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener{
 
     private NavigationView mNavigationView;
     private ProgressDialog mProgressDialog;
@@ -52,6 +57,7 @@ public class BaseActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private TextView mUsernameView;
     private ImageView mImageView;
+    private String groupName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +103,7 @@ public class BaseActivity extends AppCompatActivity implements
 
             prefs = getApplicationContext().getSharedPreferences(getResources().getString(R.string.application_key),
                     Context.MODE_PRIVATE);
-            String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+            groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
 
             if (groupName.equals("Admin")) {
                 // remove buyer, vendor, navigation, coop agent activity
