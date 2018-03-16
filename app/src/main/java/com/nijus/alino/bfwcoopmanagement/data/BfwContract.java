@@ -936,6 +936,10 @@ public class BfwContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildFarmerProductUri(long id) {
+            return CONTENT_URI.buildUpon().appendPath("product").appendPath(Long.toString(id)).build();
+        }
+
     }
 
     public static final class ProductProduct implements BaseColumns {
@@ -998,6 +1002,10 @@ public class BfwContract {
 
         public static Uri buildLoanUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildFarmerLoanUri(long id) {
+            return CONTENT_URI.buildUpon().appendPath("loan").appendPath(Long.toString(id)).build();
         }
     }
 

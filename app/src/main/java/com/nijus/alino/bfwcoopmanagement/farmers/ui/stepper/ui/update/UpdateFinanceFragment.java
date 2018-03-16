@@ -38,7 +38,7 @@ public class UpdateFinanceFragment extends Fragment implements AdapterView.OnIte
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     private Cursor cursor;
     private String seasonName;
@@ -84,7 +84,7 @@ public class UpdateFinanceFragment extends Fragment implements AdapterView.OnIte
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
         }
 
     }
@@ -118,6 +118,7 @@ public class UpdateFinanceFragment extends Fragment implements AdapterView.OnIte
         other = rootView.findViewById(R.id.l_other);
 
         harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvsetSeason.setOnItemSelectedListener(this);
         populateSpinner();
 
         cursor = (Cursor) harvsetSeason.getSelectedItem();

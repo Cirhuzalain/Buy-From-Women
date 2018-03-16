@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -127,6 +128,7 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
 
         tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(View.SCROLLBAR_POSITION_DEFAULT);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -156,11 +158,11 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         coopAgentFragment = new CoopAgentFragment();
         farmer_fragment = new NavigationFragment();
 
-        adapter.addFragment(farmer_fragment, "Farmer");
-        adapter.addFragment(coopFragment, "Coop");
-        adapter.addFragment(coopAgentFragment, "Agent");
-        adapter.addFragment(buyerFragment, "Buyer");
-        adapter.addFragment(vendorFragment, "Vendor");
+        adapter.addFragment(farmer_fragment, getString(R.string.main_farmer));
+        adapter.addFragment(coopFragment, getString(R.string.main_coop));
+        adapter.addFragment(coopAgentFragment, getString(R.string.main_agent));
+        adapter.addFragment(buyerFragment, getString(R.string.main_buyer));
+        adapter.addFragment(vendorFragment, getString(R.string.main_vendor));
 
         viewPager.setAdapter(adapter);
     }

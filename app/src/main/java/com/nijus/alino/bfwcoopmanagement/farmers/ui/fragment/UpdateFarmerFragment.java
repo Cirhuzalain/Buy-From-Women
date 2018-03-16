@@ -68,7 +68,7 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
     private CreateFarmerStepper mPageAdapter;
     private PageFragmentCallbacks mCallbacks;
     private ViewPager pager;
-    private long mFarmerId;
+    private int mFarmerId;
 
     public UpdateFarmerFragment() {
     }
@@ -92,7 +92,7 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
         //get farmer Id
         Intent intent = getActivity().getIntent();
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
         }
 
     }

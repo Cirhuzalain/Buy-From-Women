@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 
 import java.io.IOException;
@@ -21,6 +20,24 @@ public class Utils {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
+    }
+
+    public static String getUserType(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        return prefs.getString(context.getResources().getString(R.string.g_name), "123");
+    }
+
+    public static int getVendorServerId(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        return prefs.getInt(context.getResources().getString(R.string.vendor_buyer_id), 0);
+    }
+
+    public static int getCoopServerId(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        return prefs.getInt(context.getResources().getString(R.string.coop_id), 0);
     }
 
     public static boolean checkAlreadyLogin(Context context) {
@@ -41,7 +58,7 @@ public class Utils {
             return client.newCall(requestUser).execute();
         } catch (IOException exp) {
             return null;
-        } catch (Exception exp){
+        } catch (Exception exp) {
             return null;
         }
     }

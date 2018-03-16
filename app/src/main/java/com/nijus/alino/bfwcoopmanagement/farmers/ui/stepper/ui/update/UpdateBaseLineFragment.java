@@ -36,7 +36,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
     private Page mPage;
     private PageFragmentCallbacks mCallbacks;
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     private Cursor cursor;
     private String seasonName;
@@ -79,7 +79,7 @@ public class UpdateBaseLineFragment extends Fragment implements LoaderManager.Lo
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
         }
     }
 

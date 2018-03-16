@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

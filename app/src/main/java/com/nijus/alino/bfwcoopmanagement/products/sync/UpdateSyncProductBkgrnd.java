@@ -13,6 +13,7 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -104,7 +105,6 @@ public class UpdateSyncProductBkgrnd extends IntentService {
                         }
                     }
 
-                    //Get Harvsetseason id from server
                     String selectHarvsetId = BfwContract.HarvestSeason.TABLE_NAME + "." +
                             BfwContract.HarvestSeason._ID + " =  ? ";
 
@@ -125,17 +125,25 @@ public class UpdateSyncProductBkgrnd extends IntentService {
                             .readTimeout(240, TimeUnit.SECONDS)
                             .build();
 
-                    //Construct body
-                    String bodyContent = "{}";
+                    String bodyContent;
 
                     bodyContent = "{" +
                             "\"name\": \"" + nameProduct + "\", " +
                             "\"harvest_grade\": \"" + grade + "\"," +
                             "\"harvest_season\": " + local_season_id + "," +
-                            "\"vendor_qty\": " + productQty + ", " +
-                            "\"standard_price\": " + productPrice + ", " +
-                            "\"farmer_id\": " + local_farmer_id + " " +
-                            "}";
+                            "\"vendor_qty\": " + productQty + "," +
+                            "\"standard_price\": " + productPrice + ",";
+
+                    String userType = Utils.getUserType(getApplicationContext());
+
+                    if (userType.equals("Admin") || userType.equals("Agent")) {
+                        bodyContent += "\"farmer_id\": " + local_farmer_id + "" +
+                                "}";
+                    } else if (userType.equals("Vendor")) {
+                        int vendorId = Utils.getVendorServerId(getApplicationContext());
+                        bodyContent += "\"vendor_farmer_id\": " + vendorId + "" +
+                                "}";
+                    }
 
                     String API_INFO = BuildConfig.DEV_API_URL + "product.template" + "/" + productServerId;
 

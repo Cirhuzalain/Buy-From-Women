@@ -28,6 +28,7 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
 import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateProduct;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
@@ -57,6 +58,10 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         mProductContainer = viewContainer.findViewById(R.id.productContainer);
 
         vendor = viewContainer.findViewById(R.id.vendor);
+        String userType = Utils.getUserType(getContext());
+        if (userType.equals("Vendor")) {
+            vendor.setVisibility(View.GONE);
+        }
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
         create_product = viewContainer.findViewById(R.id.create_product);
@@ -69,7 +74,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
                 Context.MODE_PRIVATE);
         String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
 
-        if(groupName.equals("Buyer")){
+        if (groupName.equals("Buyer")) {
             order_product.setVisibility(View.VISIBLE);
             create_product.setVisibility(View.GONE);
         } else {
@@ -85,7 +90,10 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
                 .setNegativeButton(R.string.msg_cancel, this);
 
         populateSpinnerHarvestSeason();
-        populateSpinnerFarmer();
+
+        if (!userType.equals("Vendor")) {
+            populateSpinnerFarmer();
+        }
 
         ArrayAdapter<CharSequence> adapter_grade = ArrayAdapter.createFromResource(getContext(),
                 R.array.grade_array, android.R.layout.simple_spinner_item);
@@ -208,13 +216,24 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         int[] toViews = {
                 android.R.id.text1
         };
-        Cursor cursor = getActivity().getContentResolver().query(
-                BfwContract.Farmer.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+        Cursor cursor;
+
+        if (groupName.equals("Agent")) {
+            int serverId = prefs.getInt(getResources().getString(R.string.coop_id), 1);
+
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " =  ? ";
+            cursor = getActivity().getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, farmerSelection, new String[]{Integer.toString(serverId)}, null
+            );
+        } else {
+            cursor = getActivity().getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, null, null, null
+            );
+        }
         if (cursor != null) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                     getContext(), // context

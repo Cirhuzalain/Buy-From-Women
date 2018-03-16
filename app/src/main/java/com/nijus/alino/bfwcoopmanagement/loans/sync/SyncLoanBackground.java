@@ -13,6 +13,7 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -87,8 +88,6 @@ public class SyncLoanBackground extends IntentService {
                     String purpose = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE));
                     String financial_institution = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION));
 
-                    financial_institution = "bank";
-
                     //Get farmer id from server
                     String selectFarmerId = BfwContract.Farmer.TABLE_NAME + "." +
                             BfwContract.Farmer._ID + " =  ? ";
@@ -112,15 +111,26 @@ public class SyncLoanBackground extends IntentService {
                     //Construct body
                     String bodyContent;
 
+                    String userType = Utils.getUserType(getApplicationContext());
+
+                    // if agent show farmer with coop server user id
                     bodyContent = "{" +
                             "\"purpose\": \"" + purpose + "\", " +
                             "\"financial_institution\": \"" + financial_institution + "\"," +
                             "\"amount\": " + amount + "," +
                             "\"duration\": " + duration + ", " +
                             "\"interest_rate\": " + interest_rate + ", " +
-                            "\"start_date\": \"" + date_string + "\", " +
-                            "\"partner_id\": " + farmer_id + "" +
-                            "}";
+                            "\"start_date\": \"" + date_string + "\", ";
+
+                    if (userType.equals("Admin") || userType.equals("Agent")) {
+                        bodyContent += "\"partner_id\": " + farmer_id + "" +
+                                "}";
+                    } else if (userType.equals("Vendor")) {
+                        int vendorId = Utils.getVendorServerId(getApplicationContext());
+                        bodyContent += "\"vendor_id\": " + vendorId + "" +
+                                "}";
+                    }
+
 
                     String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan";
 

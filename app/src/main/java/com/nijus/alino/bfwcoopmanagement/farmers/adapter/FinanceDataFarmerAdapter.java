@@ -72,7 +72,12 @@ public class FinanceDataFarmerAdapter extends ArrayAdapter<Finance> {
             viewHolder.totOutstanding.setText(outstanding);
             viewHolder.interestRate.setText(interestrate);
             viewHolder.duration.setText(durationInMonth);
-            viewHolder.loanProvider.setText(lProvider);
+            if (lProvider == null || lProvider.equals("null")) {
+                viewHolder.loanProvider.setText("");
+            } else {
+                viewHolder.loanProvider.setText(lProvider);
+            }
+
 
             viewHolder.input.setImageResource(isInput ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);
             viewHolder.aggregation.setImageResource(isAggregation ? R.mipmap.icon_sm_ok : R.mipmap.icon_sm_error);

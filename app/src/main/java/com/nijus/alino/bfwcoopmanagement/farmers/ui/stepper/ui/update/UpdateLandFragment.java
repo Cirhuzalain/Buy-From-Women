@@ -12,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
     private PageFragmentCallbacks mCallbacks;
 
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     private Cursor cursor;
     private String seasonName;
@@ -82,7 +81,7 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
         }
 
     }
@@ -107,7 +106,7 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
                     mUri,
                     null,
                     farmerSelection,
-                    new String[]{Long.toString(mFarmerId)},
+                    new String[]{Integer.toString(mFarmerId)},
                     null
             );
         }
@@ -128,6 +127,7 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
         landContainer = rootView.findViewById(R.id.land_container);
 
         harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvsetSeason.setOnItemSelectedListener(this);
 
         populateSpinner();
 
@@ -136,6 +136,8 @@ public class UpdateLandFragment extends Fragment implements View.OnClickListener
         switchlocationView.setText(getString(R.string.loc_gps));
         switchlocationView.setTextOff(getString(R.string.man_gps));
         switchlocationView.setTextOn(getString(R.string.gps_automatic));
+
+        switchlocationView.setVisibility(View.GONE);
 
         cursor = (Cursor) harvsetSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));

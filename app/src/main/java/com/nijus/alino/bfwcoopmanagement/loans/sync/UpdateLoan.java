@@ -23,10 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
-
 public class UpdateLoan extends IntentService {
     public final String LOG_TAG = UpdateLoan.class.getSimpleName();
     private int id_loan;
@@ -64,20 +60,16 @@ public class UpdateLoan extends IntentService {
 
             PojoLoan pojoLoan = loanData.getParcelable("loan");
 
-            int farmer_id = 0;
-            /*int coop_id = 0;
-            int vendor_id = 0;*/
-            Long start_date = null;
-            Double amount = 0.0;
-            Double interest_rate = 0.0;
-            Double duration = 0.0;
-            String purpose = "";
-            String financial_institution = "";
+            int farmer_id;
+            Long start_date;
+            Double amount;
+            Double interest_rate;
+            Double duration;
+            String purpose;
+            String financial_institution;
 
 
             if (pojoLoan != null) {
-                 /* coop_id = pojoLoan.getCoop_id();
-                vendor_id = pojoLoan.getVendor_id(); */
                 farmer_id = pojoLoan.getFarmer_id();
 
                 start_date = pojoLoan.getStart_date();
@@ -87,8 +79,36 @@ public class UpdateLoan extends IntentService {
                 purpose = pojoLoan.getPurpose();
                 financial_institution = pojoLoan.getFinancial_institution();
 
+                String userType = Utils.getUserType(getApplicationContext());
+
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(BfwContract.Loan.COLUMN_FARMER_ID, farmer_id);
+
+                // if agent show farmer with coop server user id
+                if (userType.equals("Admin") || userType.equals("Agent")) {
+                    contentValues.put(BfwContract.Loan.COLUMN_FARMER_ID, farmer_id);
+                } else if (userType.equals("Vendor")) {
+
+                    int vendorId = Utils.getVendorServerId(getApplicationContext());
+                    Cursor cursor = null;
+
+                    try {
+                        String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                                "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                        cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                        if (cursor != null && cursor.moveToFirst()) {
+                            vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                        }
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    contentValues.put(BfwContract.Loan.COLUMN_VENDOR_ID, vendorId);
+                }
+
+
                 contentValues.put(BfwContract.Loan.COLUMN_START_DATE, start_date);
                 contentValues.put(BfwContract.Loan.COLUMN_AMOUNT, amount);
                 contentValues.put(BfwContract.Loan.COLUMN_INTEREST_RATE, interest_rate);
@@ -99,14 +119,14 @@ public class UpdateLoan extends IntentService {
                 contentValues.put(BfwContract.Loan.COLUMN_IS_SYNC, isSyncProduct);
                 contentValues.put(BfwContract.Loan.COLUMN_IS_UPDATE, 0);
 
-                getContentResolver().update(BfwContract.Loan.CONTENT_URI, contentValues,loanSelect,new String[]{Integer.toString(id_loan)});
+                getContentResolver().update(BfwContract.Loan.CONTENT_URI, contentValues, loanSelect, new String[]{Integer.toString(id_loan)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent("Loan updated successfully",true));
+                EventBus.getDefault().post(new SaveDataEvent("Loan updated successfully", true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service
-                   startService(new Intent(this, UpdateSyncLoanBkgrnd.class));
+                    startService(new Intent(this, UpdateSyncLoanBkgrnd.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

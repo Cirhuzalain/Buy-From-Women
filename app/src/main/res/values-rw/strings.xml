@@ -1,61 +1,61 @@
 <resources>
-    <string name="app_name">Gurira Umugore Umusaruro We</string>
+    <string name="app_name">Bfw App</string>
     <string name="action_settings">Settings</string>
-    <string name="message1">Gurira Umugore Umusaruro We</string>
-    <string name="message2">Land Registration</string>
+    <string name="message1">Gura Umusaruro w\'Abagore</string>
+    <string name="message2">Kwandikisha umurima</string>
     <string name="message3">Manage Harvest</string>
     <string name="comments1">
-        Farmers Registration
+        Kwiyandikisha nk'umuhinzi
     </string>
     <string name="comments2">
-        Add land information
+        Andi makuru y'umurima
     </string>
     <string name="comments3">
         View Sales and Purchases orders
     </string>
-    <string name="login">Login</string>
-    <string name="title_activity_login">Login</string>
+    <string name="login">Kwinjira</string>
+    <string name="title_activity_login">Kwinjira</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Login</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign In</string>
+    <string name="prompt_password">Umubare w\'ibanga</string>
+    <string name="action_sign_in">Kwiyandikisha</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short (>= 3 characters)</string>
-    <string name="error_invalid_product_name">This name is too short (>= 3 characters)</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_product_name">Umubare w\'ibanga siwo</string>
+    <string name="error_field_required">Ugomba kuzuza hano</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_navigation">Gurira Umugore Umusaruro We</string>
+    <string name="title_activity_navigation">Bfw App</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="sales">Sales</string>
-    <string name="loan">Loan</string>
-    <string name="user_profile">Users Profile</string>
+    <string name="sales">Igurisha</string>
+    <string name="loan">Inguzanyo</string>
+    <string name="user_profile">Abakoresha</string>
     <string name="user_profile_coop_agent">Coop Profile</string>
-    <string name="liste_farmer">Farmers</string>
+    <string name="liste_farmer">Abahinzi</string>
     <string name="user_profile_buyer">Buyer Profile</string>
     <string name="user_profile_vendor">Vendor Profile</string>
-    <string name="purchase">Purchases</string>
-    <string name="settings">Settings</string>
+    <string name="purchase">Igura</string>
+    <string name="settings">Igenamiterere</string>
+    <string name="about">Ibyerekeye</string>
     <string name="user_profile_image">User Profile Image</string>
-    <string name="about">About</string>
     <string name="uname">john@gmail.com</string>
 
-    <string name="create_farmer">Create Farmer</string>
-    <string name="name">Name</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="create_farmer">Kongeramo umuhinzi</string>
+    <string name="name">Izina (Amazina)</string>
+    <string name="phone_number">Telefoni</string>
     <string name="address">Address</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="gender">Gender</string>
-    <string name="coop">Coop</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
-    <string name="househol_head">Household Head</string>
+    <string name="male">Umugabo</string>
+    <string name="female">Umugore</string>
+    <string name="gender">Igitsina</string>
+    <string name="coop">Koperative</string>
+    <string name="no">Oya</string>
+    <string name="yes">Yego</string>
+    <string name="househol_head">Umukuru w\'umuryango</string>
     <string name="mobile_money_account">Mobile Money Account</string>
     <string name="plot_size">Plot Size</string>
     <string name="email">Email</string>
@@ -65,60 +65,60 @@
     <string name="expected_post_harvest_loss_in_kg">Expected Post Harvest loss in KG</string>
     <string name="total_coop_land_size_in_ha">Total Coop Land Size (in HA)</string>
     <string name="percent_coop_land_size">Farmer % of total coop land size</string>
-    <string name="spouse_f_name">Spouse First Name</string>
-    <string name="spouse_last_name">Spouse Last Name</string>
-    <string name="cell_phone_alt">Cell phone (Alt)</string>
-    <string name="cell_carrier">Cell Carrier</string>
+    <string name="spouse_f_name">Izina ry\'uwo mwashakanye</string>
+    <string name="spouse_last_name">Irindi zina ry\'uwo mwashakanye</string>
+    <string name="cell_phone_alt">Nomero ya Telefoni</string>
+    <string name="cell_carrier">Umuyoboro (MTN, Airtel, Tigo)</string>
     <string name="membership_id">Membership ID</string>
-    <string name="number_of_household_members">Number of Household Members</string>
-    <string name="household_members"># Household Members</string>
-    <string name="total_production_in_kg">Total production in KG</string>
-    <string name="tot_lost">Total Lost in KG</string>
-    <string name="total_sold_in_kg">Total Sold in KG</string>
-    <string name="tot_vol_sold_coop">Total volume sold to your coop in KG</string>
-    <string name="price_sold_to_the_coop_per_kg">Price sold to the coop per KG</string>
-    <string name="tot_vol_side_sold">Total volume that was side-sold in KG</string>
-    <string name="price_sold_kg">Price side-sold in KG</string>
-    <string name="total_loan_amount_in_rwf">Total loan amount (in RWF)</string>
-    <string name="tot_outstanding">Total outstanding (in RWF)</string>
-    <string name="interest_rate">Interest Rate (% in months)</string>
-    <string name="interest_rate_simple">Interest Rate</string>
-    <string name="duration_month">Duration (months)</string>
-    <string name="loan_provider">Loan Provider</string>
+    <string name="number_of_household_members">Umubare w\'abagize umuryango</string>
+    <string name="household_members">Umubare w\'abagize umuryango</string>
+    <string name="total_production_in_kg">Umusaruro wose wabonetse (mu biro)</string>
+    <string name="tot_lost">Umusaruro wose watakaye (mu biro)</string>
+    <string name="total_sold_in_kg">Umusaruro wose wagurishijwe (mu biro)</string>
+    <string name="tot_vol_sold_coop">Umusaruro woese wagurishije muri Koperative (mu biro)</string>
+    <string name="price_sold_to_the_coop_per_kg">Igiciro ku kiro (umusaruro wagurishije kuri koperative)</string>
+    <string name="tot_vol_side_sold">Umusaruro wose wagurishijwe hanze ya koperative (mu biro)</string>
+    <string name="price_sold_kg">Igiciro ku kiro (umusaruro wagurishije utanyuze muri koperative)</string>
+    <string name="total_loan_amount_in_rwf">Agaciro k\'inguzanyo (RWF)</string>
+    <string name="tot_outstanding">Agaciro k\'inguzanyo itarishyurwa (RWF)</string>
+    <string name="interest_rate">Inyungu ku nguzanyo (RWF)</string>
+    <string name="interest_rate_simple">Inyungu ku nguzanyo (RWF)</string>
+    <string name="duration_month">Igihe inguzanyo izishyurirwa (mu mezi)</string>
+    <string name="loan_provider">Ikigo k\'imari cyaguhaye inguzanyo</string>
     <string name="outstanding_loan">Outstanding Loan</string>
-    <string name="loan_purpose">Loan Purpose</string>
-    <string name="input">Input</string>
-    <string name="aggregation">Aggregation</string>
+    <string name="loan_purpose">Icyo inguzanyo yasabiwe</string>
+    <string name="input">Ibikenerwa mu ihinga (imbuto, ifumbire, umuti)</string>
+    <string name="aggregation">Gukusanya umusaruro</string>
     <string name="other">Other Water source</string>
     <string name="new_resources">Other available resource</string>
-    <string name="mm_acct">Mobile Money Account</string>
+    <string name="mm_acct">Nomero ukoresha kuri mobilo mani</string>
     <string name="harvsetSeason">Harvest Season</string>
     <string name="available_resources">Available Resources</string>
-    <string name="agri_extension">Agricultural extension services</string>
-    <string name="climate_related_information_e_g_weather_forecasts">Climate related information (e.g. weather forecasts)</string>
-    <string name="climate_related_info_e_g_weather_forecasts">Climate related information</string>
-    <string name="seed">Seeds</string>
-    <string name="organic_fertilizers">Organic Fertilizers</string>
-    <string name="inor_fert">Inorganic Fertilizers</string>
-    <string name="labour">Labour</string>
-    <string name="irrigation_water_pumps">Irrigation/Water pumps</string>
-    <string name="tractors">Tractors</string>
-    <string name="harv">Harvester</string>
-    <string name="spreaders_or_sprayers">Spreaders or Sprayers</string>
-    <string name="dryer">Dryer</string>
-    <string name="thresher">Thresher</string>
-    <string name="safe_storage">Storage Information</string>
-    <string name="other_res_av">Other</string>
-    <string name="main_water_source">Main water source</string>
-    <string name="dam">Dam</string>
-    <string name="well">Well</string>
-    <string name="borehole">Borehole</string>
-    <string name="river_stream">River/Stream</string>
-    <string name="pipe_borne">Pipe-Borne</string>
-    <string name="irrigation">Irrigation</string>
-    <string name="none">None</string>
-    <string name="s_other">Other</string>
-    <string name="land_size_in_ha">Land Size in ha</string>
+    <string name="agri_extension">Servisi zibasha kuboneka</string>
+    <string name="climate_related_information_e_g_weather_forecasts">Amakuru ajyanye n\'ihindagurika ry\'ikirere</string>
+    <string name="climate_related_info_e_g_weather_forecasts">Amakuru ajyanye n\'ihindagurika ry\'ikirere</string>
+    <string name="seed">Imbuto</string>
+    <string name="organic_fertilizers">Ifumbire y\'imborera</string>
+    <string name="inor_fert">Ifumbire mvarugamba</string>
+    <string name="labour">Abakozi</string>
+    <string name="irrigation_water_pumps">Kuhira/Imashini ikurura amazi</string>
+    <string name="tractors">Imashini zihinga</string>
+    <string name="harv">Imashini isarura</string>
+    <string name="spreaders_or_sprayers">Imashini itera umuti</string>
+    <string name="dryer">Imashini yumisha umusaruro</string>
+    <string name="thresher">Imashini ihungura</string>
+    <string name="safe_storage">Ubuhunikiro bwiza</string>
+    <string name="other_res_av">Ikindi kitavuzwe haruguru</string>
+    <string name="main_water_source">umuyoboro w\'amazi</string>
+    <string name="dam">Damu</string>
+    <string name="well">Isoko</string>
+    <string name="borehole">Ivomo</string>
+    <string name="river_stream">Umugezi</string>
+    <string name="pipe_borne">Robine</string>
+    <string name="irrigation">Kuhira</string>
+    <string name="none">Nta serivisi n\'imwe</string>
+    <string name="s_other">Nta serivisi n\'imwe</string>
+    <string name="land_size_in_ha">Ubuso bw\'ubutaka (Hegitari)</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="account_number">Account Number</string>
@@ -144,10 +144,29 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="rgcc_contract">
+        <item>yes</item>
+        <item>no</item>
+    </string-array>
+
+    <string-array name="coop_grade">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+    </string-array>
+
     <string-array name="fin_institution">
-        <item>bank</item>
         <item>sacco</item>
-        <item>cooperative</item>
+        <item>clecam</item>
+        <item>kcb</item>
+        <item>duterimbere</item>
+        <item>coopedu</item>
+        <item>uob</item>
+        <item>visionfinance</item>
+        <item>unguka</item>
+        <item>rim</item>
+        <item>bpr</item>
+        <item>umutanguha</item>
     </string-array>
     <string-array name="purpose_loan">
         <item>aggregation</item>
@@ -161,21 +180,21 @@
         <item>On Delivery</item>
     </string-array>
 
-    <string name="customer">Customer</string>
-    <string name="harvest_season">Harvest Season</string>
+    <string name="customer">Umukiriya</string>
+    <string name="harvest_season">Igihembwe wasaruyemo</string>
     <string name="order_lines">Order Lines</string>
-    <string name="product">Product</string>
+    <string name="product">Ibicuruzwa</string>
     <string name="product_name">Product name</string>
     <string name="sale_price">Sale price</string>
-    <string name="quantity">Quantity (Kg)</string>
-    <string name="add_so_contract">Add New Product</string>
-    <string name="payment_term">Payment Term</string>
-    <string name="price_rwf">Unit Price (RWF)</string>
+    <string name="quantity">Ingano (mu biro)</string>
+    <string name="add_so_contract">Ongeraho igicuruzwa</string>
+    <string name="payment_term">Amabwiriza yo kwishyura</string>
+    <string name="price_rwf">Igiciro cya kimwe</string>
     <string name="title_activity_sale_order_info">Sale Order</string>
-    <string name="title_activity_product">Product</string>
+    <string name="title_activity_product">Ibicuruzwa</string>
     <string name="val_so_settings">Settings</string>
-    <string name="vendor">Vendor</string>
-    <string name="farmer">Farmer</string>
+    <string name="vendor">Umucuruzi</string>
+    <string name="farmer">Umuhinzi</string>
     <string name="details_coop_">Cooperative Details</string>
     <string name="title_activity_purchase_order">Purchase Order</string>
     <string name="purchase_order_detail">Purchase Order Detail</string>
@@ -183,30 +202,29 @@
     <string name="version_1_0">Version 1.0</string>
     <string name="about_text">An app to empower Coop Agent to register farmers and perform various actions including but not limited to farmer registration and harvest management</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="logout_user">Logout</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="logout_user">Kuvamo</string>
+    <string name="next">Ahakurikira</string>
+    <string name="previous">Ahabanza</string>
     <string name="s_stepper">Save</string>
     <string name="u_stepper">Update</string>
 
-    <string name="finish">Submit</string>
+    <string name="finish">Kohereza</string>
 
     <string name="next_s">Next</string>
 
-    <string name="kin_value">Kinyarwanda</string>
+    <string name="kin_value">Ikinyarwanda</string>
     <string name="fr_value">French</string>
-    <string name="en_value">English</string>
+    <string name="en_value">Icyongereza</string>
 
     <string name="kin_key">kin</string>
     <string name="eng_key">en</string>
 
-    <!-- <PageVendorPage Title &ndash;&gt;-->
-    <string name="gen_title">General Information</string>
-    <string name="forecast">Forecast</string>
+    <string name="gen_title">Amakuru rusange</string>
+    <string name="forecast">Ibyitezwe</string>
     <string name="demographicVendor">Demographics</string>
     <string name="demographic">Demographics</string>
     <string name="base_line">BaseLine</string>
-    <string name="finance">Finance</string>
+    <string name="finance">Imari</string>
     <string name="access_service">Access to other services, inputs and equipment</string>
     <string name="access_to_info">Access to Information</string>
     <string name="farmer_land">Land Information</string>
@@ -214,14 +232,11 @@
     <string name="bank_info">Bank Information</string>
     <string name="left_icon">Next Step Left Icon</string>
     <string name="next_step_icon">Next Step Right Icon</string>
-    <string name="name_search">Farmer name</string>
+    <string name="name_search">Izina ry\'umuhinzi</string>
 
-    <!--
-    pageVendorpage coops titles&ndash;&gt;
--->
     <string name="create_coop">Create Cooperative</string>
     <string name="create_vend">Create Vendor</string>
-    <string name="data_valid_error_coop">Coop Name and Adress are required</string>
+    <string name="data_valid_error_coop">Coop Name and Address are required</string>
     <string name="internal_title">Internal Information</string>
     <string name="forecast_sales">Forecast Sales</string>
     <string name="baseline_yield">Baseline Yield</string>
@@ -229,88 +244,112 @@
     <string name="baseline_fin_info">Baseline Finance Information</string>
 
 
-    <!-- Preference for app token -->
     <string name="user_name">uname</string>
     <string name="user_server_id">userServerId</string>
 
-    <string name="connectivity_error">Sorry you\'re not connected, please check your internet connection</string>
-    <string name="json_error">An error occur while logging you in, please try again later </string>
-    <string name="data_error">An error occur while logging you out, please try again later </string>
-    <string name="data_valid_error">Farmer Name and Phone Number are required</string>
-    <string name="data_valid_error_vendor">Vendor Name and Phone Number are required</string>
+    <string name="connectivity_error">Nta internet ufite, reba neza niba ikiri kubitera</string>
+    <string name="json_error">Ntiwabashije kwinjira, ongera ugerageze</string>
+    <string name="data_error">Ntiwabashije gusohoka, ongera ugerageze</string>
+    <string name="data_valid_error">Izina na numero ya telefone by\'umuhinzi ni ngombwa</string>
+    <string name="data_valid_error_vendor">Ugomba kwinjiza izina na telefoni by\'ugurisha</string>
     <string name="msg_ok">Ok</string>
     <string name="msg_cancel">Cancel</string>
-    <string name="there_s_no_farmer">There\'s no farmer</string>
-    <string name="syncing_error">An error occur while syncing farmer data</string>
+    <string name="there_s_no_farmer">Nta muhinzi</string>
+    <string name="syncing_error_loan">Havutse ikibazo winjiza amakuru, ongera ugerageze</string>
+    <string name="syncing_error_payment">An error occur while syncing Payment data</string>
+    <string name="syncing_error">Amakuru ku muhinzi ntiyoherejwe, ongera ugerageze</string>
+
+    <string name="delete_error_product">An error occur while deleting product</string>
+    <string name="syncing_error_agent">An error occur while syncing agent data</string>
+    <string name="syncing_error_vendor">An error occur while syncing vendor data</string>
+    <string name="syncing_error_buyer">An error occur while syncing buyer data</string>
+    <string name="syncing_error_product">An error occur while syncing Product data</string>
+
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
     <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
     <string name="update_msg">Information updated successfully</string>
 
-    <string name="there_s_no_cooperative_agent">There\'s no cooperative\'s agent</string>
-    <string name="there_s_no_buyer">There\'s no buyer</string>
-    <string name="there_s_no_vendor">There\'s no vendor</string>
-    <string name="there_s_no_loan">There\'s no loan</string>
-    <string name="there_s_no_product">There\'s no product</string>
-    <string name="there_s_no_loan_line">There\'s no loan schedule</string>
-    <string name="there_is_loan_line">Loan schedule</string>
+    <string name="update_msg_vendor">Vendor updated successfully</string>
+    <string name="coops">Koperative</string>
+
+    <string name="there_s_no_cooperative_agent">Nta wuhagarariye koperative</string>
+    <string name="there_s_no_buyer">Nta muguzi</string>
+    <string name="there_s_no_vendor">Ntaw\'ugurisha</string>
+    <string name="there_s_no_loan">Nta nguzanyo</string>
+    <string name="there_s_no_product">Nta gicuruzwa</string>
+    <string name="there_s_no_loan_line">Nta nguzanyo iteganyijwe</string>
+    <string name="there_is_loan_line">Gahunda y\'inguzanyo</string>
     <string name="there_s_no_payment">There\'s no payment</string>
     <string name="there_is_payment">Loan payment</string>
     <string name="cooperativ">Coops</string>
+    <string name="add_farmer_msg">Umuhinzi yongewemo</string>
+    <string name="add_vendor_msg">Vendor added successfully</string>
+
     <string name="view_sale">Sale</string>
     <string name="view_purchase">Purchase</string>
-    <string name="title_activity_coop_profile">Cooperative</string>
-    <string name="profile">Detail</string>
+    <string name="title_activity_coop_profile">Koperative</string>
+    <string name="profile">Amakuru arambuye</string>
 
-    <string name="action_delete">Delete</string>
+    <string name="action_delete">Gusiba</string>
+
+    <string name="my_cart">My Cart</string>
+    <string name="delete">DELETE</string>
+
+    <string name="add_buyer_msg">Umuguzi yongewemo neza</string>
+    <string name="add_vend_msg_sync">Vendor synchronised successfully</string>
+    <string name="add_buyer_msg_sync">Umuguzi yongewemo neza</string>
+    <string name="add_farmer_msg_sync">Umuhinzi yongewemo neza</string>
+    <string name="add_agent_msg_sync">Agent synchronised successfully</string>
+    <string name="add_buyer_wait_internet_msg">Buyer added successfully, you need to be connected to synchronise</string>
 
 
     <!--String related to forescast data-->
-    <string name="tot_plot_land_maize_prod">Total number of arable land plots </string>
-    <string name="current_ftma_commitement_kg">Current FTMA commitement in kg</string>
-    <string name="farmer_contribution_ftma_com">Farmer contribution towards FTMA commitement in kg</string>
-    <string name="farmers_expected_min_revenu">Farmers expected minimum revenu from FTMA sale in RWF</string>
-    <string name="min_flore_price_per_kg_in_rwf">Minimum floor price per kg in RWF</string>
+    <string name="tot_plot_land_maize_prod">Umubare w\'imirima yose ihingwa</string>
+    <string name="current_ftma_commitement_kg">Ingano y\'umusaruro bazagurisha binyuze muri FtMA (mu biro)</string>
+    <string name="farmer_contribution_ftma_com">Uruhare rw\'umuhinzi ku umusaruro bazagurisha binyuze muri FtMA (mu biro)</string>
+    <string name="farmers_expected_min_revenu">Inyungu umuhinzi yiteze ku musaruro bazagurisha binyuze muri FtMA (RWF)</string>
+    <string name="min_flore_price_per_kg_in_rwf">igiciro fatizo ku kilo (RWF)</string>
 
     <!--String reletive to COOP WIZARD-->
-    <string name="chair">Chair</string>
-    <string name="vice_chair">Vice chair</string>
-    <string name="sec">Sec</string>
-    <string name="summary">Cooperative summary</string>
-    <string name="measured_total_land_size">Measured total land size</string>
-    <string name="male_in_coop">Male in cooperative</string>
-    <string name="female_in_coop">Female in cooperative </string>
-    <string name="total_members">Total members</string>
+    <string name="chair">Umuyobozi mukuru</string>
+    <string name="vice_chair">Uwungirije umuyobozi</string>
+    <string name="sec">Umwanditsi</string>
+    <string name="summary">Incamake kuri Koperative</string>
+    <string name="measured_total_land_size">Ubuso bwose bw\'umurima bwapimwe</string>
+    <string name="male_in_coop">Abagabo bari muri koperative</string>
+    <string name="female_in_coop">Abagore bari muri koperative</string>
+    <string name="total_members">Abanyamuryango bose</string>
 
-    <string name="land_size_under_cip">Land size under CIP in ha</string>
-    <string name="chair_name">Chair name</string>
-    <string name="chair_gender">Chair gender</string>
+    <string name="land_size_under_cip">Ubuso bwose buhurijwe hamwe (Ha)</string>
+    <string name="chair_name">Amazina y\'umuyobozi mukuru</string>
+    <string name="chair_gender">Igitsina cy\'umuyobozi</string>
     <string name="chair_cell">Chair cell</string>
     <string name="v_chair_name">Vice Chair name</string>
-    <string name="v_chair_gender">Vice Chair gender</string>
+    <string name="v_chair_gender">Igitsina cy\'umuyobozi wungirije</string>
     <string name="v_chair_cell">Vice Chair cell</string>
-    <string name="sec_name">Secretary name</string>
-    <string name="sec_gender">Secretary gender</string>
+    <string name="sec_name">Amazina y\'umwanditsi</string>
+    <string name="sec_gender">Igitsina cy\'umwanditsi</string>
     <string name="sec_cell">Secretary cell</string>
-    <string name="year_rca_registration">Year of RCA registration</string>
+    <string name="year_rca_registration">Umwaka koperative yiyandikishijemo muri RCA</string>
     <string name="office_space">Office Space</string>
-    <string name="moisture_meter">Moisture meter</string>
-    <string name="weighting_scales">Weighting scales</string>
-    <string name="qlt_inputs">Quality inputs</string>
-    <string name="safe_storage_facilities">Safe storage facilities</string>
+    <string name="moisture_meter">Akamashini gapima ubuhehere</string>
+    <string name="weighting_scales">Iminzani</string>
+    <string name="qlt_inputs">Imbuto zifite ubuziranenge</string>
+    <string name="safe_storage_facilities">Ibikorwa remezo by\'ubuhunikiro bwizewe</string>
 
     <string name="rgcc">RGCC</string>
     <string name="prodev">Prodev</string>
-    <string name="sasura">Sasura</string>
+    <string name="sasura">Sarura</string>
     <string name="aif">AIF</string>
     <string name="eax">EAX</string>
-    <string name="commired_contract_qty">Commited contract quantity(MT)</string>
+    <string name="commired_contract_qty">Committed contract quantity(MT)</string>
     <string name="grade">Grade</string>
     <string name="min_floor_per_grade">Minimun floor per grade</string>
-    <string name="maize">Maize</string>
-    <string name="bean">Bean</string>
-    <string name="soy">Soy</string>
+    <string name="maize">Ibigori</string>
+    <string name="bean">Ibishyimbo</string>
+    <string name="soy">Soya</string>
     <string name="qty_agregated_from_members">Quantity agregated from members(MT)</string>
     <string name="qty_purchaced_from_non_members">Quantity purchased from non members(MT)</string>
     <string name="cycle_h_at_price_per_kg">Cycle harvest (At price per KG)</string>
@@ -320,8 +359,8 @@
     <string name="qty_sold_to_rgcc">Quantity sold to RGCC (MT)</string>
     <string name="price_per_kg_sold_to_rgcc">Price per KG sold to RGCC (RWF)</string>
     <string name="qty_slod_outside_rgcc">Quantity sold outside of RGCC (MT)</string>
-    <string name="formal_buyer">Formal Buyer</string>
-    <string name="informal_buyer">Informal Buyer</string>
+    <string name="formal_buyer">Umuguzi wemewe</string>
+    <string name="informal_buyer">Umuguzi utemewe</string>
     <string name="price_per_kg_sold_outside_ftma">Price per KG sold outside FTMA (RWF)</string>
     <string name="input_loan">Input loan</string>
     <string name="input_loan_provider">Input loan provider</string>
@@ -364,14 +403,48 @@
     <string name="others_finance_source">Others</string>
     <string name="farmers_expected_minimum_revenue_from_ftma_sale_in_rwf">Farmers expected minimum revenue from FTMA sale in RWF</string>
     <string name="flow_price">Minimum floor price per kg in RWF</string>
+
     <string name="loc_gps">Check your location here</string>
     <string name="man_gps">Manual</string>
     <string name="gps_automatic">Automatic</string>
     <string name="harvest_season_2016">Harvest Season 2016</string>
     <string name="others_fin">Others</string>
     <string name="harvest_season_2017">Harvest Season 2017</string>
+    <string name="del_farmer">Delete Farmer</string>
+    <string name="del_vendor">Delete Vendor</string>
+    <string name="input_lprovider">Input loan provider</string>
+    <string name="inpu_lp_purpose">Input loan purpose</string>
+    <string name="aggreg_harv_l_provider">Aggregation/Post harvest loan provider</string>
+    <string name="aggregation_post_harvest_loan_purpose">Aggregation/Post harvest loan purpose</string>
+
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove</string>
     <string name="delete_loan">Delete Loan</string>
-    <string name="del_farmer">Delete Farmer</string>
+    <string name="del_buyer">Delete Buyer</string>
+    <string name="del_agent">Delete Agent</string>
     <string name="del_confirm">Confirm</string>
+    <string name="farm_msg">Processing your request</string>
+    <string name="farm_erro_msg">An Error occur while delete farmer data</string>
+    <string name="farm_del_success">Farmer Remove Successfully</string>
+    <string name="farm_id_not_av">Farmer Id not available</string>
+    <string name="farm_no_data_av">No Data available</string>
+    <string name="del_coop">Delete Coop</string>
+    <string name="sv_farmer">Create Product</string>
+    <string name="order_product">Order Product</string>
+    <string name="vndor">Vendor</string>
+    <string name="syncing_error_coop">An error occur while syncing coop data</string>
+    <string name="product_error">Fill all the field</string>
+    <string name="auth_error">Wrong credentials, please try again later</string>
+    <string name="syncing_loan_error">An error occur while syncing loan data</string>
+    <string name="prod_sync">Product synchronised successfully</string>
+    <string name="prod_del_msg">Product deleted successfully</string>
+    <string name="lon_sync_res">Loan synchronised successfully</string>
+    <string name="search_farmer">Search Farmer</string>
+    <string name="prod_farmer">Farmer</string>
+
+
+    <string name="main_farmer">Abahinzi</string>
+    <string name="main_coop">Koperative</string>
+    <string name="main_agent">Agents</string>
+    <string name="main_buyer">Abaguzi</string>
+    <string name="main_vendor">Abacuruzi</string>
 </resources>

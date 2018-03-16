@@ -3,6 +3,7 @@ package com.nijus.alino.bfwcoopmanagement.loans.sync;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,13 +46,13 @@ public class AddLoan extends IntentService {
 
             PojoLoan pojoLoan = productData.getParcelable("loan");
 
-            int farmer_id = 0;
-            Long start_date = null;
-            Double amount = 0.0;
-            Double interest_rate = 0.0;
-            Double duration = 0.0;
-            String purpose = "";
-            String financial_institution = "";
+            int farmer_id;
+            Long start_date;
+            Double amount;
+            Double interest_rate;
+            Double duration;
+            String purpose;
+            String financial_institution;
 
 
             if (pojoLoan != null) {
@@ -59,12 +60,41 @@ public class AddLoan extends IntentService {
                 start_date = pojoLoan.getStart_date();
                 amount = pojoLoan.getAmount();
                 interest_rate = pojoLoan.getInterest_rate();
-                duration= pojoLoan.getDuration();
+                duration = pojoLoan.getDuration();
                 purpose = pojoLoan.getPurpose();
                 financial_institution = pojoLoan.getFinancial_institution();
 
+
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(BfwContract.Loan.COLUMN_FARMER_ID, farmer_id);
+
+                String userType = Utils.getUserType(getApplicationContext());
+
+                // if agent show farmer with coop server user id
+                if (userType.equals("Admin") || userType.equals("Agent")) {
+                    contentValues.put(BfwContract.Loan.COLUMN_FARMER_ID, farmer_id);
+                } else if (userType.equals("Vendor")) {
+
+                    int vendorId = Utils.getVendorServerId(getApplicationContext());
+                    Cursor cursor = null;
+
+                    try {
+                        String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                                "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                        cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                        if (cursor != null && cursor.moveToFirst()) {
+                            vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                        }
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    contentValues.put(BfwContract.Loan.COLUMN_VENDOR_ID, vendorId);
+                }
+
+
                 contentValues.put(BfwContract.Loan.COLUMN_START_DATE, start_date);
                 contentValues.put(BfwContract.Loan.COLUMN_AMOUNT, amount);
                 contentValues.put(BfwContract.Loan.COLUMN_INTEREST_RATE, interest_rate);
@@ -75,7 +105,7 @@ public class AddLoan extends IntentService {
                 contentValues.put(BfwContract.Loan.COLUMN_IS_SYNC, 0);
                 contentValues.put(BfwContract.Loan.COLUMN_IS_UPDATE, 0);
 
-                Uri uri = getContentResolver().insert(BfwContract.Loan.CONTENT_URI, contentValues);
+                getContentResolver().insert(BfwContract.Loan.CONTENT_URI, contentValues);
 
                 //Post event after saving data
                 EventBus.getDefault().post(new SaveDataEvent("Loan added successfully", true));

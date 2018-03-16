@@ -166,7 +166,14 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
             TextView phone_c_details = findViewById(R.id.phone_c_details);
             phone_c_details.setText(phone);
             TextView address_c_details = findViewById(R.id.address_c_details);
-            address_c_details.setText(address);
+
+            if (address == null || address.equals("null")) {
+                address_c_details.setText("");
+            } else {
+                address_c_details.setText(address);
+            }
+
+
             TextView mail_c_details = findViewById(R.id.mail_c_details);
             mail_c_details.setText(email);
 

@@ -54,7 +54,7 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     private RadioGroup mGenderGroup;
     private Spinner spinner;
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
     private int coopId;
 
     public UpdateGeneralInformation() {
@@ -81,7 +81,7 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
 

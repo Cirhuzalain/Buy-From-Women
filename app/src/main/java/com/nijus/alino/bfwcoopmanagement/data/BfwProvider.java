@@ -84,6 +84,7 @@ public class BfwProvider extends ContentProvider {
     static final int PRODUCT_PRODUCT = 200;
     static final int PRODUCT_PRODUCT_DETAILS = 210;
     static final int PRODUCT_TEMPLATE = 201;
+    static final int PRODUCT_BY_FARMER = 301;
     static final int PRODUCT_TEMPLATE_DETAILS = 211;
 
     static final int SALE_ORDER = 203;
@@ -97,6 +98,7 @@ public class BfwProvider extends ContentProvider {
     static final int LOAN_LINE = 207;
     static final int LOAN_PAYMENT = 208;
     static final int LOAN = 209;
+    static final int LOAN_BY_FARMER = 302;
     static final int LOAN_DETAILS = 214;
 
     static final int SALE_ORDER_LINE_PRODUCT = 222;
@@ -128,6 +130,9 @@ public class BfwProvider extends ContentProvider {
     private static final SQLiteQueryBuilder purchaseOderLineProduct;
     private static final SQLiteQueryBuilder loanLinePayment;
 
+    private static final SQLiteQueryBuilder productByFarmer;
+    private static final SQLiteQueryBuilder loanByFarmer;
+
     static {
         farmerLandPlot = new SQLiteQueryBuilder();
         infoByFarmer = new SQLiteQueryBuilder();
@@ -151,6 +156,9 @@ public class BfwProvider extends ContentProvider {
         saleOrderLineProduct = new SQLiteQueryBuilder();
         purchaseOderLineProduct = new SQLiteQueryBuilder();
         loanLinePayment = new SQLiteQueryBuilder();
+
+        productByFarmer = new SQLiteQueryBuilder();
+        loanByFarmer = new SQLiteQueryBuilder();
 
         saleOrderLineProduct.setTables(
                 BfwContract.SaleOrder.TABLE_NAME +
@@ -338,6 +346,24 @@ public class BfwProvider extends ContentProvider {
                         " = " + BfwContract.Farmer.TABLE_NAME +
                         "." + BfwContract.Farmer._ID
         );
+
+        productByFarmer.setTables(
+                BfwContract.ProductTemplate.TABLE_NAME +
+                        " INNER JOIN " + BfwContract.Farmer.TABLE_NAME +
+                        " ON " + BfwContract.Farmer.TABLE_NAME +
+                        "." + BfwContract.Farmer._ID +
+                        " = " + BfwContract.ProductTemplate.TABLE_NAME +
+                        "." + BfwContract.ProductTemplate.COLUMN_FARMER_ID
+        );
+
+        loanByFarmer.setTables(
+                BfwContract.Loan.TABLE_NAME +
+                        " INNER JOIN  " + BfwContract.Farmer.TABLE_NAME +
+                        " ON " + BfwContract.Farmer.TABLE_NAME +
+                        "." + BfwContract.Farmer._ID +
+                        " = " + BfwContract.Loan.TABLE_NAME +
+                        "." + BfwContract.Loan.COLUMN_FARMER_ID
+        );
     }
 
     public BfwProvider() {
@@ -420,6 +446,7 @@ public class BfwProvider extends ContentProvider {
 
         matcher.addURI(authority, BfwContract.PATH_PRODUCT_TEMPLATE, PRODUCT_TEMPLATE);
         matcher.addURI(authority, BfwContract.PATH_PRODUCT_TEMPLATE + "/#", PRODUCT_TEMPLATE_DETAILS);
+        matcher.addURI(authority, BfwContract.PATH_PRODUCT_TEMPLATE + "/*/#", PRODUCT_BY_FARMER);
 
         matcher.addURI(authority, BfwContract.PATH_SALE_ORDER, SALE_ORDER);
         matcher.addURI(authority, BfwContract.PATH_SALE_ORDER + "/#", SALE_ORDER_DETAILS);
@@ -433,6 +460,7 @@ public class BfwProvider extends ContentProvider {
         matcher.addURI(authority, BfwContract.PATH_LOAN_PAYMENT, LOAN_PAYMENT);
         matcher.addURI(authority, BfwContract.PATH_LOAN, LOAN);
         matcher.addURI(authority, BfwContract.PATH_LOAN + "/#", LOAN_DETAILS);
+        matcher.addURI(authority, BfwContract.PATH_LOAN + "/*/#", LOAN_BY_FARMER);
 
         matcher.addURI(authority, BfwContract.PATH_LOAN + "/#/#", LOAN_LINE_PAYMENT);
         matcher.addURI(authority, BfwContract.PATH_SALE_ORDER + "/#/#", SALE_ORDER_LINE_PRODUCT);
@@ -547,6 +575,8 @@ public class BfwProvider extends ContentProvider {
                 return BfwContract.ProductProduct.CONTENT_ITEM_TYPE;
             case PRODUCT_TEMPLATE:
                 return BfwContract.ProductTemplate.CONTENT_TYPE;
+            case PRODUCT_BY_FARMER:
+                return BfwContract.ProductTemplate.CONTENT_TYPE;
             case PRODUCT_TEMPLATE_DETAILS:
                 return BfwContract.ProductTemplate.CONTENT_ITEM_TYPE;
             case SALE_ORDER:
@@ -562,6 +592,8 @@ public class BfwProvider extends ContentProvider {
             case PURCHASE_ORDER_LINE:
                 return BfwContract.PurchaseOrder.CONTENT_TYPE;
             case LOAN:
+                return BfwContract.Loan.CONTENT_TYPE;
+            case LOAN_BY_FARMER:
                 return BfwContract.Loan.CONTENT_TYPE;
             case LOAN_LINE:
                 return BfwContract.LoanLine.CONTENT_TYPE;
@@ -1082,6 +1114,26 @@ public class BfwProvider extends ContentProvider {
                 break;
             case SALE_COOP_BY_COOP:
                 returnCursor = saleByCoop.query(mBfwDbHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PRODUCT_BY_FARMER:
+                returnCursor = productByFarmer.query(mBfwDbHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case LOAN_BY_FARMER:
+                returnCursor = loanByFarmer.query(mBfwDbHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,

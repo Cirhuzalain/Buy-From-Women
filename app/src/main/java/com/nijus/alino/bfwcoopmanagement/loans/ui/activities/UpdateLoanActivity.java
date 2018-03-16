@@ -1,7 +1,9 @@
 package com.nijus.alino.bfwcoopmanagement.loans.ui.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -52,9 +54,9 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
     private Button save_loan;
     private EditText ed_date_value;
     private Button date;
-    private Spinner loan_orign_spinner, fin_inst_spinner,purpose_loan;
+    private Spinner loan_orign_spinner, fin_inst_spinner, purpose_loan;
     private AutoCompleteTextView principal_amount, interest_rate, duration_month;
-    private int id_loan,loan_server_id;
+    private int id_loan, loan_server_id;
     private long id_loan_long;
 
     @Override
@@ -63,7 +65,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_update_loan);
         //EventBus.getDefault().register(this);
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         save_loan = findViewById(R.id.save_loan);
         ed_date_value = findViewById(R.id.ed_date_value);
@@ -96,13 +98,28 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
     public void populateSpinnerFarmer() {
         String[] fromColumns = {BfwContract.Farmer.COLUMN_NAME};
-        // View IDs to map the columns (fetched above) into
         int[] toViews = {android.R.id.text1};
-        Cursor cursor = getContentResolver().query(
-                BfwContract.Farmer.CONTENT_URI, null, null, null, null
-        );
+        SharedPreferences prefs = getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+        Cursor cursor;
+
+        if (groupName.equals("Agent")) {
+            int serverId = prefs.getInt(getResources().getString(R.string.coop_id), 1);
+
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " =  ? ";
+            cursor = getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, farmerSelection, new String[]{Integer.toString(serverId)}, null
+            );
+        } else {
+            cursor = getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, null, null, null
+            );
+        }
         if (cursor != null) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                     this, // context
@@ -157,7 +174,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
                 }
 
                 fin_inst = (String) fin_inst_spinner.getSelectedItem();
-                purpose_loan_string = (String)purpose_loan.getSelectedItem();
+                purpose_loan_string = (String) purpose_loan.getSelectedItem();
                 PojoLoan pojoLoan = new PojoLoan();
                 pojoLoan.setFarmer_id(farmer_spiner_id);
                 pojoLoan.setPurpose(purpose_loan_string);
@@ -236,20 +253,21 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             ed_date_value.setText(date_string);
 
             //loan_orign_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
-            setSpinnerItemByIdFarmer(loan_orign_spinner,data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID)));
+            setSpinnerItemByIdFarmer(loan_orign_spinner, data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID)));
             //fin_inst_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
-            setSpinnerItemOrigin(fin_inst_spinner,data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
-            setSpinnerItemOrigin(purpose_loan,data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE)));
+            setSpinnerItemOrigin(fin_inst_spinner, data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
+            setSpinnerItemOrigin(purpose_loan, data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE)));
             //purpose_loan.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
 
-            principal_amount.setText(data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT))+"");
-            interest_rate.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
-            duration_month.setText(""+data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_DURATION)));
+            principal_amount.setText(data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)) + "");
+            interest_rate.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
+            duration_month.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_DURATION)));
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {}
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
     public void setSpinnerItemOrigin(Spinner spinner, String fin_inst) {
         int spinnerCount = spinner.getCount();
@@ -261,6 +279,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             }
         }
     }
+
     public void setSpinnerItemByIdFarmer(Spinner spinner, int _id) {
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
@@ -271,34 +290,35 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             }
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
-        if (syncDataEvent.isSuccess()){
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             //onSupportNavigateUp();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             //onSupportNavigateUp();
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();

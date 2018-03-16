@@ -3,6 +3,7 @@ package com.nijus.alino.bfwcoopmanagement.products.sync;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,9 +21,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class AddProduct extends IntentService {
     public final String LOG_TAG = AddProduct.class.getSimpleName();
@@ -42,12 +40,12 @@ public class AddProduct extends IntentService {
 
             PojoProduct pojoProduct = productData.getParcelable("product");
 
-            String name = "";
-            int price = 0;
-            Double quantity = 0.0;
-            int harvest_season = 0;
-            String grade ="";
-            int farmer = 0;
+            String name;
+            int price;
+            Double quantity;
+            int harvest_season;
+            String grade;
+            int farmer;
 
 
             if (pojoProduct != null) {
@@ -59,6 +57,35 @@ public class AddProduct extends IntentService {
                 farmer = pojoProduct.getFarmer();
 
                 ContentValues contentValues = new ContentValues();
+
+
+                String userType = Utils.getUserType(getApplicationContext());
+
+                // if agent show farmer with coop server user id
+                if (userType.equals("Admin") || userType.equals("Agent")) {
+                    contentValues.put(BfwContract.ProductTemplate.COLUMN_FARMER_ID, farmer);
+                } else if (userType.equals("Vendor")) {
+
+                    int vendorId = Utils.getVendorServerId(getApplicationContext());
+                    Cursor cursor = null;
+
+                    try {
+                        String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                                "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                        cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                        if (cursor != null && cursor.moveToFirst()) {
+                            vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.ProductTemplate._ID));
+                        }
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+                    }
+                    contentValues.put(BfwContract.ProductTemplate.COLUMN_VENDOR_ID, vendorId);
+                }
+
                 contentValues.put(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME, name);
                 contentValues.put(BfwContract.ProductTemplate.COLUMN_PRICE, price);
                 contentValues.put(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY, quantity);
@@ -69,10 +96,10 @@ public class AddProduct extends IntentService {
                 contentValues.put(BfwContract.ProductTemplate.COLUMN_IS_SYNC, 0);
                 contentValues.put(BfwContract.ProductTemplate.COLUMN_IS_UPDATE, 0);
 
-                Uri uri = getContentResolver().insert(BfwContract.ProductTemplate.CONTENT_URI, contentValues);
+                getContentResolver().insert(BfwContract.ProductTemplate.CONTENT_URI, contentValues);
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent("Product added successfully",true));
+                EventBus.getDefault().post(new SaveDataEvent("Product added successfully", true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

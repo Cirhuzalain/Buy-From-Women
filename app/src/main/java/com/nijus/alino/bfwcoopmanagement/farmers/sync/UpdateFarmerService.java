@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class UpdateFarmerService extends IntentService {
-    private long mFarmerId;
+    private int mFarmerId;
 
     public UpdateFarmerService() {
         super("");
@@ -45,7 +45,7 @@ public class UpdateFarmerService extends IntentService {
 
             String farmerSelect = BfwContract.Farmer.TABLE_NAME + "." +
                     BfwContract.Farmer._ID + " =  ? ";
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
 
             int isSyncFarmerId = 0;
             Cursor farmCursor = null;

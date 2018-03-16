@@ -472,7 +472,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     }
                                 }
 
-                                //Prefetch sale,purchase,product
+                                //Prefetch product
                                 cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
 
                                 if (cursor != null && !cursor.moveToFirst()) {
@@ -484,7 +484,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
                                 //Prefetch loan
-                                //Prefetch sale,purchase,product
                                 cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, null, null, null);
 
                                 if (cursor != null && !cursor.moveToFirst()) {
@@ -535,7 +534,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
-                                //Prefetch sale,purchase,product
+
+                                //Prefetch product
                                 cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
 
                                 if (cursor != null && !cursor.moveToFirst()) {
@@ -544,7 +544,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
+
                                 //Prefetch loan
+                                cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchLoan(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
                             }
 
                             if (groupName.equals("Buyer")) {
@@ -575,6 +584,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 }
 
                                 //Prefetch product
+                                cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchProduct(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
                             }
 
                             if (groupName.equals("Vendor")) {
@@ -601,12 +618,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
-                                //Prefetch sale,purchase,product
+
+                                //Prefetch product
+                                cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchProduct(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
+
                                 //Prefetch loan
+                                cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, null, null, null);
+
+                                if (cursor != null && !cursor.moveToFirst()) {
+                                    boolean isSuccess = prefetchLoan(access_token, client);
+                                    if (!isSuccess) {
+                                        return getLoginMessage(getResources().getString(R.string.json_error), "", false);
+                                    }
+                                }
                             }
-
-
-                            // make activity parent dynamic (Review App Navigation)
 
                             int userId = objectInfo.getInt("uid");
 

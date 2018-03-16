@@ -13,6 +13,7 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -63,13 +64,9 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                 BfwContract.Loan.TABLE_NAME + "." +
                 BfwContract.Loan.COLUMN_IS_UPDATE + " = 0";
 
-        String selectionLoan = BfwContract.Loan.TABLE_NAME + "." +
-                BfwContract.Loan.COLUMN_IS_SYNC + " =  0 ";
-
         String selectionLoan_id = BfwContract.Loan.TABLE_NAME + "." +
                 BfwContract.Loan._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.Loan.CONTENT_URI, null, selection, null, null);
             if (cursor != null) {
@@ -80,11 +77,7 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                     loanServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
 
                     int local_farmer_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
-                    /*int coop_id = 0;
-                    int vendor_id = 0;*/
                     Long start_date_long = cursor.getLong(cursor.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE));
-                    //Date start_date_date = new Date(start_date_long);
-                    //String date_string = DateFormat.getDateInstance().format(start_date_date);
 
                     Date start_date_date = new Date(start_date_long);
                     DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
@@ -117,20 +110,29 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                             .build();
 
                     //Construct body
-                    String bodyContent = "{}";
+                    String bodyContent;
 
+                    String userType = Utils.getUserType(getApplicationContext());
 
+                    // if agent show farmer with coop server user id
                     bodyContent = "{" +
                             "\"purpose\": \"" + purpose + "\", " +
                             "\"financial_institution\": \"" + financial_institution + "\"," +
                             "\"amount\": " + amount + "," +
                             "\"duration\": " + duration + ", " +
                             "\"interest_rate\": " + interest_rate + ", " +
-                            "\"start_date\": \"" + date_string + "\", " +
-                            "\"partner_id\": " + local_farmer_id + " " +
-                            "}";
+                            "\"start_date\": \"" + date_string + "\", ";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan" + "/"+loanServerId;
+                    if (userType.equals("Admin") || userType.equals("Agent")) {
+                        bodyContent += "\"partner_id\": " + local_farmer_id + "" +
+                                "}";
+                    } else if (userType.equals("Vendor")) {
+                        int vendorId = Utils.getVendorServerId(getApplicationContext());
+                        bodyContent += "\"vendor_id\": " + vendorId + "" +
+                                "}";
+                    }
+
+                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan" + "/" + loanServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 

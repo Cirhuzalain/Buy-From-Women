@@ -7,8 +7,8 @@ android {
         applicationId "com.nijus.alino.bfwcoopmanagement"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 17
-        versionName "2.3"
+        versionCode 18
+        versionName "2.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -20,7 +20,7 @@ android {
         buildTypes.each {
             it.buildConfigField 'String', 'DEV_API_URL', "\"http://52.234.227.106:8069/api/\""
             it.buildConfigField 'String', 'DEV_PROXY_URL', "\"http://52.234.227.106:1993/\""
-            it.buildConfigField 'String', 'DEV_DB_NAME', "\"bfwfinal\""
+            it.buildConfigField 'String', 'DEV_DB_NAME', "\"bfw\""
         }
     }
     sourceSets {

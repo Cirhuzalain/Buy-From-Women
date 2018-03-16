@@ -1,9 +1,12 @@
 package com.nijus.alino.bfwcoopmanagement.loans.ui.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,7 +42,7 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
     private Button save_loan;
     private EditText ed_date_value;
     private Button date;
-    private Spinner loan_orign_spinner, fin_inst_spinner,purpose_loan;
+    private Spinner loan_orign_spinner, fin_inst_spinner, purpose_loan;
     private AutoCompleteTextView principal_amount, interest_rate, duration_month;
 
     @Override
@@ -77,7 +80,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
 
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -86,9 +88,26 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
         String[] fromColumns = {BfwContract.Farmer.COLUMN_NAME};
         // View IDs to map the columns (fetched above) into
         int[] toViews = {android.R.id.text1};
-        Cursor cursor = getContentResolver().query(
-                BfwContract.Farmer.CONTENT_URI, null, null, null, null
-        );
+
+
+        SharedPreferences prefs = getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+        Cursor cursor;
+
+        if (groupName.equals("Agent")) {
+            int serverId = prefs.getInt(getResources().getString(R.string.coop_id), 1);
+
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " =  ? ";
+            cursor = getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, farmerSelection, new String[]{Integer.toString(serverId)}, null
+            );
+        } else {
+            cursor = getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, null, null, null
+            );
+        }
         if (cursor != null) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                     this, // context
@@ -112,7 +131,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
             String purpose_loan_string;
             Date start_date = null;
 
-            //Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show();
             if (TextUtils.isEmpty(ed_date_value.getText())) {
                 ed_date_value.setError(getString(R.string.error_field_required));
             }
@@ -143,7 +161,7 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
                 }
 
                 fin_inst = (String) fin_inst_spinner.getSelectedItem();
-                purpose_loan_string = (String)purpose_loan.getSelectedItem();
+                purpose_loan_string = (String) purpose_loan.getSelectedItem();
                 PojoLoan pojoLoan = new PojoLoan();
                 pojoLoan.setFarmer_id(farmer_spiner_id);
                 pojoLoan.setPurpose(purpose_loan_string);

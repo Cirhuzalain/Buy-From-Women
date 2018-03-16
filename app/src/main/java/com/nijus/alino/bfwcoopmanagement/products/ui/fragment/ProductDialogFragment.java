@@ -28,6 +28,7 @@ import com.nijus.alino.bfwcoopmanagement.loans.ui.activities.LoanActivity;
 import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
 import com.nijus.alino.bfwcoopmanagement.products.sync.AddProduct;
 import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,7 +58,14 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
 
         mProductContainer = viewContainer.findViewById(R.id.productContainer);
 
+
         farmer = viewContainer.findViewById(R.id.vendor);
+
+        String userType = Utils.getUserType(getContext());
+        if (userType.equals("Vendor")) {
+            farmer.setVisibility(View.GONE);
+        }
+
         harvsetSeason = viewContainer.findViewById(R.id.harvsetSeason);
         grade = viewContainer.findViewById(R.id.grade);
         create_product = viewContainer.findViewById(R.id.create_product);
@@ -84,7 +92,12 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
         sale_price = viewContainer.findViewById(R.id.sale_price);
 
         populateSpinnerHarvestSeason();
-        populateSpinnerFarmer();
+
+
+        if (!userType.equals("Vendor")) {
+            populateSpinnerFarmer();
+        }
+
         ArrayAdapter<CharSequence> adapter_grade = ArrayAdapter.createFromResource(getContext(),
                 R.array.grade_array, android.R.layout.simple_spinner_item);
         adapter_grade.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -135,13 +148,24 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
         int[] toViews = {
                 android.R.id.text1
         };
-        Cursor cursor = getActivity().getContentResolver().query(
-                BfwContract.Farmer.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+        SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
+                Context.MODE_PRIVATE);
+        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
+        Cursor cursor;
+
+        if (groupName.equals("Agent")) {
+            int serverId = prefs.getInt(getResources().getString(R.string.coop_id), 1);
+
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." +
+                    BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " =  ? ";
+            cursor = getActivity().getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, farmerSelection, new String[]{Integer.toString(serverId)}, null
+            );
+        } else {
+            cursor = getActivity().getContentResolver().query(
+                    BfwContract.Farmer.CONTENT_URI, null, null, null, null
+            );
+        }
         if (cursor != null) {
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                     getContext(), // context

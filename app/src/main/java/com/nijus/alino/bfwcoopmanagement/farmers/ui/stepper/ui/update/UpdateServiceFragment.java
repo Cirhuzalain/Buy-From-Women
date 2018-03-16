@@ -34,7 +34,7 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
     private ServiceAccess serviceAccess = new ServiceAccess();
 
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     private CheckBox tractors;
     private CheckBox harvester;
@@ -82,7 +82,7 @@ public class UpdateServiceFragment extends Fragment implements LoaderManager.Loa
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
 

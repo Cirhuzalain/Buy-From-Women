@@ -13,6 +13,7 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -68,7 +69,6 @@ public class SyncProductBackground extends IntentService {
         String selectionProduct_id = BfwContract.ProductTemplate.TABLE_NAME + "." +
                 BfwContract.ProductTemplate._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, selectionProduct, null, null);
             if (cursor != null) {
@@ -76,8 +76,6 @@ public class SyncProductBackground extends IntentService {
 
                 while (cursor.moveToNext()) {
                     id = cursor.getLong(cursor.getColumnIndex(BfwContract.ProductTemplate._ID));
-
-                    productServerId = 0;
 
                     String nameProduct = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
                     Double productPrice = 0.0;
@@ -106,7 +104,6 @@ public class SyncProductBackground extends IntentService {
                         }
                     }
 
-                    //Get Harvsetseason id from server
                     String selectHarvsetId = BfwContract.HarvestSeason.TABLE_NAME + "." +
                             BfwContract.HarvestSeason._ID + " =  ? ";
 
@@ -128,18 +125,27 @@ public class SyncProductBackground extends IntentService {
                             .build();
 
                     //Construct body
-                    String bodyContent = "{}";
+                    String bodyContent;
 
-                    //if (productServerId != 0) {
-                        bodyContent = "{" +
-                                "\"name\": \"" + nameProduct + "\", " +
-                                "\"harvest_grade\": \"" + grade + "\"," +
-                                "\"harvest_season\": " + local_season_id + "," +
-                                "\"vendor_qty\": " + productQty + ", " +
-                                "\"standard_price\": " + productPrice + ", " +
-                                "\"farmer_id\": " + local_farmer_id + " " +
+
+                    bodyContent = "{" +
+                            "\"name\": \"" + nameProduct + "\", " +
+                            "\"harvest_grade\": \"" + grade + "\"," +
+                            "\"harvest_season\": " + local_season_id + "," +
+                            "\"vendor_qty\": " + productQty + "," +
+                            "\"standard_price\": " + productPrice + ",";
+
+                    String userType = Utils.getUserType(getApplicationContext());
+
+                    if (userType.equals("Admin") || userType.equals("Agent")) {
+                        bodyContent += "\"farmer_id\": " + local_farmer_id + "" +
                                 "}";
-                    //}
+                    } else if (userType.equals("Vendor")) {
+                        int vendorId = Utils.getVendorServerId(getApplicationContext());
+                        bodyContent += "\"vendor_farmer_id\": " + vendorId + "" +
+                                "}";
+                    }
+
                     String API_INFO = BuildConfig.DEV_API_URL + "product.template";
 
 

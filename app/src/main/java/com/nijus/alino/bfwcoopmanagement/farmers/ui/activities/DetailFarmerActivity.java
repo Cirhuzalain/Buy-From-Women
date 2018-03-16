@@ -284,7 +284,12 @@ public class DetailFarmerActivity extends AppCompatActivity implements LoaderMan
 
 
             TextView membership_f_details = findViewById(R.id.membership_f_details1);
-            membership_f_details.setText(membership);
+            if (membership == null || membership.equals("null")) {
+                membership_f_details.setText("");
+            } else {
+                membership_f_details.setText(membership);
+            }
+
 
             //Available resources
             ImageView pic_tractor_details = findViewById(R.id.pic_tractor_details);

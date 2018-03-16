@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.pojo.Product;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 public class ProductAdapter extends BaseAdapter {
     private Cursor mCursor;

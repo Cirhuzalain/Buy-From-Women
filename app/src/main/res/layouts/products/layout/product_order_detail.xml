@@ -111,8 +111,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/vendor"
+                    android:layout_weight="2"
+                    android:text="@string/prod_farmer"
                     android:textSize="16sp" />
 
                 <Spinner

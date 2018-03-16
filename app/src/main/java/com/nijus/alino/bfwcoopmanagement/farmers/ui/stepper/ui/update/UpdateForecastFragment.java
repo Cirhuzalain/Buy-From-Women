@@ -52,7 +52,7 @@ public class UpdateForecastFragment extends Fragment implements LoaderManager.Lo
     private TextView currentFtmaCommitementKg;
     private TextView farmerContributionFtmaCom;
 
-    private long mFarmerId;
+    private int mFarmerId;
     private Uri mUri;
     private Cursor cursor;
     private int seasonId;
@@ -83,7 +83,7 @@ public class UpdateForecastFragment extends Fragment implements LoaderManager.Lo
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
 

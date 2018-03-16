@@ -3,6 +3,7 @@ package com.nijus.alino.bfwcoopmanagement.loans.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -31,6 +32,7 @@ import com.nijus.alino.bfwcoopmanagement.loans.adapter.LoanAdapter;
 import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.DeleteLoanDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -148,12 +150,44 @@ public class LoanActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // filter for agent and vendor
-        /*SharedPreferences prefs = getSharedPreferences(getResources().getString(R.string.application_key),
-                Context.MODE_PRIVATE);
-        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");*/
-        return new CursorLoader(this, BfwContract.Loan.CONTENT_URI, null, null, null,
-                null);
+        // check who is currently connect in the app
+        String userType = Utils.getUserType(getApplicationContext());
+
+        // if agent show farmer with coop server user id
+        if (userType.equals("Admin")) {
+            return new CursorLoader(this, BfwContract.Loan.CONTENT_URI, null, null, null,
+                    null);
+        } else if (userType.equals("Agent")) {
+            // filter base on coop server id on farmer
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." + BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " = ? ";
+            int farmerServerId = Utils.getCoopServerId(getApplicationContext());
+
+            Uri loanFarmerUri = BfwContract.Loan.buildFarmerLoanUri(farmerServerId);
+            return new CursorLoader(this, loanFarmerUri, null, farmerSelection, new String[]{Integer.toString(farmerServerId)}, null);
+
+        } else if (userType.equals("Vendor")) {
+            //  show vendor loan
+            String vendorSelection = BfwContract.Loan.TABLE_NAME + "." + BfwContract.Loan.COLUMN_VENDOR_ID + " = ? ";
+            int vendorId = Utils.getVendorServerId(getApplicationContext());
+            Cursor cursor = null;
+
+            try {
+                String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                        "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            return new CursorLoader(this, BfwContract.Loan.CONTENT_URI, null, vendorSelection, new String[]{Integer.toString(vendorId)}, null);
+        }
+        return null;
     }
 
     @Override

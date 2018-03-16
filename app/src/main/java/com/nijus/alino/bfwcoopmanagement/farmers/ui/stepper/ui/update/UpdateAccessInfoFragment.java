@@ -36,7 +36,7 @@ public class UpdateAccessInfoFragment extends Fragment implements LoaderManager.
     private AccessToInformation accessToInformation = new AccessToInformation();
 
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     private Cursor cursor;
     private String seasonName;
@@ -81,7 +81,7 @@ public class UpdateAccessInfoFragment extends Fragment implements LoaderManager.
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
         }
 
     }
@@ -101,6 +101,7 @@ public class UpdateAccessInfoFragment extends Fragment implements LoaderManager.
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.access_to_info));
         harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        harvsetSeason.setOnItemSelectedListener(this);
 
         populateSpinner();
 

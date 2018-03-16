@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -169,18 +170,50 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // filter for agent and vendor
-        /*SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
-                Context.MODE_PRIVATE);
-        String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");*/
-        return new CursorLoader(
-                getContext(),
-                BfwContract.ProductTemplate.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+        // check who is currently connect in the app
+        String userType = Utils.getUserType(getContext());
+
+        // if agent show farmer with coop server user id
+        if (userType.equals("Admin")) {
+            return new CursorLoader(
+                    getContext(),
+                    BfwContract.ProductTemplate.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        } else if (userType.equals("Agent")) {
+            // filter base on coop server id on farmer
+            String farmerSelection = BfwContract.Farmer.TABLE_NAME + "." + BfwContract.Farmer.COLUMN_COOP_SERVER_ID + " = ? ";
+            int coopServerId = Utils.getCoopServerId(getContext());
+
+            Uri productFarmerUri = BfwContract.ProductTemplate.buildFarmerProductUri(coopServerId);
+            return new CursorLoader(getContext(), productFarmerUri, null, farmerSelection, new String[]{Integer.toString(coopServerId)}, null);
+        } else if (userType.equals("Vendor")) {
+            //  show vendor loan
+            String vendorSelection = BfwContract.ProductTemplate.TABLE_NAME + "." + BfwContract.Loan.COLUMN_VENDOR_ID + " = ? ";
+            int vendorId = Utils.getVendorServerId(getContext());
+            Cursor cursor = null;
+
+            try {
+                String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                        "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                cursor = getContext().getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+
+            return new CursorLoader(getContext(), BfwContract.ProductTemplate.CONTENT_URI, null, vendorSelection, new String[]{Integer.toString(vendorId)}, null);
+        }
+        return null;
     }
 
     @Override
@@ -211,7 +244,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshProductLoader(RefreshProductLoader productLoader) {
         getLoaderManager().restartLoader(0, null, this);
     }
@@ -232,6 +265,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
         }
 
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

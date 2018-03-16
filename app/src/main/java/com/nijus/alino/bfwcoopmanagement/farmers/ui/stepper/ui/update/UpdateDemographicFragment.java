@@ -45,7 +45,7 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
     private AutoCompleteTextView cellCarrier;
     private AutoCompleteTextView memberShipId;
     private Uri mUri;
-    private long mFarmerId;
+    private int mFarmerId;
 
     public UpdateDemographicFragment() {
         super();
@@ -71,7 +71,7 @@ public class UpdateDemographicFragment extends Fragment implements LoaderManager
         Intent intent = getActivity().getIntent();
 
         if (intent.hasExtra("farmerId")) {
-            mFarmerId = intent.getLongExtra("farmerId", 0);
+            mFarmerId = intent.getIntExtra("farmerId", 0);
             mUri = BfwContract.Farmer.buildFarmerUri(mFarmerId);
         }
 
