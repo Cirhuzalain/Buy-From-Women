@@ -64,7 +64,7 @@ public class BuyerActivity extends BaseActivity implements BuyerFragment.OnListF
             public void onLongClick(long buyerId, long position, BuyerAdapter.ViewHolder vh) {
 
             }
-        },mLayoutManager);
+        }, mLayoutManager);
 
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);

@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 
 public class BaselineYield implements Parcelable {
+    public static final Creator<BaselineYield> CREATOR = new Creator<BaselineYield>() {
+        @Override
+        public BaselineYield createFromParcel(Parcel parcel) {
+            return new BaselineYield(parcel);
+        }
+
+        @Override
+        public BaselineYield[] newArray(int i) {
+            return new BaselineYield[0];
+        }
+    };
     private String seasonName;
     private boolean isMaize;
     private boolean isBean;
@@ -12,7 +23,6 @@ public class BaselineYield implements Parcelable {
     private boolean isOther;
     private int seasonId;
     private int baselineYieldId;
-
 
     public BaselineYield() {
         this.baselineYieldId = 0;
@@ -40,7 +50,6 @@ public class BaselineYield implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -109,16 +118,4 @@ public class BaselineYield implements Parcelable {
     public void setOther(boolean other) {
         isOther = other;
     }
-
-    public static final Creator<BaselineYield> CREATOR = new Creator<BaselineYield>() {
-        @Override
-        public BaselineYield createFromParcel(Parcel parcel) {
-            return new BaselineYield(parcel);
-        }
-
-        @Override
-        public BaselineYield[] newArray(int i) {
-            return new BaselineYield[0];
-        }
-    };
 }

@@ -21,18 +21,18 @@ import java.util.ArrayList;
 
 public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecyclerViewAdapter.ViewHolder> {
 
-    private Cursor mCursor;
+    // index is used to animate only the selected row
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
     final private VendorAdapterOnClickHandler mClickHandler;
     final private VendorRecyclerViewAdapter.VendorAdapterOnLongClickListener mOnLongClickListener;
-
+    private Cursor mCursor;
+    // array used to perform multiple animation at once
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
     private SparseBooleanArray itemsValues;
     private boolean reverseAllAnimations = false;
-    private static int currentSelectedIndex = -1;
-
 
     public VendorRecyclerViewAdapter(Context context, View view, VendorAdapterOnClickHandler vh, VendorAdapterOnLongClickListener vLong) {
         mContext = context;
@@ -59,6 +59,7 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
 
         holder.vendorImage.setImageResource(R.mipmap.male);
 
+        // displaying text view data
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_NAME)));
 
         String phone = mCursor.getString(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_PHONE));
@@ -68,14 +69,21 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
             holder.mUphone.setText(phone);
         }
 
+        // display profile image
         holder.imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Vendor.COLUMN_IS_SYNC)) == 1;
         if (isSync) {
+
+            // display green image
             holder.imageView.setImageResource(R.drawable.ic_cloud_done_black_24dp);
         } else {
+
+            // display red image
             holder.imageView.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
         }
+
+        // change the icon state to activated
         applyIconAnimation(holder, position);
     }
 
@@ -197,7 +205,10 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
             iconFront = view.findViewById(R.id.icon_front);
             iconContainer = view.findViewById(R.id.icon_container);
 
+            // apply click events
             view.setOnClickListener(this);
+
+            // apply long click events
             view.setOnLongClickListener(this);
         }
 
@@ -223,6 +234,8 @@ public class VendorRecyclerViewAdapter extends RecyclerView.Adapter<VendorRecycl
             return true;
         }
 
+        // As the views will be reused, sometimes the icon appears as
+        // flipped because older view is reused. Reset the Y-axis to 0
         private void resetIconYAxis(View view) {
             if (view.getRotationY() != 0) {
                 view.setRotationY(0);

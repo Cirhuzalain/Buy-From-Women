@@ -14,13 +14,12 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventB;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation;
 
 public class GeneralInformationFragment extends Fragment {
 

@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.adapter.CoopAgentAdapter;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.CreateCoopAgentActivity;
@@ -40,7 +39,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link com.nijus.alino.bfwcoopmanagement.coopAgent.ui.fragment.CoopAgentFragment#newInstance} factory method to
@@ -58,13 +56,15 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
     private RecyclerView recyclerView;
     private CoordinatorLayout coordinatorLayout;
 
-    public CoopAgentFragment() {}
+    public CoopAgentFragment() {
+    }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameter.
-     *
+     * <p>
      * ARG_COLUMN_COUNT = "column-count";
+     *
      * @return A new instance of fragment CoopFragment.
      */
     public static CoopAgentFragment newInstance(int columnCount) {
@@ -104,9 +104,9 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         }, new CoopAgentAdapter.CoopAgentAdapterOnLongClickHandler() {
             @Override
             public void onLongClick(long agentId, long position, CoopAgentAdapter.ViewHolder vh) {
-                ((CoopAgentFragment.OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(agentId,position, vh);
+                ((CoopAgentFragment.OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(agentId, position, vh);
             }
-        },mLayoutManager);
+        }, mLayoutManager);
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);
@@ -114,8 +114,6 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         recyclerView.setAdapter(agentRecyclerViewAdapter);
 
         //ADD LISTENER TO RECYCLEVIEW WHEN SWIPPING IT
-
-        //fab coop fragment
         fab = view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_add_black_24dp);
         fab.setOnClickListener(this);
@@ -170,7 +168,7 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onToggleAgentRequestEvent(ToggleAgentRequestEvent agentRequestEvent) {
 
         agentRecyclerViewAdapter.toggleSelection(agentRequestEvent.getPosition());
@@ -180,19 +178,19 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRequestAgentToDelete(RequestEventAgentToDelete buyerToDelete) {
 
         EventBus.getDefault().post(new ResponseEventAgentToDelete(agentRecyclerViewAdapter.getSelectedItems()));
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDisableAgentSwipeEvent(DisableAgentSwipeEvent disableAgentSwipeEven) {
         mRefreshData.setEnabled(false);
         fab.setVisibility(View.INVISIBLE);
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventAgentResetItems(EventAgentResetItems eventAgentResetItems) {
         agentRecyclerViewAdapter.clearSelections();
         mRefreshData.setEnabled(true);
@@ -206,18 +204,18 @@ public class CoopAgentFragment extends Fragment implements LoaderManager.LoaderC
         });
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         if (saveDataEvent.isSuccess())
             getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshAgentLoader(RefreshAgentLoader bayerLoader) {
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
         if (syncDataEvent.isSuccess()) {
             getLoaderManager().restartLoader(0, null, this);

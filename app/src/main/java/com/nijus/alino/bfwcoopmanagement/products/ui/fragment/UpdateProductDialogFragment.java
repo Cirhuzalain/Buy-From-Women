@@ -32,6 +32,9 @@ import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateProduct;
 public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    AutoCompleteTextView product_name;
+    AutoCompleteTextView quantity;
+    AutoCompleteTextView sale_price;
     private LinearLayout mProductContainer;
     private Spinner vendor;
     private Spinner harvsetSeason;
@@ -39,10 +42,6 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     private int id_product, product_server_id;
     private Button create_product;
     private Button order_product;
-
-    AutoCompleteTextView product_name;
-    AutoCompleteTextView quantity;
-    AutoCompleteTextView sale_price;
 
     @Override
     @NonNull
@@ -69,7 +68,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
                 Context.MODE_PRIVATE);
         String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
 
-        if(groupName.equals("Buyer")){
+        if (groupName.equals("Buyer")) {
             order_product.setVisibility(View.VISIBLE);
             create_product.setVisibility(View.GONE);
         } else {

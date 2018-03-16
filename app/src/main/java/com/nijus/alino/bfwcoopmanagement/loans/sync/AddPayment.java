@@ -20,9 +20,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class AddPayment extends IntentService {
     public final String LOG_TAG = AddPayment.class.getSimpleName();
@@ -62,7 +59,7 @@ public class AddPayment extends IntentService {
                 Uri uri = getContentResolver().insert(BfwContract.LoanPayment.CONTENT_URI, contentValues);
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent("Payment added successfully",true));
+                EventBus.getDefault().post(new SaveDataEvent("Payment added successfully", true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

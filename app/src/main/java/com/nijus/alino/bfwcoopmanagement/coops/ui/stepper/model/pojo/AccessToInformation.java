@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class AccessToInformation implements Parcelable {
 
+    public static final Creator<AccessToInformation> CREATOR = new Creator<AccessToInformation>() {
+        @Override
+        public AccessToInformation createFromParcel(Parcel parcel) {
+            return new AccessToInformation(parcel);
+        }
+
+        @Override
+        public AccessToInformation[] newArray(int i) {
+            return new AccessToInformation[0];
+        }
+    };
     private boolean isAgricultureExtension;
     private boolean isClimateRelatedInformation;
     private boolean isSeed;
@@ -15,13 +26,12 @@ public class AccessToInformation implements Parcelable {
     private boolean isSpreaderOrSprayer;
     private int seasonId;
     private int infoId;
-
     private String seasonName;
-
 
     public AccessToInformation() {
         this.infoId = 0;
     }
+
 
     public AccessToInformation(String seasonName, boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
                                boolean isOrganicFertilizers, boolean isInorganicFertilizers, boolean isLabour,
@@ -37,7 +47,6 @@ public class AccessToInformation implements Parcelable {
         this.seasonName = seasonName;
         this.seasonId = seasonId;
     }
-
 
     public AccessToInformation(Parcel source) {
         this.isAgricultureExtension = source.readByte() != 0;
@@ -153,7 +162,6 @@ public class AccessToInformation implements Parcelable {
         isWaterPumps = waterPumps;
     }
 
-
     public boolean isSpreaderOrSprayer() {
         return isSpreaderOrSprayer;
     }
@@ -161,16 +169,4 @@ public class AccessToInformation implements Parcelable {
     public void setSpreaderOrSprayer(boolean spreaderOrSprayer) {
         isSpreaderOrSprayer = spreaderOrSprayer;
     }
-
-    public static final Creator<AccessToInformation> CREATOR = new Creator<AccessToInformation>() {
-        @Override
-        public AccessToInformation createFromParcel(Parcel parcel) {
-            return new AccessToInformation(parcel);
-        }
-
-        @Override
-        public AccessToInformation[] newArray(int i) {
-            return new AccessToInformation[0];
-        }
-    };
 }

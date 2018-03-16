@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
 
 import java.util.List;
@@ -24,15 +23,15 @@ public class CreateCoopStepper extends FragmentStatePagerAdapter {
         mPageList = pageList;
     }
 
+    public int getCutOffPage() {
+        return mCutOffPage;
+    }
+
     public void setCutOffPage(int cutOffPage) {
         if (cutOffPage < 0) {
             cutOffPage = Integer.MAX_VALUE;
         }
         mCutOffPage = cutOffPage;
-    }
-
-    public int getCutOffPage() {
-        return mCutOffPage;
     }
 
     @Override

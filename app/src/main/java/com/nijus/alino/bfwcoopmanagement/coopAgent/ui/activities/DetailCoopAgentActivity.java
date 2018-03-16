@@ -14,19 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 
 public class DetailCoopAgentActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String ARG_KEY = "key";
     Long mCoopAgentId;
     private Uri mUri;
-    private int coopId,coop;
+    private int coopId, coop;
     private String name, phone, mail;
     private String mKey;
-    public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView coop_image_details, gen_info_pic;
@@ -44,7 +43,7 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
             mUri = BfwContract.CoopAgent.buildAgentUri(mCoopAgentId);
         }
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         collapsingToolbarLayout = findViewById(R.id.name_coopAgent);
         toolbar = findViewById(R.id.toolbar_coop);
@@ -64,7 +63,7 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),UpdateCoopAgent.class);
+                Intent intent1 = new Intent(getApplicationContext(), UpdateCoopAgent.class);
                 intent1.putExtra("coopAgentId", mCoopAgentId);
                 startActivity(intent1);
             }
@@ -112,8 +111,7 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
             TextView mail_ca_details = findViewById(R.id.mail_ca_details);
             mail_ca_details.setText(mail);
 
-            /**Get the real name of the cooperative**/
-
+            //Get the real name of the cooperative
             Cursor cursor = null;
             int dataCount;
             String namecoop = "";
@@ -130,8 +128,7 @@ public class DetailCoopAgentActivity extends AppCompatActivity implements Loader
                         namecoop = cursor.getString(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_NAME));
                     }
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
 
             }
 

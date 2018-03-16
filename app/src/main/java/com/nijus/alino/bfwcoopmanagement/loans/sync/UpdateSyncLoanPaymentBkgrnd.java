@@ -18,9 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -81,7 +79,7 @@ public class UpdateSyncLoanPaymentBkgrnd extends IntentService {
                     long id_loan_loacal = cursor.getLong(cursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_LOAN_ID));
 
 
-                    //Date
+                    //Get date
                     Long start_date_long = cursor.getLong(cursor.getColumnIndex(BfwContract.LoanPayment.COLUMN_PAYMENT_DATE));
                     Date start_date_date = new Date(start_date_long);
                     String date_string = DateFormat.getDateInstance().format(start_date_date);
@@ -94,7 +92,6 @@ public class UpdateSyncLoanPaymentBkgrnd extends IntentService {
                             .readTimeout(240, TimeUnit.SECONDS)
                             .build();
 
-                    //Construct bodyn /*"\"loan_id\": " + id_loan_loacal + ", " +*/
                     String bodyContent = "{}";
 
                     bodyContent = "{" +
@@ -102,7 +99,7 @@ public class UpdateSyncLoanPaymentBkgrnd extends IntentService {
                             "\"payment_date\": \"" + date_string + "\" " +
                             "}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.payment" + "/"+loanPaymentServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.payment" + "/" + loanPaymentServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 
@@ -143,6 +140,6 @@ public class UpdateSyncLoanPaymentBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Payment synchronized successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_loan_payment_msg_sync), true));
     }
 }

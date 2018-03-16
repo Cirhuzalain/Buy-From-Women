@@ -24,6 +24,7 @@ import com.nijus.alino.bfwcoopmanagement.coops.adapter.BaselineYieldAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.ExpectedYieldAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.adapter.ForecastSalesAdapter;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineFinanceInfo;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineSales;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.BaselineYield;
@@ -32,7 +33,6 @@ import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.ForecastSal
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.GeneralInformation;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.PageFragmentCallbacks;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
 import com.riyagayasen.easyaccordion.AccordionExpansionCollapseListener;
 import com.riyagayasen.easyaccordion.AccordionView;
 
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 public class DetailCoopActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String ARG_KEY = "key";
     Long mCoopId;
     private Uri mUri;
     private int coopId;
@@ -48,7 +49,6 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
     private Page mPage;
     private String mKey;
     private PageFragmentCallbacks mCallbacks;
-    public static final String ARG_KEY = "key";
     private GeneralInformation general;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;

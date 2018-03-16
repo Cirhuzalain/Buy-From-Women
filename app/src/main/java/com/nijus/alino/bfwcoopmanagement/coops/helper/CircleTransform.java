@@ -12,13 +12,9 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import java.security.MessageDigest;
 
 
-public class CircleTransform  extends BitmapTransformation {
+public class CircleTransform extends BitmapTransformation {
     public CircleTransform(Context context) {
         super(context);
-    }
-
-    @Override protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return circleCrop(pool, toTransform);
     }
 
     private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
@@ -45,8 +41,13 @@ public class CircleTransform  extends BitmapTransformation {
         return result;
     }
 
+    @Override
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+        return circleCrop(pool, toTransform);
+    }
+
     //@Override public String getId() {
-        //return getClass().getName();
+    //return getClass().getName();
     //}
 
     @Override

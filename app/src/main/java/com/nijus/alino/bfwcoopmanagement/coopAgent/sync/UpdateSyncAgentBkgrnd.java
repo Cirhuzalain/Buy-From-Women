@@ -48,7 +48,7 @@ public class UpdateSyncAgentBkgrnd extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync agent to the server (is_sync)
         int dataCount = 0;
         int agentServerId;
         long id;
@@ -93,7 +93,7 @@ public class UpdateSyncAgentBkgrnd extends IntentService {
                             "\"coop_id\": " + coop + " " +
                             "}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "coop.agent" + "/"+agentServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "coop.agent" + "/" + agentServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 
@@ -109,7 +109,6 @@ public class UpdateSyncAgentBkgrnd extends IntentService {
                         if (responseBodyLoan != null) {
                             String farmerDataInfo = responseBodyLoan.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //productServerId = productInfo.getInt("id");
 
                                 //update localId
                                 ContentValues contentValues = new ContentValues();

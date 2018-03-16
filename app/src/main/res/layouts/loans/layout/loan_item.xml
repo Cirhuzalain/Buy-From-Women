@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Make the background of our selector a non-transparent color -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/touch_selector"
-    android:paddingLeft="@dimen/list_item_extra_padding"
-    android:padding="5dp"
-    android:paddingRight="@dimen/list_item_extra_padding"
     android:elevation="6dp"
-    >
+    android:padding="5dp"
+    android:paddingLeft="@dimen/list_item_extra_padding"
+    android:paddingRight="@dimen/list_item_extra_padding">
 
     <LinearLayout
         android:id="@+id/view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
         android:background="#fff"
+        android:elevation="4dp"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
@@ -127,8 +125,8 @@
                     android:layout_gravity="left"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textColor="@color/colorAccent"
                     android:text="12/12/2018"
+                    android:textColor="@color/colorAccent"
                     android:textStyle="bold" />
 
             </LinearLayout>

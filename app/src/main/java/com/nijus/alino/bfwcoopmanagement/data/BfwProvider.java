@@ -12,118 +12,83 @@ import android.support.annotation.Nullable;
 
 public class BfwProvider extends ContentProvider {
 
-    private BfwDbHelper mBfwDbHelper;
-    public UriMatcher mUriMatcher = buildUriMatcher();
-
     static final int COOPS = 100;
     static final int COOPS_DETAILS = 158;
-
     static final int COOP_INFO = 120;
     static final int COOP_INFO_BY_COOP = 127;
-
     static final int SALE_COOP = 121;
     static final int SALE_COOP_BY_COOP = 129;
-
     static final int YIELD_COOP = 122;
     static final int YIELD_BY_COOP = 152;
-
     static final int BASELINE_SALE_COOP = 123;
     static final int BASELINE_SALE_BY_COOP = 153;
-
     static final int FINANCE_INFO_COOP = 124;
     static final int FINANCE_INFO_BY_COOP = 155;
-
     static final int EXPECTED_YIELD = 125;
     static final int EXPECTED_YIELD_BY_COOP = 157;
-
-
     static final int BUYER = 101;
     static final int BUYER_DETAILS = 150;
     static final int COOP_AGENT = 102;
     static final int COOP_AGENT_DETAILS = 160;
-
-
     static final int FARMER = 103;
     static final int FARMER_DETAILS = 104;
-
     static final int FARMER_INFO = 130;
     static final int INFO_BY_FARMER = 170;
-
     static final int FARMER_BASELINE = 131;
     static final int BASELINE_BY_FARMER = 171;
-
     static final int FARMER_FORECAST = 132;
     static final int FORECAST_BY_FARMER = 172;
-
     static final int FARMER_FINANCE_DATA = 133;
     static final int FINANCE_DATA_BY_FARMER = 173;
-
     static final int LAND_PLOT = 105;
     static final int FARMER_BY_LAND_PLOT = 106;
-
     static final int VENDOR = 114;
     static final int VENDOR_DETAILS = 175;
-
     static final int VENDOR_INFO = 140;
     static final int INFO_BY_VENDOR = 176;
-
     static final int VENDOR_LAND = 141;
     static final int LAND_BY_VENDOR = 177;
-
     static final int BASELINE_VENDOR = 142;
     static final int BASELINE_BY_VENDOR = 178;
-
     static final int FINANCE_DATA_VENDOR = 143;
     static final int FINANCE_DATA_BY_VENDOR = 179;
-
     static final int FORECAST_VENDOR = 144;
     static final int FORECAST_BY_VENDOR = 180;
-
     static final int HARVEST_SEASON = 107;
-
     static final int PRODUCT_PRODUCT = 200;
     static final int PRODUCT_PRODUCT_DETAILS = 210;
     static final int PRODUCT_TEMPLATE = 201;
     static final int PRODUCT_TEMPLATE_DETAILS = 211;
-
     static final int SALE_ORDER = 203;
     static final int SALE_ORDER_LINE = 204;
     static final int SALE_ORDER_DETAILS = 212;
-
     static final int PURCHASE_ORDER = 205;
     static final int PURCHASE_ORDER_LINE = 206;
     static final int PURCHASE_ORDER_DETAILS = 213;
-
     static final int LOAN_LINE = 207;
     static final int LOAN_PAYMENT = 208;
     static final int LOAN = 209;
     static final int LOAN_DETAILS = 214;
-
     static final int SALE_ORDER_LINE_PRODUCT = 222;
     static final int PURCHASE_ORDER_LINE_PRODUCT = 223;
     static final int LOAN_LINE_PAYMENT = 224;
-
     static final int PAYMENT_TERM = 250;
-
     private static final SQLiteQueryBuilder infoByCoop;
     private static final SQLiteQueryBuilder saleByCoop;
     private static final SQLiteQueryBuilder yieldByCoop;
     private static final SQLiteQueryBuilder baselineByCoop;
     private static final SQLiteQueryBuilder financeInfoByCoop;
     private static final SQLiteQueryBuilder expectedYieldByCoop;
-
     private static final SQLiteQueryBuilder farmerLandPlot;
     private static final SQLiteQueryBuilder infoByFarmer;
     private static final SQLiteQueryBuilder baselineByFarmer;
     private static final SQLiteQueryBuilder forecastByFarmer;
     private static final SQLiteQueryBuilder financeDataByFarmer;
-
     private static final SQLiteQueryBuilder infoByVendor;
     private static final SQLiteQueryBuilder landByVendor;
     private static final SQLiteQueryBuilder baselineByVendor;
     private static final SQLiteQueryBuilder financeByVendor;
     private static final SQLiteQueryBuilder forecastByVendor;
-
     private static final SQLiteQueryBuilder saleOrderLineProduct;
     private static final SQLiteQueryBuilder purchaseOderLineProduct;
     private static final SQLiteQueryBuilder loanLinePayment;
@@ -339,6 +304,9 @@ public class BfwProvider extends ContentProvider {
                         "." + BfwContract.Farmer._ID
         );
     }
+
+    public UriMatcher mUriMatcher = buildUriMatcher();
+    private BfwDbHelper mBfwDbHelper;
 
     public BfwProvider() {
 

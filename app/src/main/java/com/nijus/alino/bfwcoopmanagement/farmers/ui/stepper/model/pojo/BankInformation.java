@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class BankInformation implements Parcelable {
 
+    public static final Parcelable.Creator<BankInformation> CREATOR = new Parcelable.Creator<BankInformation>() {
+        @Override
+        public BankInformation createFromParcel(Parcel parcel) {
+            return new BankInformation(parcel);
+        }
+
+        @Override
+        public BankInformation[] newArray(int i) {
+            return new BankInformation[0];
+        }
+    };
     private String accountNumber;
     private String bankName;
 
@@ -52,16 +63,4 @@ public class BankInformation implements Parcelable {
     public void setBankName(String bankName) {
         this.bankName = bankName;
     }
-
-    public static final Parcelable.Creator<BankInformation> CREATOR = new Parcelable.Creator<BankInformation>() {
-        @Override
-        public BankInformation createFromParcel(Parcel parcel) {
-            return new BankInformation(parcel);
-        }
-
-        @Override
-        public BankInformation[] newArray(int i) {
-            return new BankInformation[0];
-        }
-    };
 }

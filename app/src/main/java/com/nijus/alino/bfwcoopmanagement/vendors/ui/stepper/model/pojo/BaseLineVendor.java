@@ -10,6 +10,17 @@ import android.os.Parcelable;
 public class BaseLineVendor implements Parcelable {
 
 
+    public static final Parcelable.Creator<BaseLineVendor> CREATOR = new Parcelable.Creator<BaseLineVendor>() {
+        @Override
+        public BaseLineVendor createFromParcel(Parcel parcel) {
+            return new BaseLineVendor(parcel);
+        }
+
+        @Override
+        public BaseLineVendor[] newArray(int i) {
+            return new BaseLineVendor[0];
+        }
+    };
     private Double totProdInKg;
     private Double totLostInKg;
     private Double totSoldInKg;
@@ -21,9 +32,9 @@ public class BaseLineVendor implements Parcelable {
     private int baselineId;
     private String seasonName;
 
-
-
-    public BaseLineVendor(){ this.baselineId = 0;}
+    public BaseLineVendor() {
+        this.baselineId = 0;
+    }
 
     public BaseLineVendor(Double totProdInKg, Double totLostInKg, Double totSoldInKg, Double totVolumeSoldCoopInKg,
                           Double priceSoldToCoopPerKg, Double totVolSoldInKg, Double priceSoldInKg, int harvestSeason) {
@@ -49,6 +60,7 @@ public class BaseLineVendor implements Parcelable {
         this.baselineId = data.readInt();
         this.seasonName = data.readString();
     }
+
     @Override
     public int describeContents() {
         return 0;
@@ -67,6 +79,7 @@ public class BaseLineVendor implements Parcelable {
         parcel.writeInt(baselineId);
         parcel.writeString(seasonName);
     }
+
     public String getSeasonName() {
         return seasonName;
     }
@@ -146,16 +159,4 @@ public class BaseLineVendor implements Parcelable {
     public void setPriceSoldInKg(Double priceSoldInKg) {
         this.priceSoldInKg = priceSoldInKg;
     }
-
-    public static final  Parcelable.Creator<BaseLineVendor> CREATOR = new  Parcelable.Creator<BaseLineVendor>() {
-        @Override
-        public BaseLineVendor createFromParcel(Parcel parcel) {
-            return new BaseLineVendor(parcel);
-        }
-
-        @Override
-        public BaseLineVendor[] newArray(int i) {
-            return new BaseLineVendor[0];
-        }
-    };
 }

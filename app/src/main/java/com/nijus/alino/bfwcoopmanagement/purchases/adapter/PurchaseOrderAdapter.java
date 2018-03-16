@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchaseOrderListFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont;
+import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchaseOrderListFragment;
 
 import java.util.List;
 

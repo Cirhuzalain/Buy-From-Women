@@ -8,6 +8,17 @@ import android.os.Parcelable;
  */
 
 public class AvailableResources implements Parcelable {
+    public static final Creator<AvailableResources> CREATOR = new Creator<AvailableResources>() {
+        @Override
+        public AvailableResources createFromParcel(Parcel parcel) {
+            return new AvailableResources(parcel);
+        }
+
+        @Override
+        public AvailableResources[] newArray(int i) {
+            return new AvailableResources[0];
+        }
+    };
     private boolean isOfficeSpace;
     private boolean isMoistureMeter;
     private boolean isWeightingScales;
@@ -18,7 +29,6 @@ public class AvailableResources implements Parcelable {
     private boolean isTresher;
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
-
     private String textSafeStorage;
     private String textOtherResourceInfo;
     private String seasonName;
@@ -186,16 +196,4 @@ public class AvailableResources implements Parcelable {
     public void setTextOtherResourceInfo(String textOtherResourceInfo) {
         this.textOtherResourceInfo = textOtherResourceInfo;
     }
-
-    public static final Creator<AvailableResources> CREATOR = new Creator<AvailableResources>() {
-        @Override
-        public AvailableResources createFromParcel(Parcel parcel) {
-            return new AvailableResources(parcel);
-        }
-
-        @Override
-        public AvailableResources[] newArray(int i) {
-            return new AvailableResources[0];
-        }
-    };
 }

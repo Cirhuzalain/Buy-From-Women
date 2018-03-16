@@ -266,13 +266,18 @@
     <string name="syncing_error_buyer">An error occur while syncing buyer data</string>
     <string name="syncing_error_product">An error occur while syncing Product data</string>
 
+    <string name="update">UPDATE</string>
     <string name="update_farmer">Update Farmer</string>
     <string name="update_coop">Update Cooperative</string>
     <string name="update_loan">Update Loan</string>
     <string name="update_vendor">Update Vendor</string>
     <string name="update_msg">Information updated successfully</string>
+    <string name="update_loan_payment">Loan payment updated successfully</string>
 
     <string name="update_msg_vendor">Vendor updated successfully</string>
+    <string name="update_msg_buyer_sync">Buyer updated successfully and will be synchronised later </string>
+    <string name="update_msg_buyer">Buyer updated successfully</string>
+    <string name="update_msg_loan">Loan updated successfully</string>
     <string name="coops">Coops</string>
 
     <string name="there_s_no_cooperative_agent">There\'s no cooperative\'s agent</string>
@@ -287,6 +292,13 @@
     <string name="cooperativ">Coops</string>
     <string name="add_farmer_msg">Farmer added successfully</string>
     <string name="add_vendor_msg">Vendor added successfully</string>
+    <string name="update_msg_agent">Agent updated successfully</string>
+
+
+    <string name="add_buyer_msg_sync_later">Buyer added successfully and will be synchronized later</string>
+    <string name="add_agent_msg">Agent added successfully</string>
+    <string name="add_agent_msg_later">Agent added successfully and will be synchronized later</string>
+    <string name="update_product_msg">Product updated successfully</string>
 
     <string name="view_sale">Sale</string>
     <string name="view_purchase">Purchase</string>
@@ -299,8 +311,11 @@
     <string name="delete">DELETE</string>
 
     <string name="add_buyer_msg">Buyer added successfully</string>
+    <string name="add_product_msg">Product added successfully</string>
     <string name="add_vend_msg_sync">Vendor synchronised successfully</string>
     <string name="add_buyer_msg_sync">Buyer synchronised successfully</string>
+    <string name="add_loan_payment_msg_sync">Loan payment synchronised successfully</string>
+    <string name="add_loan_msg_sync">Loan synchronised successfully</string>
     <string name="add_farmer_msg_sync">Farmer synchronised successfully</string>
     <string name="add_agent_msg_sync">Agent synchronised successfully</string>
     <string name="add_buyer_wait_internet_msg">Buyer added successfully, you need to be connected to synchronise</string>
@@ -425,8 +440,11 @@
     <string name="del_confirm">Confirm</string>
     <string name="farm_msg">Processing your request</string>
     <string name="farm_erro_msg">An Error occur while delete farmer data</string>
+    <string name="vendor_erro_msg">An Error occur while delete vendor data</string>
     <string name="farm_del_success">Farmer Remove Successfully</string>
+    <string name="vendor_del_success">Vendor removed Successfully</string>
     <string name="farm_id_not_av">Farmer Id not available</string>
+    <string name="vendor_id_not_av">Vendor Id not available</string>
     <string name="farm_no_data_av">No Data available</string>
     <string name="del_coop">Delete Coop</string>
     <string name="sv_farmer">Create Product</string>

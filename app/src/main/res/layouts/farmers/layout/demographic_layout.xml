@@ -141,9 +141,9 @@
                         android:id="@+id/m_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:hint="@string/membership_id"
                         android:inputType="text"
-                        android:enabled="false"
                         android:maxLines="2" />
 
                 </android.support.design.widget.TextInputLayout>

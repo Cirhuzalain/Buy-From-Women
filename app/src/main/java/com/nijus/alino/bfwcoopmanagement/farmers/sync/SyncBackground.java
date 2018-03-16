@@ -33,10 +33,9 @@ import okhttp3.ResponseBody;
 
 public class SyncBackground extends IntentService {
 
-    public final String LOG_TAG = SyncBackground.class.getSimpleName();
-
     public static final MediaType JSON
             = MediaType.parse("text/html; charset=utf-8");
+    public final String LOG_TAG = SyncBackground.class.getSimpleName();
 
     public SyncBackground() {
         super("");
@@ -678,7 +677,7 @@ public class SyncBackground extends IntentService {
 
                                         boolean isResponse = false;
 
-                                        if(json instanceof JSONArray){
+                                        if (json instanceof JSONArray) {
                                             isResponse = true;
                                         }
 

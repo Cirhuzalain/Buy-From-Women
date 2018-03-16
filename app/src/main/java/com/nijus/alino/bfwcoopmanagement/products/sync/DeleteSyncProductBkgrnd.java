@@ -48,9 +48,9 @@ public class DeleteSyncProductBkgrnd extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        EventBus.getDefault().post(new ProcessingFarmerEvent("Processing your request ..."));
+        EventBus.getDefault().post(new ProcessingFarmerEvent(getResources().getString(R.string.farm_msg)));
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync product to the server (is_sync)
         int dataCount = 0;
         int productServerId;
         long id;
@@ -83,7 +83,7 @@ public class DeleteSyncProductBkgrnd extends IntentService {
                     //Construct body
                     String bodyContent = "{}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "product.template" + "/"+productServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "product.template" + "/" + productServerId;
 
                     RequestBody bodyProduct = RequestBody.create(JSON, bodyContent);
 

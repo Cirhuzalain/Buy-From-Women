@@ -37,7 +37,6 @@ public class InternalInfoFragment extends Fragment {
     private RadioGroup v_chair_gender_group;
 
 
-
     private AutoCompleteTextView sec_name_c;
     private AutoCompleteTextView sec_phone;
     private RadioGroup sec_gender_group;

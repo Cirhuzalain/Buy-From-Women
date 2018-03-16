@@ -6,7 +6,7 @@ public class ResponseEventCoopToDelete {
 
     ArrayList<Integer> farmerIds;
 
-    public ResponseEventCoopToDelete(ArrayList<Integer> farmerIds){
+    public ResponseEventCoopToDelete(ArrayList<Integer> farmerIds) {
         this.farmerIds = farmerIds;
     }
 

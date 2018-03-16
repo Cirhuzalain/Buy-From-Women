@@ -24,18 +24,17 @@ import java.util.Date;
 import java.util.Locale;
 
 public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
     final private LoanAdapterOnClickHandler mClickHandler;
     final private LoanAdapterOnLongClickHandler mOnLongClickListener;
     private Cursor mCursor;
     private View view;
-
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
     private SparseBooleanArray itemsValues;
     private boolean reverseAllAnimations = false;
-    private static int currentSelectedIndex = -1;
     private int position;
 
     public LoanAdapter(Context mContext, View mEmptyView, LoanAdapterOnClickHandler mClickHandler,

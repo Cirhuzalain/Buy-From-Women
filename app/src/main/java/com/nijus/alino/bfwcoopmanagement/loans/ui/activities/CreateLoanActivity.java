@@ -39,7 +39,7 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
     private Button save_loan;
     private EditText ed_date_value;
     private Button date;
-    private Spinner loan_orign_spinner, fin_inst_spinner,purpose_loan;
+    private Spinner loan_orign_spinner, fin_inst_spinner, purpose_loan;
     private AutoCompleteTextView principal_amount, interest_rate, duration_month;
 
     @Override
@@ -77,7 +77,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
 
 
         getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -112,7 +111,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
             String purpose_loan_string;
             Date start_date = null;
 
-            //Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show();
             if (TextUtils.isEmpty(ed_date_value.getText())) {
                 ed_date_value.setError(getString(R.string.error_field_required));
             }
@@ -143,7 +141,7 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
                 }
 
                 fin_inst = (String) fin_inst_spinner.getSelectedItem();
-                purpose_loan_string = (String)purpose_loan.getSelectedItem();
+                purpose_loan_string = (String) purpose_loan.getSelectedItem();
                 PojoLoan pojoLoan = new PojoLoan();
                 pojoLoan.setFarmer_id(farmer_spiner_id);
                 pojoLoan.setPurpose(purpose_loan_string);
@@ -177,9 +175,11 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
                 }
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             calendar.set(Calendar.YEAR, 2000);
-            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
+            // Used to hide previous date,month and year
+            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             calendar.set(Calendar.YEAR, 2030);
-            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());// TODO: used to hide future date,month and year
+            // Used to hide future date,month and year
+            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
 
             dialog.show();
         }

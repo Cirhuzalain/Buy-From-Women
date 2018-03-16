@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class LandInformation implements Parcelable {
 
+    public static final Parcelable.Creator<LandInformation> CREATOR = new Parcelable.Creator<LandInformation>() {
+        @Override
+        public LandInformation createFromParcel(Parcel parcel) {
+            return new LandInformation(parcel);
+        }
+
+        @Override
+        public LandInformation[] newArray(int i) {
+            return new LandInformation[0];
+        }
+    };
     private double landSize;
     private double lat;
     private double lng;
@@ -98,16 +109,4 @@ public class LandInformation implements Parcelable {
     public void setLandSize(double landSize) {
         this.landSize = landSize;
     }
-
-    public static final Parcelable.Creator<LandInformation> CREATOR = new Parcelable.Creator<LandInformation>() {
-        @Override
-        public LandInformation createFromParcel(Parcel parcel) {
-            return new LandInformation(parcel);
-        }
-
-        @Override
-        public LandInformation[] newArray(int i) {
-            return new LandInformation[0];
-        }
-    };
 }

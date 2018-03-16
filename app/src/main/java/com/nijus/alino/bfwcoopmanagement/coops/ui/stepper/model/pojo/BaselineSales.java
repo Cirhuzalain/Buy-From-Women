@@ -6,9 +6,19 @@ import android.os.Parcelable;
 
 public class BaselineSales implements Parcelable {
 
+    public static final Creator<BaselineSales> CREATOR = new Creator<BaselineSales>() {
+        @Override
+        public BaselineSales createFromParcel(Parcel parcel) {
+            return new BaselineSales(parcel);
+        }
+
+        @Override
+        public BaselineSales[] newArray(int i) {
+            return new BaselineSales[0];
+        }
+    };
     private String seasonName;
     private String rgccContractUnderFtma;
-
     private int qtyAgregatedFromMember;
     private int cycleHarvsetAtPricePerKg;
     private int qtyPurchaseFromNonMember;
@@ -18,14 +28,11 @@ public class BaselineSales implements Parcelable {
     private double pricePerKgSoldToRgcc;
     private double qtySoldOutOfRgcc;
     private double pricePerKkSoldOutFtma;
-
     private boolean isFormalBuyer;
     private boolean isInformalBuyer;
     private boolean isOther;
-
     private int seasonId;
     private int baselineId;
-
 
     public BaselineSales() {
         this.baselineId = 0;
@@ -222,16 +229,4 @@ public class BaselineSales implements Parcelable {
     public void setOther(boolean other) {
         isOther = other;
     }
-
-    public static final Creator<BaselineSales> CREATOR = new Creator<BaselineSales>() {
-        @Override
-        public BaselineSales createFromParcel(Parcel parcel) {
-            return new BaselineSales(parcel);
-        }
-
-        @Override
-        public BaselineSales[] newArray(int i) {
-            return new BaselineSales[0];
-        }
-    };
 }

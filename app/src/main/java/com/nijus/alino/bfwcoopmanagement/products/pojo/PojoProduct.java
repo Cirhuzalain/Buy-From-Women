@@ -3,11 +3,19 @@ package com.nijus.alino.bfwcoopmanagement.products.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class PojoProduct implements Parcelable {
+    public static final Parcelable.Creator<PojoProduct> CREATOR = new Parcelable.Creator<PojoProduct>() {
+        @Override
+        public PojoProduct createFromParcel(Parcel parcel) {
+            return new PojoProduct(parcel);
+        }
+
+        @Override
+        public PojoProduct[] newArray(int i) {
+            return new PojoProduct[0];
+        }
+    };
     private String name;
     private int price;
     private Double quantity;
@@ -27,6 +35,7 @@ public class PojoProduct implements Parcelable {
         this.grade = grade;
         this.farmer = farmer;
     }
+
     public PojoProduct(Parcel data) {
         this.name = data.readString();
         this.price = data.readInt();
@@ -35,6 +44,7 @@ public class PojoProduct implements Parcelable {
         this.grade = data.readString();
         this.farmer = data.readInt();
     }
+
     @Override
     public int describeContents() {
         return 0;
@@ -97,17 +107,5 @@ public class PojoProduct implements Parcelable {
     public void setFarmer(int farmer) {
         this.farmer = farmer;
     }
-
-    public static final Parcelable.Creator<PojoProduct> CREATOR = new Parcelable.Creator<PojoProduct>() {
-        @Override
-        public PojoProduct createFromParcel(Parcel parcel) {
-            return new PojoProduct(parcel);
-        }
-
-        @Override
-        public PojoProduct[] newArray(int i) {
-            return new PojoProduct[0];
-        }
-    };
 
 }

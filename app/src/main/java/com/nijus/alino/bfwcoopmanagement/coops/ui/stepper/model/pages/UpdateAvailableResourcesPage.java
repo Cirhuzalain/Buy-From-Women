@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AvailableResources;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.AvailableResourcesFragment;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.update.UpdateAvailableResourcesFragment;
 
 import java.util.ArrayList;

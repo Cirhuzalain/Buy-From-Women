@@ -80,11 +80,8 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                     loanServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
 
                     int local_farmer_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID));
-                    /*int coop_id = 0;
-                    int vendor_id = 0;*/
+
                     Long start_date_long = cursor.getLong(cursor.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE));
-                    //Date start_date_date = new Date(start_date_long);
-                    //String date_string = DateFormat.getDateInstance().format(start_date_date);
 
                     Date start_date_date = new Date(start_date_long);
                     DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
@@ -130,7 +127,7 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                             "\"partner_id\": " + local_farmer_id + " " +
                             "}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan" + "/"+loanServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan" + "/" + loanServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 
@@ -146,7 +143,6 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                         if (responseBodyLoan != null) {
                             String farmerDataInfo = responseBodyLoan.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //productServerId = productInfo.getInt("id");
 
                                 //update localId
                                 ContentValues contentValues = new ContentValues();
@@ -171,6 +167,6 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Loan synchronised successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_loan_msg_sync), true));
     }
 }

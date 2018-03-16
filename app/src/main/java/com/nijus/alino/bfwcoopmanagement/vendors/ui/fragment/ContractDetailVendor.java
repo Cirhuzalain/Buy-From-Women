@@ -25,11 +25,9 @@ import com.nijus.alino.bfwcoopmanagement.R;
  */
 public class ContractDetailVendor extends BottomSheetDialogFragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_ITEM_COUNT = "item_count";
     private Listener mListener;
 
-    // TODO: Customize parameters
     public static ContractDetailVendor newInstance(int itemCount) {
         final ContractDetailVendor fragment = new ContractDetailVendor();
         final Bundle args = new Bundle();
@@ -78,7 +76,7 @@ public class ContractDetailVendor extends BottomSheetDialogFragment {
         final TextView text;
 
         ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            // TODO: Customize the item layout
+            // Customize the item layout
             super(inflater.inflate(R.layout.fragment_item_list_bottom_sheet, parent, false));
             text = itemView.findViewById(R.id.text);
             text.setOnClickListener(new View.OnClickListener() {

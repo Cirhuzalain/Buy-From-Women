@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.AccessToInformation;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.update.UpdateAccessInfoFragment;
 
-
 import java.util.ArrayList;
 
 public class UpdateAccessInfoPage extends Page {

@@ -23,15 +23,15 @@ public class CreateVendorStepper extends FragmentStatePagerAdapter {
         mPageVendorList = pageVendorList;
     }
 
+    public int getCutOffPage() {
+        return mCutOffPage;
+    }
+
     public void setCutOffPage(int cutOffPage) {
         if (cutOffPage < 0) {
             cutOffPage = Integer.MAX_VALUE;
         }
         mCutOffPage = cutOffPage;
-    }
-
-    public int getCutOffPage() {
-        return mCutOffPage;
     }
 
     @Override

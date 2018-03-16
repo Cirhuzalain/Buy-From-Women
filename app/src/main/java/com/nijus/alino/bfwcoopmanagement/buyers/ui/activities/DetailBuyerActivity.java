@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
@@ -26,14 +25,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 
 public class DetailBuyerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String ARG_KEY = "key";
     private Long mBuyerId;
     private Uri mUri;
     private String name, phone, mail;
     private String mKey;
-    public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-    private ImageView buyer_details,gen_info_pic;
+    private ImageView buyer_details, gen_info_pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +47,14 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
             mUri = BfwContract.Buyer.buildBuyerUri(mBuyerId);
         }
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
         FloatingActionButton fab = findViewById(R.id.fab_edit_buyer);
-        //ImageView imageView = findViewById(R.id.buyer_details);
         fab.setImageResource(R.drawable.ic_edit_black_24dp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(getApplicationContext(),UpdateBuyerActivity.class);
+                Intent intent1 = new Intent(getApplicationContext(), UpdateBuyerActivity.class);
                 intent1.putExtra("buyerId", mBuyerId);
                 startActivity(intent1);
             }
@@ -72,10 +70,6 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
 
         gen_info_pic = findViewById(R.id.gen_info_pic);
         gen_info_pic.setImageResource(R.mipmap.male);
-
-        //Log.d("DetailCoopActivity",mBuyerId+"");
-
-
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -112,8 +106,7 @@ public class DetailBuyerActivity extends AppCompatActivity implements LoaderMana
             toolbar.setTitle(name);
             collapsingToolbarLayout.setTitle(name);
 
-            //Affichages des donnees venant dans lka base des donnes
-
+            //Get data from database
             TextView name_ca_details = findViewById(R.id.name_b_details);
             name_ca_details.setText(name);
             TextView phone_ca_details = findViewById(R.id.phone_b_details);

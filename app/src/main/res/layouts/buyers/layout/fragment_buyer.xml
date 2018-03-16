@@ -27,15 +27,15 @@
         android:id="@+id/refresh_data_done"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:elevation="6dp">
+        android:elevation="6dp"
+        android:scrollbars="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:elevation="4dp"
             android:id="@+id/buyer_list"
             android:name="com.example.alino.bfwcoopmanagement.ui.fragment.NavigationFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="4dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".buyers.ui.fragment.BuyerFragment"
             tools:listitem="@layout/buyer_item" />
@@ -49,7 +49,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:stateListAnimator="@animator/fab_raise"
-        />
+        android:stateListAnimator="@animator/fab_raise" />
 
 </android.support.design.widget.CoordinatorLayout>

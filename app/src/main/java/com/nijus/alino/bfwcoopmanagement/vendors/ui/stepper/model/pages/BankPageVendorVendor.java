@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class BankPageVendorVendor extends PageVendorVendor {
 
-    private BankInformation bankInformation = new BankInformation();
     public static final String BANK_KEY = "key";
+    private BankInformation bankInformation = new BankInformation();
 
     public BankPageVendorVendor(ModelCallbacksVendor callbacks, String title) {
         super(callbacks, title);

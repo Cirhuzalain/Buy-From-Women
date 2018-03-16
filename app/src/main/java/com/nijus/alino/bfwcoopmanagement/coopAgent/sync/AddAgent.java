@@ -11,22 +11,15 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
-import com.nijus.alino.bfwcoopmanagement.buyers.sync.SyncBuyer;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.pojo.PojoAgent;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.SyncProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.SyncProductBackground;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class AddAgent extends IntentService {
     public final String LOG_TAG = AddAgent.class.getSimpleName();
@@ -74,9 +67,9 @@ public class AddAgent extends IntentService {
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent added successfully",true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.add_agent_msg), true));
                     //start job service
-                   startService(new Intent(this, SyncAgentBackground.class));
+                    startService(new Intent(this, SyncAgentBackground.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -87,7 +80,7 @@ public class AddAgent extends IntentService {
                             .build();
                     dispatcher.mustSchedule(job);
                     //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent added successfully and will be synchronized later",true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.add_agent_msg_later), true));
                 }
             }
 

@@ -14,18 +14,12 @@ import com.firebase.jobdispatcher.Job;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
-import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.SyncProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.SyncProductBackground;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class AddLoan extends IntentService {
     public final String LOG_TAG = AddLoan.class.getSimpleName();
@@ -59,7 +53,7 @@ public class AddLoan extends IntentService {
                 start_date = pojoLoan.getStart_date();
                 amount = pojoLoan.getAmount();
                 interest_rate = pojoLoan.getInterest_rate();
-                duration= pojoLoan.getDuration();
+                duration = pojoLoan.getDuration();
                 purpose = pojoLoan.getPurpose();
                 financial_institution = pojoLoan.getFinancial_institution();
 

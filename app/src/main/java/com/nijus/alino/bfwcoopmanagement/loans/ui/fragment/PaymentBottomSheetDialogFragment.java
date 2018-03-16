@@ -16,7 +16,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
@@ -34,31 +33,29 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback =
             new BottomSheetBehavior.BottomSheetCallback() {
 
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                dismiss();
-            }
-        }
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                        dismiss();
+                    }
+                }
 
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            if (slideOffset < 0) {dismiss();
-            //Toast.makeText(getContext()," "+slideOffset, Toast.LENGTH_LONG).show();
-            }
-        }
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                    if (slideOffset < 0) {
+                        dismiss();
+                    }
+                }
 
-    };
+            };
+
     //@SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        //super.setupDialog(dialog,style);
-        //getSupportLoaderManager().initLoader(0,null,this);
-        getLoaderManager().initLoader(0,null,this);
+        getLoaderManager().initLoader(0, null, this);
 
         id_loan = getArguments().getLong("id_loan");
-        //Toast.makeText(getContext(),id_loan+"",Toast.LENGTH_LONG).show();
 
         View contentView = View.inflate(getContext(), R.layout.payment_fragment_bottom_sheet, null);
         dialog.setContentView(contentView);
@@ -67,15 +64,15 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
         //Make responsive bottom sheet
-        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
-        params.setMargins(width,0,width,0);
+        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet) / 2;
+        params.setMargins(width, 0, width, 0);
 
-        if( behavior != null && behavior instanceof BottomSheetBehavior ) {
+        if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
 
         View emptyView = contentView.findViewById(R.id.recyclerview_empty_payment);
-        //Context context = this;
+
         RecyclerView recyclerView = contentView.findViewById(R.id.payment_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -94,14 +91,14 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
         id_loan = getArguments().getLong("id_loan");
         String loanPaymentSelection = BfwContract.LoanPayment.TABLE_NAME + "." +
                 BfwContract.LoanPayment.COLUMN_LOAN_ID + " =  ? ";
-         return new CursorLoader(
-                    getContext(),
-                    BfwContract.LoanPayment.CONTENT_URI,
-                    null,
-                    loanPaymentSelection,
-                    new String[]{Long.toString(id_loan)},
-                    null
-            );
+        return new CursorLoader(
+                getContext(),
+                BfwContract.LoanPayment.CONTENT_URI,
+                null,
+                loanPaymentSelection,
+                new String[]{Long.toString(id_loan)},
+                null
+        );
 
     }
 
@@ -125,6 +122,7 @@ public class PaymentBottomSheetDialogFragment extends BottomSheetDialogFragment 
     public void onRefresh() {
         getLoaderManager().restartLoader(0, null, this);
     }
+
     public void back2(PojoLoanPayment p) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("loan_payment", p);

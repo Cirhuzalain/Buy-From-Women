@@ -54,7 +54,7 @@ public class SyncLoanBackground extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync loan to the server (is_sync)
         int dataCount = 0;
         int LoanServerId;
         long id;
@@ -87,7 +87,7 @@ public class SyncLoanBackground extends IntentService {
                     String purpose = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE));
                     String financial_institution = cursor.getString(cursor.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION));
 
-                    financial_institution = "bank";
+                    //financial_institution = "bank";
 
                     //Get farmer id from server
                     String selectFarmerId = BfwContract.Farmer.TABLE_NAME + "." +

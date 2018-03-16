@@ -5,48 +5,48 @@ import android.os.Parcelable;
 
 
 public class BaselineFinanceInfo implements Parcelable {
+    public static final Creator<BaselineFinanceInfo> CREATOR = new Creator<BaselineFinanceInfo>() {
+        @Override
+        public BaselineFinanceInfo createFromParcel(Parcel parcel) {
+            return new BaselineFinanceInfo(parcel);
+        }
+
+        @Override
+        public BaselineFinanceInfo[] newArray(int i) {
+            return new BaselineFinanceInfo[0];
+        }
+    };
     private String seasonName;
     private String input_loan;
-
     private boolean isInput_loan_prov_bank;
     private boolean isInput_loan_prov_cooperative;
     private boolean isInput_loan_prov_sacco;
     private boolean isInput_loan_prov_other;
-
     private double input_loan_amount;
     private double input_loan_interest_rate;
     private int input_loan_duration;
-
     private boolean sInput_loan_purpose_labour;
     private boolean sInput_loan_purpose_seed;
     private boolean sInput_loan_purpose_input;
     private boolean sInput_loan_purpose_machinery;
     private boolean sInput_loan_purpose_other;
-
     private boolean isInput_prov_in_kind;
     private boolean isCash_provided_purchase_inputs;
-
     private String aggrgation_post_harvset_loan;
-
     private boolean isAgg_post_harv_loan_prov_bank;
     private boolean isAgg_post_harv_loan_prov_cooperative;
     private boolean isAgg_post_harv_loan_prov_sacco;
     private boolean isAgg_post_harv_loan_prov_other;
-
     private double aggrgation_post_harvset_amount;
     private double aggrgation_post_harvset_loan_interest;
     private int aggrgation_post_harvset_loan_duration;
-
     private boolean isAgg_post_harv_loan_purpose_labour;
     private boolean isAgg_post_harv_loan_purpose_input;
     private boolean isAgg_post_harv_loan_purpose_machinery;
     private boolean isAgg_post_harv_loan_purpose_other;
-
     private String aggrgation_post_harvset_laon_disbursement_method;
-
     private int baselineFinanceInfoId;
     private int seasonId;
-
 
     public BaselineFinanceInfo() {
         this.baselineFinanceInfoId = 0;
@@ -198,7 +198,6 @@ public class BaselineFinanceInfo implements Parcelable {
         parcel.writeInt(baselineFinanceInfoId);
         parcel.writeInt(seasonId);
     }
-
 
     public String getSeasonName() {
         return seasonName;
@@ -447,16 +446,4 @@ public class BaselineFinanceInfo implements Parcelable {
     public void setAggrgation_post_harvset_laon_disbursement_method(String aggrgation_post_harvset_laon_disbursement_method) {
         this.aggrgation_post_harvset_laon_disbursement_method = aggrgation_post_harvset_laon_disbursement_method;
     }
-
-    public static final Creator<BaselineFinanceInfo> CREATOR = new Creator<BaselineFinanceInfo>() {
-        @Override
-        public BaselineFinanceInfo createFromParcel(Parcel parcel) {
-            return new BaselineFinanceInfo(parcel);
-        }
-
-        @Override
-        public BaselineFinanceInfo[] newArray(int i) {
-            return new BaselineFinanceInfo[0];
-        }
-    };
 }

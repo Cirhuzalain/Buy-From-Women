@@ -1,8 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities.UpdateCoopAgent"
     tools:showIn="@layout/activity_update_coop_agent">
@@ -66,10 +66,10 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
                     android:id="@+id/content_spiner_ca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -89,15 +89,15 @@
                 </LinearLayout>
 
                 <Button
-                    android:layout_marginTop="10dp"
                     android:id="@+id/create_coop_agent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_button"
-                    android:textColor="@color/cardview_light_background"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    android:text="@string/title_activity_update_coop_agent" />
+                    android:background="@drawable/gradient_button"
+                    android:text="@string/title_activity_update_coop_agent"
+                    android:textColor="@color/cardview_light_background" />
 
 
             </LinearLayout>

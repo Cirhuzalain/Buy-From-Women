@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.nijus.alino.bfwcoopmanagement.loans.ui.activities.CreateLoanActivity"
     tools:showIn="@layout/activity_create_loan">
@@ -50,33 +50,34 @@
                     android:layout_height="match_parent">
 
                     <Button
+                        android:id="@+id/date_selected"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select date"
-                        android:id="@+id/date_selected"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:layout_marginTop="8dp"
                         android:drawableLeft="@mipmap/calendar_one"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="Select date" />
 
                     <EditText
+                        android:id="@+id/ed_date_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/ed_date_value"
-                        android:hint="@string/start_loan_date"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_alignTop="@+id/date_selected"
                         android:layout_toRightOf="@+id/date_selected"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true" />
+                        android:hint="@string/start_loan_date" />
 
                 </RelativeLayout>
+
                 <LinearLayout
-                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -93,20 +94,6 @@
                         android:layout_weight="1" />
 
                 </LinearLayout>
-
-               <!-- <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/purpose_loan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/loan_purpose"
-                        android:inputType="text"
-                        android:maxLines="1" />
-
-                </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -152,10 +139,10 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="8dp"
                     android:id="@+id/content_spiner_ca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -173,16 +160,17 @@
                         android:layout_weight="1" />
 
                 </LinearLayout>
+
                 <Button
-                    android:layout_marginTop="15dp"
                     android:id="@+id/save_loan"
                     android:layout_width="match_parent"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
                     android:layout_weight="1"
-                    android:textColor="@color/cardview_light_background"
                     android:background="@drawable/gradient_button"
-                    android:text="@string/title_activity_create_loan" />
+                    android:text="@string/title_activity_create_loan"
+                    android:textColor="@color/cardview_light_background" />
 
             </LinearLayout>
 

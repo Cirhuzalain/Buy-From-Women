@@ -54,13 +54,11 @@ public class SyncLoanPaymentBackground extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync loan payment to the server (is_sync)
         int dataCount = 0;
         int LoanServerId;
         long id;
         Cursor cursor = null;
-
-        //int id_loan_server = 0;
 
         String selectionLoan = BfwContract.LoanPayment.TABLE_NAME + "." +
                 BfwContract.LoanPayment.COLUMN_IS_SYNC + " =  0 ";
@@ -97,12 +95,10 @@ public class SyncLoanPaymentBackground extends IntentService {
                             null);
                     if (cursorLoan != null) {
                         while (cursorLoan.moveToNext()) {
-                            if (cursorLoan.getInt(cursorLoan.getColumnIndex(BfwContract.Loan.COLUMN_IS_SYNC)) == 0)
-                            {
-                                EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error), false));
-                            }
-                            else
-                            id_loan_loacal = cursorLoan.getLong(cursorLoan.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
+                            if (cursorLoan.getInt(cursorLoan.getColumnIndex(BfwContract.Loan.COLUMN_IS_SYNC)) == 0) {
+                                EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.syncing_error_loan), false));
+                            } else
+                                id_loan_loacal = cursorLoan.getLong(cursorLoan.getColumnIndex(BfwContract.Loan.COLUMN_SERVER_ID));
                         }
                     }
 
@@ -122,11 +118,11 @@ public class SyncLoanPaymentBackground extends IntentService {
                     //Construct body
                     String bodyContent = "{}";
 
-                        bodyContent = "{" +
-                                "\"amount\": " + amount + "," +
-                                "\"loan_id\": " + id_loan_loacal + ", " +
-                                "\"payment_date\": \"" + date_string + "\" " +
-                                "}";
+                    bodyContent = "{" +
+                            "\"amount\": " + amount + "," +
+                            "\"loan_id\": " + id_loan_loacal + ", " +
+                            "\"payment_date\": \"" + date_string + "\" " +
+                            "}";
 
                     String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.payment";
 
@@ -169,7 +165,7 @@ public class SyncLoanPaymentBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Payment synchronised successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_loan_msg_sync), true));
 
     }
 }

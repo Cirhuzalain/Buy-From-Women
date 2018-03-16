@@ -13,6 +13,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -43,15 +44,15 @@
 
 
             <LinearLayout
-                android:layout_marginTop="10dp"
-                android:weightSum="3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <TextView
-                    android:layout_width="wrap_content"
                     android:id="@+id/textView80"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="Season"
@@ -66,9 +67,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -103,9 +104,9 @@
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -122,23 +123,24 @@
                     android:layout_weight="1" />
 
             </LinearLayout>
+
             <Button
                 android:id="@+id/create_product"
-                android:layout_marginTop="@dimen/fab_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/cardview_light_background"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:background="@drawable/gradient_button"
-                android:text="@string/sv_farmer"/>
+                android:text="@string/sv_farmer"
+                android:textColor="@color/cardview_light_background" />
 
             <Button
                 android:id="@+id/order_product"
-                android:layout_marginTop="@dimen/fab_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/cardview_light_background"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:background="@drawable/gradient_button"
-                android:text="@string/order_product"/>
+                android:text="@string/order_product"
+                android:textColor="@color/cardview_light_background" />
 
         </LinearLayout>
     </LinearLayout>

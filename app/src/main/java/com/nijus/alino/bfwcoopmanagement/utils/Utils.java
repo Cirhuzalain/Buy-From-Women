@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class Utils {
             return client.newCall(requestUser).execute();
         } catch (IOException exp) {
             return null;
-        } catch (Exception exp){
+        } catch (Exception exp) {
             return null;
         }
     }

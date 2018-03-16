@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -12,6 +11,7 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coopAgent.pojo.PojoAgent;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
@@ -21,9 +21,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class UpdateAgent extends IntentService {
     public final String LOG_TAG = UpdateAgent.class.getSimpleName();
@@ -84,15 +81,15 @@ public class UpdateAgent extends IntentService {
                 contentValues.put(BfwContract.CoopAgent.COLUMN_IS_SYNC, isSyncProduct);
                 contentValues.put(BfwContract.CoopAgent.COLUMN_IS_UPDATE, 0);
 
-                //Uri uri = getContentResolver().insert(BfwContract.CoopAgent.CONTENT_URI, contentValues);
-                getContentResolver().update(BfwContract.CoopAgent.CONTENT_URI, contentValues,agentSelect,new String[]{Integer.toString(id_agent)});
+                getContentResolver().update(BfwContract.CoopAgent.CONTENT_URI, contentValues, agentSelect, new String[]{Integer.toString(id_agent)});
+
+                //Post event after saving data
+                EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_agent), true));
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent updated successfully",true));
                     //start job service
-                   startService(new Intent(this, UpdateSyncAgentBkgrnd.class));
+                    startService(new Intent(this, UpdateSyncAgentBkgrnd.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -102,8 +99,6 @@ public class UpdateAgent extends IntentService {
                             .setConstraints(Constraint.ON_ANY_NETWORK)
                             .build();
                     dispatcher.mustSchedule(job);
-                    //Post event after saving data
-                    EventBus.getDefault().post(new SaveDataEvent("Agent updated successfully and will be synchronized later",true));
                 }
             }
 

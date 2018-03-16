@@ -11,21 +11,15 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
-import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateSyncProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateSyncProductBkgrnd;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class UpdateLoan extends IntentService {
     public final String LOG_TAG = UpdateLoan.class.getSimpleName();
@@ -99,14 +93,14 @@ public class UpdateLoan extends IntentService {
                 contentValues.put(BfwContract.Loan.COLUMN_IS_SYNC, isSyncProduct);
                 contentValues.put(BfwContract.Loan.COLUMN_IS_UPDATE, 0);
 
-                getContentResolver().update(BfwContract.Loan.CONTENT_URI, contentValues,loanSelect,new String[]{Integer.toString(id_loan)});
+                getContentResolver().update(BfwContract.Loan.CONTENT_URI, contentValues, loanSelect, new String[]{Integer.toString(id_loan)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent("Loan updated successfully",true));
+                EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_loan), true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service
-                   startService(new Intent(this, UpdateSyncLoanBkgrnd.class));
+                    startService(new Intent(this, UpdateSyncLoanBkgrnd.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

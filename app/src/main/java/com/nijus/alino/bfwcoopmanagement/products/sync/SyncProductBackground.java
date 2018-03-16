@@ -81,9 +81,7 @@ public class SyncProductBackground extends IntentService {
 
                     String nameProduct = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
                     Double productPrice = 0.0;
-                    //if (!cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)).equals("null")){
                     productPrice = cursor.getDouble(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE));
-                    //}
 
                     int productQty = cursor.getInt(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY));
                     String grade = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE));
@@ -130,16 +128,14 @@ public class SyncProductBackground extends IntentService {
                     //Construct body
                     String bodyContent = "{}";
 
-                    //if (productServerId != 0) {
-                        bodyContent = "{" +
-                                "\"name\": \"" + nameProduct + "\", " +
-                                "\"harvest_grade\": \"" + grade + "\"," +
-                                "\"harvest_season\": " + local_season_id + "," +
-                                "\"vendor_qty\": " + productQty + ", " +
-                                "\"standard_price\": " + productPrice + ", " +
-                                "\"farmer_id\": " + local_farmer_id + " " +
-                                "}";
-                    //}
+                    bodyContent = "{" +
+                            "\"name\": \"" + nameProduct + "\", " +
+                            "\"harvest_grade\": \"" + grade + "\"," +
+                            "\"harvest_season\": " + local_season_id + "," +
+                            "\"vendor_qty\": " + productQty + ", " +
+                            "\"standard_price\": " + productPrice + ", " +
+                            "\"farmer_id\": " + local_farmer_id + " " +
+                            "}";
                     String API_INFO = BuildConfig.DEV_API_URL + "product.template";
 
 
