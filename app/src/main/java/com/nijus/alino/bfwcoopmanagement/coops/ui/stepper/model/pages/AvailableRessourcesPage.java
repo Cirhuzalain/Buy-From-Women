@@ -12,7 +12,7 @@ public class AvailableRessourcesPage extends Page {
 
     public static final String AVAILABLE_RES_KEY = "key";
 
-   private AvailableResources availableRessources = new AvailableResources();
+    private AvailableResources availableRessources = new AvailableResources();
 
     public AvailableRessourcesPage(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
@@ -78,7 +78,7 @@ public class AvailableRessourcesPage extends Page {
         return super.setRequired(required);
     }
 
-   public AvailableRessourcesPage setValue(AvailableResources availableRessources) {
+    public AvailableRessourcesPage setValue(AvailableResources availableRessources) {
         mData.putParcelable(AVAILABLE_RES_KEY, availableRessources);
         return this;
     }

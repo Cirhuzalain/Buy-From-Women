@@ -7,18 +7,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.coops.adapter.CoopAdapter;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.NavigationRecyclerViewAdapter;
-import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.DetailFarmerActivity;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.CoopFragment;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.fragment.ViewCoopsSalePurchase;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
+import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
-public class CoopActivity extends BaseActivity  {
+public class CoopActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

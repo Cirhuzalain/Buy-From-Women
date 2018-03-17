@@ -134,7 +134,8 @@ public class UpdatePurchaseOrderDialogFragment extends DialogFragment implements
 
             mProductContainer.addView(linearLayout, 1);
         }
-        if(view == date_btn){final Calendar calendar = Calendar.getInstance();
+        if (view == date_btn) {
+            final Calendar calendar = Calendar.getInstance();
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker arg0, int year, int month, int day_of_month) {
@@ -145,7 +146,7 @@ public class UpdatePurchaseOrderDialogFragment extends DialogFragment implements
                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
                     ed_date_value.setText(sdf.format(calendar.getTime()));
                 }
-            },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             calendar.set(Calendar.YEAR, 2000);
             dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
             calendar.set(Calendar.YEAR, 2030);

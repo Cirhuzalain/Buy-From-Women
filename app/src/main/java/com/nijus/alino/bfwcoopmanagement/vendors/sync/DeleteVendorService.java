@@ -30,9 +30,6 @@ public class DeleteVendorService extends IntentService {
     private String vendorSelect = BfwContract.Vendor.TABLE_NAME + "." +
             BfwContract.Vendor._ID + " = ? ";
 
-    /**
-     * Attention here**/
-    // TODO : Check well if vendor required PLOT LAND
     private String landSelect = BfwContract.VendorLand.TABLE_NAME + "." +
             BfwContract.VendorLand.COLUMN_VENDOR_ID + " = ? ";
 
@@ -44,6 +41,7 @@ public class DeleteVendorService extends IntentService {
 
     private String financeSelect = BfwContract.FinanceDataVendor.TABLE_NAME + "." +
             BfwContract.FinanceDataVendor.COLUMN_VENDOR_ID + " = ? ";
+
     private String infoSelect = BfwContract.VendorAccessInfo.TABLE_NAME + "." +
             BfwContract.VendorAccessInfo.COLUMN_VENDOR_ID + " = ? ";
 
@@ -80,7 +78,8 @@ public class DeleteVendorService extends IntentService {
 
                         if (vendorDataCursor != null && vendorDataCursor.moveToFirst()) {
 
-                            EventBus.getDefault().post(new ProcessingVendorEvent("Processing your request ..."));
+                            //dispatch processing message while deleting data
+                            EventBus.getDefault().post(new ProcessingVendorEvent(getResources().getString(R.string.farm_msg)));
 
                             isSync = vendorDataCursor.getInt(vendorDataCursor.getColumnIndex(BfwContract.Vendor.COLUMN_IS_SYNC));
 
@@ -91,13 +90,13 @@ public class DeleteVendorService extends IntentService {
                                 boolean isLocalSuccess = deleteVendorLocal(vendorId);
                                 if (!isServerSuccess || !isLocalSuccess) {
                                     // dispatch error message
-                                    EventBus.getDefault().post(new DeleteVendorEvent("An Error occur while delete vendor data", false));
+                                    EventBus.getDefault().post(new DeleteVendorEvent(getResources().getString(R.string.vendor_erro_msg), false));
                                 }
                             } else {
                                 boolean isLocalSuccess = deleteVendorLocal(vendorId);
                                 if (!isLocalSuccess) {
                                     // dispatch error message
-                                    EventBus.getDefault().post(new DeleteVendorEvent("An Error occur while delete vendor data", false));
+                                    EventBus.getDefault().post(new DeleteVendorEvent(getResources().getString(R.string.vendor_erro_msg), false));
                                 }
                             }
                         }
@@ -108,13 +107,13 @@ public class DeleteVendorService extends IntentService {
                     }
                 }
                 // dispatch action to restart loader after data get delete
-                EventBus.getDefault().post(new DeleteVendorEvent("Vendor Remove Successfully", true));
+                EventBus.getDefault().post(new DeleteVendorEvent(getResources().getString(R.string.vendor_del_success), true));
             } else {
-                EventBus.getDefault().post(new DeleteVendorEvent("Vendor Id not available", false));
+                EventBus.getDefault().post(new DeleteVendorEvent(getResources().getString(R.string.vendor_id_not_av), false));
             }
         } else {
             // dispatch action to restart loader after data get delete
-            EventBus.getDefault().post(new DeleteVendorEvent("No Data available", false));
+            EventBus.getDefault().post(new DeleteVendorEvent(getResources().getString(R.string.farm_no_data_av), false));
         }
     }
 

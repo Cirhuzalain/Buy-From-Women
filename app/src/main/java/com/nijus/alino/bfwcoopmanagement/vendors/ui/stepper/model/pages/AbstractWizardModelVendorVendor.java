@@ -68,7 +68,7 @@ public abstract class AbstractWizardModelVendorVendor implements ModelCallbacksV
         return bundle;
     }
 
-    public Context getPageContext(){
+    public Context getPageContext() {
         return mContext;
     }
 

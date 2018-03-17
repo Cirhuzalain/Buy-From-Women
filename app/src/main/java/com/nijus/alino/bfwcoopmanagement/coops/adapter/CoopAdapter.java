@@ -20,17 +20,16 @@ import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import java.util.ArrayList;
 
 public class CoopAdapter extends RecyclerView.Adapter<CoopAdapter.ViewHolder> {
-    private Cursor mCursor;
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
-
+    final private CoopAdapterOnClickHandler mClickHandler;
+    final private CoopAdapterOnLongClickHandler mOnLongClickListener;
+    private Cursor mCursor;
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
     private SparseBooleanArray itemsValues;
-    final private CoopAdapterOnClickHandler mClickHandler;
-    final private CoopAdapterOnLongClickHandler mOnLongClickListener;
     private boolean reverseAllAnimations = false;
-    private static int currentSelectedIndex = -1;
 
     public CoopAdapter(Context mContext, View mEmptyView, CoopAdapterOnClickHandler mClickHandler, CoopAdapterOnLongClickHandler mOnLongClickListener) {
         this.mContext = mContext;
@@ -157,16 +156,16 @@ public class CoopAdapter extends RecyclerView.Adapter<CoopAdapter.ViewHolder> {
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
     public interface CoopAdapterOnClickHandler {
         void onClick(Long farmerId, ViewHolder vh);
     }
 
     public interface CoopAdapterOnLongClickHandler {
         void onLongClick(Long farmerId, int position);
-    }
-
-    public int getSelectedItemCount() {
-        return selectedItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

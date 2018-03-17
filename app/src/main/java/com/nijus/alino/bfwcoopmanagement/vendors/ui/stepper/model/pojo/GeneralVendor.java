@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class GeneralVendor implements Parcelable {
 
+    public static final Creator<GeneralVendor> CREATOR = new Creator<GeneralVendor>() {
+        @Override
+        public GeneralVendor createFromParcel(Parcel parcel) {
+            return new GeneralVendor(parcel);
+        }
+
+        @Override
+        public GeneralVendor[] newArray(int i) {
+            return new GeneralVendor[0];
+        }
+    };
     private String name;
     private String address;
     private String phoneNumber;
@@ -54,12 +65,12 @@ public class GeneralVendor implements Parcelable {
         this.name = name;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
     public boolean isGender() {
         return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public String getAddress() {
@@ -77,17 +88,4 @@ public class GeneralVendor implements Parcelable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-
-    public static final Creator<GeneralVendor> CREATOR = new Creator<GeneralVendor>() {
-        @Override
-        public GeneralVendor createFromParcel(Parcel parcel) {
-            return new GeneralVendor(parcel);
-        }
-
-        @Override
-        public GeneralVendor[] newArray(int i) {
-            return new GeneralVendor[0];
-        }
-    };
 }

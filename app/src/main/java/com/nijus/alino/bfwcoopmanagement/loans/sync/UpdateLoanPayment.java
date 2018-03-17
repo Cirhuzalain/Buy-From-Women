@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -12,19 +11,15 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoanPayment;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class UpdateLoanPayment extends IntentService {
     public final String LOG_TAG = UpdateLoanPayment.class.getSimpleName();
@@ -82,14 +77,14 @@ public class UpdateLoanPayment extends IntentService {
                 contentValues.put(BfwContract.LoanPayment.COLUMN_IS_SYNC, isSyncPayment);
                 contentValues.put(BfwContract.LoanPayment.COLUMN_IS_UPDATE, 0);
 
-                getContentResolver().update(BfwContract.LoanPayment.CONTENT_URI, contentValues,loanPaymentSelect,new String[]{Long.toString(id_loanPayment)});
+                getContentResolver().update(BfwContract.LoanPayment.CONTENT_URI, contentValues, loanPaymentSelect, new String[]{Long.toString(id_loanPayment)});
 
                 //Post event after saving data
-                EventBus.getDefault().post(new SaveDataEvent("Loan payment updated successfully",true));
+                EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_loan_payment), true));
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service
-                   startService(new Intent(this, UpdateSyncLoanPaymentBkgrnd.class));
+                    startService(new Intent(this, UpdateSyncLoanPaymentBkgrnd.class));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));

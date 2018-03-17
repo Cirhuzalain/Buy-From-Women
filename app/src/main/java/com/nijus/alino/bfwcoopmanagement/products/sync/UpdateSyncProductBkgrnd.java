@@ -16,8 +16,6 @@ import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +49,7 @@ public class UpdateSyncProductBkgrnd extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync product to the server (is_sync)
         int dataCount = 0;
         int productServerId;
         long id;
@@ -80,9 +78,7 @@ public class UpdateSyncProductBkgrnd extends IntentService {
 
                     String nameProduct = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
                     Double productPrice = 0.0;
-                    //if (!cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)).equals("null")){
                     productPrice = cursor.getDouble(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE));
-                    //}
 
                     int productQty = cursor.getInt(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY));
                     String grade = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE));
@@ -161,7 +157,6 @@ public class UpdateSyncProductBkgrnd extends IntentService {
                         if (responseBodyProduct != null) {
                             String farmerDataInfo = responseBodyProduct.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //productServerId = productInfo.getInt("id");
 
                                 //update localId
                                 ContentValues contentValues = new ContentValues();

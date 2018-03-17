@@ -82,7 +82,6 @@ public class UpdateLandFragmentVendor extends Fragment implements View.OnClickLi
 
         if (intent.hasExtra("vendorId")) {
             mFarmerId = intent.getLongExtra("vendorId", 0);
-            //mUri = BfwContract.VendorLand.buildVendorLandUri(mFarmerId);
         }
     }
 

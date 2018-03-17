@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.AccessToInformationVendorAdapter;
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.BaselineVendorAdapter;
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.FinanceDataVendorAdapter;
@@ -41,10 +40,10 @@ import java.util.ArrayList;
 
 
 public class DetailVendorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String ARG_KEY = "key";
     private Long mVendorId;
     private Uri mUri;
     private String name;
-    public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ListView infoListView;
@@ -53,7 +52,6 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
     private ListView landDataListView;
     private TextView coop_f_details;
     private ListView forecastListView;
-
 
 
     @Override
@@ -210,9 +208,6 @@ public class DetailVendorActivity extends AppCompatActivity implements LoaderMan
             TextView phone_f_details = findViewById(R.id.phone_f_details);
             phone_f_details.setText(phone);
 
-           /* TextView adress_f_details = findViewById(R.id.phone_f_details);
-            adress_f_details.setText(phone);
-*/
             TextView sex_f_details = findViewById(R.id.sex_f_details);
             sex_f_details.setText(gender);
 

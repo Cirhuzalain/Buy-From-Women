@@ -9,14 +9,23 @@ import android.os.Parcelable;
 
 public class Finance implements Parcelable {
 
+    public static final Parcelable.Creator<Finance> CREATOR = new Parcelable.Creator<Finance>() {
+        @Override
+        public Finance createFromParcel(Parcel parcel) {
+            return new Finance(parcel);
+        }
+
+        @Override
+        public Finance[] newArray(int i) {
+            return new Finance[0];
+        }
+    };
     private boolean isOutstandingLoan;
     private boolean hasMobileMoneyAccount;
-
     //Loan Purpose
     private boolean isInput;
     private boolean isAggregation;
     private boolean isOtherLp;
-
     private double totLoanAmount;
     private double totOutstanding;
     private double interestRate;
@@ -187,16 +196,4 @@ public class Finance implements Parcelable {
     public void setLoanProvider(String loanProvider) {
         this.loanProvider = loanProvider;
     }
-
-    public static final Parcelable.Creator<Finance> CREATOR = new Parcelable.Creator<Finance>() {
-        @Override
-        public Finance createFromParcel(Parcel parcel) {
-            return new Finance(parcel);
-        }
-
-        @Override
-        public Finance[] newArray(int i) {
-            return new Finance[0];
-        }
-    };
 }

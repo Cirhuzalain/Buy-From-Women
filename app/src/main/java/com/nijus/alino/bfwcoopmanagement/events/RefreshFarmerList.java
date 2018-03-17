@@ -1,4 +1,5 @@
 package com.nijus.alino.bfwcoopmanagement.events;
 
 
-public class RefreshFarmerList {}
+public class RefreshFarmerList {
+}

@@ -82,7 +82,6 @@ public class UpdateBaselineSalesFragment extends Fragment {
         textView.setText(getContext().getString(R.string.baseline_sales));
 
 
-
         harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
         qty_agregated_from_members = rootView.findViewById(R.id.qty_agregated_from_members);
         cycle_h_at_price_per_kg = rootView.findViewById(R.id.cycle_h_at_price_per_kg);
@@ -109,11 +108,11 @@ public class UpdateBaselineSalesFragment extends Fragment {
         baselineSales.setOther(isOther);
 
 
-
         qty_agregated_from_members.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baselineSales.setQtyAgregatedFromMember(Integer.parseInt(charSequence.toString()));

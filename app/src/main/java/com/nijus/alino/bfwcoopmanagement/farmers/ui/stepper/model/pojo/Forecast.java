@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class Forecast implements Parcelable {
 
+    public static final Parcelable.Creator<Forecast> CREATOR = new Parcelable.Creator<Forecast>() {
+        @Override
+        public Forecast createFromParcel(Parcel parcel) {
+            return new Forecast(parcel);
+        }
+
+        @Override
+        public Forecast[] newArray(int i) {
+            return new Forecast[0];
+        }
+    };
     private double arableLandPlot;
     private double totProdKg;
     private double salesOutsidePpp;
@@ -13,10 +24,8 @@ public class Forecast implements Parcelable {
     private double farmerPercentCoopLandSize;
     private double currentPppContrib;
     private double farmerContributionPpp;
-
     private double farmerexpectedminppp;
     private double minimumflowprice;
-
     private int harvestSeason;
     private int forecastId;
     private String seasonName;
@@ -183,16 +192,4 @@ public class Forecast implements Parcelable {
     public void setFarmerPercentCoopLandSize(double farmerPercentCoopLandSize) {
         this.farmerPercentCoopLandSize = farmerPercentCoopLandSize;
     }
-
-    public static final Parcelable.Creator<Forecast> CREATOR = new Parcelable.Creator<Forecast>() {
-        @Override
-        public Forecast createFromParcel(Parcel parcel) {
-            return new Forecast(parcel);
-        }
-
-        @Override
-        public Forecast[] newArray(int i) {
-            return new Forecast[0];
-        }
-    };
 }

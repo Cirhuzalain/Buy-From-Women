@@ -81,23 +81,23 @@ public class CreateVendorActivity extends AppCompatActivity implements CreateVen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
-            Toast.makeText(getApplicationContext(),saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(getApplicationContext(), saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }else {
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             //onSupportNavigateUp();
         }
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
-        if (syncDataEvent.isSuccess()){
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

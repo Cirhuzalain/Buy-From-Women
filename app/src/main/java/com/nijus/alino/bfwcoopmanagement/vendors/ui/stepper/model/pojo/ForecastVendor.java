@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class ForecastVendor implements Parcelable {
 
+    public static final Parcelable.Creator<ForecastVendor> CREATOR = new Parcelable.Creator<ForecastVendor>() {
+        @Override
+        public ForecastVendor createFromParcel(Parcel parcel) {
+            return new ForecastVendor(parcel);
+        }
+
+        @Override
+        public ForecastVendor[] newArray(int i) {
+            return new ForecastVendor[0];
+        }
+    };
     private double arableLandPlot;
     private double totProdKg;
     private double salesOutsidePpp;
@@ -17,10 +28,8 @@ public class ForecastVendor implements Parcelable {
     private double farmerPercentCoopLandSize;
     private double currentPppContrib;
     private double farmerContributionPpp;
-
     private double farmerexpectedminppp;
     private double minimumflowprice;
-
     private int harvestSeason;
     private int forecastId;
     private String seasonName;
@@ -83,6 +92,7 @@ public class ForecastVendor implements Parcelable {
         parcel.writeInt(forecastId);
         parcel.writeString(seasonName);
     }
+
     public String getSeasonName() {
         return seasonName;
     }
@@ -186,16 +196,4 @@ public class ForecastVendor implements Parcelable {
     public void setFarmerPercentCoopLandSize(double farmerPercentCoopLandSize) {
         this.farmerPercentCoopLandSize = farmerPercentCoopLandSize;
     }
-
-    public static final Parcelable.Creator<ForecastVendor> CREATOR = new Parcelable.Creator<ForecastVendor>() {
-        @Override
-        public ForecastVendor createFromParcel(Parcel parcel) {
-            return new ForecastVendor(parcel);
-        }
-
-        @Override
-        public ForecastVendor[] newArray(int i) {
-            return new ForecastVendor[0];
-        }
-    };
 }

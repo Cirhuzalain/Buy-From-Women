@@ -5,24 +5,32 @@ import android.os.Parcelable;
 
 
 public class InternalInformation implements Parcelable {
+    public static final Creator<InternalInformation> CREATOR = new Creator<InternalInformation>() {
+        @Override
+        public InternalInformation createFromParcel(Parcel parcel) {
+            return new InternalInformation(parcel);
+        }
+
+        @Override
+        public InternalInformation[] newArray(int i) {
+            return new InternalInformation[0];
+        }
+    };
     private String chairName;
     private String viceChairName;
     private String secName;
-
     private boolean isChairGender;
     private boolean isViceChairGender;
     private boolean isSecGender;
-
     private String chairCell;
     private String viceChairCell;
     private String secCell;
-
     private String yearRcaRegistration;
     private String seasonName;
 
-
     public InternalInformation() {
     }
+
 
     public InternalInformation(String chairName, String viceChairName, String secName, boolean isChairGender, boolean isViceChairGender, boolean isSecGender,
                                String chairCell, String viceChairCell, String secCell, String yearRcaRegistration) {
@@ -37,7 +45,6 @@ public class InternalInformation implements Parcelable {
         this.secCell = secCell;
         this.yearRcaRegistration = yearRcaRegistration;
     }
-
 
     public InternalInformation(Parcel data) {
         this.chairName = data.readString();
@@ -161,16 +168,4 @@ public class InternalInformation implements Parcelable {
     public void setYearRcaRegistration(String yearRcaRegistration) {
         this.yearRcaRegistration = yearRcaRegistration;
     }
-
-    public static final Creator<InternalInformation> CREATOR = new Creator<InternalInformation>() {
-        @Override
-        public InternalInformation createFromParcel(Parcel parcel) {
-            return new InternalInformation(parcel);
-        }
-
-        @Override
-        public InternalInformation[] newArray(int i) {
-            return new InternalInformation[0];
-        }
-    };
 }

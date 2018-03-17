@@ -100,7 +100,6 @@ public class UpdateAccessToInformationFragment extends Fragment implements Adapt
         accessToInformation.setWaterPumps(isIrrigation);
 
 
-
         mPage.getData().putParcelable("accessToInformation", accessToInformation);
 
         agriculturalExtension.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

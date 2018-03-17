@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.Page;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pojo.AccessToInformation;
-
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 import java.util.HashMap;

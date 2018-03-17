@@ -7,6 +7,8 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.wizard.UpdateW
 
 public interface PageFragmentCallbacks {
     Page onGetPage(String key);
+
     FarmerWizardModel onGetFarmerWizard();
+
     UpdateWizardModel onGetUpdateWizard();
 }

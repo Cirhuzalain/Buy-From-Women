@@ -11,7 +11,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.InputType;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,7 +27,7 @@ import java.util.Locale;
 
 public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
     private LinearLayout mProductContainer;
-    private Button addProductItem,ok;
+    private Button addProductItem, ok;
     private Spinner vendor;
     private Spinner harvestSeason;
     private Spinner coops;
@@ -44,20 +43,22 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback =
             new BottomSheetBehavior.BottomSheetCallback() {
 
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                dismiss();
-            }
-        }
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                        dismiss();
+                    }
+                }
 
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            if (slideOffset < 0) {dismiss();
-            }
-        }
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                    if (slideOffset < 0) {
+                        dismiss();
+                    }
+                }
 
-    };
+            };
+
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
@@ -69,12 +70,12 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) viewContainer.getParent()).getLayoutParams();
 
         //Make responsive bottom sheet
-        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet)/2;
-        params.setMargins(width,0,width,0);
+        int width = getContext().getResources().getDimensionPixelSize(R.dimen.padding_bottom_sheet) / 2;
+        params.setMargins(width, 0, width, 0);
 
         CoordinatorLayout.Behavior behavior = params.getBehavior();
 
-        if( behavior != null && behavior instanceof BottomSheetBehavior ) {
+        if (behavior != null && behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
         mProductContainer = viewContainer.findViewById(R.id.saleOrderContainer);
@@ -100,6 +101,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
         populateSeason();
         populateProduct();
     }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.add_so_order) {
@@ -128,7 +130,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
 
             mProductContainer.addView(linearLayout, 1);
         }
-        if(view == date_btn){
+        if (view == date_btn) {
             final Calendar calendar = Calendar.getInstance();
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
@@ -140,7 +142,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
                     ed_date_value.setText(sdf.format(calendar.getTime()));
                 }
-            },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             calendar.set(Calendar.YEAR, 2000);
             dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
             calendar.set(Calendar.YEAR, 2030);
@@ -148,7 +150,7 @@ public class PurchasesBottomSheetDialogFragment extends BottomSheetDialogFragmen
 
             dialog.show();
         }
-        if (view == ok){
+        if (view == ok) {
             Toast.makeText(getContext(), "Coming soon !!!", Toast.LENGTH_LONG).show();
         }
     }

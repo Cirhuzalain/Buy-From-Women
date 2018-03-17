@@ -13,7 +13,6 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteAgentEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ProcessingAgentEvent;
-import com.nijus.alino.bfwcoopmanagement.events.ProcessingFarmerEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -81,10 +80,7 @@ public class DeleteSyncAgentBkgrnd extends IntentService {
                         id = cursor.getLong(cursor.getColumnIndex(BfwContract.CoopAgent._ID));
                         agentServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.CoopAgent.COLUMN_AGENT_SERVER_ID));
 
-                        /** select all Agent IN ARRAYLIST and delete them one by one
-                         */
-
-                                OkHttpClient client = new OkHttpClient.Builder()
+                        OkHttpClient client = new OkHttpClient.Builder()
                                 .connectTimeout(240, TimeUnit.SECONDS)
                                 .writeTimeout(240, TimeUnit.SECONDS)
                                 .readTimeout(240, TimeUnit.SECONDS)

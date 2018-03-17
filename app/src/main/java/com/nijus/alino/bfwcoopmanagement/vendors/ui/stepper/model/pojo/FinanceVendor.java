@@ -9,14 +9,23 @@ import android.os.Parcelable;
 
 public class FinanceVendor implements Parcelable {
 
+    public static final Parcelable.Creator<FinanceVendor> CREATOR = new Parcelable.Creator<FinanceVendor>() {
+        @Override
+        public FinanceVendor createFromParcel(Parcel parcel) {
+            return new FinanceVendor(parcel);
+        }
+
+        @Override
+        public FinanceVendor[] newArray(int i) {
+            return new FinanceVendor[0];
+        }
+    };
     private boolean isOutstandingLoan;
     private boolean hasMobileMoneyAccount;
-
     //Loan Purpose
     private boolean isInput;
     private boolean isAggregation;
     private boolean isOtherLp;
-
     private double totLoanAmount;
     private double totOutstanding;
     private double interestRate;
@@ -25,7 +34,6 @@ public class FinanceVendor implements Parcelable {
     private int harvestSeason;
     private int financeId;
     private String seasonName;
-
 
     public FinanceVendor() {
         this.financeId = 0;
@@ -189,16 +197,4 @@ public class FinanceVendor implements Parcelable {
     public void setLoanProvider(String loanProvider) {
         this.loanProvider = loanProvider;
     }
-
-    public static final Parcelable.Creator<FinanceVendor> CREATOR = new Parcelable.Creator<FinanceVendor>() {
-        @Override
-        public FinanceVendor createFromParcel(Parcel parcel) {
-            return new FinanceVendor(parcel);
-        }
-
-        @Override
-        public FinanceVendor[] newArray(int i) {
-            return new FinanceVendor[0];
-        }
-    };
 }

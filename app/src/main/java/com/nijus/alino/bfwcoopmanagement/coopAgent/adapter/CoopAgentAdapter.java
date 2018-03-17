@@ -1,10 +1,7 @@
 package com.nijus.alino.bfwcoopmanagement.coopAgent.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -22,17 +19,14 @@ import com.nijus.alino.bfwcoopmanagement.coops.helper.FlipAnimator;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.ViewHolder> {
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
-    private Cursor mCursor;
-
-    private static int currentSelectedIndex = -1;
-
     final private CoopAgentAdapter.CoopAgentAdapterOnClickHandler mClickHandler;
     final private CoopAgentAdapter.CoopAgentAdapterOnLongClickHandler mLongClickHandler;
+    private Cursor mCursor;
     private LinearLayoutManager mLinearLayoutManager;
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
@@ -90,7 +84,6 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
         cursor.close();
 
 
-
         holder.ca_cooperative.setText(namecoop);
 
         holder.farmerImage.setImageResource(R.mipmap.male);
@@ -102,7 +95,6 @@ public class CoopAgentAdapter extends RecyclerView.Adapter<CoopAgentAdapter.View
             holder.imageView.setImageResource(R.drawable.ic_cloud_upload_black_24dp);
         }
         applyIconAnimation(holder, position);
-
     }
 
     private void applyIconAnimation(CoopAgentAdapter.ViewHolder holder, int position) {

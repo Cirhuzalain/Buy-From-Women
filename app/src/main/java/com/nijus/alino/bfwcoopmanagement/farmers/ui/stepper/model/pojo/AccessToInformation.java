@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class AccessToInformation implements Parcelable {
 
+    public static final Creator<AccessToInformation> CREATOR = new Creator<AccessToInformation>() {
+        @Override
+        public AccessToInformation createFromParcel(Parcel parcel) {
+            return new AccessToInformation(parcel);
+        }
+
+        @Override
+        public AccessToInformation[] newArray(int i) {
+            return new AccessToInformation[0];
+        }
+    };
     private boolean isAgricultureExtension;
     private boolean isClimateRelatedInformation;
     private boolean isSeed;
@@ -13,11 +24,9 @@ public class AccessToInformation implements Parcelable {
     private boolean isLabour;
     private boolean isWaterPumps;
     private boolean isSpreaderOrSprayer;
-
     private int accessInfoId;
     private int harvestSeason;
     private String seasonName;
-
 
     public AccessToInformation() {
         this.accessInfoId = 0;
@@ -98,7 +107,6 @@ public class AccessToInformation implements Parcelable {
         this.harvestSeason = harvestSeason;
     }
 
-
     public boolean isAgricultureExtension() {
         return isAgricultureExtension;
     }
@@ -155,7 +163,6 @@ public class AccessToInformation implements Parcelable {
         isWaterPumps = waterPumps;
     }
 
-
     public boolean isSpreaderOrSprayer() {
         return isSpreaderOrSprayer;
     }
@@ -163,16 +170,4 @@ public class AccessToInformation implements Parcelable {
     public void setSpreaderOrSprayer(boolean spreaderOrSprayer) {
         isSpreaderOrSprayer = spreaderOrSprayer;
     }
-
-    public static final Creator<AccessToInformation> CREATOR = new Creator<AccessToInformation>() {
-        @Override
-        public AccessToInformation createFromParcel(Parcel parcel) {
-            return new AccessToInformation(parcel);
-        }
-
-        @Override
-        public AccessToInformation[] newArray(int i) {
-            return new AccessToInformation[0];
-        }
-    };
 }

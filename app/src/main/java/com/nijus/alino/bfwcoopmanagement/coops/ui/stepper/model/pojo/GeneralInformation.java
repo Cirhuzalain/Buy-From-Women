@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 
 public class GeneralInformation implements Parcelable {
+    public static final Creator<GeneralInformation> CREATOR = new Creator<GeneralInformation>() {
+        @Override
+        public GeneralInformation createFromParcel(Parcel parcel) {
+            return new GeneralInformation(parcel);
+        }
+
+        @Override
+        public GeneralInformation[] newArray(int i) {
+            return new GeneralInformation[0];
+        }
+    };
     private String name;
     private String phone;
     private String mail;
@@ -12,7 +23,6 @@ public class GeneralInformation implements Parcelable {
     private double landSize;
     private String seasonName;
     private int coopId;
-
 
     public GeneralInformation() {
     }
@@ -108,16 +118,4 @@ public class GeneralInformation implements Parcelable {
     public void setLandSize(double landSize) {
         this.landSize = landSize;
     }
-
-    public static final Creator<GeneralInformation> CREATOR = new Creator<GeneralInformation>() {
-        @Override
-        public GeneralInformation createFromParcel(Parcel parcel) {
-            return new GeneralInformation(parcel);
-        }
-
-        @Override
-        public GeneralInformation[] newArray(int i) {
-            return new GeneralInformation[0];
-        }
-    };
 }

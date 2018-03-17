@@ -39,7 +39,6 @@ import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

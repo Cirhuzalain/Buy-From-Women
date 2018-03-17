@@ -14,9 +14,6 @@ import com.firebase.jobdispatcher.Job;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
-import com.nijus.alino.bfwcoopmanagement.products.pojo.PojoProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateSyncProduct;
-import com.nijus.alino.bfwcoopmanagement.products.sync.UpdateSyncProductBkgrnd;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -123,6 +120,7 @@ public class UpdateLoan extends IntentService {
 
                 //Post event after saving data
                 EventBus.getDefault().post(new SaveDataEvent("Loan updated successfully", true));
+
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service

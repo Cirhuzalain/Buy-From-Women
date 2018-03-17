@@ -28,14 +28,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class UpdateBuyerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private Button update_buyer;
-    private  long id_buyer_long;
+    private long id_buyer_long;
     private int buyer_local_id, buyer_id_from_server;
     private AutoCompleteTextView name;
     private AutoCompleteTextView phone;
@@ -49,7 +44,7 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         setSupportActionBar(toolbar);
         EventBus.getDefault().register(this);
 
-        getSupportLoaderManager().initLoader(0,null,this);
+        getSupportLoaderManager().initLoader(0, null, this);
 
 
         name = findViewById(R.id.name_b);
@@ -75,17 +70,15 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
 
                 if (isValidString(String.valueOf(name.getText()))
                         && isValidString(String.valueOf(email.getText()))
-                        && !TextUtils.isEmpty(phone.getText()))
-                {
+                        && !TextUtils.isEmpty(phone.getText())) {
 
-                    //Toast.makeText(getApplicationContext()," Commingg soon",Toast.LENGTH_LONG).show();
                     PojoBuyer pojoBuyer = new PojoBuyer();
                     pojoBuyer.setName(String.valueOf(name.getText()));
                     pojoBuyer.setMail(String.valueOf(email.getText()));
                     pojoBuyer.setPhone(String.valueOf(phone.getText()));
 
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("buyer",pojoBuyer);
+                    bundle.putParcelable("buyer", pojoBuyer);
 
                     Intent intent = new Intent(getApplicationContext(), UpdateBuyer.class);
                     intent.putExtra("buyer_id", buyer_id_from_server);
@@ -99,12 +92,14 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -129,7 +124,6 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
             // handle case
         }
 
-        //Toast.makeText(this," Get "+id_loan_long,Toast.LENGTH_LONG).show();
         String loanSelection = BfwContract.Buyer.TABLE_NAME + "." +
                 BfwContract.Buyer._ID + " =  ? ";//TABLE SERVER ID
         return new CursorLoader(
@@ -145,12 +139,12 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            buyer_id_from_server =  data.getInt(data.getColumnIndex(BfwContract.Buyer._ID));
+            buyer_id_from_server = data.getInt(data.getColumnIndex(BfwContract.Buyer._ID));
             buyer_local_id = data.getInt(data.getColumnIndex(BfwContract.Buyer._ID));
 
-            name.setText(data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME))+"");
-            phone.setText(""+data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_PHONE)));
-            email.setText(""+data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_EMAIL)));
+            name.setText(data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME)) + "");
+            phone.setText("" + data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_PHONE)));
+            email.setText("" + data.getString(data.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_EMAIL)));
         }
     }
 
@@ -158,6 +152,7 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
     private boolean isValidString(String word) {
         return word.length() >= 3;
     }
@@ -171,25 +166,21 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
-        if (syncDataEvent.isSuccess()){
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
+        } else {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

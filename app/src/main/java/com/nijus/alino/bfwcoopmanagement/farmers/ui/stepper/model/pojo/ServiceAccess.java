@@ -9,13 +9,23 @@ import android.os.Parcelable;
 
 public class ServiceAccess implements Parcelable {
 
+    public static final Parcelable.Creator<ServiceAccess> CREATOR = new Parcelable.Creator<ServiceAccess>() {
+        @Override
+        public ServiceAccess createFromParcel(Parcel parcel) {
+            return new ServiceAccess(parcel);
+        }
+
+        @Override
+        public ServiceAccess[] newArray(int i) {
+            return new ServiceAccess[0];
+        }
+    };
     private boolean isTractor;
     private boolean isHarvester;
     private boolean isDryer;
     private boolean isTresher;
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
-
     private boolean isDam;
     private boolean isWell;
     private boolean isBoreHole;
@@ -24,7 +34,6 @@ public class ServiceAccess implements Parcelable {
     private boolean isIrrigation;
     private boolean hasNoWaterSource;
     private boolean isOtherInfo;
-
     private String storageDetails;
     private String newResourcesDetails;
     private String mainWaterSourceDetails;
@@ -157,7 +166,6 @@ public class ServiceAccess implements Parcelable {
         isHarvester = harvester;
     }
 
-
     public boolean isDryer() {
         return isDryer;
     }
@@ -253,16 +261,4 @@ public class ServiceAccess implements Parcelable {
     public void setOtherInfo(boolean otherInfo) {
         isOtherInfo = otherInfo;
     }
-
-    public static final Parcelable.Creator<ServiceAccess> CREATOR = new Parcelable.Creator<ServiceAccess>() {
-        @Override
-        public ServiceAccess createFromParcel(Parcel parcel) {
-            return new ServiceAccess(parcel);
-        }
-
-        @Override
-        public ServiceAccess[] newArray(int i) {
-            return new ServiceAccess[0];
-        }
-    };
 }

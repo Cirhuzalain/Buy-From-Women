@@ -15,11 +15,9 @@ import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.DeleteSyncLoanBkgrnd;
-import com.nijus.alino.bfwcoopmanagement.products.sync.DeleteSyncProductBkgrnd;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DeleteLoanDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener {
     private int id_to_delete;

@@ -10,10 +10,10 @@ import java.util.List;
  */
 
 public class SelectedItems {
-    private List<Long> listsSelectedItem = new ArrayList<>();
-    private String message;
     boolean isSuccess;
     Long selected_item;
+    private List<Long> listsSelectedItem = new ArrayList<>();
+    private String message;
 
 
     public SelectedItems() {
@@ -74,11 +74,9 @@ public class SelectedItems {
         this.selected_item = selected_item;
     }
 
-    public int getCountSelctedItem()
-    {
+    public int getCountSelctedItem() {
         int count = 0;
-        for(long s : listsSelectedItem )
-        {
+        for (long s : listsSelectedItem) {
             count++;
         }
         return count;

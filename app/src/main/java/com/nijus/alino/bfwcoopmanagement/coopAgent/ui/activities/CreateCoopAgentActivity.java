@@ -1,11 +1,11 @@
 package com.nijus.alino.bfwcoopmanagement.coopAgent.ui.activities;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -54,6 +54,7 @@ public class CreateCoopAgentActivity extends AppCompatActivity implements View.O
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
     public void populateSpinnerCoops() {
         String[] fromColumns = {BfwContract.Coops.COLUMN_COOP_NAME};
 
@@ -84,6 +85,7 @@ public class CreateCoopAgentActivity extends AppCompatActivity implements View.O
             coop.setAdapter(adapter);
         }
     }
+
     private boolean isValidString(String word) {
         return word.length() >= 3;
     }
@@ -91,25 +93,25 @@ public class CreateCoopAgentActivity extends AppCompatActivity implements View.O
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
-            Toast.makeText(getApplicationContext(),saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
+        if (saveDataEvent.isSuccess()) {
+            Toast.makeText(getApplicationContext(), saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }else {
-            Toast.makeText(this,saveDataEvent.getMessage(),Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
+        } else {
+            Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSyncDataEvent(SyncDataEvent syncDataEvent) {
-        if (syncDataEvent.isSuccess()){
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        if (syncDataEvent.isSuccess()) {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
             onSupportNavigateUp();
-        }
-        else {
-            Toast.makeText(this,syncDataEvent.getMessage(),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

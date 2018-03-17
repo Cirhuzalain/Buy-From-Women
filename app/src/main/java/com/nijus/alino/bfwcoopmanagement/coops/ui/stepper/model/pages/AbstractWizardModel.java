@@ -68,7 +68,7 @@ public abstract class AbstractWizardModel implements ModelCallbacks {
         return bundle;
     }
 
-    public Context getPageContext(){
+    public Context getPageContext() {
         return mContext;
     }
 

@@ -33,6 +33,9 @@ import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 public class UpdateProductDialogFragment extends DialogFragment implements DialogInterface.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
+    AutoCompleteTextView product_name;
+    AutoCompleteTextView quantity;
+    AutoCompleteTextView sale_price;
     private LinearLayout mProductContainer;
     private Spinner vendor;
     private Spinner harvsetSeason;
@@ -40,10 +43,6 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
     private int id_product, product_server_id;
     private Button create_product;
     private Button order_product;
-
-    AutoCompleteTextView product_name;
-    AutoCompleteTextView quantity;
-    AutoCompleteTextView sale_price;
 
     @Override
     @NonNull

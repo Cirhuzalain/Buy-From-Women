@@ -35,11 +35,11 @@ import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBar;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarDuration;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarGravity;
 import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarTheme;
+import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
 import com.nijus.alino.bfwcoopmanagement.products.ui.activities.ProductActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
@@ -75,19 +75,16 @@ import static com.nijus.alino.bfwcoopmanagement.R.id.login_form;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final MediaType JSON
+            = MediaType.parse("text/html; charset=utf-8");
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
-    public static final MediaType JSON
-            = MediaType.parse("text/html; charset=utf-8");
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -618,6 +615,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         return getLoginMessage(getResources().getString(R.string.json_error), "", false);
                                     }
                                 }
+
+                            }
 
                                 //Prefetch product
                                 cursor = getContentResolver().query(BfwContract.ProductTemplate.CONTENT_URI, null, null, null, null);
@@ -1833,7 +1832,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 int loan_line_id = 0;
 
                                 if (!lineObject.getString("payment_date").equals("null")) {
-                                    //payment_date = lineObject.getLong("payment_date");
                                     String getDate = lineObject.getString("payment_date");
                                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                                     payment_date = df.parse(getDate);
@@ -1877,7 +1875,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 int loan_payment_id = 0;
 
                                 if (!paymentObject.getString("payment_date").equals("null")) {
-                                    //payment_date = paymentObject.getLong("payment_date");
                                     String getDate = paymentObject.getString("payment_date");
                                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                                     payment_date = df.parse(getDate);
@@ -1933,7 +1930,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         for (int s = 0; s < productArray.length(); s++) {
                             productObject = productArray.getJSONObject(s);
 
-                            //declaration des array et leurs objects
+                            //Array declaration and their objects
                             JSONArray farmerArray;
                             JSONArray buyerArray;
                             JSONArray vendorArray;
@@ -1961,7 +1958,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                                 String harvSelect = BfwContract.HarvestSeason.TABLE_NAME + "." +
                                         BfwContract.HarvestSeason.COLUMN_SERVER_ID + " =  ? ";
-                                //int seasonId = 0;
+
                                 cursor = getContentResolver().query(BfwContract.HarvestSeason.CONTENT_URI, null, harvSelect, new String[]{Long.toString(serverID_harvest_season)}, null);
                                 if (cursor != null) {
                                     while (cursor.moveToNext()) {
@@ -2384,7 +2381,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             if (!farmerObjectInfo.getString("total_land_plot_size").equals("null")) {
                                 totalLandPlotSize = farmerObjectInfo.getDouble("total_land_plot_size");
                             }
-                            // TODO Check well this field
                             if (farmerObjectInfo.has("other_water_source")) {
                                 otherWaterSource = farmerObjectInfo.getString("other_water_source");
                             }
@@ -3817,8 +3813,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-
-
     }
 
 }

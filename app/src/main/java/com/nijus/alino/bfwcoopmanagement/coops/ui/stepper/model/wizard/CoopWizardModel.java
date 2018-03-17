@@ -4,16 +4,16 @@ import android.content.Context;
 
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.AbstractWizardModel;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.AccessToInformationPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.InternalInformationPage;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.AvailableRessourcesPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.ForecastSalesPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.BaselineYieldPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.GeneralPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.BaselineSalesPage;
-import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.PageList;
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.BaselineFinaceInfoPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.BaselineSalesPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.BaselineYieldPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.ForecastSalesPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.GeneralPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.InternalInformationPage;
+import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages.PageList;
 
-public class CoopWizardModel extends AbstractWizardModel{
+public class CoopWizardModel extends AbstractWizardModel {
 
     public CoopWizardModel(Context context) {
         super(context);

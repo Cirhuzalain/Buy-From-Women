@@ -58,8 +58,6 @@ public class UpdateAccessInfoFragmentVendor extends Fragment implements AdapterV
     private Spinner harvsetSeason;
 
 
-
-
     public UpdateAccessInfoFragmentVendor() {
         super();
     }

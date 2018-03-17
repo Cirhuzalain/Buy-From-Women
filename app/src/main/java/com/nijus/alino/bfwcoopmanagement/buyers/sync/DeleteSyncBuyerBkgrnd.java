@@ -12,7 +12,6 @@ import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.DeleteBuyerEvent;
-import com.nijus.alino.bfwcoopmanagement.events.ProcessingAgentEvent;
 import com.nijus.alino.bfwcoopmanagement.events.ProcessingBuyerEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,10 +79,8 @@ public class DeleteSyncBuyerBkgrnd extends IntentService {
                         id = cursor.getLong(cursor.getColumnIndex(BfwContract.Buyer._ID));
                         buyerServerId = cursor.getInt(cursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_SERVER_ID));
 
-                        /** select all BUYERS IN ARRAYLIST and delete them one by one
-                         */
 
-                                OkHttpClient client = new OkHttpClient.Builder()
+                        OkHttpClient client = new OkHttpClient.Builder()
                                 .connectTimeout(240, TimeUnit.SECONDS)
                                 .writeTimeout(240, TimeUnit.SECONDS)
                                 .readTimeout(240, TimeUnit.SECONDS)

@@ -4,9 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.nijus.alino.bfwcoopmanagement.farmers.sync.SyncBackground;
-import com.nijus.alino.bfwcoopmanagement.farmers.sync.UpdateSyncFarmer;
-
 public class RefreshData extends IntentService {
 
     public RefreshData() {

@@ -20,10 +20,9 @@
   *
   -->
 
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:textSize="@dimen/cafebar_content_text"
     android:textStyle="bold"
-    android:theme="@style/Animation.AppCompat.Dialog"/>
+    android:theme="@style/Animation.AppCompat.Dialog" />

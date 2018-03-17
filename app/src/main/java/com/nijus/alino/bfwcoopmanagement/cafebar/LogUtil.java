@@ -5,9 +5,8 @@ import android.util.Log;
 
 class LogUtil {
 
-    static boolean sEnableLogging = false;
-
     private static final String TAG = "CafeBar";
+    static boolean sEnableLogging = false;
 
     public static void d(@NonNull String message) {
         if (LogUtil.sEnableLogging)

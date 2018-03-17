@@ -5,11 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderFragment;
 
 import java.util.List;
 

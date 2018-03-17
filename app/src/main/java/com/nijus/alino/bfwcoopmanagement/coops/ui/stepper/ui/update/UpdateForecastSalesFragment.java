@@ -265,8 +265,6 @@ public class UpdateForecastSalesFragment extends Fragment {
         });*/
 
 
-
-
         return rootView;
     }
 
