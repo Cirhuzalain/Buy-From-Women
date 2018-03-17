@@ -32,10 +32,9 @@ import okhttp3.ResponseBody;
 
 public class SyncBackgroundVendor extends IntentService {
 
-    public final String LOG_TAG = SyncBackgroundVendor.class.getSimpleName();
-
     public static final MediaType JSON
             = MediaType.parse("text/html; charset=utf-8");
+    public final String LOG_TAG = SyncBackgroundVendor.class.getSimpleName();
 
     public SyncBackgroundVendor() {
         super("");
@@ -63,7 +62,6 @@ public class SyncBackgroundVendor extends IntentService {
 
         //get non sync vendor to the server
         int dataCount = 0;
-        int coopServerId = 0;
         int seasonId, serverSeasonId = 1;
         int vendorServerId;
         long id;
@@ -77,9 +75,6 @@ public class SyncBackgroundVendor extends IntentService {
 
         String vendorSelection = BfwContract.Vendor.TABLE_NAME + "." +
                 BfwContract.Vendor._ID + " =  ? ";
-
-       /* String farmerCoopServerId = BfwContract.Coops.TABLE_NAME + "." +
-                BfwContract.Coops._ID + " =  ? ";*/
 
         String landSelection = BfwContract.VendorLand.TABLE_NAME + "." +
                 BfwContract.VendorLand.COLUMN_VENDOR_ID + " = ?  AND " + BfwContract.VendorLand.COLUMN_IS_SYNC + " = 0 ";
@@ -244,10 +239,8 @@ public class SyncBackgroundVendor extends IntentService {
                             JSONObject farmerInfo = new JSONObject(farmerDataInfo);
                             if (farmerInfo.has("id")) {
                                 vendorServerId = farmerInfo.getInt("id");
-                                //String membershipId = farmerInfo.getString("membership_id");
                                 String membershipId = "";
 
-                                //set membership id
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put(BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID, vendorServerId);
                                 contentValues.put(BfwContract.Vendor.COLUMN_MEMBER_SHIP, membershipId);
@@ -644,8 +637,6 @@ public class SyncBackgroundVendor extends IntentService {
                                 if (vendorServerId > 0) {
 
                                     // get all the forecast for a given vendor and check if there's one that match with serverSeasonId
-                                    //String proxyUrl = BuildConfig.DEV_PROXY_URL + "?model=vendor.farmer&attr=id&value=" + vendorServerId + "&token=" + access_token;
-
                                     String proxyUrl = BuildConfig.DEV_PROXY_URL + "?model=forecast.vendor&attr=vendor_id&value=" + vendorServerId + "&token=" + appToken;
                                     Request requestLand = new Request.Builder()
                                             .url(proxyUrl)
@@ -668,7 +659,7 @@ public class SyncBackgroundVendor extends IntentService {
 
                                         Boolean isResponse = false;
 
-                                        if (json instanceof JSONArray){
+                                        if (json instanceof JSONArray) {
                                             isResponse = true;
                                         }
 
@@ -913,6 +904,6 @@ public class SyncBackgroundVendor extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_vend_msg_sync ), true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_vend_msg_sync), true));
     }
 }

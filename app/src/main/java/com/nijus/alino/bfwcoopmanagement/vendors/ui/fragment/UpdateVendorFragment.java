@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventB;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
-import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.ui.fragment.ProgressDialog;
 import com.nijus.alino.bfwcoopmanagement.vendors.adapter.CreateVendorStepper;
 import com.nijus.alino.bfwcoopmanagement.vendors.sync.UpdateVendorService;
@@ -70,6 +69,23 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
     private long mFarmerId;
 
     public UpdateVendorFragment() {
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateVendorFragment.
+     */
+    public static UpdateVendorFragment newInstance(String param1, String param2) {
+        UpdateVendorFragment fragment = new UpdateVendorFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -157,7 +173,6 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
         updateBottomBar();
         return rootView;
     }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -271,30 +286,6 @@ public class UpdateVendorFragment extends Fragment implements ModelCallbacksVend
         if (eventR.isDataValid()) {
             pager.setCurrentItem(pager.getCurrentItem() + 1);
         }
-    }
-
-   /* @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        progressDialog.dismiss();
-        Toast.makeText(getContext(), getResources().getString(R.string.update_msg), Toast.LENGTH_SHORT).show();
-        getActivity().finish();
-    }*/
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateVendorFragment.
-     */
-    public static UpdateVendorFragment newInstance(String param1, String param2) {
-        UpdateVendorFragment fragment = new UpdateVendorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

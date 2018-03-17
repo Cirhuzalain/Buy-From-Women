@@ -6,12 +6,21 @@ import android.os.Parcelable;
 
 public class ForecastSales implements Parcelable {
 
+    public static final Creator<ForecastSales> CREATOR = new Creator<ForecastSales>() {
+        @Override
+        public ForecastSales createFromParcel(Parcel parcel) {
+            return new ForecastSales(parcel);
+        }
+
+        @Override
+        public ForecastSales[] newArray(int i) {
+            return new ForecastSales[0];
+        }
+    };
     private String seasonName;
     private String minFloorPerGrade;
     private String grade;
-
     private int commitedContractQty;
-
     private boolean rgcc;
     private boolean prodev;
     private boolean sarura;
@@ -19,10 +28,8 @@ public class ForecastSales implements Parcelable {
     private boolean eax;
     private boolean none;
     private boolean other;
-
     private int seasonId;
     private int forecastId;
-
 
     public ForecastSales() {
         this.forecastId = 0;
@@ -184,16 +191,4 @@ public class ForecastSales implements Parcelable {
     public void setOther(boolean other) {
         this.other = other;
     }
-
-    public static final Creator<ForecastSales> CREATOR = new Creator<ForecastSales>() {
-        @Override
-        public ForecastSales createFromParcel(Parcel parcel) {
-            return new ForecastSales(parcel);
-        }
-
-        @Override
-        public ForecastSales[] newArray(int i) {
-            return new ForecastSales[0];
-        }
-    };
 }

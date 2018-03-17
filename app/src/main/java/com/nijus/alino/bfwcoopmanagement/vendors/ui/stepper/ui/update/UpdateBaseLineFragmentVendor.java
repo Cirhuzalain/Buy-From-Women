@@ -29,7 +29,7 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.ui.PageFragmentCallb
 
 import java.util.HashMap;
 
-public class UpdateBaseLineFragmentVendor extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> , AdapterView.OnItemSelectedListener {
+public class UpdateBaseLineFragmentVendor extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener {
 
     public static final String ARG_KEY = "key";
     private String mKey;
@@ -88,6 +88,7 @@ public class UpdateBaseLineFragmentVendor extends Fragment implements LoaderMana
         }
         return null;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -50,7 +50,7 @@ public class SyncAgentBackground extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync agent to the server (is_sync)
         int dataCount = 0;
         int buyerServerId;
         long id;
@@ -84,12 +84,12 @@ public class SyncAgentBackground extends IntentService {
 
                     String bodyContent = "{}";
 
-                        bodyContent = "{" +
-                                "\"name\": \"" + name + "\", " +
-                                "\"phone\": \"" + phone + "\"," +
-                                "\"email\": \"" + email + "\" ," +
-                                "\"coop_id\": " + coop + " " +
-                                "}";
+                    bodyContent = "{" +
+                            "\"name\": \"" + name + "\", " +
+                            "\"phone\": \"" + phone + "\"," +
+                            "\"email\": \"" + email + "\" ," +
+                            "\"coop_id\": " + coop + " " +
+                            "}";
 
 
                     String API_INFO = BuildConfig.DEV_API_URL + "coop.agent";

@@ -3,11 +3,18 @@ package com.nijus.alino.bfwcoopmanagement.buyers.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Guillain-B on 26/02/2018.
- */
+public class PojoBuyer implements Parcelable {
+    public static final Parcelable.Creator<PojoBuyer> CREATOR = new Parcelable.Creator<PojoBuyer>() {
+        @Override
+        public PojoBuyer createFromParcel(Parcel parcel) {
+            return new PojoBuyer(parcel);
+        }
 
-public class PojoBuyer implements Parcelable{
+        @Override
+        public PojoBuyer[] newArray(int i) {
+            return new PojoBuyer[0];
+        }
+    };
     private String name;
     private String phone;
     private String mail;
@@ -62,16 +69,4 @@ public class PojoBuyer implements Parcelable{
     public void setMail(String mail) {
         this.mail = mail;
     }
-
-    public static final Parcelable.Creator<PojoBuyer> CREATOR = new Parcelable.Creator<PojoBuyer>() {
-        @Override
-        public PojoBuyer createFromParcel(Parcel parcel) {
-            return new PojoBuyer(parcel);
-        }
-
-        @Override
-        public PojoBuyer[] newArray(int i) {
-            return new PojoBuyer[0];
-        }
-    };
 }

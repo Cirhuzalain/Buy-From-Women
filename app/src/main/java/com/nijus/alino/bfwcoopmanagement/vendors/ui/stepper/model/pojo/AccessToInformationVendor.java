@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class AccessToInformationVendor implements Parcelable {
 
+    public static final Creator<AccessToInformationVendor> CREATOR = new Creator<AccessToInformationVendor>() {
+        @Override
+        public AccessToInformationVendor createFromParcel(Parcel parcel) {
+            return new AccessToInformationVendor(parcel);
+        }
+
+        @Override
+        public AccessToInformationVendor[] newArray(int i) {
+            return new AccessToInformationVendor[0];
+        }
+    };
     private boolean isAgricultureExtension;
     private boolean isClimateRelatedInformation;
     private boolean isSeed;
@@ -13,12 +24,14 @@ public class AccessToInformationVendor implements Parcelable {
     private boolean isLabour;
     private boolean isWaterPumps;
     private boolean isSpreaderOrSprayer;
-
     private int accessInfoId;
     private int harvestSeason;
     private String seasonName;
 
-    public AccessToInformationVendor() {this.accessInfoId = 0;}
+    public AccessToInformationVendor() {
+        this.accessInfoId = 0;
+    }
+
     public AccessToInformationVendor(boolean isAgricultureExtension, boolean isClimateRelatedInformation, boolean isSeed,
                                      boolean isOrganicFertilizers, boolean isInorganicFertilizers, boolean isLabour,
                                      boolean isWaterPumps, boolean isSpreaderOrSprayer, int harvestSeason) {
@@ -93,7 +106,6 @@ public class AccessToInformationVendor implements Parcelable {
         this.harvestSeason = harvestSeason;
     }
 
-
     public boolean isAgricultureExtension() {
         return isAgricultureExtension;
     }
@@ -150,7 +162,6 @@ public class AccessToInformationVendor implements Parcelable {
         isWaterPumps = waterPumps;
     }
 
-
     public boolean isSpreaderOrSprayer() {
         return isSpreaderOrSprayer;
     }
@@ -158,17 +169,4 @@ public class AccessToInformationVendor implements Parcelable {
     public void setSpreaderOrSprayer(boolean spreaderOrSprayer) {
         isSpreaderOrSprayer = spreaderOrSprayer;
     }
-
-
-    public static final Creator<AccessToInformationVendor> CREATOR = new Creator<AccessToInformationVendor>() {
-        @Override
-        public AccessToInformationVendor createFromParcel(Parcel parcel) {
-            return new AccessToInformationVendor(parcel);
-        }
-
-        @Override
-        public AccessToInformationVendor[] newArray(int i) {
-            return new AccessToInformationVendor[0];
-        }
-    };
 }

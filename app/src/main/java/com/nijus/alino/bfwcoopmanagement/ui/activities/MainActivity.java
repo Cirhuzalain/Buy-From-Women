@@ -17,12 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.BuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.activities.NavigationActivity;
 import com.nijus.alino.bfwcoopmanagement.products.ui.activities.ProductActivity;
 import com.nijus.alino.bfwcoopmanagement.sales.ui.activities.SaleOrderInfoActivity;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
-import com.nijus.alino.bfwcoopmanagement.vendors.ui.activities.VendorActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -100,6 +98,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_COMMENT = "comment";
+        private static final String ARG_SECTION_IMAGE = "img";
+
+        public PlaceholderFragment() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int message, int comment, int img) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, message);
+            args.putInt(ARG_SECTION_COMMENT, comment);
+            args.putInt(ARG_SECTION_IMAGE, img);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            ImageView imageView = rootView.findViewById(R.id.home_icon);
+            TextView textView = rootView.findViewById(R.id.app_headline);
+            TextView textComment = rootView.findViewById(R.id.app_comments);
+
+            textView.setText(getArguments().getInt(ARG_SECTION_NUMBER));
+            textComment.setText(getArguments().getInt(ARG_SECTION_COMMENT));
+            imageView.setImageResource(getArguments().getInt(ARG_SECTION_IMAGE));
+            return rootView;
+        }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -138,50 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     return "";
             }
             return null;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final String ARG_SECTION_COMMENT = "comment";
-        private static final String ARG_SECTION_IMAGE = "img";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int message, int comment, int img) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, message);
-            args.putInt(ARG_SECTION_COMMENT, comment);
-            args.putInt(ARG_SECTION_IMAGE, img);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            ImageView imageView = rootView.findViewById(R.id.home_icon);
-            TextView textView = rootView.findViewById(R.id.app_headline);
-            TextView textComment = rootView.findViewById(R.id.app_comments);
-
-            textView.setText(getArguments().getInt(ARG_SECTION_NUMBER));
-            textComment.setText(getArguments().getInt(ARG_SECTION_COMMENT));
-            imageView.setImageResource(getArguments().getInt(ARG_SECTION_IMAGE));
-            return rootView;
         }
     }
 }

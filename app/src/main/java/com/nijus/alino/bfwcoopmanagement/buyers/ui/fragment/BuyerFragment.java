@@ -19,21 +19,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.nijus.alino.bfwcoopmanagement.events.DisableBuyerSwipeEvent;
-import com.nijus.alino.bfwcoopmanagement.events.EventBuyerResetItems;
-import com.nijus.alino.bfwcoopmanagement.events.RefreshBuyerLoader;
-import com.nijus.alino.bfwcoopmanagement.events.RequestEventBuyerToDelete;
-import com.nijus.alino.bfwcoopmanagement.events.ResponseEventBuyerToDelete;
-import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerRequestEvent;
-import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerResponseEvent;
-
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.adapter.BuyerAdapter;
 import com.nijus.alino.bfwcoopmanagement.buyers.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.buyers.ui.activities.CreateBuyerActivity;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.DisableBuyerSwipeEvent;
+import com.nijus.alino.bfwcoopmanagement.events.EventBuyerResetItems;
+import com.nijus.alino.bfwcoopmanagement.events.RefreshBuyerLoader;
+import com.nijus.alino.bfwcoopmanagement.events.RequestEventBuyerToDelete;
+import com.nijus.alino.bfwcoopmanagement.events.ResponseEventBuyerToDelete;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerRequestEvent;
+import com.nijus.alino.bfwcoopmanagement.events.ToggleBuyerResponseEvent;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,7 +50,8 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
     private RecyclerView recyclerView;
     private CoordinatorLayout coordinatorLayout;
 
-     public BuyerFragment() {}
+    public BuyerFragment() {
+    }
 
     @SuppressWarnings("unused")
     public static BuyerFragment newInstance(int columnCount) {
@@ -94,9 +94,9 @@ public class BuyerFragment extends Fragment implements LoaderManager.LoaderCallb
         }, new BuyerAdapter.BuyerAdapterOnLongClickHandler() {
             @Override
             public void onLongClick(long buyerId, long position, BuyerAdapter.ViewHolder vh) {
-                ((OnLongClickFragmentInteractionListener)getActivity()).onLongClickFragmentInteractionListener(buyerId,position,vh);
+                ((OnLongClickFragmentInteractionListener) getActivity()).onLongClickFragmentInteractionListener(buyerId, position, vh);
             }
-        },mLayoutManager);
+        }, mLayoutManager);
 
         mRefreshData = view.findViewById(R.id.refresh_data_done);
         mRefreshData.setOnRefreshListener(this);

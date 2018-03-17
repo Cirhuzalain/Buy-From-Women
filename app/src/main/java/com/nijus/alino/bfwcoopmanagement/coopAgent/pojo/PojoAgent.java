@@ -3,11 +3,18 @@ package com.nijus.alino.bfwcoopmanagement.coopAgent.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Guillain-B on 27/02/2018.
- */
+public class PojoAgent implements Parcelable {
+    public static final Parcelable.Creator<PojoAgent> CREATOR = new Parcelable.Creator<PojoAgent>() {
+        @Override
+        public PojoAgent createFromParcel(Parcel parcel) {
+            return new PojoAgent(parcel);
+        }
 
-public class PojoAgent implements Parcelable{
+        @Override
+        public PojoAgent[] newArray(int i) {
+            return new PojoAgent[0];
+        }
+    };
     private String name;
     private String phone;
     private String mail;
@@ -74,16 +81,4 @@ public class PojoAgent implements Parcelable{
     public void setCoop(int coop) {
         this.coop = coop;
     }
-
-    public static final Parcelable.Creator<PojoAgent> CREATOR = new Parcelable.Creator<PojoAgent>() {
-        @Override
-        public PojoAgent createFromParcel(Parcel parcel) {
-            return new PojoAgent(parcel);
-        }
-
-        @Override
-        public PojoAgent[] newArray(int i) {
-            return new PojoAgent[0];
-        }
-    };
 }

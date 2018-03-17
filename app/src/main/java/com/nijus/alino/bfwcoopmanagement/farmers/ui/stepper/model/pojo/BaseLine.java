@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class BaseLine implements Parcelable {
 
+    public static final Parcelable.Creator<BaseLine> CREATOR = new Parcelable.Creator<BaseLine>() {
+        @Override
+        public BaseLine createFromParcel(Parcel parcel) {
+            return new BaseLine(parcel);
+        }
+
+        @Override
+        public BaseLine[] newArray(int i) {
+            return new BaseLine[0];
+        }
+    };
     private Double totProdInKg;
     private Double totLostInKg;
     private Double totSoldInKg;
@@ -19,7 +30,6 @@ public class BaseLine implements Parcelable {
     private int harvestSeason;
     private int baselineId;
     private String seasonName;
-
 
     public BaseLine() {
         this.baselineId = 0;
@@ -148,16 +158,4 @@ public class BaseLine implements Parcelable {
     public void setPriceSoldInKg(Double priceSoldInKg) {
         this.priceSoldInKg = priceSoldInKg;
     }
-
-    public static final Parcelable.Creator<BaseLine> CREATOR = new Parcelable.Creator<BaseLine>() {
-        @Override
-        public BaseLine createFromParcel(Parcel parcel) {
-            return new BaseLine(parcel);
-        }
-
-        @Override
-        public BaseLine[] newArray(int i) {
-            return new BaseLine[0];
-        }
-    };
 }

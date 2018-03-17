@@ -78,10 +78,8 @@ public class SyncProductBackground extends IntentService {
                     id = cursor.getLong(cursor.getColumnIndex(BfwContract.ProductTemplate._ID));
 
                     String nameProduct = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRODUCT_NAME));
-                    Double productPrice = 0.0;
-                    //if (!cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE)).equals("null")){
+                    Double productPrice;
                     productPrice = cursor.getDouble(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_PRICE));
-                    //}
 
                     int productQty = cursor.getInt(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_VENDOR_QTY));
                     String grade = cursor.getString(cursor.getColumnIndex(BfwContract.ProductTemplate.COLUMN_HARVEST_GRADE));
@@ -117,7 +115,6 @@ public class SyncProductBackground extends IntentService {
                         }
                     }
 
-
                     OkHttpClient client = new OkHttpClient.Builder()
                             .connectTimeout(240, TimeUnit.SECONDS)
                             .writeTimeout(240, TimeUnit.SECONDS)
@@ -145,7 +142,6 @@ public class SyncProductBackground extends IntentService {
                         bodyContent += "\"vendor_farmer_id\": " + vendorId + "" +
                                 "}";
                     }
-
                     String API_INFO = BuildConfig.DEV_API_URL + "product.template";
 
 

@@ -42,6 +42,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         View.OnClickListener {
     public static final String ARG_KEY = "key";
     Long mLoanId;
+    AlertDialog alertDialog;
     private Uri mUri;
     private String name;
     private String mKey;
@@ -51,13 +52,9 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
     private TextView name_b_details, start_date, loan_purpose,
             principal_amount, interest_rate, duration_month,
             fin_inst_spinner;
-
     private Button schedule, payment, save;
-
     private long loan_id, loan_id_from_server;
     private AlertDialog.Builder adb;
-    AlertDialog alertDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +178,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         switch (v.getId()) {
             case R.id.schedule_: {
                 Bundle bundle = new Bundle();
-                bundle.putLong("id_loan", loan_id); // set Fragmentclass Arguments
+                bundle.putLong("id_loan", loan_id);
                 BottomSheetDialogFragment bottomSheetDialogFragment = new ScheduleBottomSheetDialogFragment();
                 bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
@@ -190,7 +187,7 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
             }
             case R.id.payment_: {
                 Bundle bundle = new Bundle();
-                bundle.putLong("id_loan", loan_id); // set Fragmentclass Arguments
+                bundle.putLong("id_loan", loan_id);
                 BottomSheetDialogFragment bottomSheetDialogFragment = new PaymentBottomSheetDialogFragment();
                 bottomSheetDialogFragment.setArguments(bundle);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());

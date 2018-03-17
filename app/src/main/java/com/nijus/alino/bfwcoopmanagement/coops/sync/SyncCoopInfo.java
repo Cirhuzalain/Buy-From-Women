@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.annotation.Nullable;

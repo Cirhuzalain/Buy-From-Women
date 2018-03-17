@@ -42,10 +42,10 @@ import java.util.ArrayList;
 public class DetailFarmerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
+    public static final String ARG_KEY = "key";
     private int mFarmerId;
     private Uri mUri;
     private String name;
-    public static final String ARG_KEY = "key";
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ListView infoListView;

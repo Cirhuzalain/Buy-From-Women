@@ -4,7 +4,6 @@ package com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.model.pages;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-
 import com.nijus.alino.bfwcoopmanagement.coops.ui.stepper.ui.GeneralInformationFragment;
 
 import java.util.ArrayList;

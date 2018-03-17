@@ -18,20 +18,20 @@
             android:id="@+id/name_farmer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="4dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="guy"
+            app:title=""
             app:titleEnabled="true"
-            app:toolbarId="@+id/toolbar"
-            android:elevation="4dp">
+            app:toolbarId="@+id/toolbar">
 
             <ImageView
                 android:id="@+id/coop_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -54,9 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:pressedTranslationZ="12dp" />
 
 </android.support.design.widget.CoordinatorLayout>

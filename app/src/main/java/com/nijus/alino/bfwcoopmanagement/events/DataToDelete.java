@@ -13,7 +13,7 @@ public class DataToDelete {
 
     public DataToDelete(int position, List<Integer> listsSelectedItem) {
         this.position = position;
-        this.listsSelectedItem =  new ArrayList<>();
+        this.listsSelectedItem = new ArrayList<>();
     }
 
     public int getPosition() {

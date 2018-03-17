@@ -13,10 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchasesBottomSheetDialogFragment;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchaseOrderListFragment;
+import com.nijus.alino.bfwcoopmanagement.purchases.ui.fragment.PurchasesBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
+import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 public class PurchaseOrderActivity extends BaseActivity implements
         PurchaseOrderListFragment.OnListFragmentInteractionListener, View.OnClickListener {
@@ -36,8 +36,6 @@ public class PurchaseOrderActivity extends BaseActivity implements
         if (view.getId() == R.id.fab_purchase_orders) {
             BottomSheetDialogFragment bottomSheetDialogFragment = new PurchasesBottomSheetDialogFragment();
             bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-           /* PurchaseOderDialogFragment dialogFragment = new PurchaseOderDialogFragment();
-            dialogFragment.show(getSupportFragmentManager(), "purchaseDialog");*/
         }
     }
 

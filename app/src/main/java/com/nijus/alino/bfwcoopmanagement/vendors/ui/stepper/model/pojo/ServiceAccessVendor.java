@@ -9,13 +9,23 @@ import android.os.Parcelable;
 
 public class ServiceAccessVendor implements Parcelable {
 
+    public static final Parcelable.Creator<ServiceAccessVendor> CREATOR = new Parcelable.Creator<ServiceAccessVendor>() {
+        @Override
+        public ServiceAccessVendor createFromParcel(Parcel parcel) {
+            return new ServiceAccessVendor(parcel);
+        }
+
+        @Override
+        public ServiceAccessVendor[] newArray(int i) {
+            return new ServiceAccessVendor[0];
+        }
+    };
     private boolean isTractor;
     private boolean isHarvester;
     private boolean isDryer;
     private boolean isTresher;
     private boolean isSafeStorage;
     private boolean isOtherResourceInfo;
-
     private boolean isDam;
     private boolean isWell;
     private boolean isBoreHole;
@@ -24,12 +34,10 @@ public class ServiceAccessVendor implements Parcelable {
     private boolean isIrrigation;
     private boolean hasNoWaterSource;
     private boolean isOtherInfo;
-
     private String storageDetails;
     private String newResourcesDetails;
     private String mainWaterSourceDetails;
     private String seasonName;
-
 
     public ServiceAccessVendor() {
 
@@ -109,6 +117,7 @@ public class ServiceAccessVendor implements Parcelable {
         parcel.writeString(newResourcesDetails);
         parcel.writeString(seasonName);
     }
+
     public String getSeasonName() {
         return seasonName;
     }
@@ -156,7 +165,6 @@ public class ServiceAccessVendor implements Parcelable {
     public void setHarvester(boolean harvester) {
         isHarvester = harvester;
     }
-
 
     public boolean isDryer() {
         return isDryer;
@@ -253,17 +261,4 @@ public class ServiceAccessVendor implements Parcelable {
     public void setOtherInfo(boolean otherInfo) {
         isOtherInfo = otherInfo;
     }
-
-
-    public static final Parcelable.Creator<ServiceAccessVendor> CREATOR = new Parcelable.Creator<ServiceAccessVendor>() {
-        @Override
-        public ServiceAccessVendor createFromParcel(Parcel parcel) {
-            return new ServiceAccessVendor(parcel);
-        }
-
-        @Override
-        public ServiceAccessVendor[] newArray(int i) {
-            return new ServiceAccessVendor[0];
-        }
-    };
 }

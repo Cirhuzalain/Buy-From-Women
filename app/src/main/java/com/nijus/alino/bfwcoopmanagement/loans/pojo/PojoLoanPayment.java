@@ -3,16 +3,25 @@ package com.nijus.alino.bfwcoopmanagement.loans.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class PojoLoanPayment implements Parcelable {
+    public static final Creator<PojoLoanPayment> CREATOR = new Creator<PojoLoanPayment>() {
+        @Override
+        public PojoLoanPayment createFromParcel(Parcel parcel) {
+            return new PojoLoanPayment(parcel);
+        }
+
+        @Override
+        public PojoLoanPayment[] newArray(int i) {
+            return new PojoLoanPayment[0];
+        }
+    };
     private int loan_id;
     private Double amount;
     private long payment_date;
 
-    public PojoLoanPayment() {}
+    public PojoLoanPayment() {
+    }
 
     public PojoLoanPayment(int loan_id, Double amount, long payment_date) {
         this.loan_id = loan_id;
@@ -25,6 +34,11 @@ public class PojoLoanPayment implements Parcelable {
         this.payment_date = data.readLong();
         this.amount = data.readDouble();
     }
+
+    public static Creator<PojoLoanPayment> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -60,21 +74,5 @@ public class PojoLoanPayment implements Parcelable {
     public void setPayment_date(long payment_date) {
         this.payment_date = payment_date;
     }
-
-    public static Creator<PojoLoanPayment> getCREATOR() {
-        return CREATOR;
-    }
-
-    public static final Creator<PojoLoanPayment> CREATOR = new Creator<PojoLoanPayment>() {
-        @Override
-        public PojoLoanPayment createFromParcel(Parcel parcel) {
-            return new PojoLoanPayment(parcel);
-        }
-
-        @Override
-        public PojoLoanPayment[] newArray(int i) {
-            return new PojoLoanPayment[0];
-        }
-    };
 
 }

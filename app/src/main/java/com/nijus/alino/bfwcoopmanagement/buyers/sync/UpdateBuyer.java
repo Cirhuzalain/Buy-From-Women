@@ -11,21 +11,15 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.pojo.PojoBuyer;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateSyncLoan;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateSyncLoanBkgrnd;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class UpdateBuyer extends IntentService {
     public final String LOG_TAG = UpdateBuyer.class.getSimpleName();
@@ -81,14 +75,14 @@ public class UpdateBuyer extends IntentService {
                 contentValues.put(BfwContract.Buyer.COLUMN_IS_SYNC, isSyncProduct);
                 contentValues.put(BfwContract.Buyer.COLUMN_IS_UPDATE, 0);
 
-                getContentResolver().update(BfwContract.Buyer.CONTENT_URI, contentValues,buyerSelect,new String[]{Integer.toString(id_buyer)});
+                getContentResolver().update(BfwContract.Buyer.CONTENT_URI, contentValues, buyerSelect, new String[]{Integer.toString(id_buyer)});
 
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
                     //start job service
                     startService(new Intent(this, UpdateSyncBuyerBkgrnd.class));
-                    EventBus.getDefault().post(new SaveDataEvent("Buyer updated successfully", true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_buyer), true));
                 } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
@@ -100,7 +94,7 @@ public class UpdateBuyer extends IntentService {
                             .build();
 
                     dispatcher.mustSchedule(job);
-                    EventBus.getDefault().post(new SaveDataEvent("Buyer updated successfully and will be synchronized later", true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_buyer_sync), true));
 
                 }
             }

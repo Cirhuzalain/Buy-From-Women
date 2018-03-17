@@ -14,7 +14,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -30,23 +29,20 @@ public class GeneralInformationVendor extends Fragment {
 
     public static final String ARG_KEY = "key";
     public final String LOG_TAG = GeneralInformationVendor.class.getSimpleName();
+    /**
+     * Make LinearLyaut content_spiner_coop invisible
+     **/
+    LinearLayout content_spiner_coop;
     private String mKey;
-
     private GeneralVendor generalVendor = new GeneralVendor();
-
     private PageVendorVendor mPageVendor;
     private PageFragmentCallbacksVendor mCallbacks;
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
     private AutoCompleteTextView addressTextView;
-
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
-
-    /**
-     * Make LinearLyaut content_spiner_coop invisible**/
-    LinearLayout content_spiner_coop;
 
     public GeneralInformationVendor() {
         super();
@@ -114,7 +110,7 @@ public class GeneralInformationVendor extends Fragment {
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
 
-        content_spiner_coop =  rootView.findViewById(R.id.content_spiner_coop);
+        content_spiner_coop = rootView.findViewById(R.id.content_spiner_coop);
         content_spiner_coop.setVisibility(View.GONE);
         //spinner = rootView.findViewById(R.id.spinner_coops_infos);
         mGenderGroup = rootView.findViewById(R.id.gender_group);
@@ -125,7 +121,7 @@ public class GeneralInformationVendor extends Fragment {
             mPageVendor.getData().putParcelable("general", generalVendor);
         } else if (mGenderGroup.getCheckedRadioButtonId() == R.id.radio_female) {
             generalVendor.setGender(false);
-            mPageVendor.getData().putParcelable("generalVendor",generalVendor);
+            mPageVendor.getData().putParcelable("generalVendor", generalVendor);
         }
 
         //listen for change on gender
@@ -134,10 +130,10 @@ public class GeneralInformationVendor extends Fragment {
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
                 if (i == R.id.radio_male) {
                     generalVendor.setGender(true);
-                    mPageVendor.getData().putParcelable("generalVendor",generalVendor);
+                    mPageVendor.getData().putParcelable("generalVendor", generalVendor);
                 } else if (i == R.id.radio_female) {
                     generalVendor.setGender(false);
-                    mPageVendor.getData().putParcelable("generalVendor",generalVendor);
+                    mPageVendor.getData().putParcelable("generalVendor", generalVendor);
                 }
             }
         });

@@ -11,9 +11,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
-import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont.DummyItem;
+import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.sales.adapter.SaleOrderAdapter;
 
 /**

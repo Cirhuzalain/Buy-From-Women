@@ -17,10 +17,6 @@ import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -52,7 +48,7 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync buyer to the server (is_sync)
         int dataCount = 0;
         int buyerServerId;
         long id;
@@ -95,7 +91,7 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
                             "\"buyer_email\": \"" + email + "\"" +
                             "}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "buyer" + "/"+buyerServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "buyer" + "/" + buyerServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 
@@ -111,8 +107,6 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
                         if (responseBodyLoan != null) {
                             String farmerDataInfo = responseBodyLoan.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //productServerId = productInfo.getInt("id");
-
                                 //update localId
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put(BfwContract.Buyer.COLUMN_BUYER_SERVER_ID, buyerServerId);

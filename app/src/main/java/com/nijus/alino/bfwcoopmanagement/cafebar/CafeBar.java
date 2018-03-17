@@ -144,7 +144,7 @@ public class CafeBar {
 
     @NonNull
     private static CafeBar prepareCafeBar(@NonNull Context context, @NonNull String content,
-                                   @NonNull CafeBarDuration duration) {
+                                          @NonNull CafeBarDuration duration) {
         CafeBar.Builder builder = new Builder(context);
         builder.content(content);
         builder.duration(duration.getDuration());
@@ -170,6 +170,11 @@ public class CafeBar {
             builder.autoDismiss(false);
         }
         return new CafeBar(builder);
+    }
+
+    @NonNull
+    public static Builder builder(@NonNull Context context) {
+        return new Builder(context);
     }
 
     public void setAction(@NonNull String action, @Nullable CafeBarCallback callback) {
@@ -229,7 +234,7 @@ public class CafeBar {
         }
 
         int navBar = 0;
-        LogUtil.d("fitSystemWindow: " +mBuilder.mFitSystemWindow);
+        LogUtil.d("fitSystemWindow: " + mBuilder.mFitSystemWindow);
         if (mBuilder.mFitSystemWindow && !mBuilder.mFloating) {
             navBar = CafeBarUtil.getNavigationBarHeight(mBuilder.mContext);
         }
@@ -241,7 +246,7 @@ public class CafeBar {
             if (mBuilder.longContent()) {
                 LogUtil.d("content has multi lines");
                 root.setPadding(side, side, (side - buttonPadding), (side - bottom + navBar));
-            } else if (longAction){
+            } else if (longAction) {
                 LogUtil.d("content only 1 line with longAction");
                 root.setPadding(side, top, (side - buttonPadding), (top - buttonPadding + navBar));
             } else {
@@ -314,7 +319,7 @@ public class CafeBar {
         Snackbar.SnackbarLayout snackBarLayout = (Snackbar.SnackbarLayout) mSnackBar.getView();
 
         boolean tabletMode = mBuilder.mContext.getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("Tablet mode: " +tabletMode);
+        LogUtil.d("Tablet mode: " + tabletMode);
 
         if (tabletMode || mBuilder.mFloating) {
             CardView cardView = (CardView) snackBarLayout.getChildAt(0);
@@ -349,11 +354,6 @@ public class CafeBar {
                 }
             });
         }
-    }
-
-    @NonNull
-    public static Builder builder(@NonNull Context context) {
-        return new Builder(context);
     }
 
     @SuppressWarnings("unused")
@@ -424,6 +424,7 @@ public class CafeBar {
             mAdjustCustomView = adjustCustomView;
             return this;
         }
+
         public Builder customView(@Nullable View customView, boolean adjustCustomView) {
             mCustomView = customView;
             mAdjustCustomView = adjustCustomView;
@@ -445,12 +446,12 @@ public class CafeBar {
             return this;
         }
 
-        public Builder maxLines(@IntRange (from = 1, to = 6) int maxLines) {
+        public Builder maxLines(@IntRange(from = 1, to = 6) int maxLines) {
             mMaxLines = maxLines;
             return this;
         }
 
-        public Builder duration(@IntRange (from = 1, to = 10000) int duration) {
+        public Builder duration(@IntRange(from = 1, to = 10000) int duration) {
             mDuration = duration;
             return this;
         }

@@ -74,7 +74,6 @@ public class UpdateBaselineFinanceFragment extends Fragment {
     private AutoCompleteTextView aggrgation_post_harvset_laon_disbursement_method;
 
 
-
     public UpdateBaselineFinanceFragment() {
         super();
     }
@@ -107,8 +106,8 @@ public class UpdateBaselineFinanceFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.baseline_fin_info));
 
-        harvsetSeason = rootView.findViewById(R.id.harvsetSeason) ;
-        input_loan = rootView.findViewById(R.id.input_loan) ;
+        harvsetSeason = rootView.findViewById(R.id.harvsetSeason);
+        input_loan = rootView.findViewById(R.id.input_loan);
 
         input_loan_prov_bank = rootView.findViewById(R.id.input_loan_prov_bank);
         boolean isInput_loan_prov_bank = input_loan_prov_bank.isActivated();
@@ -126,9 +125,9 @@ public class UpdateBaselineFinanceFragment extends Fragment {
         boolean isinput_loan_prov_other = input_loan_prov_other.isActivated();
         baslineFinanceInfo.setInput_loan_prov_other(isinput_loan_prov_other);
 
-        input_loan_amount = rootView.findViewById(R.id.input_loan_amount) ;
-        input_loan_interest_rate = rootView.findViewById(R.id.input_loan_interest_rate) ;
-        input_loan_duration = rootView.findViewById(R.id.input_loan_duration) ;
+        input_loan_amount = rootView.findViewById(R.id.input_loan_amount);
+        input_loan_interest_rate = rootView.findViewById(R.id.input_loan_interest_rate);
+        input_loan_duration = rootView.findViewById(R.id.input_loan_duration);
 
 //        input_loan_purpose_labour = rootView.findViewById(R.id.input_loan_purpose_labour) ;
 //        input_loan_purpose_seed = rootView.findViewById(R.id.input_loan_purpose_seed) ;
@@ -175,19 +174,13 @@ public class UpdateBaselineFinanceFragment extends Fragment {
 
         //aggrgation_post_harvset_loan = rootView.findViewById(R.id.aggrgation_post_harvset_loan);
         agg_post_harv_loan_prov_bank = rootView.findViewById(R.id.agg_post_harv_loan_prov_bank);
-        agg_post_harv_loan_prov_cooperative = rootView.findViewById(R.id.agg_post_harv_loan_prov_cooperative) ;
+        agg_post_harv_loan_prov_cooperative = rootView.findViewById(R.id.agg_post_harv_loan_prov_cooperative);
         agg_post_harv_loan_prov_sacco = rootView.findViewById(R.id.agg_post_harv_loan_prov_sacco);
         agg_post_harv_loan_prov_other = rootView.findViewById(R.id.agg_post_harv_loan_prov_other);
 
-        aggrgation_post_harvset_amount = rootView.findViewById(R.id.aggrgation_post_harvset_amount) ;
-        aggrgation_post_harvset_loan_interest = rootView.findViewById(R.id.aggrgation_post_harvset_loan_interest) ;
-        aggrgation_post_harvset_loan_duration = rootView.findViewById(R.id.aggrgation_post_harvset_loan_duration) ;
-
-       /* agg_post_harv_loan_purpose_labour = rootView.findViewById(R.id.agg_post_harv_loan_purpose_labour) ;
-        agg_post_harv_loan_purpose_input = rootView.findViewById(R.id.agg_post_harv_loan_purpose_input) ;
-        agg_post_harv_loan_purpose_machinery = rootView.findViewById(R.id.agg_post_harv_loan_purpose_machinery) ;
-        agg_post_harv_loan_purpose_other = rootView.findViewById(R.id.agg_post_harv_loan_purpose_other);
-*/
+        aggrgation_post_harvset_amount = rootView.findViewById(R.id.aggrgation_post_harvset_amount);
+        aggrgation_post_harvset_loan_interest = rootView.findViewById(R.id.aggrgation_post_harvset_loan_interest);
+        aggrgation_post_harvset_loan_duration = rootView.findViewById(R.id.aggrgation_post_harvset_loan_duration);
 
         agg_post_harv_loan_purpose_labour = rootView.findViewById(R.id.agg_post_harv_loan_purpose_labour);
         boolean isagg_post_harv_loan_purpose_labour = agg_post_harv_loan_purpose_labour.isActivated();
@@ -207,12 +200,13 @@ public class UpdateBaselineFinanceFragment extends Fragment {
 
         aggrgation_post_harvset_laon_disbursement_method = rootView.findViewById(R.id.aggrgation_post_harvset_laon_disbursement_method);
 
-       //SET DEFAULT FOR ALL AUTOCOMPLETE TEXT VIEEW
+        //SET DEFAULT FOR ALL AUTOCOMPLETE TEXT VIEEW
 
         input_loan_amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setInput_loan_amount(Integer.parseInt(charSequence.toString()));
@@ -228,6 +222,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setInput_loan_interest_rate(Integer.parseInt(charSequence.toString()));
@@ -243,6 +238,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setInput_loan_duration(Integer.parseInt(charSequence.toString()));
@@ -258,6 +254,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setAggrgation_post_harvset_loan(charSequence.toString());
@@ -273,6 +270,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setAggrgation_post_harvset_amount(Integer.parseInt(charSequence.toString()));
@@ -288,6 +286,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setAggrgation_post_harvset_loan_interest(Integer.parseInt(charSequence.toString()));
@@ -303,6 +302,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setAggrgation_post_harvset_loan_duration(Integer.parseInt(charSequence.toString()));
@@ -318,6 +318,7 @@ public class UpdateBaselineFinanceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 baslineFinanceInfo.setAggrgation_post_harvset_laon_disbursement_method(charSequence.toString());

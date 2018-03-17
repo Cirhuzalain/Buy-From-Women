@@ -136,7 +136,6 @@ public class UpdateBaselineYieldFragment extends Fragment {
         //les spiners
 
 
-
         return rootView;
     }
 

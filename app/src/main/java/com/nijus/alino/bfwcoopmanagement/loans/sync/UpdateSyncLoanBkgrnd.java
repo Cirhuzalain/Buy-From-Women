@@ -148,7 +148,6 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
                         if (responseBodyLoan != null) {
                             String farmerDataInfo = responseBodyLoan.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //productServerId = productInfo.getInt("id");
 
                                 //update localId
                                 ContentValues contentValues = new ContentValues();
@@ -173,6 +172,6 @@ public class UpdateSyncLoanBkgrnd extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Loan synchronised successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getResources().getString(R.string.add_loan_msg_sync), true));
     }
 }

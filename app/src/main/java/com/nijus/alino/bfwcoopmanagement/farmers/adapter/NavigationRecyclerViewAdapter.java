@@ -23,20 +23,17 @@ import java.util.List;
 
 public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<NavigationRecyclerViewAdapter.ViewHolder> implements Filterable {
 
+    private static int currentSelectedIndex = -1;
     final private Context mContext;
     final private View mEmptyView;
     final private FarmerAdapterOnClickHandler mClickHandler;
     final private FarmerAdapterOnLongClickListener mOnLongClickListener;
-
     private SparseBooleanArray selectedItems;
     private SparseBooleanArray animationItemsIndex;
     private SparseBooleanArray itemsValues;
-
     private List<Farmer> farmerList;
     private List<Farmer> farmerFilterList;
-
     private boolean reverseAllAnimations = false;
-    private static int currentSelectedIndex = -1;
 
     public NavigationRecyclerViewAdapter(Context context, View view, FarmerAdapterOnClickHandler vh, FarmerAdapterOnLongClickListener vLong) {
         mContext = context;
@@ -201,16 +198,16 @@ public class NavigationRecyclerViewAdapter extends RecyclerView.Adapter<Navigati
         mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
     public interface FarmerAdapterOnClickHandler {
         void onClick(int farmerId, ViewHolder vh);
     }
 
     public interface FarmerAdapterOnLongClickListener {
         void onLongClick(long item, long position, NavigationRecyclerViewAdapter.ViewHolder vh);
-    }
-
-    public int getSelectedItemCount() {
-        return selectedItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

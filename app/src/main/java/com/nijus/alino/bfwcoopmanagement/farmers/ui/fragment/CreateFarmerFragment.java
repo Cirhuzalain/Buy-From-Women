@@ -16,11 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.events.SaveLocalFarmerEvent;
-import com.nijus.alino.bfwcoopmanagement.farmers.adapter.CreateFarmerStepper;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventB;
 import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
+import com.nijus.alino.bfwcoopmanagement.events.SaveLocalFarmerEvent;
+import com.nijus.alino.bfwcoopmanagement.farmers.adapter.CreateFarmerStepper;
 import com.nijus.alino.bfwcoopmanagement.farmers.sync.AddFarmer;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.AbstractWizardModel;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pages.ModelCallbacks;
@@ -43,7 +43,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,11 +58,9 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public String LOG_TAG = CreateFarmerFragment.class.getSimpleName();
     private String mParam1;
     private String mParam2;
-    public String LOG_TAG = CreateFarmerFragment.class.getSimpleName();
-
     private OnFragmentInteractionListener mListener;
 
     private AbstractWizardModel mFarmerWizard;
@@ -83,6 +80,23 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
     private ViewPager pager;
 
     public CreateFarmerFragment() {
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateVendorFragment.
+     */
+    public static CreateFarmerFragment newInstance(String param1, String param2) {
+        CreateFarmerFragment fragment = new CreateFarmerFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -164,7 +178,6 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
         updateBottomBar();
         return rootView;
     }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -279,28 +292,11 @@ public class CreateFarmerFragment extends Fragment implements ModelCallbacks,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
+        if (saveDataEvent.isSuccess()) {
             EventBus.getDefault().post(new SaveLocalFarmerEvent());
             progressDialog.dismiss();
             getActivity().finish();
         }
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateVendorFragment.
-     */
-    public static CreateFarmerFragment newInstance(String param1, String param2) {
-        CreateFarmerFragment fragment = new CreateFarmerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

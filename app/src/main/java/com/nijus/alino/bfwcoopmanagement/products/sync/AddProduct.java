@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -20,7 +19,6 @@ import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
 
 public class AddProduct extends IntentService {
     public final String LOG_TAG = AddProduct.class.getSimpleName();
@@ -46,6 +44,7 @@ public class AddProduct extends IntentService {
             int harvest_season;
             String grade;
             int farmer;
+
 
 
             if (pojoProduct != null) {

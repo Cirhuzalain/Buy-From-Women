@@ -14,6 +14,7 @@ import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
@@ -45,8 +46,6 @@ public class AddVendor extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-       // try {
-
         if (intent != null) {
             Bundle vendorData = intent.getBundleExtra("vendor_data");
 
@@ -179,7 +178,6 @@ public class AddVendor extends IntentService {
             contentValues.put(BfwContract.Vendor.COLUMN_OTHER, isOtherResourceInfo);
             contentValues.put(BfwContract.Vendor.COLUMN_IS_SYNC, 0);
             contentValues.put(BfwContract.Vendor.COLUMN_IS_UPDATE, 0);
-            //contentValues.put(BfwContract.Vendor.COLUMN_COOP_USER_ID, coopServerId);
 
             Uri uri = getContentResolver().insert(BfwContract.Vendor.CONTENT_URI, contentValues);
             long farmerId = ContentUris.parseId(uri);
@@ -337,7 +335,7 @@ public class AddVendor extends IntentService {
             }
 
             //Post event after saving data
-            EventBus.getDefault().post(new SaveDataEvent("Vendor added successfully", true));
+            EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.add_vendor_msg), true));
 
             //sync if network available
             if (Utils.isNetworkAvailable(getApplicationContext())) {
@@ -356,7 +354,8 @@ public class AddVendor extends IntentService {
                 dispatcher.mustSchedule(job);
             }
         } else {
-            EventBus.getDefault().post(new SaveDataEvent("No data Available", false));
+            //If no data available
+            EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.farm_no_data_av), false));
         }
     }
 }

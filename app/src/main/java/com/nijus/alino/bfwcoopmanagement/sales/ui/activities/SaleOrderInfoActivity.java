@@ -16,13 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.loans.ui.fragment.ScheduleBottomSheetDialogFragment;
-import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SalesBottomSheetDialogFragment;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
-import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderDialogFragment;
-import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderFragment;
 import com.nijus.alino.bfwcoopmanagement.farmers.ui.fragment.dummy.DummyCont;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderFragment;
+import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SalesBottomSheetDialogFragment;
 import com.nijus.alino.bfwcoopmanagement.ui.activities.BaseActivity;
+import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 public class SaleOrderInfoActivity extends BaseActivity implements SaleOrderFragment.OnListFragmentInteractionListener,
         View.OnClickListener {

@@ -56,11 +56,9 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public String LOG_TAG = CreateCoopFragment.class.getSimpleName();
     private String mParam1;
     private String mParam2;
-    public String LOG_TAG = CreateCoopFragment.class.getSimpleName();
-
     private OnFragmentInteractionListener mListener;
 
     private AbstractWizardModel mCoopWizard;
@@ -80,6 +78,23 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     private ViewPager pager;
 
     public CreateCoopFragment() {
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateVendorFragment.
+     */
+    public static CreateCoopFragment newInstance(String param1, String param2) {
+        CreateCoopFragment fragment = new CreateCoopFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -162,7 +177,6 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
         updateBottomBar();
         return rootView;
     }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -277,23 +291,6 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         progressDialog.dismiss();
         getActivity().finish();
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateVendorFragment.
-     */
-    public static CreateCoopFragment newInstance(String param1, String param2) {
-        CreateCoopFragment fragment = new CreateCoopFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

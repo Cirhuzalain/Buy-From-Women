@@ -11,7 +11,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.RefreshProductLoader;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
-import com.nijus.alino.bfwcoopmanagement.loans.adapter.PaymentAdapter;
-import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.products.adapter.ProductAdapter;
 import com.nijus.alino.bfwcoopmanagement.products.sync.RefreshData;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
@@ -123,7 +120,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
         int id = productRecyclerViewAdapter.getServerProductId(i);
         Bundle bundle = new Bundle();
-        bundle.putInt("id_product", id); // set Fragment class Arguments
+        bundle.putInt("id_product", id);
         UpdateProductDialogFragment dialogFragment = new UpdateProductDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(getFragmentManager(), "dialogPurchaseTag");

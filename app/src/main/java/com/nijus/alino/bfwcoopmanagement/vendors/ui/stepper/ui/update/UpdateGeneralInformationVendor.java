@@ -188,7 +188,6 @@ public class UpdateGeneralInformationVendor extends Fragment implements /* Adapt
         address = rootView.findViewById(R.id.address);
         male = rootView.findViewById(R.id.radio_male);
         female = rootView.findViewById(R.id.radio_female);
-        //spinner = rootView.findViewById(R.id.spinner_coops_infos);
         mGenderGroup = rootView.findViewById(R.id.gender_group);
         content_spiner_coop = rootView.findViewById(R.id.content_spiner_coop);
         content_spiner_coop.setVisibility(View.GONE);

@@ -72,6 +72,23 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
     public UpdateCoopFragment() {
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateVendorFragment.
+     */
+    public static UpdateCoopFragment newInstance(String param1, String param2) {
+        UpdateCoopFragment fragment = new UpdateCoopFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +174,6 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
         updateBottomBar();
         return rootView;
     }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -280,23 +296,6 @@ public class UpdateCoopFragment extends Fragment implements ModelCallbacks,
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
         progressDialog.dismiss();
         Toast.makeText(getContext(), getResources().getString(R.string.update_msg), Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateVendorFragment.
-     */
-    public static UpdateCoopFragment newInstance(String param1, String param2) {
-        UpdateCoopFragment fragment = new UpdateCoopFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

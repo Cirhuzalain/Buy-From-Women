@@ -8,7 +8,7 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.update.UpdateFore
 
 import java.util.ArrayList;
 
-public class UpdateForecastPage extends Page{
+public class UpdateForecastPage extends Page {
 
     public static final String FORCAST_KEY = "key";
 

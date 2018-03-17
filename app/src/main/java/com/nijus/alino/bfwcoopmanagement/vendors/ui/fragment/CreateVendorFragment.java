@@ -57,11 +57,9 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public String LOG_TAG = CreateVendorFragment.class.getSimpleName();
     private String mParam1;
     private String mParam2;
-    public String LOG_TAG = CreateVendorFragment.class.getSimpleName();
-
     private OnFragmentInteractionListener mListener;
 
     private AbstractWizardModelVendorVendor mFarmerWizard;
@@ -81,6 +79,23 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
     private ViewPager pager;
 
     public CreateVendorFragment() {
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CreateVendorFragment.
+     */
+    public static CreateVendorFragment newInstance(String param1, String param2) {
+        CreateVendorFragment fragment = new CreateVendorFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -162,7 +177,6 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
         updateBottomBar();
         return rootView;
     }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -261,7 +275,7 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
                 saveBundle.putSerializable("accessToInformationVendor", accessInfoMap);
             }
         }
-       Intent intent = new Intent(getContext(), AddVendor.class);
+        Intent intent = new Intent(getContext(), AddVendor.class);
         intent.putExtra("vendor_data", saveBundle);
         progressDialog.show(getFragmentManager(), "vendorTag");
         getContext().startService(intent);
@@ -277,28 +291,11 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveDataEvent(SaveDataEvent saveDataEvent) {
-        if (saveDataEvent.isSuccess()){
+        if (saveDataEvent.isSuccess()) {
             EventBus.getDefault().post(new SaveLocalVendorEvent());
             progressDialog.dismiss();
             getActivity().finish();
         }
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateVendorFragment.
-     */
-    public static CreateVendorFragment newInstance(String param1, String param2) {
-        CreateVendorFragment fragment = new CreateVendorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

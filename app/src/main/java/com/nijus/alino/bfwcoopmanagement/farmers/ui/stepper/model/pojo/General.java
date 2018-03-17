@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class General implements Parcelable {
 
+    public static final Parcelable.Creator<General> CREATOR = new Parcelable.Creator<General>() {
+        @Override
+        public General createFromParcel(Parcel parcel) {
+            return new General(parcel);
+        }
+
+        @Override
+        public General[] newArray(int i) {
+            return new General[0];
+        }
+    };
     private String name;
     private String coopsName;
     private int coopId;
@@ -81,16 +92,20 @@ public class General implements Parcelable {
         this.coopId = coopId;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
     public String getCoopsName() {
         return coopsName;
     }
 
+    public void setCoopsName(String coop) {
+        this.coopsName = coop;
+    }
+
     public boolean isGender() {
         return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public String getAddress() {
@@ -108,20 +123,4 @@ public class General implements Parcelable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    public void setCoopsName(String coop) {
-        this.coopsName = coop;
-    }
-
-    public static final Parcelable.Creator<General> CREATOR = new Parcelable.Creator<General>() {
-        @Override
-        public General createFromParcel(Parcel parcel) {
-            return new General(parcel);
-        }
-
-        @Override
-        public General[] newArray(int i) {
-            return new General[0];
-        }
-    };
 }

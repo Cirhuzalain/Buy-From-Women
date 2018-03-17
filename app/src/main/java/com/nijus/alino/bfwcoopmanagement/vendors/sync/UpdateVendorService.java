@@ -516,7 +516,7 @@ public class UpdateVendorService extends IntentService {
             }
 
             //Post event after saving data
-            EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_vendor),true));
+            EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.update_msg_vendor), true));
 
             String farmerSelect1 = BfwContract.Vendor.TABLE_NAME + "." +
                     BfwContract.Vendor.COLUMN_IS_SYNC + " =  1 AND " +

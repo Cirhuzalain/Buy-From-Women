@@ -16,10 +16,10 @@ import com.nijus.alino.bfwcoopmanagement.pojo.Product;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 public class ProductAdapter extends BaseAdapter {
-    private Cursor mCursor;
     private final Context mContext;
-    private View mEmptyView;
     private final boolean mIsProduct;
+    private Cursor mCursor;
+    private View mEmptyView;
     private CardView cardView;
 
     public ProductAdapter(Context context, Product[] product, boolean isProduct) {

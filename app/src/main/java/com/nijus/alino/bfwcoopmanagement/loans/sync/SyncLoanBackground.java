@@ -55,7 +55,7 @@ public class SyncLoanBackground extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync loan to the server (is_sync)
         int dataCount = 0;
         int LoanServerId;
         long id;

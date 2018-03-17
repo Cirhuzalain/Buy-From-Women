@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 import com.nijus.alino.bfwcoopmanagement.sales.ui.fragment.SaleOrderDetailFragment;
+import com.nijus.alino.bfwcoopmanagement.ui.activities.SettingsActivity;
 
 public class SaleOrderDetailActivity extends AppCompatActivity implements SaleOrderDetailFragment.OnFragmentInteractionListener {
 

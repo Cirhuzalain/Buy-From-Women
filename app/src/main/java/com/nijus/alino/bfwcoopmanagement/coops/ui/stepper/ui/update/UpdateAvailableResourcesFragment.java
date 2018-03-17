@@ -76,50 +76,50 @@ public class UpdateAvailableResourcesFragment extends Fragment {
         TextView textView = rootView.findViewById(R.id.page_title);
         textView.setText(getContext().getString(R.string.available_resources));
 
-        office_space = rootView.findViewById(R.id.office_space) ;
+        office_space = rootView.findViewById(R.id.office_space);
         boolean isoffice_space = office_space.isActivated();
         availableResources.setOfficeSpace(isoffice_space);
 
-        moisture_meter = rootView.findViewById(R.id.moisture_meter) ;
+        moisture_meter = rootView.findViewById(R.id.moisture_meter);
         boolean ismoisture_meter = moisture_meter.isActivated();
         availableResources.setMoistureMeter(ismoisture_meter);
 
-        weighting_scales = rootView.findViewById(R.id.weighting_scales) ;
+        weighting_scales = rootView.findViewById(R.id.weighting_scales);
         boolean isweighting_scales = weighting_scales.isActivated();
         availableResources.setWeightingScales(isweighting_scales);
 
-        qlt_inputs = rootView.findViewById(R.id.qlt_inputs) ;
+        qlt_inputs = rootView.findViewById(R.id.qlt_inputs);
         boolean isqlt_inputs = qlt_inputs.isActivated();
         availableResources.setQualityInput(isqlt_inputs);
 
-        tractors = rootView.findViewById(R.id.tractors) ;
+        tractors = rootView.findViewById(R.id.tractors);
         boolean istractors = tractors.isActivated();
         availableResources.setTractor(istractors);
 
-        harvester = rootView.findViewById(R.id.harvester) ;
+        harvester = rootView.findViewById(R.id.harvester);
         boolean isharvester = harvester.isActivated();
         availableResources.setHarvester(isharvester);
 
-        dryer = rootView.findViewById(R.id.dryer) ;
+        dryer = rootView.findViewById(R.id.dryer);
         boolean isdryer = dryer.isActivated();
         availableResources.setDryer(isdryer);
 
-        thresher = rootView.findViewById(R.id.thresher) ;
+        thresher = rootView.findViewById(R.id.thresher);
         boolean isthresher = thresher.isActivated();
         availableResources.setTresher(isthresher);
 
-        safe_storage = rootView.findViewById(R.id.safe_storage) ;
+        safe_storage = rootView.findViewById(R.id.safe_storage);
         boolean issafe_storage = safe_storage.isActivated();
         availableResources.setSafeStorage(issafe_storage);
 
-        e_other_av_res = rootView.findViewById(R.id.e_other_av_res) ;
+        e_other_av_res = rootView.findViewById(R.id.e_other_av_res);
         boolean ise_other_av_res = e_other_av_res.isActivated();
         availableResources.setOtherResourceInfo(ise_other_av_res);
 
 
-        safe_storage_text = rootView.findViewById(R.id.safe_storage_text) ;
+        safe_storage_text = rootView.findViewById(R.id.safe_storage_text);
 
-        other_text = rootView.findViewById(R.id.other_text) ;
+        other_text = rootView.findViewById(R.id.other_text);
 
 
         //les checkk button
@@ -250,6 +250,7 @@ public class UpdateAvailableResourcesFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 availableResources.setTextSafeStorage(charSequence.toString());
@@ -277,8 +278,6 @@ public class UpdateAvailableResourcesFragment extends Fragment {
 
             }
         });
-
-
 
 
         return rootView;

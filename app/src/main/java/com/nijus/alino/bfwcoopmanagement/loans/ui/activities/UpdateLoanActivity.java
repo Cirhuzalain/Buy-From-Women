@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -26,17 +22,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
-import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBar;
-import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarDuration;
-import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarGravity;
-import com.nijus.alino.bfwcoopmanagement.cafebar.CafeBarTheme;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
-import com.nijus.alino.bfwcoopmanagement.loans.sync.AddLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.UpdateLoan;
-import com.nijus.alino.bfwcoopmanagement.ui.activities.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,14 +46,13 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
     private Button date;
     private Spinner loan_orign_spinner, fin_inst_spinner, purpose_loan;
     private AutoCompleteTextView principal_amount, interest_rate, duration_month;
-    private int id_loan, loan_server_id;
+    private int loan_server_id;
     private long id_loan_long;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_loan);
-        //EventBus.getDefault().register(this);
 
         getSupportLoaderManager().initLoader(0, null, this);
 
@@ -80,7 +69,7 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         save_loan.setOnClickListener(this);
         date.setOnClickListener(this);
 
-        //PUPULATE ALL SPINNERS
+        //Populate all spinners
         populateSpinnerFarmer();
 
         ArrayAdapter<CharSequence> adapter_microfin = ArrayAdapter.createFromResource(this,
@@ -143,7 +132,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             String purpose_loan_string;
             Date start_date = null;
 
-            //Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show();
             if (TextUtils.isEmpty(ed_date_value.getText())) {
                 ed_date_value.setError(getString(R.string.error_field_required));
             }
@@ -209,9 +197,13 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
                 }
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             calendar.set(Calendar.YEAR, 2000);
-            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());// TODO: used to hide previous date,month and year
+
+            // used to hide previous date,month and year
+            dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             calendar.set(Calendar.YEAR, 2030);
-            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());// TODO: used to hide future date,month and year
+
+            // used to hide future date,month and year
+            dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
 
             dialog.show();
         }
@@ -227,7 +219,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             // handle case
         }
 
-        //Toast.makeText(this," Get "+id_loan_long,Toast.LENGTH_LONG).show();
         String loanSelection = BfwContract.Loan.TABLE_NAME + "." +
                 BfwContract.Loan.COLUMN_SERVER_ID + " =  ? ";//TABLE SERVER ID
         return new CursorLoader(
@@ -247,17 +238,13 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
 
             Date start_date_date = new Date(data.getLong(data.getColumnIndex(BfwContract.Loan.COLUMN_START_DATE)));
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            //String date_string = DateFormat.getDateInstance().format(start_date_date);
             String date_string = df.format(start_date_date);
 
             ed_date_value.setText(date_string);
 
-            //loan_orign_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
             setSpinnerItemByIdFarmer(loan_orign_spinner, data.getInt(data.getColumnIndex(BfwContract.Loan.COLUMN_FARMER_ID)));
-            //fin_inst_spinner.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
             setSpinnerItemOrigin(fin_inst_spinner, data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_FINANCIAL_INSTITUTION)));
             setSpinnerItemOrigin(purpose_loan, data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PURPOSE)));
-            //purpose_loan.setText(data.getString(data.getColumnIndex(BfwContract.Loan.COLUMN_PRODUCT_NAME)));
 
             principal_amount.setText(data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_AMOUNT)) + "");
             interest_rate.setText("" + data.getDouble(data.getColumnIndex(BfwContract.Loan.COLUMN_INTEREST_RATE)));
@@ -273,7 +260,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
         int spinnerCount = spinner.getCount();
         for (int i = 0; i < spinnerCount; i++) {
             String value = (String) spinner.getItemAtPosition(i);
-            //int id = value.getInt(value.getColumnIndex(BfwContract.Farmer._ID));
             if (value.equals(fin_inst)) {
                 spinner.setSelection(i);
             }
@@ -304,7 +290,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
         }
     }
 
@@ -315,7 +300,6 @@ public class UpdateLoanActivity extends AppCompatActivity implements View.OnClic
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
         }
     }
 

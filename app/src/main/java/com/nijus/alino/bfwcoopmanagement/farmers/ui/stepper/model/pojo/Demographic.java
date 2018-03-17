@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class Demographic implements Parcelable {
 
+    public static final Parcelable.Creator<Demographic> CREATOR = new Parcelable.Creator<Demographic>() {
+        @Override
+        public Demographic createFromParcel(Parcel parcel) {
+            return new Demographic(parcel);
+        }
+
+        @Override
+        public Demographic[] newArray(int i) {
+            return new Demographic[0];
+        }
+    };
     private boolean isHouseHoldHead;
     private int houseHoldMember;
     private String spouseFirstName;
@@ -120,16 +131,4 @@ public class Demographic implements Parcelable {
     public void setCellCarrier(String cellCarrier) {
         this.cellCarrier = cellCarrier;
     }
-
-    public static final Parcelable.Creator<Demographic> CREATOR = new Parcelable.Creator<Demographic>() {
-        @Override
-        public Demographic createFromParcel(Parcel parcel) {
-            return new Demographic(parcel);
-        }
-
-        @Override
-        public Demographic[] newArray(int i) {
-            return new Demographic[0];
-        }
-    };
 }

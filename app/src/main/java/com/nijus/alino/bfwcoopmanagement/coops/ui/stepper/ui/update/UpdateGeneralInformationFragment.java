@@ -102,13 +102,14 @@ public class UpdateGeneralInformationFragment extends Fragment {
         name = rootView.findViewById(R.id.name_f);
         phone = rootView.findViewById(R.id.name_phone);
         adress = rootView.findViewById(R.id.address);
-        mail= rootView.findViewById(R.id.email);
+        mail = rootView.findViewById(R.id.email);
         landSize = rootView.findViewById(R.id.land_size_under_cip);
 
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 general.setName(charSequence.toString());

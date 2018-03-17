@@ -15,16 +15,11 @@ import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.buyers.pojo.PojoBuyer;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
 import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
-import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.UUID;
-
-/**
- * Created by Guillain-B on 19/02/2018.
- */
 
 public class AddBuyer extends IntentService {
     public final String LOG_TAG = AddBuyer.class.getSimpleName();
@@ -42,7 +37,7 @@ public class AddBuyer extends IntentService {
         if (intent != null) {
             Bundle buyerData = intent.getBundleExtra("Buyer_data");
 
-            PojoBuyer pojoBuyer= buyerData.getParcelable("Buyer");
+            PojoBuyer pojoBuyer = buyerData.getParcelable("Buyer");
 
             String name = "";
             String email = "";
@@ -65,10 +60,10 @@ public class AddBuyer extends IntentService {
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {
-                    EventBus.getDefault().post(new SaveDataEvent("Buyer added successfully", true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.add_buyer_msg), true));
                     //start job service
                     startService(new Intent(this, SyncBuyerBackground.class));
-                }else {
+                } else {
                     //schedule a job if not network is available
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
 
@@ -78,7 +73,7 @@ public class AddBuyer extends IntentService {
                             .setConstraints(Constraint.ON_ANY_NETWORK)
                             .build();
                     dispatcher.mustSchedule(job);
-                    EventBus.getDefault().post(new SaveDataEvent("Buyer added successfully and will be synchronized later", true));
+                    EventBus.getDefault().post(new SaveDataEvent(getResources().getString(R.string.add_buyer_msg_sync_later), true));
 
                 }
             }

@@ -64,7 +64,7 @@ class CafeBarUtil {
         int bottom = view.getPaddingBottom();
 
         boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("CafeBar tabletMode: " +tabletMode);
+        LogUtil.d("CafeBar tabletMode: " + tabletMode);
 
         if (builder.isFitSystemWindow() && !builder.floating()) {
             Configuration configuration = builder.context().getResources().getConfiguration();
@@ -81,7 +81,7 @@ class CafeBarUtil {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             if (viewGroup.getChildAt(i) instanceof TextView) {
                 index = i;
-                LogUtil.d("CafeBar with customView found textview at index " +i);
+                LogUtil.d("CafeBar with customView found textview at index " + i);
                 LogUtil.d("CafeBar always consider fist textview found as content");
                 break;
             }
@@ -194,7 +194,7 @@ class CafeBarUtil {
 
         Point point = getMeasuredContentSize(builder);
         int defaultHeight = getDefaultContentHeight(builder.context(), builder.contentTypeface());
-        LogUtil.d("measured content height for 1 line: " +defaultHeight);
+        LogUtil.d("measured content height for 1 line: " + defaultHeight);
 
         boolean moreThanOneLine = point.y > defaultHeight;
         boolean containsPositive = builder.positiveText() != null;
@@ -202,17 +202,17 @@ class CafeBarUtil {
         boolean longNeutralAction = isLongAction(builder.neutralText());
 
         if (moreThanOneLine || containsPositive || containsNegative || longNeutralAction) {
-            LogUtil.d("More than one line: " +moreThanOneLine);
-            LogUtil.d("Contains positive button: " +containsPositive);
-            LogUtil.d("Contains negative button: " +containsNegative);
-            LogUtil.d("Long neutral action: " +longNeutralAction);
+            LogUtil.d("More than one line: " + moreThanOneLine);
+            LogUtil.d("Contains positive button: " + containsPositive);
+            LogUtil.d("Contains negative button: " + containsNegative);
+            LogUtil.d("Long neutral action: " + longNeutralAction);
             top = side;
             builder.longContent(true);
         }
 
         root.setPadding(side, top, side, top);
 
-        LogUtil.d("fitSystemWindow: " +builder.isFitSystemWindow());
+        LogUtil.d("fitSystemWindow: " + builder.isFitSystemWindow());
         if (builder.positiveText() == null && builder.negativeText() == null) {
             LogUtil.d("CafeBar not contains positive and negative button");
 
@@ -378,7 +378,7 @@ class CafeBarUtil {
         if (textView != null) textView.setVisibility(View.INVISIBLE);
 
         boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("CafeBar tabletMode: " +tabletMode);
+        LogUtil.d("CafeBar tabletMode: " + tabletMode);
         if (tabletMode || builder.floating()) {
             int shadow = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_shadow_around);
             int padding = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
@@ -453,7 +453,7 @@ class CafeBarUtil {
             }
         }
 
-        LogUtil.d("getting action view, longAction: " +longAction);
+        LogUtil.d("getting action view, longAction: " + longAction);
 
         int padding = builder.context().getResources().getDimensionPixelSize(
                 R.dimen.cafebar_button_padding);
@@ -527,7 +527,7 @@ class CafeBarUtil {
             int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             action.measure(widthMeasureSpec, heightMeasureSpec);
 
-            LogUtil.d("measured action width: " +action.getMeasuredWidth());
+            LogUtil.d("measured action width: " + action.getMeasuredWidth());
             padding += action.getMeasuredWidth();
         }
 
@@ -535,7 +535,7 @@ class CafeBarUtil {
             int icon = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_icon_size);
             icon += builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
 
-            LogUtil.d("measured icon width: " +icon);
+            LogUtil.d("measured icon width: " + icon);
             padding += icon;
         }
 
@@ -573,11 +573,11 @@ class CafeBarUtil {
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
 
-        LogUtil.d("minWidth: " +minWidth);
-        LogUtil.d("maxWidth: " +maxWidth);
-        LogUtil.d("target width: " +width);
-        LogUtil.d("measured width: " +textView.getMeasuredWidth());
-        LogUtil.d("measured height: " +textView.getMeasuredHeight());
+        LogUtil.d("minWidth: " + minWidth);
+        LogUtil.d("maxWidth: " + maxWidth);
+        LogUtil.d("target width: " + width);
+        LogUtil.d("measured width: " + textView.getMeasuredWidth());
+        LogUtil.d("measured height: " + textView.getMeasuredHeight());
         return new Point(textView.getMeasuredWidth(), textView.getMeasuredHeight());
     }
 
@@ -651,14 +651,14 @@ class CafeBarUtil {
         if (appUsableSize.x < realScreenSize.x) {
             Point point = new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
             LogUtil.d("Navigation Bar height position: Right");
-            LogUtil.d("Navigation Bar height: " +point.x);
+            LogUtil.d("Navigation Bar height: " + point.x);
             return point.x;
         }
 
         if (appUsableSize.y < realScreenSize.y) {
             Point point = new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
             LogUtil.d("Navigation Bar height position: Bottom");
-            LogUtil.d("Navigation Bar height: " +point.y);
+            LogUtil.d("Navigation Bar height: " + point.y);
             return point.y;
         }
 
@@ -683,7 +683,7 @@ class CafeBarUtil {
             display.getRealSize(size);
         } else if (Build.VERSION.SDK_INT >= 14) {
             try {
-                size.x = (Integer)     Display.class.getMethod("getRawWidth").invoke(display);
+                size.x = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
                 size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
             } catch (Exception e) {
                 LogUtil.d(Log.getStackTraceString(e));
@@ -697,7 +697,7 @@ class CafeBarUtil {
     }
 
     static int getTitleTextColor(@ColorInt int color) {
-        double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return (darkness < 0.35) ? getDarkerColor(color) : Color.WHITE;
     }
 
@@ -729,7 +729,7 @@ class CafeBarUtil {
     @Nullable
     static Typeface getTypeface(@NonNull Context context, String fontName) {
         try {
-            return Typeface.createFromAsset(context.getAssets(), "fonts/" +fontName);
+            return Typeface.createFromAsset(context.getAssets(), "fonts/" + fontName);
         } catch (Exception e) {
             LogUtil.d(Log.getStackTraceString(e));
         }

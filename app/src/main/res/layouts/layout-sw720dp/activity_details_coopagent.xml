@@ -70,7 +70,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="@dimen/padding_sw720_port"
             android:layout_marginRight="@dimen/padding_sw720_port"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="96dp"
             android:elevation="@dimen/appbar_elevation"
             app:cardElevation="@dimen/appbar_elevation"
             app:cardPreventCornerOverlap="false">

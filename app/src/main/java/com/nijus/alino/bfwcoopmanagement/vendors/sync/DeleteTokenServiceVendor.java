@@ -23,10 +23,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class DeleteTokenServiceVendor extends IntentService {
-    public final String LOG_TAG = DeleteTokenServiceVendor.class.getSimpleName();
-
     public static final MediaType JSON
             = MediaType.parse("text/html; charset=utf-8");
+    public final String LOG_TAG = DeleteTokenServiceVendor.class.getSimpleName();
 
     public DeleteTokenServiceVendor() {
         super("");

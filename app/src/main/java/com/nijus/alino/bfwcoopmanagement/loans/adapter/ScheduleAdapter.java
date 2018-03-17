@@ -15,10 +15,10 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
-    private Cursor mCursor;
     final private Context mContext;
     final private View mEmptyView;
     final private TextView mEmptyTextView;
+    private Cursor mCursor;
 
     public ScheduleAdapter(Context mContext, View mEmptyView) {
         this.mContext = mContext;
@@ -36,18 +36,18 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        holder.txt_loan.setText((position+1)+"");
+        holder.txt_loan.setText((position + 1) + "");
 
-        holder.nextPayemnt.setText("Next payment "+mCursor.getDouble(mCursor.
-                getColumnIndex(BfwContract.LoanLine.COLUMN_NEXT_PAYMENT_AMOUNT))+" RWF");
+        holder.nextPayemnt.setText("Next payment " + mCursor.getDouble(mCursor.
+                getColumnIndex(BfwContract.LoanLine.COLUMN_NEXT_PAYMENT_AMOUNT)) + " RWF");
 
-        holder.interest.setText("("+mCursor.getDouble(mCursor.getColumnIndex(BfwContract.LoanLine.COLUMN_INTEREST))+"RWF)");
+        holder.interest.setText("(" + mCursor.getDouble(mCursor.getColumnIndex(BfwContract.LoanLine.COLUMN_INTEREST)) + "RWF)");
 
         Long getDate = mCursor.getLong(mCursor.getColumnIndex(BfwContract.LoanLine.COLUMN_PAYMENT_DATE));
         Date start_date = new Date(getDate);
         String date_string = DateFormat.getDateInstance().format(start_date);
 
-        holder.amount_principal.setText("Pay before "+ date_string);
+        holder.amount_principal.setText("Pay before " + date_string);
     }
 
     @Override
@@ -61,17 +61,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         notifyDataSetChanged();
         try {
             //mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
-            mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_loan_line: R.string.there_is_loan_line);
-        }
-        catch (Exception e)
-        {
+            mEmptyTextView.setText(getItemCount() == 0 ? R.string.there_s_no_loan_line : R.string.there_is_loan_line);
+        } catch (Exception e) {
 
         }
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView nextPayemnt;
-        public final TextView txt_loan,amount_principal,interest;
+        public final TextView txt_loan, amount_principal, interest;
 
         public ViewHolder(View view) {
             super(view);

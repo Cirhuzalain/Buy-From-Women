@@ -58,7 +58,6 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
 
         create_coop_agent_btn = findViewById(R.id.create_coop_agent);
         create_coop_agent_btn.setOnClickListener(this);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -167,7 +166,6 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
             // handle case
         }
 
-        //Toast.makeText(this," Get "+id_loan_long,Toast.LENGTH_LONG).show();
         String loanSelection = BfwContract.CoopAgent.TABLE_NAME + "." +
                 BfwContract.CoopAgent._ID + " =  ? ";//TABLE SERVER ID
         return new CursorLoader(
@@ -226,7 +224,6 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, syncDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
         }
     }
 
@@ -237,7 +234,6 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
             onSupportNavigateUp();
         } else {
             Toast.makeText(this, saveDataEvent.getMessage(), Toast.LENGTH_LONG).show();
-            //onSupportNavigateUp();
         }
     }
 }

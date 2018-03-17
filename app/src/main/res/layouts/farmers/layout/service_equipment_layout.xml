@@ -95,13 +95,13 @@
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
-                            android:visibility="gone"
                             android:id="@+id/new_resources"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/new_resources"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:visibility="gone" />
                     </android.support.design.widget.TextInputLayout>
 
 
@@ -167,18 +167,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/s_other" />
+
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
-                            android:visibility="gone"
                             android:id="@+id/other_water_source"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/other"
                             android:inputType="text"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:visibility="gone" />
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>

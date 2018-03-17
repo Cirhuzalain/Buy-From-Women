@@ -3,12 +3,19 @@ package com.nijus.alino.bfwcoopmanagement.loans.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Guillain-B on 19/02/2018.
- */
-
 public class PojoLoan implements Parcelable {
 
+    public static final Creator<PojoLoan> CREATOR = new Creator<PojoLoan>() {
+        @Override
+        public PojoLoan createFromParcel(Parcel parcel) {
+            return new PojoLoan(parcel);
+        }
+
+        @Override
+        public PojoLoan[] newArray(int i) {
+            return new PojoLoan[0];
+        }
+    };
     private int farmer_id;
     private int coop_id;
     private int vendor_id;
@@ -48,6 +55,11 @@ public class PojoLoan implements Parcelable {
         this.financial_institution = data.readString();
 
     }
+
+    public static Creator<PojoLoan> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -137,21 +149,5 @@ public class PojoLoan implements Parcelable {
     public void setFinancial_institution(String financial_institution) {
         this.financial_institution = financial_institution;
     }
-
-    public static Creator<PojoLoan> getCREATOR() {
-        return CREATOR;
-    }
-
-    public static final Creator<PojoLoan> CREATOR = new Creator<PojoLoan>() {
-        @Override
-        public PojoLoan createFromParcel(Parcel parcel) {
-            return new PojoLoan(parcel);
-        }
-
-        @Override
-        public PojoLoan[] newArray(int i) {
-            return new PojoLoan[0];
-        }
-    };
 
 }

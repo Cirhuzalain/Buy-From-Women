@@ -2,7 +2,6 @@ package com.nijus.alino.bfwcoopmanagement.loans.sync;
 
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,7 +60,7 @@ public class DeleteSyncLoanPaymentBkgrnd extends IntentService {
 
         int id_loan_to_delete = intent.getIntExtra("loan_id", 0);
 
-        String selection= BfwContract.LoanPayment.TABLE_NAME + "." +
+        String selection = BfwContract.LoanPayment.TABLE_NAME + "." +
                 BfwContract.LoanPayment.COLUMN_SERVER_ID + " =  ? ";
 
 
@@ -97,7 +96,7 @@ public class DeleteSyncLoanPaymentBkgrnd extends IntentService {
 
                     String bodyContent = "{}";
 
-                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.payment" + "/"+loanPaymentServerId;
+                    String API_INFO = BuildConfig.DEV_API_URL + "res.partner.loan.payment" + "/" + loanPaymentServerId;
 
                     RequestBody bodyLoan = RequestBody.create(JSON, bodyContent);
 

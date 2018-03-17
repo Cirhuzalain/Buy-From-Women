@@ -50,7 +50,7 @@ public class SyncBuyerBackground extends IntentService {
 
         String appToken = prefGoog.getString(getResources().getString(R.string.app_key), "123");
 
-        //get non sync farmer to the server (is_sync)
+        //get non sync buyer to the server (is_sync)
         int dataCount = 0;
         int buyerServerId;
         long id;
@@ -83,12 +83,12 @@ public class SyncBuyerBackground extends IntentService {
 
                     String bodyContent = "{}";
 
-                        bodyContent = "{" +
-                                "\"name\": \"" + name + "\", " +
-                                "\"buyer_phone\": \"" + phone + "\"," +
-                                "\"buyer_email\": \"" + email + "\"" +
+                    bodyContent = "{" +
+                            "\"name\": \"" + name + "\", " +
+                            "\"buyer_phone\": \"" + phone + "\"," +
+                            "\"buyer_email\": \"" + email + "\"" +
 
-                                "}";
+                            "}";
 
                     String API_INFO = BuildConfig.DEV_API_URL + "buyer";
 

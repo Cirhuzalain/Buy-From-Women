@@ -44,7 +44,6 @@ public class UpdateInternalInfoFragment extends Fragment {
     private AutoCompleteTextView year_rca_registration;
 
 
-
     public UpdateInternalInfoFragment() {
         super();
     }
@@ -95,6 +94,7 @@ public class UpdateInternalInfoFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 internalInformation.setChairName(charSequence.toString());

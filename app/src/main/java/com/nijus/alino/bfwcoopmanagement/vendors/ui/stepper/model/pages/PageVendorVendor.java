@@ -58,6 +58,11 @@ public abstract class PageVendorVendor implements PageTreeNodeVendor {
         return mRequired;
     }
 
+    public PageVendorVendor setRequired(boolean required) {
+        mRequired = required;
+        return this;
+    }
+
     void setParentKey(String parentKey) {
         mParentKey = parentKey;
     }
@@ -78,12 +83,11 @@ public abstract class PageVendorVendor implements PageTreeNodeVendor {
         return (mParentKey != null) ? mParentKey + ":" + mTitle : mTitle;
     }
 
-
     public boolean isCompleted() {
         return true;
     }
 
-    public void setData(String key, Parcelable info){
+    public void setData(String key, Parcelable info) {
         mData.putParcelable(key, info);
     }
 
@@ -94,10 +98,5 @@ public abstract class PageVendorVendor implements PageTreeNodeVendor {
 
     public void notifyDataChanged() {
         mCallbacks.onPageDataChanged(this);
-    }
-
-    public PageVendorVendor setRequired(boolean required) {
-        mRequired = required;
-        return this;
     }
 }
