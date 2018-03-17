@@ -3,15 +3,12 @@ package com.nijus.alino.bfwcoopmanagement.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -95,7 +92,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class UserProfileActivityAdmin extends BaseActivity implements NavigationFragment.OnListFragmentInteractionListener, CoopFragment.OnCoopFragmentInteractionListener,
         NavigationFragment.OnLongClickFragmentInteractionListener, BuyerFragment.OnListFragmentInteractionListener,
@@ -320,7 +316,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
     }
 
     private void toggleSelection(int position) {
-        // dispatch event to toggle action
         EventBus.getDefault().post(new ToggleFarmerRequestEvent(position));
     }
 
@@ -495,8 +490,6 @@ public class UserProfileActivityAdmin extends BaseActivity implements Navigation
         }
     }
 
-
-    //subscribe vendor
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onToggleVendorResponseEvent(ToggleVendorResponseEvent vendorResponseEvent) {
         int count = vendorResponseEvent.getCount();
