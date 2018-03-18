@@ -15,4 +15,3 @@ You need to have the Java Runtime and the JDK install on your computer
 * Glide
 * Firebase Job Dispatcher
 
-
