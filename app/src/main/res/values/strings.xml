@@ -263,7 +263,7 @@
     <string name="data_valid_error_vendor">Vendor Name and Phone Number are required</string>
     <string name="msg_ok">Ok</string>
     <string name="msg_cancel">Cancel</string>
-    <string name="there_s_no_farmer">There\'s no farmer</string>
+    <string name="there_s_no_farmer">There\'s no farmer or swipe to refresh</string>
     <string name="syncing_error_loan">An error occur while syncing loan data</string>
     <string name="syncing_error_payment">An error occur while syncing Payment data</string>
     <string name="syncing_error">An error occur while syncing farmer data</string>
