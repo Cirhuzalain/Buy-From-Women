@@ -75,7 +75,7 @@ public class AddProduct extends IntentService {
                         cursor = getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
 
                         if (cursor != null && cursor.moveToFirst()) {
-                            vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.ProductTemplate._ID));
+                            vendorId = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
                         }
                     } finally {
                         if (cursor != null) {

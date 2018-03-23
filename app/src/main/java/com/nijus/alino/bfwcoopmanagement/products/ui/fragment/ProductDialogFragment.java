@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -50,6 +51,9 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
         View viewContainer = getActivity().getLayoutInflater().inflate(R.layout.product_order_detail, null);
 
         mProductContainer = viewContainer.findViewById(R.id.productContainer);
+
+        TextView textView = viewContainer.findViewById(R.id.farmerView);
+        textView.setVisibility(View.GONE);
 
 
         farmer = viewContainer.findViewById(R.id.vendor);
@@ -181,58 +185,88 @@ public class ProductDialogFragment extends DialogFragment implements DialogInter
 
     @Override
     public void onClick(View view) {
-        try {
+        if (view.getId() == R.id.create_product) {
+            try {
 
-            int farmer_spiner_id, harvest_s_spinner_id;
-            String grade_spinner_name;
+                int farmer_spiner_id = 0, harvest_s_spinner_id;
+                String grade_spinner_name;
 
-            // Check if value's length entered is > 3 char .
-            if (!isValidString(String.valueOf(product_name.getText()))) {
-                product_name.setError(getString(R.string.error_invalid_password));
+                // Check if value's length entered is > 3 char .
+                if (!isValidString(String.valueOf(product_name.getText()))) {
+                    product_name.setError(getString(R.string.error_invalid_password));
+                }
+
+                // Check for a valid qty
+                if (TextUtils.isEmpty(quantity.getText())) {
+                    quantity.setError(getString(R.string.error_field_required));
+                }
+                if (TextUtils.isEmpty(sale_price.getText())) {
+                    sale_price.setError(getString(R.string.error_field_required));
+                }
+
+                if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
+                        && !TextUtils.isEmpty(sale_price.getText())) {
+
+                    String userType = Utils.getUserType(getContext().getApplicationContext());
+                    Cursor cursor = null;
+
+                    if (userType.equals("Vendor")) {
+
+                        int vendorId = Utils.getVendorServerId(getContext().getApplicationContext());
+
+                        try {
+                            String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                                    "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                            cursor = getContext().getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                            if (cursor != null && cursor.moveToFirst()) {
+                                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                            }
+                        } finally {
+                            if (cursor != null) {
+                                cursor.close();
+                            }
+                        }
+                    } else {
+                        cursor = (Cursor) farmer.getSelectedItem();
+                        farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+                    }
+
+
+                    cursor = (Cursor) harvsetSeason.getSelectedItem();
+                    harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
+
+                    grade_spinner_name = (String) grade.getSelectedItem();
+
+                    PojoProduct pojoProduct = new PojoProduct();
+                    pojoProduct.setName(String.valueOf(product_name.getText()));
+                    pojoProduct.setFarmer(farmer_spiner_id);
+                    pojoProduct.setGrade(grade_spinner_name);
+                    pojoProduct.setHarvest_season(harvest_s_spinner_id);
+                    pojoProduct.setPrice(Integer.valueOf(sale_price.getText().toString()));
+                    pojoProduct.setQuantity(Double.valueOf(quantity.getText().toString()));
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("product", pojoProduct);
+
+                    Intent intent = new Intent(getContext(), AddProduct.class);
+                    intent.putExtra("product_data", bundle);
+
+                    getContext().startService(intent);
+                    dismiss();
+
+                } else {
+                    Toast.makeText(getContext(), "Data Error", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                return;
             }
-
-            // Check for a valid qty
-            if (TextUtils.isEmpty(quantity.getText())) {
-                quantity.setError(getString(R.string.error_field_required));
-            }
-            if (TextUtils.isEmpty(sale_price.getText())) {
-                sale_price.setError(getString(R.string.error_field_required));
-            }
-
-            if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
-                    && !TextUtils.isEmpty(sale_price.getText())) {
-
-                Cursor cursor = (Cursor) farmer.getSelectedItem();
-                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
-
-                cursor = (Cursor) harvsetSeason.getSelectedItem();
-                harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));
-
-                grade_spinner_name = (String) grade.getSelectedItem();
-
-                PojoProduct pojoProduct = new PojoProduct();
-                pojoProduct.setName(String.valueOf(product_name.getText()));
-                pojoProduct.setFarmer(farmer_spiner_id);
-                pojoProduct.setGrade(grade_spinner_name);
-                pojoProduct.setHarvest_season(harvest_s_spinner_id);
-                pojoProduct.setPrice(Integer.valueOf(sale_price.getText().toString()));
-                pojoProduct.setQuantity(Double.valueOf(quantity.getText().toString()));
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("product", pojoProduct);
-
-                Intent intent = new Intent(getContext(), AddProduct.class);
-                intent.putExtra("product_data", bundle);
-
-                getContext().startService(intent);
-                dismiss();
-
-            } else {
-                Toast.makeText(getContext(), "Data Error", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            return;
+        } else if (view.getId() == R.id.order_product) {
+            Toast.makeText(getContext(), "Thanks !!!", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     private boolean isValidString(String word) {

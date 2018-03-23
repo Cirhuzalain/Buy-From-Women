@@ -62,7 +62,6 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
         String selectionLoan_id = BfwContract.Buyer.TABLE_NAME + "." +
                 BfwContract.Buyer._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.Buyer.CONTENT_URI, null, selection, null, null);
             if (cursor != null) {
@@ -83,7 +82,7 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
                             .build();
 
                     //Construct body
-                    String bodyContent = "{}";
+                    String bodyContent;
 
                     bodyContent = "{" +
                             "\"name\": \"" + name + "\", " +
@@ -107,7 +106,6 @@ public class UpdateSyncBuyerBkgrnd extends IntentService {
                         if (responseBodyLoan != null) {
                             String farmerDataInfo = responseBodyLoan.string();
                             if (farmerDataInfo.equals("{}")) {
-                                //update localId
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put(BfwContract.Buyer.COLUMN_BUYER_SERVER_ID, buyerServerId);
                                 contentValues.put(BfwContract.Buyer.COLUMN_IS_SYNC, 1);

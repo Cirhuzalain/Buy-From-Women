@@ -69,7 +69,7 @@ public class ProductActivity extends BaseActivity implements
                     Context.MODE_PRIVATE);
 
             String groupName = prefs.getString(getResources().getString(R.string.g_name), "123");
-            if (groupName.equals("Buyer")) {
+            if (groupName.equals("Buyer") || groupName.equals("Vendor")) {
                 super.onBackPressed();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);

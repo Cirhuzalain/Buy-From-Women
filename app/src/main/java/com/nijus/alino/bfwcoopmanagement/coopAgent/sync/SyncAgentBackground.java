@@ -62,7 +62,6 @@ public class SyncAgentBackground extends IntentService {
         String selectionCoopAgent_id = BfwContract.CoopAgent.TABLE_NAME + "." +
                 BfwContract.CoopAgent._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.CoopAgent.CONTENT_URI, null, selectionCoopAgent, null, null);
             if (cursor != null) {
@@ -82,7 +81,7 @@ public class SyncAgentBackground extends IntentService {
                             .readTimeout(240, TimeUnit.SECONDS)
                             .build();
 
-                    String bodyContent = "{}";
+                    String bodyContent;
 
                     bodyContent = "{" +
                             "\"name\": \"" + name + "\", " +

@@ -4,7 +4,7 @@
 You need to have the Java Runtime and the JDK install on your computer
 
 ## Clone the project
-`https://github.com/Cirhuzalain/BFW.git`
+`https://github.com/Cirhuzalain/Buy-From-Women.git`
 
 ## Built with
 * Java

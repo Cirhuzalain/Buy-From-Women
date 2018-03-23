@@ -11,7 +11,7 @@
         Add land information
     </string>
     <string name="comments3">
-        View Sales and Purchases orders
+        View and Manage Product
     </string>
     <string name="login">Login</string>
     <string name="title_activity_login">Login</string>
@@ -47,7 +47,7 @@
 
     <string name="create_farmer">Create Farmer</string>
     <string name="name">Name</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="phone_number">Phone Number (e.g +250.........)</string>
     <string name="address">Address</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
@@ -236,7 +236,7 @@
 
     <string name="create_coop">Create Cooperative</string>
     <string name="create_vend">Create Vendor</string>
-    <string name="data_valid_error_coop">Coop Name and Address are required</string>
+    <string name="data_valid_error_coop">Coop Name and Address are required or phone number is invalid</string>
     <string name="internal_title">Internal Information</string>
     <string name="forecast_sales">Forecast Sales</string>
     <string name="baseline_yield">Baseline Yield</string>
@@ -259,8 +259,8 @@
     <string name="connectivity_error">Sorry you\'re not connected, please check your internet connection</string>
     <string name="json_error">An error occur while logging you in, please try again later </string>
     <string name="data_error">An error occur while logging you out, please try again later </string>
-    <string name="data_valid_error">Farmer Name and Phone Number are required</string>
-    <string name="data_valid_error_vendor">Vendor Name and Phone Number are required</string>
+    <string name="data_valid_error">Farmer Name and Phone Number are required or phone number is incorrect</string>
+    <string name="data_valid_error_vendor">Vendor Name and Phone Number are required or phone number is invalid</string>
     <string name="msg_ok">Ok</string>
     <string name="msg_cancel">Cancel</string>
     <string name="there_s_no_farmer">There\'s no farmer or swipe to refresh</string>
@@ -431,9 +431,9 @@
     <string name="loc_gps">Check your location here</string>
     <string name="man_gps">Manual</string>
     <string name="gps_automatic">Automatic</string>
-    <string name="harvest_season_2016">Harvest Season 2016</string>
+    <string name="harvest_season_2016">Harvest Season</string>
     <string name="others_fin">Others</string>
-    <string name="harvest_season_2017">Harvest Season 2017</string>
+    <string name="harvest_season_2017">Harvest Season</string>
     <string name="del_farmer">Delete Farmer</string>
     <string name="del_vendor">Delete Vendor</string>
     <string name="input_lprovider">Input loan provider</string>
@@ -472,4 +472,12 @@
     <string name="main_agent">Agents</string>
     <string name="main_buyer">Buyers</string>
     <string name="main_vendor">Vendors</string>
+    <string name="farm_update_successfully">Farmer updated Successfully</string>
+    <string name="farm_add_success">Farmer Added Successfully</string>
+    <string name="name_info_msg">Name is Required</string>
+    <string name="phone_valid_msg">Phone Number is required or not Valid</string>
+    <string name="name_coop_info">Name is Required >= 4 characters</string>
+    <string name="address_info_coop">Address is required or not Valid</string>
+    <string name="phone_info_coop">Phone is required or is invalid</string>
+    <string name="email_info_coop">Email is required</string>
 </resources>

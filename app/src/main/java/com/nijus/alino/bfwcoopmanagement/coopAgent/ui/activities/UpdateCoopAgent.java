@@ -30,6 +30,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private AutoCompleteTextView name;
     private AutoCompleteTextView phone;
@@ -38,6 +41,8 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
     private Button create_coop_agent_btn;
     private int agent_id_from_server;
     private Long id_agent_long;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +99,16 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
         }
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Override
     public void onClick(View view) {
 
         int coop_spiner_id;
+        String phoneNumber = phone.getText().toString().trim();
 
         // Check if value's length entered is > 3 char .
         if (!isValidString(String.valueOf(name.getText()))) {
@@ -105,15 +116,15 @@ public class UpdateCoopAgent extends AppCompatActivity implements LoaderManager.
         }
 
         // Check for a valid qty
-        if (TextUtils.isEmpty(phone.getText())) {
-            phone.setError(getString(R.string.error_field_required));
+        if (TextUtils.isEmpty(phone.getText()) || !validatePhone(phoneNumber)) {
+            phone.setError(getString(R.string.phone_info_coop));
         }
         if (TextUtils.isEmpty(email.getText())) {
             email.setError(getString(R.string.error_field_required));
         }
 
         if (isValidString(String.valueOf(name.getText())) && !TextUtils.isEmpty(name.getText())
-                && !TextUtils.isEmpty(email.getText())) {
+                && !TextUtils.isEmpty(email.getText()) && validatePhone(phoneNumber)) {
 
             Cursor cursor = (Cursor) coop.getSelectedItem();
             coop_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Coops.COLUMN_COOP_SERVER_ID));

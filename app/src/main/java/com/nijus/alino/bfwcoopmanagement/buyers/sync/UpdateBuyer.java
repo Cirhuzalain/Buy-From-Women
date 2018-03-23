@@ -58,9 +58,9 @@ public class UpdateBuyer extends IntentService {
 
             PojoBuyer pojoBuyer = buyerData.getParcelable("buyer");
 
-            String name = "";
-            String email = "";
-            String phone = "";
+            String name;
+            String email;
+            String phone;
 
             if (pojoBuyer != null) {
                 name = pojoBuyer.getName();

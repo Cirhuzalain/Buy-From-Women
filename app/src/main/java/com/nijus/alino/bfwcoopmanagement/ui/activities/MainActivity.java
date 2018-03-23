@@ -84,12 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, NavigationActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            } else if (groupName.equals("Buyer")) {
+            } else if (groupName.equals("Buyer") || groupName.equals("Vendor")) {
                 Intent intent = new Intent(this, ProductActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            } else if (groupName.equals("Vendor")) {
-                Intent intent = new Intent(this, SaleOrderInfoActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

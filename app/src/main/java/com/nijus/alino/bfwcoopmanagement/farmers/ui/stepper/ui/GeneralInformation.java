@@ -29,6 +29,9 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.model.pojo.General;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class GeneralInformation extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public static final String ARG_KEY = "key";
@@ -46,6 +49,8 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
     private RadioButton female;
     private RadioGroup mGenderGroup;
     private Spinner spinner;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     public GeneralInformation() {
         super();
@@ -81,6 +86,11 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
         EventBus.getDefault().unregister(this);
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
@@ -88,11 +98,13 @@ public class GeneralInformation extends Fragment implements AdapterView.OnItemSe
         String phoneInfo = phoneNumber.getText().toString().trim();
 
         //Add Regex
-        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo)) {
+        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo) && validatePhone(phoneInfo)) {
             EventBus.getDefault().post(new DataValidEventR(true));
-        } else {
-            names.setError("Name is Required");
-            phoneNumber.setError("Phone Number is required or not Valid");
+        } else if (nameInfo.length() < 4) {
+            names.setError(getString(R.string.name_info_msg));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if(!validatePhone(phoneInfo)){
+            phoneNumber.setError(getString(R.string.phone_valid_msg));
             EventBus.getDefault().post(new DataValidEventR(false));
         }
     }

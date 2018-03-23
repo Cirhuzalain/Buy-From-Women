@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import com.nijus.alino.bfwcoopmanagement.BuildConfig;
 import com.nijus.alino.bfwcoopmanagement.R;
 import com.nijus.alino.bfwcoopmanagement.data.BfwContract;
+import com.nijus.alino.bfwcoopmanagement.events.ProcessingCoopEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -159,11 +160,13 @@ public class UpdateSyncFarmer extends IntentService {
                     Boolean isOtherSource = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER)) == 1;
 
                     String storageDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_STORAGE_DETAIL));
-                    String newResourcesDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_OTHER_INFO));
+                    String newResourcesDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_NEW_SOURCE_DETAIL));
                     String waterSourceDetails = cursor.getString(cursor.getColumnIndex(BfwContract.Farmer.COLUMN_WATER_SOURCE_DETAILS));
 
 
                     String API = BuildConfig.DEV_API_URL + "farmer" + "/" + farmerServerId;
+
+                    EventBus.getDefault().post(new ProcessingCoopEvent(getString(R.string.farm_msg)));
 
                     String bodyInfo = "{" +
                             "\"name\" : \"" + name + "\"," +
@@ -1096,6 +1099,6 @@ public class UpdateSyncFarmer extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("", true));
+            EventBus.getDefault().post(new SyncDataEvent(getString(R.string.farm_update_successfully), true));
     }
 }

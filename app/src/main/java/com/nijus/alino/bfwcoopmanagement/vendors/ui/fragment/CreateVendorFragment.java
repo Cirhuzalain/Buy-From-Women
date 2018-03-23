@@ -43,6 +43,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +67,9 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
     private AbstractWizardModelVendorVendor mFarmerWizard;
     private Bundle saveBundle = new Bundle();
     private ProgressDialog progressDialog = new ProgressDialog();
+
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     private Button mNextButton;
     private Button mPrevButton;
@@ -214,7 +219,11 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
         } else if (view.getId() == R.id.save_button) {
             saveNewVendor();
         }
+    }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
     }
 
     public void saveNewVendor() {
@@ -234,8 +243,10 @@ public class CreateVendorFragment extends Fragment implements ModelCallbacksVend
 
             if (isData) {
                 GeneralVendor generalVendor = data.getParcelable("generalVendor");
+
                 if (generalVendor != null) {
-                    if (generalVendor.getName() == null || generalVendor.getPhoneNumber() == null) {
+                    String phoneNumber = generalVendor.getPhoneNumber();
+                    if (generalVendor.getName() == null || generalVendor.getPhoneNumber() == null || !validatePhone(phoneNumber)) {
                         Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error_vendor), Toast.LENGTH_LONG).show();
                         return;
                     }

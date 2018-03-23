@@ -39,10 +39,10 @@ public class AddAgent extends IntentService {
 
             PojoAgent pojoAgent = agentData.getParcelable("agent");
 
-            String name = "";
-            String phone = "";
-            String mail = "";
-            int coop = 0;
+            String name;
+            String phone;
+            String mail;
+            int coop;
 
 
             if (pojoAgent != null) {
@@ -61,7 +61,7 @@ public class AddAgent extends IntentService {
                 contentValues.put(BfwContract.CoopAgent.COLUMN_IS_SYNC, 0);
                 contentValues.put(BfwContract.CoopAgent.COLUMN_IS_UPDATE, 0);
 
-                Uri uri = getContentResolver().insert(BfwContract.CoopAgent.CONTENT_URI, contentValues);
+                getContentResolver().insert(BfwContract.CoopAgent.CONTENT_URI, contentValues);
 
 
                 //sync if network available

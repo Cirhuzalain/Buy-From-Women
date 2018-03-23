@@ -68,8 +68,6 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_coop);
 
-        getSupportLoaderManager().initLoader(0, null, this);
-
         //get Coop Id
         Intent intent = this.getIntent();
         if (intent.hasExtra("coopId")) {
@@ -107,6 +105,8 @@ public class DetailCoopActivity extends AppCompatActivity implements LoaderManag
                 startActivity(intent1);
             }
         });
+
+        getSupportLoaderManager().initLoader(0, null, this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

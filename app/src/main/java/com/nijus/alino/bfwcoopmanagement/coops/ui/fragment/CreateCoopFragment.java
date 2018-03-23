@@ -41,6 +41,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +74,8 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
     private ImageView mRightImageView;
 
     private List<Page> mCurrentPageSequence;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
     private StepPagerStrip_coop mStepPagerStripCoop;
     private CreateCoopStepper mPageAdapter;
     private PageFragmentCallbacks mCallbacks;
@@ -216,6 +220,11 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
 
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     public void saveNewCoop() {
         //Get each page data
         for (Page page : mCurrentPageSequence) {
@@ -235,7 +244,8 @@ public class CreateCoopFragment extends Fragment implements ModelCallbacks,
             if (isData) {
                 GeneralInformation general = data.getParcelable("general");
                 if (general != null) {
-                    if (general.getName() == null || general.getAddress() == null) {
+                    String phoneNumber = general.getPhone();
+                    if (general.getName() == null || general.getAddress() == null || !validatePhone(phoneNumber)) {
                         Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error_coop), Toast.LENGTH_LONG).show();
                         return;
                     }

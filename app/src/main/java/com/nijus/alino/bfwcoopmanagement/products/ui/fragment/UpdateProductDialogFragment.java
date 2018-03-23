@@ -22,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -68,6 +69,9 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         order_product.setVisibility(View.GONE);
         create_product.setOnClickListener(this);
         order_product.setOnClickListener(this);
+
+        TextView textView = viewContainer.findViewById(R.id.farmerView);
+        textView.setVisibility(View.GONE);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(getResources().getString(R.string.application_key),
                 Context.MODE_PRIVATE);
@@ -258,7 +262,7 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
         } else {
             try {
 
-                int farmer_spiner_id, harvest_s_spinner_id;
+                int farmer_spiner_id = 0, harvest_s_spinner_id;
                 String grade_spinner_name;
 
                 // Check if value's length entered is > 3 char .
@@ -277,8 +281,31 @@ public class UpdateProductDialogFragment extends DialogFragment implements Dialo
                 if (isValidString(String.valueOf(product_name.getText())) && !TextUtils.isEmpty(quantity.getText())
                         && !TextUtils.isEmpty(sale_price.getText())) {
 
-                    Cursor cursor = (Cursor) vendor.getSelectedItem();
-                    farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+                    String userType = Utils.getUserType(getContext().getApplicationContext());
+                    Cursor cursor = null;
+
+                    if (userType.equals("Vendor")) {
+
+                        int vendorId = Utils.getVendorServerId(getContext().getApplicationContext());
+
+                        try {
+                            String vendorInfoSelection = BfwContract.Vendor.TABLE_NAME +
+                                    "." + BfwContract.Vendor.COLUMN_VENDOR_SERVER_ID + " = ? ";
+
+                            cursor = getContext().getContentResolver().query(BfwContract.Vendor.CONTENT_URI, null, vendorInfoSelection, new String[]{Long.toString(vendorId)}, null);
+
+                            if (cursor != null && cursor.moveToFirst()) {
+                                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Vendor._ID));
+                            }
+                        } finally {
+                            if (cursor != null) {
+                                cursor.close();
+                            }
+                        }
+                    } else {
+                        cursor = (Cursor) vendor.getSelectedItem();
+                        farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+                    }
 
                     cursor = (Cursor) harvsetSeason.getSelectedItem();
                     harvest_s_spinner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));

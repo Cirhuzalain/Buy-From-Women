@@ -61,8 +61,6 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_loan);
 
-        getSupportLoaderManager().initLoader(0, null, this);
-
         EventBus.getDefault().register(this);
 
         //get Id
@@ -107,6 +105,8 @@ public class DetailLoanActivity extends AppCompatActivity implements LoaderManag
         collapsingToolbarLayout = findViewById(R.id.name_loan);
         toolbar = findViewById(R.id.toolbar_loan);
         setSupportActionBar(toolbar);
+
+        getSupportLoaderManager().initLoader(0, null, this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

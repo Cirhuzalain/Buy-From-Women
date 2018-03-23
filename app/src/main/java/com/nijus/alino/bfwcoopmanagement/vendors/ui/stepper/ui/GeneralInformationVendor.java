@@ -25,6 +25,9 @@ import com.nijus.alino.bfwcoopmanagement.vendors.ui.stepper.model.pojo.GeneralVe
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class GeneralInformationVendor extends Fragment {
 
     public static final String ARG_KEY = "key";
@@ -40,6 +43,8 @@ public class GeneralInformationVendor extends Fragment {
     private AutoCompleteTextView names;
     private AutoCompleteTextView phoneNumber;
     private AutoCompleteTextView addressTextView;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
     private RadioButton male;
     private RadioButton female;
     private RadioGroup mGenderGroup;
@@ -78,18 +83,25 @@ public class GeneralInformationVendor extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
         String nameInfo = names.getText().toString();
         String phoneInfo = phoneNumber.getText().toString();
 
-        //Add Regex
-        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo)) {
+
+        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo) && validatePhone(phoneInfo)) {
             EventBus.getDefault().post(new DataValidEventR(true));
-        } else {
-            names.setError("Name is Required");
-            phoneNumber.setError("Phone Number is required or not Valid");
+        } else if (nameInfo.length() < 4) {
+            names.setError(getString(R.string.name_info_msg));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if(!validatePhone(phoneInfo)){
+            phoneNumber.setError(getString(R.string.phone_valid_msg));
             EventBus.getDefault().post(new DataValidEventR(false));
         }
     }

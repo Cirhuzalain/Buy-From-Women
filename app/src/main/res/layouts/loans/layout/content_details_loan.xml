@@ -275,7 +275,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:lines="1"
-                            android:text="Save"
+                            android:text="Add"
 
                             android:textAllCaps="false" />
                     </LinearLayout>

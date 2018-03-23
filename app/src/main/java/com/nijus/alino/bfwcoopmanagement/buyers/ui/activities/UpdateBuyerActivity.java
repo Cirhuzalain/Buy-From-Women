@@ -28,6 +28,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UpdateBuyerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private Button update_buyer;
     private long id_buyer_long;
@@ -35,6 +38,8 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
     private AutoCompleteTextView name;
     private AutoCompleteTextView phone;
     private AutoCompleteTextView email;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +60,20 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         update_buyer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /**
-                 * Before to update Buyer, Check if all fields required are not empty
-                 **/
+                String phoneNumber = phone.getText().toString().trim();
                 if (!isValidString(String.valueOf(name.getText()))) {
                     name.setError(getString(R.string.error_invalid_product_name));
                 }
                 if (!isValidString(String.valueOf(email.getText()))) {
                     email.setError(getString(R.string.error_invalid_email));
                 }
-                if (TextUtils.isEmpty(phone.getText())) {
-                    phone.setError(getString(R.string.error_field_required));
+                if (TextUtils.isEmpty(phone.getText()) || !validatePhone(phoneNumber)) {
+                    phone.setError(getString(R.string.phone_info_coop));
                 }
 
                 if (isValidString(String.valueOf(name.getText()))
                         && isValidString(String.valueOf(email.getText()))
-                        && !TextUtils.isEmpty(phone.getText())) {
+                        && !TextUtils.isEmpty(phone.getText()) && validatePhone(phoneNumber)) {
 
                     PojoBuyer pojoBuyer = new PojoBuyer();
                     pojoBuyer.setName(String.valueOf(name.getText()));
@@ -91,6 +94,11 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
     }
 
     @Override
@@ -120,12 +128,10 @@ public class UpdateBuyerActivity extends AppCompatActivity implements LoaderMana
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             id_buyer_long = extras.getLong("buyerId");
-        } else {
-            // handle case
         }
 
         String loanSelection = BfwContract.Buyer.TABLE_NAME + "." +
-                BfwContract.Buyer._ID + " =  ? ";//TABLE SERVER ID
+                BfwContract.Buyer._ID + " =  ? ";
         return new CursorLoader(
                 this,
                 BfwContract.Buyer.CONTENT_URI,

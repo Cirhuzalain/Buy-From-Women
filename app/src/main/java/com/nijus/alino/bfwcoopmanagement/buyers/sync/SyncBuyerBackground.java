@@ -62,7 +62,6 @@ public class SyncBuyerBackground extends IntentService {
         String selectionBuyer_id = BfwContract.Buyer.TABLE_NAME + "." +
                 BfwContract.Buyer._ID + " =  ? ";
 
-        String bankInfos = "\"bank_ids\": [],";
         try {
             cursor = getContentResolver().query(BfwContract.Buyer.CONTENT_URI, null, selectionBuyer, null, null);
             if (cursor != null) {
@@ -81,7 +80,7 @@ public class SyncBuyerBackground extends IntentService {
                             .readTimeout(240, TimeUnit.SECONDS)
                             .build();
 
-                    String bodyContent = "{}";
+                    String bodyContent;
 
                     bodyContent = "{" +
                             "\"name\": \"" + name + "\", " +

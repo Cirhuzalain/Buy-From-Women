@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nijus.alino.bfwcoopmanagement.R;
@@ -26,6 +27,7 @@ import com.nijus.alino.bfwcoopmanagement.events.SaveDataEvent;
 import com.nijus.alino.bfwcoopmanagement.events.SyncDataEvent;
 import com.nijus.alino.bfwcoopmanagement.loans.pojo.PojoLoan;
 import com.nijus.alino.bfwcoopmanagement.loans.sync.AddLoan;
+import com.nijus.alino.bfwcoopmanagement.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,6 +69,14 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
         date.setOnClickListener(this);
 
         populateSpinnerFarmer();
+
+        String userType = Utils.getUserType(getApplicationContext());
+        if (userType.equals("Vendor")) {
+            loan_orign_spinner.setVisibility(View.GONE);
+        }
+
+        TextView textView = findViewById(R.id.loan_orign);
+        textView.setVisibility(View.GONE);
 
         ArrayAdapter<CharSequence> adapter_microfin = ArrayAdapter.createFromResource(this,
                 R.array.fin_institution, android.R.layout.simple_spinner_item);
@@ -147,9 +157,6 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
 
             if (!TextUtils.isEmpty(ed_date_value.getText()) && !TextUtils.isEmpty(principal_amount.getText())
                     && !TextUtils.isEmpty(interest_rate.getText()) && !TextUtils.isEmpty(duration_month.getText())) {
-                //Ready to save loan's data
-                Cursor cursor = (Cursor) loan_orign_spinner.getSelectedItem();
-                farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
 
                 //get date in long
                 String date_start_string = ed_date_value.getText().toString();
@@ -162,8 +169,19 @@ public class CreateLoanActivity extends AppCompatActivity implements View.OnClic
 
                 fin_inst = (String) fin_inst_spinner.getSelectedItem();
                 purpose_loan_string = (String) purpose_loan.getSelectedItem();
+                //Ready to save loan's data
+
+                String userType = Utils.getUserType(getApplicationContext());
+                Cursor cursor = null;
+
                 PojoLoan pojoLoan = new PojoLoan();
-                pojoLoan.setFarmer_id(farmer_spiner_id);
+
+                if (!userType.equals("Vendor")) {
+                    cursor = (Cursor) loan_orign_spinner.getSelectedItem();
+                    farmer_spiner_id = cursor.getInt(cursor.getColumnIndex(BfwContract.Farmer._ID));
+                    pojoLoan.setFarmer_id(farmer_spiner_id);
+                }
+
                 pojoLoan.setPurpose(purpose_loan_string);
                 pojoLoan.setAmount(Double.valueOf(principal_amount.getText().toString()));
                 pojoLoan.setInterest_rate(Double.valueOf(interest_rate.getText().toString()));

@@ -42,6 +42,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
         View.OnClickListener, ViewPager.OnPageChangeListener {
@@ -62,6 +64,8 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
     private Button mSaveFarmer;
     private ImageView mImageView;
     private ImageView mRightImageView;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     private List<Page> mCurrentPageSequence;
     private StepPagerStrip mStepPagerStrip;
@@ -192,6 +196,11 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
 
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.next_button_update) {
@@ -212,7 +221,6 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
         } else if (view.getId() == R.id.save_button_update) {
             updateFarmer();
         }
-
     }
 
     public void updateFarmer() {
@@ -233,7 +241,8 @@ public class UpdateFarmerFragment extends Fragment implements ModelCallbacks,
             if (isData) {
                 General general = data.getParcelable("general");
                 if (general != null) {
-                    if (general.getName() == null || general.getPhoneNumber() == null) {
+                    String phoneNumber = general.getPhoneNumber();
+                    if (general.getName() == null || phoneNumber == null || !validatePhone(phoneNumber)) {
                         Toast.makeText(getContext(), getResources().getString(R.string.data_valid_error), Toast.LENGTH_LONG).show();
                         return;
                     }

@@ -135,6 +135,8 @@ public class UpdateLandFragmentVendor extends Fragment implements View.OnClickLi
         switchlocationView.setTextOff(getString(R.string.man_gps));
         switchlocationView.setTextOn(getString(R.string.gps_automatic));
 
+        switchlocationView.setVisibility(View.GONE);
+
         cursor = (Cursor) harvsetSeason.getSelectedItem();
         seasonName = cursor.getString(cursor.getColumnIndex(BfwContract.HarvestSeason.COLUMN_NAME));
         seasonId = cursor.getInt(cursor.getColumnIndex(BfwContract.HarvestSeason._ID));

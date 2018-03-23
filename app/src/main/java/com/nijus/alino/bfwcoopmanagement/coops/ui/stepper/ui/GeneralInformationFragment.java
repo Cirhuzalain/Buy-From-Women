@@ -21,6 +21,9 @@ import com.nijus.alino.bfwcoopmanagement.events.DataValidEventR;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class GeneralInformationFragment extends Fragment {
 
     public static final String ARG_KEY = "key";
@@ -37,6 +40,8 @@ public class GeneralInformationFragment extends Fragment {
     private AutoCompleteTextView mail;
     private AutoCompleteTextView address;
     private AutoCompleteTextView landSize;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     public GeneralInformationFragment() {
         super();
@@ -72,6 +77,11 @@ public class GeneralInformationFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
@@ -83,11 +93,17 @@ public class GeneralInformationFragment extends Fragment {
 
         if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(addressInfo) && !TextUtils.isEmpty(phoneNumber) && !TextUtils.isEmpty(email)) {
             EventBus.getDefault().post(new DataValidEventR(true));
-        } else {
-            name.setError("Name is Required >= 4 characters");
-            address.setError("Address is required or not Valid");
-            phone.setError("Phone is required");
-            mail.setError("Email is required");
+        } else if (TextUtils.isEmpty(nameInfo) || nameInfo.length() < 4) {
+            name.setError(getString(R.string.name_coop_info));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if (!validatePhone(phoneNumber)) {
+            phone.setError(getString(R.string.phone_info_coop));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if (TextUtils.isEmpty(addressInfo)) {
+            address.setError(getString(R.string.address_info_coop));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if (TextUtils.isEmpty(email)) {
+            mail.setError(getString(R.string.email_info_coop));
             EventBus.getDefault().post(new DataValidEventR(false));
         }
     }

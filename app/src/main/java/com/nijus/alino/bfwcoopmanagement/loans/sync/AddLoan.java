@@ -40,7 +40,7 @@ public class AddLoan extends IntentService {
 
             PojoLoan pojoLoan = productData.getParcelable("loan");
 
-            int farmer_id;
+            int farmer_id = 0;
             Long start_date;
             Double amount;
             Double interest_rate;
@@ -50,7 +50,11 @@ public class AddLoan extends IntentService {
 
 
             if (pojoLoan != null) {
-                farmer_id = pojoLoan.getFarmer_id();
+                String userType = Utils.getUserType(getApplicationContext());
+                if (!userType.equals("Vendor")) {
+                    farmer_id = pojoLoan.getFarmer_id();
+                }
+
                 start_date = pojoLoan.getStart_date();
                 amount = pojoLoan.getAmount();
                 interest_rate = pojoLoan.getInterest_rate();
@@ -60,8 +64,6 @@ public class AddLoan extends IntentService {
 
 
                 ContentValues contentValues = new ContentValues();
-
-                String userType = Utils.getUserType(getApplicationContext());
 
                 // if agent show farmer with coop server user id
                 if (userType.equals("Admin") || userType.equals("Agent")) {

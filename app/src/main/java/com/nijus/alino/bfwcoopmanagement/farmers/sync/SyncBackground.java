@@ -166,7 +166,7 @@ public class SyncBackground extends IntentService {
 
                         }
                     }
-                    EventBus.getDefault().post(new ProcessingCoopEvent("Processing your request ..."));
+                    EventBus.getDefault().post(new ProcessingCoopEvent(getString(R.string.farm_msg)));
 
                     String bodyInfo = "{" +
                             "\"name\" : \"" + name + "\"," +
@@ -919,6 +919,6 @@ public class SyncBackground extends IntentService {
 
         //post event sync after
         if (dataCount > 0)
-            EventBus.getDefault().post(new SyncDataEvent("Farmer Added Successfully", true));
+            EventBus.getDefault().post(new SyncDataEvent(getString(R.string.farm_add_success), true));
     }
 }

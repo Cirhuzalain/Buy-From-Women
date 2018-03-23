@@ -39,9 +39,9 @@ public class AddBuyer extends IntentService {
 
             PojoBuyer pojoBuyer = buyerData.getParcelable("Buyer");
 
-            String name = "";
-            String email = "";
-            String phone = "";
+            String name;
+            String email;
+            String phone;
 
             if (pojoBuyer != null) {
                 name = pojoBuyer.getName();
@@ -56,7 +56,7 @@ public class AddBuyer extends IntentService {
                 contentValues.put(BfwContract.Buyer.COLUMN_IS_SYNC, 0);
                 contentValues.put(BfwContract.Buyer.COLUMN_IS_UPDATE, 0);
 
-                Uri uri = getContentResolver().insert(BfwContract.Buyer.CONTENT_URI, contentValues);
+                getContentResolver().insert(BfwContract.Buyer.CONTENT_URI, contentValues);
 
                 //sync if network available
                 if (Utils.isNetworkAvailable(getApplicationContext())) {

@@ -57,6 +57,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.mUname.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_NAME)));
+        holder.mPhone.setText(mCursor.getString(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_BUYER_PHONE)));
         holder.farmerImage.setImageResource(R.mipmap.male);
 
         boolean isSync = mCursor.getLong(mCursor.getColumnIndex(BfwContract.Buyer.COLUMN_IS_SYNC)) == 1;
@@ -165,7 +166,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
         public final View mView;
         public final ImageView farmerImage;
         public final ImageView imagedone, imageView;
-        public final TextView mUname;
+        public final TextView mUname, mPhone;
         public RelativeLayout iconBack, iconFront, iconContainer;
         public LinearLayout view_foreground;
 
@@ -181,6 +182,7 @@ public class BuyerAdapter extends RecyclerView.Adapter<BuyerAdapter.ViewHolder> 
             imagedone.setImageResource(R.drawable.ic_done_white_24dp);
 
             mUname = view.findViewById(R.id.b_name);
+            mPhone = view.findViewById(R.id.b_phone);
             iconBack = view.findViewById(R.id.icon_back);
             iconFront = view.findViewById(R.id.icon_front);
             iconContainer = view.findViewById(R.id.icon_container);

@@ -74,7 +74,6 @@
                 android:id="@+id/b_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name lastname"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             <TextView
@@ -84,7 +83,6 @@
                 android:layout_gravity="left"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="+25078945662"
                 android:textStyle="bold" />
         </LinearLayout>
 

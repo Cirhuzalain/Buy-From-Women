@@ -57,7 +57,7 @@ public class UpdateLoan extends IntentService {
 
             PojoLoan pojoLoan = loanData.getParcelable("loan");
 
-            int farmer_id;
+            int farmer_id = 0;
             Long start_date;
             Double amount;
             Double interest_rate;
@@ -67,7 +67,10 @@ public class UpdateLoan extends IntentService {
 
 
             if (pojoLoan != null) {
-                farmer_id = pojoLoan.getFarmer_id();
+                String userType = Utils.getUserType(getApplicationContext());
+                if (!userType.equals("Vendor")) {
+                    farmer_id = pojoLoan.getFarmer_id();
+                }
 
                 start_date = pojoLoan.getStart_date();
                 amount = pojoLoan.getAmount();
@@ -75,8 +78,6 @@ public class UpdateLoan extends IntentService {
                 duration = pojoLoan.getDuration();
                 purpose = pojoLoan.getPurpose();
                 financial_institution = pojoLoan.getFinancial_institution();
-
-                String userType = Utils.getUserType(getApplicationContext());
 
                 ContentValues contentValues = new ContentValues();
 

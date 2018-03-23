@@ -80,6 +80,7 @@ public class LandFragmentVendor extends Fragment implements AdapterView.OnItemCl
         switchlocation = rootView.findViewById(R.id.switchlocation);
         switchlocation.setTextOff("Manual");
         switchlocation.setTextOn("Automatic");
+        switchlocation.setVisibility(View.GONE);
         if (switchlocation != null) {
             switchlocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

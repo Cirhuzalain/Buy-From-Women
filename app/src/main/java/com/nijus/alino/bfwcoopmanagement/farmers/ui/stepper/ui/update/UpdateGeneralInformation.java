@@ -36,6 +36,9 @@ import com.nijus.alino.bfwcoopmanagement.farmers.ui.stepper.ui.PageFragmentCallb
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UpdateGeneralInformation extends Fragment implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_KEY = "key";
@@ -56,6 +59,8 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
     private Uri mUri;
     private int mFarmerId;
     private int coopId;
+    private final Pattern phoneRegex = Pattern.compile("^\\+250[0-9]{9}$",
+            Pattern.CASE_INSENSITIVE);
 
     public UpdateGeneralInformation() {
         super();
@@ -124,6 +129,11 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
         EventBus.getDefault().unregister(this);
     }
 
+    public boolean validatePhone(String phone) {
+        Matcher match = phoneRegex.matcher(phone);
+        return match.find();
+    }
+
     @Subscribe
     public void onDataValidEventB(DataValidEventB validEventB) {
 
@@ -131,11 +141,13 @@ public class UpdateGeneralInformation extends Fragment implements AdapterView.On
         String phoneInfo = phoneNumber.getText().toString();
 
         //Add Regex
-        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo)) {
+        if (!TextUtils.isEmpty(nameInfo) && nameInfo.length() >= 4 && !TextUtils.isEmpty(phoneInfo) && validatePhone(phoneInfo)) {
             EventBus.getDefault().post(new DataValidEventR(true));
-        } else {
-            names.setError("Name is Required");
-            phoneNumber.setError("Phone Number is required or not Valid");
+        } else if (nameInfo.length() < 4) {
+            names.setError(getString(R.string.name_info_msg));
+            EventBus.getDefault().post(new DataValidEventR(false));
+        } else if (!validatePhone(phoneInfo)) {
+            phoneNumber.setError(getString(R.string.phone_valid_msg));
             EventBus.getDefault().post(new DataValidEventR(false));
         }
     }
